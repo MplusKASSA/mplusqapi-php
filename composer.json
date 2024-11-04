@@ -1,0 +1,18 @@
+{
+    "name": "mpluskassa/mplusqapi",
+    "description": "PHP Client for the MplusKASSA SOAP API",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.0",
+        "guzzlehttp/guzzle": "^7.3",
+        "brick/math": "^0.9 || ^0.10 || ^0.11 || ^0.12"
+    },
+    "autoload": {
+        "classmap": [
+            "src/MplusKASSA/MplusQapi/",
+            "src/MplusKASSA/Wsdl2PhpGenerator/"
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
