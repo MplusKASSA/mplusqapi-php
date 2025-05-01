@@ -18,6 +18,25 @@ $response = $client->getApiVersion();
 echo "{$response->serviceMajorNumber}.{$response->serviceMinorNumber}.{$response->serviceRevisionNumber}";
 ```
 
+## Debugging
+
+To retrieve the raw SOAP XML contents of the last request and/or response that were sent, use `getLastRequest`  and `getLastReponse`.
+
+```php
+
+// ...
+
+$response = $client->getApiVersion();
+
+$lastRequest = $client->getLastRequest();
+
+echo $lastRequest;
+
+$lastResponse = $client->getLastResponse();
+
+echo $lastResponse;
+```
+
 ## Features and Goals
 
 - No runtime WSDL parsing needed.
