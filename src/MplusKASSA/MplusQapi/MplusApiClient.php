@@ -3,24 +3,51 @@
 namespace MplusKASSA\MplusQapi;
 use MplusKASSA\Wsdl2PhpGenerator\BaseSoapClient;
 use Brick\Math\BigDecimal;
+use GuzzleHttp\HandlerStack;
 class MplusApiClient extends BaseSoapClient {
-    public function __construct(string $apiServer, int $apiPort, string $ident, string $secret, ?float $connectTimeout = null, ?float $timeout = null, bool $verify = true) {
-        parent::__construct($apiServer, $apiPort, $ident, $secret, $connectTimeout, $timeout, $verify);
+    public function __construct(
+        string $apiServer,
+        int $apiPort,
+        string $ident,
+        string $secret,
+        ?float $connectTimeout = null,
+        ?float $timeout = null,
+        bool $verify = true,
+        ?HandlerStack $handlerStack = null)
+    {
+        parent::__construct($apiServer, $apiPort, $ident, $secret, $connectTimeout, $timeout, $verify, $handlerStack);
         $this->parser = new SoapParser();
     }
     public static function getArrayType(string $parentFQN, string $propertyName): ?string {
         static $arrayTypes = array(
  NumberList::class . ':number' => 'int',
  CategoryIdSet::class . ':category' => 'int',
+ CustomField::class . ':multiSelectInt' => 'int',
+ CustomFieldList::class . ':customField' => 'MplusKASSA\MplusQapi\CustomField',
+ Employee::class . ':categoryIds' => 'int',
+ Employee::class . ':customFieldList' => 'MplusKASSA\MplusQapi\CustomField',
+ EmployeeList::class . ':employee' => 'MplusKASSA\MplusQapi\Employee',
+ ImageList::class . ':image' => 'MplusKASSA\MplusQapi\Image',
+ RelationArticleDiscountList::class . ':relationArticleDiscount' => 'MplusKASSA\MplusQapi\RelationArticleDiscount',
+ VatGroupList::class . ':vatGroup' => 'MplusKASSA\MplusQapi\VatGroup',
+ RelationList::class . ':relation' => 'MplusKASSA\MplusQapi\Relation',
+ Relation::class . ':categoryIds' => 'int',
+ Relation::class . ':imageList' => 'MplusKASSA\MplusQapi\Image',
+ Relation::class . ':customFieldList' => 'MplusKASSA\MplusQapi\CustomField',
+ Relation::class . ':contactList' => 'MplusKASSA\MplusQapi\Relation',
+ Relation::class . ':relationArticleDiscountList' => 'MplusKASSA\MplusQapi\RelationArticleDiscount',
+ Relation::class . ':branchesNonPurchasable' => 'int',
  BranchAccountNumberList::class . ':branchAccountNumber' => 'MplusKASSA\MplusQapi\BranchAccountNumber',
+ GiftcardType::class . ':branchNumbers' => 'int',
+ GiftcardType::class . ':availableValues' => 'int',
  EftReceipt::class . ':line' => 'MplusKASSA\MplusQapi\EftReceiptLine',
  EftTransactionDetails::class . ':customerReceipt' => 'MplusKASSA\MplusQapi\EftReceiptLine',
  EftTransactionDetails::class . ':merchantReceipt' => 'MplusKASSA\MplusQapi\EftReceiptLine',
+ ExternalPaymentTransactionDetails::class . ':receiptTexts' => 'MplusKASSA\MplusQapi\ExternalPaymentReceiptText',
  Payment::class . ':branchAccountNumberList' => 'MplusKASSA\MplusQapi\BranchAccountNumber',
  PaymentList::class . ':payment' => 'MplusKASSA\MplusQapi\Payment',
  PaymentMethod::class . ':branchAccountNumberList' => 'MplusKASSA\MplusQapi\BranchAccountNumber',
  PaymentMethodList::class . ':paymentMethod' => 'MplusKASSA\MplusQapi\PaymentMethod',
- VatGroupList::class . ':vatGroup' => 'MplusKASSA\MplusQapi\VatGroup',
  BranchFilter::class . ':branchNumbers' => 'int',
  AuthorizationsList::class . ':authorizations' => 'MplusKASSA\MplusQapi\Authorization',
  Authorization::class . ':subAuthorizations' => 'MplusKASSA\MplusQapi\Authorization',
@@ -31,11 +58,17 @@ class MplusApiClient extends BaseSoapClient {
  Order::class . ':vatGroupList' => 'MplusKASSA\MplusQapi\VatGroup',
  Order::class . ':lineList' => 'MplusKASSA\MplusQapi\Line',
  Order::class . ':paymentList' => 'MplusKASSA\MplusQapi\Payment',
+ Order::class . ':invoiceNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
+ Order::class . ':packingSlipIds' => 'string',
+ Order::class . ':packingSlipNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
  OrderList::class . ':order' => 'MplusKASSA\MplusQapi\Order',
  OrderTypeList::class . ':orderType' => 'string',
  YearNumberList::class . ':yearNumber' => 'MplusKASSA\MplusQapi\YearNumber',
+ ContractFrequencyList::class . ':contractFrequency' => 'string',
+ SalesLineContractLineList::class . ':contractLine' => 'MplusKASSA\MplusQapi\SalesLineContractLine',
  LineList::class . ':line' => 'MplusKASSA\MplusQapi\Line',
  Line::class . ':preparationList' => 'MplusKASSA\MplusQapi\Line',
+ Line::class . ':contractLines' => 'MplusKASSA\MplusQapi\SalesLineContractLine',
  TextList::class . ':text' => 'MplusKASSA\MplusQapi\Text',
  VoucherIdList::class . ':voucherId' => 'MplusKASSA\MplusQapi\VoucherId',
  VoucherIssuanceRedeemList::class . ':voucherIssuanceRedeem' => 'MplusKASSA\MplusQapi\VoucherIssuanceRedeem',
@@ -49,34 +82,17 @@ class MplusApiClient extends BaseSoapClient {
  VoucherIssuanceRedeemable::class . ':issuances' => 'MplusKASSA\MplusQapi\VoucherIssuance',
  VoucherIssuanceRedeemable::class . ':unappliedIssuances' => 'MplusKASSA\MplusQapi\UnappliedVoucherIssuance',
  VoucherIssuanceRedeemableList::class . ':voucherIssuanceRedeemable' => 'MplusKASSA\MplusQapi\VoucherIssuanceRedeemable',
+ RequestSalesRepeatTemplateTypeFilter::class . ':salesRepeatTemplateTypes' => 'string',
+ RequestSalesRepeatTemplateIdsFilter::class . ':templateIds' => 'string',
  NumberSet::class . ':number' => 'int',
  IdList::class . ':id' => 'string',
- CustomField::class . ':multiSelectInt' => 'int',
- CustomFieldList::class . ':customField' => 'MplusKASSA\MplusQapi\CustomField',
  SalesPriceList::class . ':salesPrice' => 'MplusKASSA\MplusQapi\SalesPrice',
  PriceGroupList::class . ':priceGroup' => 'MplusKASSA\MplusQapi\PriceGroup',
- GetCurrentSyncMarkersV2Request::class . ':orderTypes' => 'string',
  MistakeList::class . ':mistake' => 'MplusKASSA\MplusQapi\Mistake',
  LogMistakeRequest::class . ':mistakeList' => 'MplusKASSA\MplusQapi\Mistake',
- WorkplaceList::class . ':workplace' => 'MplusKASSA\MplusQapi\Workplace',
- Branch::class . ':workplaces' => 'MplusKASSA\MplusQapi\Workplace',
- BranchList::class . ':branch' => 'MplusKASSA\MplusQapi\Branch',
- ImageList::class . ':image' => 'MplusKASSA\MplusQapi\Image',
- GetImagesRequest::class . ':imageIds' => 'int',
- RelationArticleDiscountList::class . ':relationArticleDiscount' => 'MplusKASSA\MplusQapi\RelationArticleDiscount',
- RelationList::class . ':relation' => 'MplusKASSA\MplusQapi\Relation',
- Relation::class . ':categoryIds' => 'int',
- Relation::class . ':imageList' => 'MplusKASSA\MplusQapi\Image',
- Relation::class . ':customFieldList' => 'MplusKASSA\MplusQapi\CustomField',
- Relation::class . ':contactList' => 'MplusKASSA\MplusQapi\Relation',
- Relation::class . ':relationArticleDiscountList' => 'MplusKASSA\MplusQapi\RelationArticleDiscount',
- Relation::class . ':branchesNonPurchasable' => 'int',
  GetRelationsRequest::class . ':relationNumbers' => 'int',
  CardCategoryList::class . ':cardCategory' => 'MplusKASSA\MplusQapi\CardCategory',
  GetRelationPointsRequest::class . ':relationNumbers' => 'int',
- Employee::class . ':categoryIds' => 'int',
- Employee::class . ':customFieldList' => 'MplusKASSA\MplusQapi\CustomField',
- EmployeeList::class . ':employee' => 'MplusKASSA\MplusQapi\Employee',
  getEmployeesRequest::class . ':employeeNumbers' => 'int',
  TableNumberList::class . ':tableNumber' => 'MplusKASSA\MplusQapi\TableNumber',
  SubTableList::class . ':subTable' => 'MplusKASSA\MplusQapi\SubTableState',
@@ -97,6 +113,8 @@ class MplusApiClient extends BaseSoapClient {
  GetPackingSlipsRequest::class . ':articleBarcodes' => 'MplusKASSA\MplusQapi\Text',
  GetPackingSlipsRequest::class . ':packingSlipIds' => 'string',
  GetPackingSlipsRequest::class . ':packingSlipNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
+ GetPackingSlipsRequest::class . ':ownerFilter' => 'string',
+ GetPackingSlipsRequest::class . ':branchGroupFilter' => 'int',
  LineChangeList::class . ':lineChange' => 'MplusKASSA\MplusQapi\LineChange',
  LineChange::class . ':preparationList' => 'MplusKASSA\MplusQapi\LineChange',
  OrderChange::class . ':lineChangeList' => 'MplusKASSA\MplusQapi\LineChange',
@@ -130,6 +148,7 @@ class MplusApiClient extends BaseSoapClient {
  PayInvoiceRequest::class . ':paymentList' => 'MplusKASSA\MplusQapi\Payment',
  OrderDeliveryLineList::class . ':line' => 'MplusKASSA\MplusQapi\OrderDeliveryLine',
  OrderDelivery::class . ':lineList' => 'MplusKASSA\MplusQapi\OrderDeliveryLine',
+ OrderCategory::class . ':orderCategoryDependencyNumbers' => 'int',
  AnswerList::class . ':answer' => 'MplusKASSA\MplusQapi\Answer',
  Receipt::class . ':orderIds' => 'string',
  Receipt::class . ':extOrderIds' => 'string',
@@ -148,12 +167,19 @@ class MplusApiClient extends BaseSoapClient {
  GetReceiptsRequest::class . ':articleBarcodes' => 'MplusKASSA\MplusQapi\Text',
  GetReceiptsRequest::class . ':ownerFilter' => 'string',
  GetReceiptsRequest::class . ':branchGroupFilter' => 'int',
+ GetReceiptsRequest::class . ':receiptIds' => 'string',
  Invoice::class . ':orderIds' => 'string',
  Invoice::class . ':extOrderIds' => 'string',
  Invoice::class . ':vatGroupList' => 'MplusKASSA\MplusQapi\VatGroup',
  Invoice::class . ':lineList' => 'MplusKASSA\MplusQapi\Line',
  Invoice::class . ':paymentList' => 'MplusKASSA\MplusQapi\Payment',
  Invoice::class . ':answerList' => 'MplusKASSA\MplusQapi\Answer',
+ Invoice::class . ':orderNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
+ Invoice::class . ':packingSlipIds' => 'string',
+ Invoice::class . ':packingSlipNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
+ Invoice::class . ':proposalIds' => 'string',
+ Invoice::class . ':extProposalIds' => 'string',
+ Invoice::class . ':proposalNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
  InvoiceList::class . ':invoice' => 'MplusKASSA\MplusQapi\Invoice',
  GetInvoicesRequest::class . ':branchNumbers' => 'int',
  GetInvoicesRequest::class . ':employeeNumbers' => 'int',
@@ -165,6 +191,8 @@ class MplusApiClient extends BaseSoapClient {
  GetInvoicesRequest::class . ':articleBarcodes' => 'MplusKASSA\MplusQapi\Text',
  GetInvoicesRequest::class . ':invoiceIds' => 'string',
  GetInvoicesRequest::class . ':invoiceNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
+ GetInvoicesRequest::class . ':ownerFilter' => 'string',
+ GetInvoicesRequest::class . ':branchGroupFilter' => 'int',
  JournalFilterList::class . ':journalFilter' => 'string',
  TurnoverGroup::class . ':branchAccountNumberList' => 'MplusKASSA\MplusQapi\BranchAccountNumber',
  TurnoverGroupList::class . ':turnoverGroup' => 'MplusKASSA\MplusQapi\TurnoverGroup',
@@ -304,20 +332,9 @@ class MplusApiClient extends BaseSoapClient {
  CardLayoutFieldList::class . ':cardLayoutField' => 'MplusKASSA\MplusQapi\CardLayoutField',
  UpdateArticleCardLayoutRequest::class . ':cardLayoutFieldList' => 'MplusKASSA\MplusQapi\CardLayoutField',
  RetailSpaceRentalList::class . ':retailSpaceRental' => 'MplusKASSA\MplusQapi\RetailSpaceRental',
- InterbranchOrderLineList::class . ':interbranchOrderLine' => 'MplusKASSA\MplusQapi\InterbranchOrderLine',
- InterbranchOrder::class . ':interbranchOrderLineList' => 'MplusKASSA\MplusQapi\InterbranchOrderLine',
- InterbranchOrderList::class . ':interbranchOrder' => 'MplusKASSA\MplusQapi\InterbranchOrder',
- InterbranchOrderRequest::class . ':interbranchOrderLineList' => 'MplusKASSA\MplusQapi\InterbranchOrderLine',
- InterbranchShipmentLineList::class . ':interbranchShipmentLine' => 'MplusKASSA\MplusQapi\InterbranchShipmentLine',
- InterbranchShipment::class . ':interbranchShipmentLineList' => 'MplusKASSA\MplusQapi\InterbranchShipmentLine',
- InterbranchShipmentList::class . ':interbranchShipment' => 'MplusKASSA\MplusQapi\InterbranchShipment',
- InterbranchDeliveryLineList::class . ':interbranchDeliveryLine' => 'MplusKASSA\MplusQapi\InterbranchDeliveryLine',
- InterbranchDelivery::class . ':interbranchDeliveryLineList' => 'MplusKASSA\MplusQapi\InterbranchDeliveryLine',
- InterbranchDeliveryList::class . ':interbranchDelivery' => 'MplusKASSA\MplusQapi\InterbranchDelivery',
- InterbranchShipmentRequest::class . ':interbranchOrderLineList' => 'MplusKASSA\MplusQapi\InterbranchOrderLine',
- InterbranchDeliveryRequest::class . ':interbranchOrderLineList' => 'MplusKASSA\MplusQapi\InterbranchOrderLine',
  EntityTypeList::class . ':entityType' => 'string',
  EidSearchRequest::class . ':filter' => 'string',
+ OverviewFilterList::class . ':filter' => 'MplusKASSA\MplusQapi\OverviewFilter',
  OverviewRequest::class . ':selectFieldNameList' => 'string',
  OverviewRequest::class . ':filterList' => 'MplusKASSA\MplusQapi\OverviewFilter',
  SimpleImageList::class . ':image' => 'MplusKASSA\MplusQapi\SimpleImage',
@@ -333,13 +350,6 @@ class MplusApiClient extends BaseSoapClient {
  UpdateBatchRequest::class . ':numbers' => 'int',
  UpdateBatchRequest::class . ':fieldList' => 'MplusKASSA\MplusQapi\UpdateBatchField',
  UpdateBatchErrorList::class . ':errors' => 'MplusKASSA\MplusQapi\UpdateBatchError',
- GroupAuthorizationsList::class . ':authorizations' => 'MplusKASSA\MplusQapi\GroupAuthorization',
- EmployeeAuthorizationsList::class . ':authorizations' => 'MplusKASSA\MplusQapi\EmployeeAuthorization',
- GroupAuthorizationsV2List::class . ':authorizations' => 'MplusKASSA\MplusQapi\GroupAuthorizationV2',
- UpdateGroupAuthorizationsRequest::class . ':authorizationsList' => 'MplusKASSA\MplusQapi\GroupAuthorizationV2',
- AuthorizationGroupList::class . ':groups' => 'MplusKASSA\MplusQapi\AuthorizationGroup',
- EmployeeBranchAuthorization::class . ':authorizationList' => 'MplusKASSA\MplusQapi\EmployeeAuthorization',
- EmployeeBranchAuthorizationsList::class . ':branchAuthorizations' => 'MplusKASSA\MplusQapi\EmployeeBranchAuthorization',
  KitchenTicketLineList::class . ':kitchenTicketLine' => 'MplusKASSA\MplusQapi\KitchenTicketLine',
  KitchenTicketCourse::class . ':kitchenTicketLineList' => 'MplusKASSA\MplusQapi\KitchenTicketLine',
  KitchenTicketCourseList::class . ':kitchenTicketCourse' => 'MplusKASSA\MplusQapi\KitchenTicketCourse',
@@ -376,8 +386,6 @@ class MplusApiClient extends BaseSoapClient {
  SaveTodoListRequest::class . ':entries' => 'MplusKASSA\MplusQapi\TodoListEntry',
  SaveTodoListV2Request::class . ':entries' => 'MplusKASSA\MplusQapi\TodoListEntry',
  AddToTodoListRequest::class . ':entries' => 'MplusKASSA\MplusQapi\TodoListEntry',
- UpdateEmployeeAuthorizationGroupsRequest::class . ':branchAuthorizationGroupNumbers' => 'MplusKASSA\MplusQapi\BranchAuthorizationGroupNumber',
- UpdateEmployeeAuthorizationGroupsRequest::class . ':branchGroupAuthorizationGroupNumbers' => 'MplusKASSA\MplusQapi\BranchGroupAuthorizationGroupNumber',
  SavePreparationMethodGroupRequest::class . ':preparationMethodItems' => 'MplusKASSA\MplusQapi\SavePreparationMethodItem',
  GetNutritionalCharacteristicsRequest::class . ':numbers' => 'int',
  DeterminePricingRequest::class . ':lines' => 'MplusKASSA\MplusQapi\PlaceTableOrderLineElem',
@@ -387,12 +395,20 @@ class MplusApiClient extends BaseSoapClient {
  GetArticleBranchDeviationsRequest::class . ':branchFilter' => 'int',
  SaveArticleBranchDeviationsRequest::class . ':articleBranchDeviationLines' => 'MplusKASSA\MplusQapi\ArticleBranchDeviationLine',
  UpdateArticleNutrientsRequest::class . ':nutrients' => 'MplusKASSA\MplusQapi\ArticleNutrient',
- ns_NutrientType::class . ':subNutrientTypes' => 'MplusKASSA\MplusQapi\ns_NutrientType',
- CreateInvoiceFromPackingSlipsRequest::class . ':packingSlipIds' => 'string',
+ ArticleDynamicMinMaxStockList::class . ':articleDynamicMinMaxStock' => 'MplusKASSA\MplusQapi\ArticleDynamicMinMaxStock',
+ UpdateArticleDynamicMinMaxStockRequest::class . ':articleDynamicMinMaxStocks' => 'MplusKASSA\MplusQapi\ArticleDynamicMinMaxStock',
+ GetArticleDynamicMinMaxStockRequest::class . ':articleNumberFilters' => 'int',
+ GetArticleDynamicMinMaxStockRequest::class . ':branchNumberFilters' => 'int',
+ GetArticleDynamicMinMaxStockRequest::class . ':sourceFilters' => 'string',
+ CardFieldInfoList::class . ':field' => 'MplusKASSA\MplusQapi\CardFieldInfo',
+ CardFieldInfoResponseList::class . ':field' => 'MplusKASSA\MplusQapi\CardFieldInfoResponse',
+ GetCardFilterOptionsRequest::class . ':filters' => 'MplusKASSA\MplusQapi\OverviewFilter',
+ GetCardFilterOptionsRequest::class . ':fields' => 'MplusKASSA\MplusQapi\CardFieldInfo',
+ PlannedCycleCountList::class . ':plannedCycleCount' => 'MplusKASSA\MplusQapi\PlannedCycleCount',
+ ActiveCycleCountLineList::class . ':activeCycleCountLine' => 'MplusKASSA\MplusQapi\ActiveCycleCountLine',
+ ActiveCycleCount::class . ':lines' => 'MplusKASSA\MplusQapi\ActiveCycleCountLine',
  getSalesPriceListResponse::class . ':salesPrice' => 'MplusKASSA\MplusQapi\SalesPrice',
  getPriceGroupListResponse::class . ':priceGroup' => 'MplusKASSA\MplusQapi\PriceGroup',
- getBranchesResponse::class . ':branches' => 'MplusKASSA\MplusQapi\Branch',
- GetImagesResponse::class . ':imageList' => 'MplusKASSA\MplusQapi\Image',
  GetRelationsResponse::class . ':relationList' => 'MplusKASSA\MplusQapi\Relation',
  GetCustomFieldListsResponse::class . ':articleCustomFieldList' => 'MplusKASSA\MplusQapi\CustomField',
  GetCustomFieldListsResponse::class . ':employeeCustomFieldList' => 'MplusKASSA\MplusQapi\CustomField',
@@ -452,24 +468,11 @@ class MplusApiClient extends BaseSoapClient {
  GetPurchaseDeliveriesV2Response::class . ':purchaseDeliveryList' => 'MplusKASSA\MplusQapi\PurchaseDeliveryV2',
  GetArticleCardLayoutResponse::class . ':cardLayoutFieldList' => 'MplusKASSA\MplusQapi\CardLayoutField',
  GetRetailSpaceRentalsResponse::class . ':retailSpaceRentalList' => 'MplusKASSA\MplusQapi\RetailSpaceRental',
- GetInterbranchOrdersResponse::class . ':interbranchOrderList' => 'MplusKASSA\MplusQapi\InterbranchOrder',
- GetInterbranchShipmentsResponse::class . ':interbranchShipmentList' => 'MplusKASSA\MplusQapi\InterbranchShipment',
- GetInterbranchDeliveriesResponse::class . ':interbranchDeliveryList' => 'MplusKASSA\MplusQapi\InterbranchDelivery',
  OverviewResponse::class . ':overviewList' => 'MplusKASSA\MplusQapi\OverviewFieldList',
  OverviewResponse::class . ':errorList' => 'MplusKASSA\MplusQapi\GetOverviewError',
  GetOverviewFieldsResponse::class . ':overviewFieldsList' => 'MplusKASSA\MplusQapi\OverviewFieldsField',
  GetOverviewFieldsResponse::class . ':errorList' => 'MplusKASSA\MplusQapi\GetOverviewFieldsError',
  UpdateBatchResponse::class . ':errorList' => 'MplusKASSA\MplusQapi\UpdateBatchError',
- GetEmployeeAuthorizationsResponse::class . ':authorizationsList' => 'MplusKASSA\MplusQapi\EmployeeAuthorization',
- GetGroupAuthorizationsResponse::class . ':authorizationsList' => 'MplusKASSA\MplusQapi\GroupAuthorization',
- UpdateGroupAuthorizationsResponse::class . ':authorizationsList' => 'MplusKASSA\MplusQapi\GroupAuthorization',
- GetAuthorizationGroupsResponse::class . ':groupList' => 'MplusKASSA\MplusQapi\AuthorizationGroup',
- GetAuthorizationTreeResponse::class . ':backOfficeAuthorizationsList' => 'MplusKASSA\MplusQapi\Authorization',
- GetAuthorizationTreeResponse::class . ':articleAuthorizationsList' => 'MplusKASSA\MplusQapi\Authorization',
- GetAuthorizationTreeResponse::class . ':relationAuthorizationsList' => 'MplusKASSA\MplusQapi\Authorization',
- GetAuthorizationTreeResponse::class . ':employeeAuthorizationsList' => 'MplusKASSA\MplusQapi\Authorization',
- GetAuthorizationTreeResponse::class . ':onlineAuthorizationsList' => 'MplusKASSA\MplusQapi\Authorization',
- GetEmployeeBranchAuthorizationsResponse::class . ':branchAuthorizationsList' => 'MplusKASSA\MplusQapi\EmployeeBranchAuthorization',
  GetKitchenTicketsResponse::class . ':kitchenTicketList' => 'MplusKASSA\MplusQapi\KitchenTicket',
  GetStockCorrectionsResponse::class . ':stockCorrectionList' => 'MplusKASSA\MplusQapi\StockCorrectionV2',
  GetArticlesNutritionalCharacteristicsResponse::class . ':articleNutritionalCharacteristics' => 'MplusKASSA\MplusQapi\GetArticlesNutritionalCharacteristicsResponseElem',
@@ -481,8 +484,6 @@ class MplusApiClient extends BaseSoapClient {
  TapTickHistoryResponse::class . ':records' => 'MplusKASSA\MplusQapi\TapTickHistory',
  GetTodoListsResponse::class . ':todoLists' => 'MplusKASSA\MplusQapi\TodoList',
  TodoList::class . ':entries' => 'MplusKASSA\MplusQapi\TodoListEntry',
- GetEmployeeAuthorizationGroupsResponse::class . ':branchAuthorizationGroups' => 'MplusKASSA\MplusQapi\BranchAuthorizationGroup',
- GetEmployeeAuthorizationGroupsResponse::class . ':branchGroupAuthorizationGroups' => 'MplusKASSA\MplusQapi\BranchGroupAuthorizationGroup',
  GetFilterProfilesResponse::class . ':filterProfiles' => 'MplusKASSA\MplusQapi\FilterProfile',
  GetNutritionalCharacteristicsResponse::class . ':nutritionalCharacteristics' => 'MplusKASSA\MplusQapi\GetNutritionalCharacteristicsResponseElem',
  DeterminePricingResponse::class . ':lines' => 'MplusKASSA\MplusQapi\DeterminePricingResponseLine',
@@ -490,9 +491,11 @@ class MplusApiClient extends BaseSoapClient {
  DeterminePricingResponse::class . ':unappliedVoucherIssuances' => 'MplusKASSA\MplusQapi\UnappliedVoucherIssuance',
  DeterminePricingResponse::class . ':scannedVoucherIssuances' => 'MplusKASSA\MplusQapi\VoucherIssuanceRedeemable',
  GetArticleBranchDeviationsResponse::class . ':articleBranchDeviationLines' => 'MplusKASSA\MplusQapi\ArticleBranchDeviationLine',
- GetNutrientTypesResponse::class . ':nutrientTypes' => 'MplusKASSA\MplusQapi\ns_NutrientType',
- CreateInvoiceFromPackingSlipsResponse::class . ':voucherIssuances' => 'MplusKASSA\MplusQapi\VoucherIssuance',
- CreateInvoiceFromPackingSlipsResponse::class . ':unappliedVoucherIssuances' => 'MplusKASSA\MplusQapi\UnappliedVoucherIssuance',
+ UpdateArticleDynamicMinMaxStockResponse::class . ':articleDynamicMinMaxStocks' => 'MplusKASSA\MplusQapi\ArticleDynamicMinMaxStock',
+ GetArticleDynamicMinMaxStockResponse::class . ':articleDynamicMinMaxStocks' => 'MplusKASSA\MplusQapi\ArticleDynamicMinMaxStock',
+ GetCardFilterOptionsResponse::class . ':fields' => 'MplusKASSA\MplusQapi\CardFieldInfoResponse',
+ GetCardFilterOptionsResponse::class . ':filterErrors' => 'MplusKASSA\MplusQapi\GetOverviewError',
+ GetPlannedCycleCountsResponse::class . ':plannedCycleCounts' => 'MplusKASSA\MplusQapi\PlannedCycleCount',
  RequestBranchFilter::class . ':branchNumbers' => 'int',
  RequestEmployeeFilter::class . ':employeeNumbers' => 'int',
  RequestTurnoverGroupFilter::class . ':turnoverGroups' => 'int',
@@ -549,10 +552,30 @@ class MplusApiClient extends BaseSoapClient {
  LicensedModuleList::class . ':licensedModule' => 'MplusKASSA\MplusQapi\LicensedModule',
  LicensedBranch::class . ':licensedModules' => 'MplusKASSA\MplusQapi\LicensedModule',
  LicensedBranchList::class . ':licensedBranch' => 'MplusKASSA\MplusQapi\LicensedBranch',
+ DeliveryAddressSupplierList::class . ':deliveryAddressSupplier' => 'MplusKASSA\MplusQapi\DeliveryAddressSupplier',
+ DeliveryAddress::class . ':suppliers' => 'MplusKASSA\MplusQapi\DeliveryAddressSupplier',
+ DeliveryAddressList::class . ':deliveryAddress' => 'MplusKASSA\MplusQapi\DeliveryAddress',
+ BranchInformation::class . ':deliveryAddresses' => 'MplusKASSA\MplusQapi\DeliveryAddress',
  BranchGroup::class . ':branchNumbers' => 'int',
  BranchGroups::class . ':subGroups' => 'MplusKASSA\MplusQapi\BranchGroup',
  BranchGroupsList::class . ':branchGroups' => 'MplusKASSA\MplusQapi\BranchGroups',
  DeliveryMethodList::class . ':deliveryMethod' => 'MplusKASSA\MplusQapi\DeliveryMethod',
+ WorkplaceList::class . ':workplace' => 'MplusKASSA\MplusQapi\Workplace',
+ Branch::class . ':workplaces' => 'MplusKASSA\MplusQapi\Workplace',
+ BranchList::class . ':branch' => 'MplusKASSA\MplusQapi\Branch',
+ ns_NutrientType::class . ':subNutrientTypes' => 'MplusKASSA\MplusQapi\ns_NutrientType',
+ FloorplanNeighbourhoodList::class . ':neighbourhood' => 'MplusKASSA\MplusQapi\FloorplanNeighbourhood',
+ Floorplan::class . ':neighbourhoods' => 'MplusKASSA\MplusQapi\FloorplanNeighbourhood',
+ FloorplanList::class . ':floorplan' => 'MplusKASSA\MplusQapi\Floorplan',
+ GroupAuthorizationsList::class . ':authorizations' => 'MplusKASSA\MplusQapi\GroupAuthorization',
+ EmployeeAuthorizationsList::class . ':authorizations' => 'MplusKASSA\MplusQapi\EmployeeAuthorization',
+ GroupAuthorizationsV2List::class . ':authorizations' => 'MplusKASSA\MplusQapi\GroupAuthorizationV2',
+ UpdateGroupAuthorizationsRequest::class . ':authorizationsList' => 'MplusKASSA\MplusQapi\GroupAuthorizationV2',
+ AuthorizationGroupList::class . ':groups' => 'MplusKASSA\MplusQapi\AuthorizationGroup',
+ EmployeeBranchAuthorization::class . ':authorizationList' => 'MplusKASSA\MplusQapi\EmployeeAuthorization',
+ EmployeeBranchAuthorizationsList::class . ':branchAuthorizations' => 'MplusKASSA\MplusQapi\EmployeeBranchAuthorization',
+ UpdateEmployeeAuthorizationGroupsRequest::class . ':branchAuthorizationGroupNumbers' => 'MplusKASSA\MplusQapi\BranchAuthorizationGroupNumber',
+ UpdateEmployeeAuthorizationGroupsRequest::class . ':branchGroupAuthorizationGroupNumbers' => 'MplusKASSA\MplusQapi\BranchGroupAuthorizationGroupNumber',
  GetConfigurationResponse::class . ':configurationList' => 'MplusKASSA\MplusQapi\Configuration',
  GetConfigurationTreeResponse::class . ':configurations' => 'MplusKASSA\MplusQapi\ConfigurationGroup',
  GetConfigurationValuesResponse::class . ':configurationKeyValues' => 'MplusKASSA\MplusQapi\ConfigurationKeyValues',
@@ -573,6 +596,22 @@ class MplusApiClient extends BaseSoapClient {
  GetBranchGroupsResponse::class . ':branchGroupsList' => 'MplusKASSA\MplusQapi\BranchGroups',
  GetDeliveryMethodsResponse::class . ':deliveryMethodList' => 'MplusKASSA\MplusQapi\DeliveryMethod',
  GetDeliveryMethodsV2Response::class . ':deliveryMethodList' => 'MplusKASSA\MplusQapi\DeliveryMethod',
+ getBranchesResponse::class . ':branches' => 'MplusKASSA\MplusQapi\Branch',
+ GetNutrientTypesResponse::class . ':nutrientTypes' => 'MplusKASSA\MplusQapi\ns_NutrientType',
+ GetFloorplansResponse::class . ':floorplans' => 'MplusKASSA\MplusQapi\Floorplan',
+ GetEmployeeAuthorizationsResponse::class . ':authorizationsList' => 'MplusKASSA\MplusQapi\EmployeeAuthorization',
+ GetGroupAuthorizationsResponse::class . ':authorizationsList' => 'MplusKASSA\MplusQapi\GroupAuthorization',
+ UpdateGroupAuthorizationsResponse::class . ':authorizationsList' => 'MplusKASSA\MplusQapi\GroupAuthorization',
+ GetAuthorizationGroupsResponse::class . ':groupList' => 'MplusKASSA\MplusQapi\AuthorizationGroup',
+ GetAuthorizationTreeResponse::class . ':backOfficeAuthorizationsList' => 'MplusKASSA\MplusQapi\Authorization',
+ GetAuthorizationTreeResponse::class . ':articleAuthorizationsList' => 'MplusKASSA\MplusQapi\Authorization',
+ GetAuthorizationTreeResponse::class . ':relationAuthorizationsList' => 'MplusKASSA\MplusQapi\Authorization',
+ GetAuthorizationTreeResponse::class . ':employeeAuthorizationsList' => 'MplusKASSA\MplusQapi\Authorization',
+ GetAuthorizationTreeResponse::class . ':onlineAuthorizationsList' => 'MplusKASSA\MplusQapi\Authorization',
+ GetAuthorizationTreeResponse::class . ':kmsAuthorizationsList' => 'MplusKASSA\MplusQapi\Authorization',
+ GetEmployeeBranchAuthorizationsResponse::class . ':branchAuthorizationsList' => 'MplusKASSA\MplusQapi\EmployeeBranchAuthorization',
+ GetEmployeeAuthorizationGroupsResponse::class . ':branchAuthorizationGroups' => 'MplusKASSA\MplusQapi\BranchAuthorizationGroup',
+ GetEmployeeAuthorizationGroupsResponse::class . ':branchGroupAuthorizationGroups' => 'MplusKASSA\MplusQapi\BranchGroupAuthorizationGroup',
  ImageCardLabelIds::class . ':labelId' => 'int',
  ImageData::class . ':labels' => 'int',
  CardImageData::class . ':images' => 'MplusKASSA\MplusQapi\ImageData',
@@ -582,8 +621,10 @@ class MplusApiClient extends BaseSoapClient {
  SaveImageData::class . ':labels' => 'int',
  SaveCardImageData::class . ':images' => 'MplusKASSA\MplusQapi\SaveImageData',
  SaveCardImagesRequest::class . ':cards' => 'MplusKASSA\MplusQapi\SaveCardImageData',
+ GetImagesRequest::class . ':imageIds' => 'int',
  GetCardImageLabelsResponse::class . ':labels' => 'MplusKASSA\MplusQapi\ImageLabel',
  GetCardImagesResponse::class . ':items' => 'MplusKASSA\MplusQapi\CardImageData',
+ GetImagesResponse::class . ':imageList' => 'MplusKASSA\MplusQapi\Image',
  PrintParams::class . ':params' => 'MplusKASSA\MplusQapi\PrintParam',
  PrintInfo::class . ':paramsList' => 'MplusKASSA\MplusQapi\PrintParams',
  GetPrintLayoutsResponse::class . ':printLayouts' => 'MplusKASSA\MplusQapi\PrintLayoutView',
@@ -597,13 +638,14 @@ class MplusApiClient extends BaseSoapClient {
  Voucher::class . ':redeemCount' => 'MplusKASSA\MplusQapi\VoucherRedeemCount',
  Voucher::class . ':lines' => 'MplusKASSA\MplusQapi\VoucherLine',
  VoucherCategoryList::class . ':voucherCategory' => 'MplusKASSA\MplusQapi\VoucherCategory',
+ VoucherExternalScanCodeList::class . ':voucherScanCode' => 'MplusKASSA\MplusQapi\VoucherExternalScanCode',
+ IssueVoucherList::class . ':issueVoucher' => 'MplusKASSA\MplusQapi\IssueVoucher',
+ RedeemableVoucherIssuanceList::class . ':redeemableVoucherIssuance' => 'MplusKASSA\MplusQapi\RedeemableVoucherIssuance',
  GiftcardInfo::class . ':values' => 'int',
  GiftcardInfo::class . ':branchNumbers' => 'int',
  GiftcardPaymentLineList::class . ':line' => 'MplusKASSA\MplusQapi\GiftcardPaymentLine',
  RegisterGiftcardPaymentRequest::class . ':lineList' => 'MplusKASSA\MplusQapi\GiftcardPaymentLine',
  RegisterGiftcardPaymentV2Request::class . ':lineList' => 'MplusKASSA\MplusQapi\GiftcardPaymentLine',
- GiftcardType::class . ':branchNumbers' => 'int',
- GiftcardType::class . ':availableValues' => 'int',
  GiftcardTypesList::class . ':giftcardTypes' => 'MplusKASSA\MplusQapi\GiftcardType',
  RelationGiftcardList::class . ':relationGiftcards' => 'MplusKASSA\MplusQapi\RelationGiftcard',
  GiftcardHistoryList::class . ':giftcardHistory' => 'MplusKASSA\MplusQapi\GiftcardHistory',
@@ -617,6 +659,9 @@ class MplusApiClient extends BaseSoapClient {
  VoucherCategoryIdList::class . ':voucherCategoryId' => 'int',
  GetVoucherCategoriesRequest::class . ':voucherCategoryIdFilter' => 'int',
  GetVoucherSettingsRequest::class . ':voucherIds' => 'MplusKASSA\MplusQapi\VoucherId',
+ IssueVouchersRequest::class . ':issueVouchers' => 'MplusKASSA\MplusQapi\IssueVoucher',
+ IssueVoucherExternalScanCodeSet::class . ':scanCode' => 'string',
+ IssueVoucherExternalScanCodesRequest::class . ':scanCodes' => 'string',
  GetGiftcardTypesResponse::class . ':giftcardTypesList' => 'MplusKASSA\MplusQapi\GiftcardType',
  GetRelationGiftcardsResponse::class . ':relationGiftcardList' => 'MplusKASSA\MplusQapi\RelationGiftcard',
  GetGiftcardHistoryResponse::class . ':giftcardHistoryList' => 'MplusKASSA\MplusQapi\GiftcardHistory',
@@ -625,6 +670,10 @@ class MplusApiClient extends BaseSoapClient {
  GetVoucherCategoriesResponse::class . ':voucherCategories' => 'MplusKASSA\MplusQapi\VoucherCategory',
  GetVoucherIssuancesResponse::class . ':voucherIssuances' => 'MplusKASSA\MplusQapi\VoucherIssuance',
  GetVoucherSettingsResponse::class . ':voucherSettingsV1' => 'MplusKASSA\MplusQapi\VoucherSettingsV1',
+ IssueVouchersResponse::class . ':voucherIssuances' => 'MplusKASSA\MplusQapi\VoucherIssuance',
+ GetVoucherExternalScanCodesResponse::class . ':scanCodes' => 'MplusKASSA\MplusQapi\VoucherExternalScanCode',
+ GetRedeemableVoucherIssuancesResponse::class . ':redeemableVoucherIssuances' => 'MplusKASSA\MplusQapi\RedeemableVoucherIssuance',
+ RedeemVoucherIssuanceResponse::class . ':voucherIssuanceRedeems' => 'MplusKASSA\MplusQapi\VoucherIssuanceRedeem',
  ReportBranchFilter::class . ':branchNumbers' => 'int',
  ReportWorkplaceFilter::class . ':workplaceNumbers' => 'int',
  ReportEmployeeFilter::class . ':employeeNumbers' => 'int',
@@ -735,6 +784,11 @@ class MplusApiClient extends BaseSoapClient {
  ReportPrintableFinancialTotalsResponse::class . ':printableFinancialTotalsList' => 'MplusKASSA\MplusQapi\ReportPrintableFinancialTotalsLine',
  ReportArticlePerformanceResponse::class . ':articlePerformanceList' => 'MplusKASSA\MplusQapi\ReportArticlePerformance',
  GetSalesRepeatTemplatesRequest::class . ':relationFilter' => 'int',
+ GetSalesRepeatTemplatesRequest::class . ':contractFrequencyFilter' => 'string',
+ GetSalesRepeatTemplatesRequest::class . ':salesRepeatTemplateTypeFilter' => 'string',
+ GetSalesRepeatTemplatesRequest::class . ':branchNumbers' => 'int',
+ GetSalesRepeatTemplatesRequest::class . ':ownerFilter' => 'string',
+ GetSalesRepeatTemplatesRequest::class . ':branchGroupFilter' => 'int',
  SalesRepeatTemplateLine::class . ':componentList' => 'MplusKASSA\MplusQapi\SalesRepeatTemplateLine',
  SalesRepeatTemplateLine::class . ':preparationList' => 'MplusKASSA\MplusQapi\SalesRepeatTemplateLine',
  SalesRepeatTemplateLineList::class . ':line' => 'MplusKASSA\MplusQapi\SalesRepeatTemplateLine',
@@ -768,8 +822,14 @@ class MplusApiClient extends BaseSoapClient {
  PayOrderV2Request::class . ':paymentList' => 'MplusKASSA\MplusQapi\Payment',
  PayTableOrderRequest::class . ':paymentList' => 'MplusKASSA\MplusQapi\Payment',
  PrepayTableOrderRequest::class . ':paymentList' => 'MplusKASSA\MplusQapi\Payment',
+ GetOrdersByExtOrderIdsRequest::class . ':extOrderIds' => 'string',
  Proposal::class . ':vatGroupList' => 'MplusKASSA\MplusQapi\VatGroup',
  Proposal::class . ':lineList' => 'MplusKASSA\MplusQapi\Line',
+ Proposal::class . ':packingSlipIds' => 'string',
+ Proposal::class . ':packingSlipNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
+ Proposal::class . ':invoiceIds' => 'string',
+ Proposal::class . ':extInvoiceIds' => 'string',
+ Proposal::class . ':invoiceNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
  ProposalList::class . ':proposal' => 'MplusKASSA\MplusQapi\Proposal',
  GetProposalsRequest::class . ':branchNumbers' => 'int',
  GetProposalsRequest::class . ':employeeNumbers' => 'int',
@@ -781,6 +841,9 @@ class MplusApiClient extends BaseSoapClient {
  GetProposalsRequest::class . ':articleBarcodes' => 'MplusKASSA\MplusQapi\Text',
  GetProposalsRequest::class . ':proposalIds' => 'string',
  GetProposalsRequest::class . ':proposalNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
+ GetProposalsRequest::class . ':ownerFilter' => 'string',
+ GetProposalsRequest::class . ':branchGroupFilter' => 'int',
+ GetOrdersByReceiptsRequest::class . ':receiptIds' => 'string',
  GetOrdersRequest::class . ':branchNumbers' => 'int',
  GetOrdersRequest::class . ':employeeNumbers' => 'int',
  GetOrdersRequest::class . ':relationNumbers' => 'int',
@@ -792,6 +855,19 @@ class MplusApiClient extends BaseSoapClient {
  GetOrdersRequest::class . ':orderTypeList' => 'string',
  GetOrdersRequest::class . ':orderIds' => 'string',
  GetOrdersRequest::class . ':orderNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
+ GetOrdersRequest::class . ':ownerFilter' => 'string',
+ GetOrdersRequest::class . ':branchGroupFilter' => 'int',
+ DetermineContractLinesRequest::class . ':lineList' => 'MplusKASSA\MplusQapi\Line',
+ CreateInvoiceFromPackingSlipsRequest::class . ':packingSlipIds' => 'string',
+ CashCountInfoWorkplaceDataList::class . ':workplaceData' => 'MplusKASSA\MplusQapi\CashCountInfoWorkplaceData',
+ CashCountInfoPaymentMethodAmountList::class . ':paymentMethodAmount' => 'MplusKASSA\MplusQapi\CashCountInfoPaymentMethodAmount',
+ CashCountInfoWorkplace::class . ':paymentMethodAmounts' => 'MplusKASSA\MplusQapi\CashCountInfoPaymentMethodAmount',
+ CashCountInfoWorkplace::class . ':extraWorkplaces' => 'MplusKASSA\MplusQapi\CashCountInfoWorkplace',
+ CashCountInfoWorkplaceList::class . ':workplace' => 'MplusKASSA\MplusQapi\CashCountInfoWorkplace',
+ CashCountInfo::class . ':workplaces' => 'MplusKASSA\MplusQapi\CashCountInfoWorkplace',
+ CashCountInfoCountedPaymentMethodAmountList::class . ':countedPaymentMethodAmount' => 'MplusKASSA\MplusQapi\CashCountInfoCountedPaymentMethodAmount',
+ SaveCashCountRequest::class . ':extraWorkplacesData' => 'MplusKASSA\MplusQapi\CashCountInfoWorkplaceData',
+ SaveCashCountRequest::class . ':countedPaymentMethodAmounts' => 'MplusKASSA\MplusQapi\CashCountInfoCountedPaymentMethodAmount',
  GetSalesRepeatTemplatesResponse::class . ':salesRepeatTemplateList' => 'MplusKASSA\MplusQapi\SalesRepeatTemplate',
  PerformBpeBudgetChecksResponse::class . ':bpeResults' => 'MplusKASSA\MplusQapi\BpeBudgetCheckResponse',
  GetTicketCounterSalesResponse::class . ':ticketCounterSaleList' => 'MplusKASSA\MplusQapi\TicketCounterSale',
@@ -806,6 +882,7 @@ class MplusApiClient extends BaseSoapClient {
  PayTableOrderResponse::class . ':unappliedVoucherIssuances' => 'MplusKASSA\MplusQapi\UnappliedVoucherIssuance',
  PrepayTableOrderResponse::class . ':voucherIssuances' => 'MplusKASSA\MplusQapi\VoucherIssuance',
  PrepayTableOrderResponse::class . ':unappliedVoucherIssuances' => 'MplusKASSA\MplusQapi\UnappliedVoucherIssuance',
+ GetOrdersByExtOrderIdsResponse::class . ':orderList' => 'MplusKASSA\MplusQapi\Order',
  GetProposalsResponse::class . ':proposalList' => 'MplusKASSA\MplusQapi\Proposal',
  CreateOrderFromProposalResponse::class . ':unappliedVoucherIssuances' => 'MplusKASSA\MplusQapi\UnappliedVoucherIssuance',
  CreateInvoiceFromProposalResponse::class . ':voucherIssuances' => 'MplusKASSA\MplusQapi\VoucherIssuance',
@@ -813,6 +890,9 @@ class MplusApiClient extends BaseSoapClient {
  GetOrdersByReceiptsResponse::class . ':orderList' => 'MplusKASSA\MplusQapi\Order',
  GetCurrentTableOrdersResponse::class . ':orderList' => 'MplusKASSA\MplusQapi\Order',
  GetOrdersResponse::class . ':orderList' => 'MplusKASSA\MplusQapi\Order',
+ DetermineContractLinesResponse::class . ':lineList' => 'MplusKASSA\MplusQapi\Line',
+ CreateInvoiceFromPackingSlipsResponse::class . ':voucherIssuances' => 'MplusKASSA\MplusQapi\VoucherIssuance',
+ CreateInvoiceFromPackingSlipsResponse::class . ':unappliedVoucherIssuances' => 'MplusKASSA\MplusQapi\UnappliedVoucherIssuance',
  WebhookConsumerEventList::class . ':webhookConsumerEvent' => 'MplusKASSA\MplusQapi\WebhookConsumerEvent',
  WebhookConsumerTriggerPatternList::class . ':webhookConsumerTriggerPattern' => 'MplusKASSA\MplusQapi\WebhookConsumerTriggerPattern',
  WebhookConsumerWorkplace::class . ':workplaceNumbers' => 'int',
@@ -821,6 +901,7 @@ class MplusApiClient extends BaseSoapClient {
  WebhookConsumer::class . ':webhookConsumerTriggerPatternList' => 'MplusKASSA\MplusQapi\WebhookConsumerTriggerPattern',
  WebhookConsumer::class . ':webhookConsumerWorkplaceList' => 'MplusKASSA\MplusQapi\WebhookConsumerWorkplace',
  WebhookConsumer::class . ':webhookConsumerPaymentMethodList' => 'MplusKASSA\MplusQapi\PaymentMethod',
+ WebhookConsumer::class . ':articleFilter' => 'int',
  WebhookConsumerList::class . ':webhookConsumer' => 'MplusKASSA\MplusQapi\WebhookConsumer',
  ExternalPaymentMessageList::class . ':message' => 'MplusKASSA\MplusQapi\ExternalPaymentMessage',
  WebhookDialogInput::class . ':selectedDialogOptionIds' => 'int',
@@ -842,6 +923,32 @@ class MplusApiClient extends BaseSoapClient {
  WebhookResp::class . ':lineChanges' => 'MplusKASSA\MplusQapi\WebhookLineChange',
  WebhookResp::class . ':lineAdditions' => 'MplusKASSA\MplusQapi\WebhookLineAddition',
  WebhookResp::class . ':lineDeletions' => 'MplusKASSA\MplusQapi\WebhookLineDeletion',
+ InterbranchOrderLineList::class . ':interbranchOrderLine' => 'MplusKASSA\MplusQapi\InterbranchOrderLine',
+ InterbranchOrder::class . ':interbranchOrderLineList' => 'MplusKASSA\MplusQapi\InterbranchOrderLine',
+ InterbranchOrderList::class . ':interbranchOrder' => 'MplusKASSA\MplusQapi\InterbranchOrder',
+ GetInterbranchOrdersRequest::class . ':interbranchOrderState' => 'string',
+ InterbranchOrderRequest::class . ':interbranchOrderLineList' => 'MplusKASSA\MplusQapi\InterbranchOrderLine',
+ UpdateInterbranchOrderRequest::class . ':interbranchOrderLineList' => 'MplusKASSA\MplusQapi\InterbranchOrderLine',
+ InterbranchShipmentLineList::class . ':interbranchShipmentLine' => 'MplusKASSA\MplusQapi\InterbranchShipmentLine',
+ InterbranchShipment::class . ':interbranchShipmentLineList' => 'MplusKASSA\MplusQapi\InterbranchShipmentLine',
+ InterbranchShipmentList::class . ':interbranchShipment' => 'MplusKASSA\MplusQapi\InterbranchShipment',
+ ShipInterbranchOrderRequest::class . ':interbranchOrderLineList' => 'MplusKASSA\MplusQapi\InterbranchOrderLine',
+ InterbranchDeliveryLineList::class . ':interbranchDeliveryLine' => 'MplusKASSA\MplusQapi\InterbranchDeliveryLine',
+ InterbranchDelivery::class . ':interbranchDeliveryLineList' => 'MplusKASSA\MplusQapi\InterbranchDeliveryLine',
+ InterbranchDeliveryList::class . ':interbranchDelivery' => 'MplusKASSA\MplusQapi\InterbranchDelivery',
+ InterbranchShipmentRequest::class . ':interbranchOrderLineList' => 'MplusKASSA\MplusQapi\InterbranchOrderLine',
+ InterbranchDeliveryRequest::class . ':interbranchOrderLineList' => 'MplusKASSA\MplusQapi\InterbranchOrderLine',
+ ArticleFilter::class . ':articleNumbers' => 'int',
+ ArticleFilter::class . ':turnoverGroupNumbers' => 'int',
+ ArticleFilter::class . ':articleCategoryIds' => 'int',
+ RunInterbranchPlannerRequest::class . ':fromBranchNumbers' => 'int',
+ RunInterbranchPlannerRequest::class . ':toBranchNumbers' => 'int',
+ GetInterbranchOrdersResponse::class . ':interbranchOrderList' => 'MplusKASSA\MplusQapi\InterbranchOrder',
+ GetInterbranchShipmentsResponse::class . ':interbranchShipmentList' => 'MplusKASSA\MplusQapi\InterbranchShipment',
+ GetInterbranchDeliveriesResponse::class . ':interbranchDeliveryList' => 'MplusKASSA\MplusQapi\InterbranchDelivery',
+ RunInterbranchPlannerResponse::class . ':createdInterbranchOrders' => 'MplusKASSA\MplusQapi\YearNumber',
+ RunInterbranchPlannerResponse::class . ':updatedInterbranchOrders' => 'MplusKASSA\MplusQapi\YearNumber',
+ RunInterbranchPlannerResponse::class . ':messages' => 'MplusKASSA\MplusQapi\InterbranchPlannerMessage',
  payTableOrder::class . ':paymentList' => 'MplusKASSA\MplusQapi\Payment',
  prepayTableOrder::class . ':paymentList' => 'MplusKASSA\MplusQapi\Payment',
         );
@@ -869,57 +976,11 @@ class MplusApiClient extends BaseSoapClient {
         $this->endRequest();
         return $res;
     }
-    public function getCurrentSyncMarkers(?string $requestId = null) : getCurrentSyncMarkersResponse {
-        $opname = 'getCurrentSyncMarkers';
-        $this->startRequest($opname);
-        $reqobj = new getCurrentSyncMarkers();
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function getCurrentSyncMarkersV2(GetCurrentSyncMarkersV2Request $request, ?string $requestId = null) : GetCurrentSyncMarkersV2Response {
-        $opname = 'getCurrentSyncMarkersV2';
-        $this->startRequest($opname);
-        $reqobj = new getCurrentSyncMarkersV2();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
     public function logMistake(Terminal $terminal, LogMistakeRequest $request, ?string $requestId = null) : LogMistakeResponse {
         $opname = 'logMistake';
         $this->startRequest($opname);
         $reqobj = new logMistake();
         $reqobj->terminal = $terminal;
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function getBranches(?string $requestId = null) : getBranchesResponse {
-        $opname = 'getBranches';
-        $this->startRequest($opname);
-        $reqobj = new getBranches();
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function getImages(GetImagesRequest $request, ?string $requestId = null) : GetImagesResponse {
-        $opname = 'getImages';
-        $this->startRequest($opname);
-        $reqobj = new getImages();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);
@@ -1361,6 +1422,18 @@ class MplusApiClient extends BaseSoapClient {
         $this->startRequest($opname);
         $reqobj = new releaseTable();
         $reqobj->terminal = $terminal;
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function releaseTableV2(ReleaseTableV2Request $request, ?string $requestId = null) : ReleaseTableV2Response {
+        $opname = 'releaseTableV2';
+        $this->startRequest($opname);
+        $reqobj = new releaseTableV2();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);
@@ -2416,178 +2489,10 @@ class MplusApiClient extends BaseSoapClient {
         $this->endRequest();
         return $res;
     }
-    public function getInterbranchOrders(GetInterbranchOrdersRequest $request, ?string $requestId = null) : GetInterbranchOrdersResponse {
-        $opname = 'getInterbranchOrders';
-        $this->startRequest($opname);
-        $reqobj = new getInterbranchOrders();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function createInterbranchOrder(CreateInterbranchOrderRequest $request, ?string $requestId = null) : CreateInterbranchOrderResponse {
-        $opname = 'createInterbranchOrder';
-        $this->startRequest($opname);
-        $reqobj = new createInterbranchOrder();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function claimInterbranchOrder(ClaimInterbranchOrderRequest $request, ?string $requestId = null) : ClaimInterbranchOrderResponse {
-        $opname = 'claimInterbranchOrder';
-        $this->startRequest($opname);
-        $reqobj = new claimInterbranchOrder();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function releaseInterbranchOrder(ReleaseInterbranchOrderRequest $request, ?string $requestId = null) : ReleaseInterbranchOrderResponse {
-        $opname = 'releaseInterbranchOrder';
-        $this->startRequest($opname);
-        $reqobj = new releaseInterbranchOrder();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function getInterbranchShipments(GetInterbranchShipmentsRequest $request, ?string $requestId = null) : GetInterbranchShipmentsResponse {
-        $opname = 'getInterbranchShipments';
-        $this->startRequest($opname);
-        $reqobj = new getInterbranchShipments();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function shipInterbranchOrder(ShipInterbranchOrderRequest $request, ?string $requestId = null) : ShipInterbranchOrderResponse {
-        $opname = 'shipInterbranchOrder';
-        $this->startRequest($opname);
-        $reqobj = new shipInterbranchOrder();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function getInterbranchDeliveries(GetInterbranchDeliveriesRequest $request, ?string $requestId = null) : GetInterbranchDeliveriesResponse {
-        $opname = 'getInterbranchDeliveries';
-        $this->startRequest($opname);
-        $reqobj = new getInterbranchDeliveries();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function deliverInterbranchShipment(DeliverInterbranchShipmentRequest $request, ?string $requestId = null) : DeliverInterbranchShipmentResponse {
-        $opname = 'deliverInterbranchShipment';
-        $this->startRequest($opname);
-        $reqobj = new deliverInterbranchShipment();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function createInterbranchShipment(CreateInterbranchShipmentRequest $request, ?string $requestId = null) : CreateInterbranchShipmentResponse {
-        $opname = 'createInterbranchShipment';
-        $this->startRequest($opname);
-        $reqobj = new createInterbranchShipment();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function createInterbranchDelivery(CreateInterbranchDeliveryRequest $request, ?string $requestId = null) : CreateInterbranchDeliveryResponse {
-        $opname = 'createInterbranchDelivery';
-        $this->startRequest($opname);
-        $reqobj = new createInterbranchDelivery();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
     public function EidSearch(EidSearchRequest $request, ?string $requestId = null) : EidSearchResponse {
         $opname = 'EidSearch';
         $this->startRequest($opname);
         $reqobj = new EidSearch();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function verifyCredentials(VerifyCredentialsRequest $request, ?string $requestId = null) : VerifyCredentialsResponse {
-        $opname = 'verifyCredentials';
-        $this->startRequest($opname);
-        $reqobj = new verifyCredentials();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function saveCredentials(SaveCredentialsRequest $request, ?string $requestId = null) : SaveCredentialsResponse {
-        $opname = 'saveCredentials';
-        $this->startRequest($opname);
-        $reqobj = new saveCredentials();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function getPasswordRequirements(PasswordRequirementsRequest $request, ?string $requestId = null) : PasswordRequirementsResponse {
-        $opname = 'getPasswordRequirements';
-        $this->startRequest($opname);
-        $reqobj = new getPasswordRequirements();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function passwordReset(PasswordResetRequest $request, ?string $requestId = null) : PasswordResetResponse {
-        $opname = 'passwordReset';
-        $this->startRequest($opname);
-        $reqobj = new passwordReset();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);
@@ -2624,78 +2529,6 @@ class MplusApiClient extends BaseSoapClient {
         $opname = 'updateBatch';
         $this->startRequest($opname);
         $reqobj = new updateBatch();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function getEmployeeAuthorizations(GetEmployeeAuthorizationsRequest $request, ?string $requestId = null) : GetEmployeeAuthorizationsResponse {
-        $opname = 'getEmployeeAuthorizations';
-        $this->startRequest($opname);
-        $reqobj = new getEmployeeAuthorizations();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function getGroupAuthorizations(GetGroupAuthorizationsRequest $request, ?string $requestId = null) : GetGroupAuthorizationsResponse {
-        $opname = 'getGroupAuthorizations';
-        $this->startRequest($opname);
-        $reqobj = new getGroupAuthorizations();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function updateGroupAuthorizations(UpdateGroupAuthorizationsRequest $request, ?string $requestId = null) : UpdateGroupAuthorizationsResponse {
-        $opname = 'updateGroupAuthorizations';
-        $this->startRequest($opname);
-        $reqobj = new updateGroupAuthorizations();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function getAuthorizationGroups(GetAuthorizationGroupsRequest $request, ?string $requestId = null) : GetAuthorizationGroupsResponse {
-        $opname = 'getAuthorizationGroups';
-        $this->startRequest($opname);
-        $reqobj = new getAuthorizationGroups();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function getAuthorizationTree(GetAuthorizationTreeRequest $request, ?string $requestId = null) : GetAuthorizationTreeResponse {
-        $opname = 'getAuthorizationTree';
-        $this->startRequest($opname);
-        $reqobj = new getAuthorizationTree();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function getEmployeeBranchAuthorizations(GetEmployeeBranchAuthorizationsRequest $request, ?string $requestId = null) : GetEmployeeBranchAuthorizationsResponse {
-        $opname = 'getEmployeeBranchAuthorizations';
-        $this->startRequest($opname);
-        $reqobj = new getEmployeeBranchAuthorizations();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);
@@ -2872,18 +2705,6 @@ class MplusApiClient extends BaseSoapClient {
         $this->endRequest();
         return $res;
     }
-    public function changeTableProperty(ChangeTablePropertyReq $request, ?string $requestId = null) : ChangeTablePropertyResp {
-        $opname = 'changeTableProperty';
-        $this->startRequest($opname);
-        $reqobj = new changeTableProperty();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
     public function getTapTickTotals(TapTickTotalsRequest $request, ?string $requestId = null) : TapTickTotalsResponse {
         $opname = 'getTapTickTotals';
         $this->startRequest($opname);
@@ -3004,54 +2825,6 @@ class MplusApiClient extends BaseSoapClient {
         $this->endRequest();
         return $res;
     }
-    public function saveAuthorizationGroup(SaveAuthorizationGroupRequest $request, ?string $requestId = null) : SaveAuthorizationGroupResponse {
-        $opname = 'saveAuthorizationGroup';
-        $this->startRequest($opname);
-        $reqobj = new saveAuthorizationGroup();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function deleteAuthorizationGroup(DeleteAuthorizationGroupRequest $request, ?string $requestId = null) : DeleteAuthorizationGroupResponse {
-        $opname = 'deleteAuthorizationGroup';
-        $this->startRequest($opname);
-        $reqobj = new deleteAuthorizationGroup();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function getEmployeeAuthorizationGroups(GetEmployeeAuthorizationGroupsRequest $request, ?string $requestId = null) : GetEmployeeAuthorizationGroupsResponse {
-        $opname = 'getEmployeeAuthorizationGroups';
-        $this->startRequest($opname);
-        $reqobj = new getEmployeeAuthorizationGroups();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function updateEmployeeAuthorizationGroups(UpdateEmployeeAuthorizationGroupsRequest $request, ?string $requestId = null) : UpdateEmployeeAuthorizationGroupsResponse {
-        $opname = 'updateEmployeeAuthorizationGroups';
-        $this->startRequest($opname);
-        $reqobj = new updateEmployeeAuthorizationGroups();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
     public function getFilterProfiles(GetFilterProfilesRequest $request, ?string $requestId = null) : GetFilterProfilesResponse {
         $opname = 'getFilterProfiles';
         $this->startRequest($opname);
@@ -3068,18 +2841,6 @@ class MplusApiClient extends BaseSoapClient {
         $opname = 'savePreparationMethodGroup';
         $this->startRequest($opname);
         $reqobj = new savePreparationMethodGroup();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function getEmployeeAuthorizationSyncMarkers(GetEmployeeAuthorizationSyncMarkersRequest $request, ?string $requestId = null) : GetEmployeeAuthorizationSyncMarkersResponse {
-        $opname = 'getEmployeeAuthorizationSyncMarkers';
-        $this->startRequest($opname);
-        $reqobj = new getEmployeeAuthorizationSyncMarkers();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);
@@ -3184,10 +2945,10 @@ class MplusApiClient extends BaseSoapClient {
         $this->endRequest();
         return $res;
     }
-    public function getNutrientTypes(GetNutrientTypesRequest $request, ?string $requestId = null) : GetNutrientTypesResponse {
-        $opname = 'getNutrientTypes';
+    public function updateArticleDynamicMinMaxStock(UpdateArticleDynamicMinMaxStockRequest $request, ?string $requestId = null) : UpdateArticleDynamicMinMaxStockResponse {
+        $opname = 'updateArticleDynamicMinMaxStock';
         $this->startRequest($opname);
-        $reqobj = new getNutrientTypes();
+        $reqobj = new updateArticleDynamicMinMaxStock();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);
@@ -3196,10 +2957,58 @@ class MplusApiClient extends BaseSoapClient {
         $this->endRequest();
         return $res;
     }
-    public function createInvoiceFromPackingSlips(CreateInvoiceFromPackingSlipsRequest $request, ?string $requestId = null) : CreateInvoiceFromPackingSlipsResponse {
-        $opname = 'createInvoiceFromPackingSlips';
+    public function getArticleDynamicMinMaxStock(GetArticleDynamicMinMaxStockRequest $request, ?string $requestId = null) : GetArticleDynamicMinMaxStockResponse {
+        $opname = 'getArticleDynamicMinMaxStock';
         $this->startRequest($opname);
-        $reqobj = new createInvoiceFromPackingSlips();
+        $reqobj = new getArticleDynamicMinMaxStock();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getCardFilterOptions(GetCardFilterOptionsRequest $request, ?string $requestId = null) : GetCardFilterOptionsResponse {
+        $opname = 'getCardFilterOptions';
+        $this->startRequest($opname);
+        $reqobj = new getCardFilterOptions();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getPlannedCycleCounts(GetPlannedCycleCountsRequest $request, ?string $requestId = null) : GetPlannedCycleCountsResponse {
+        $opname = 'getPlannedCycleCounts';
+        $this->startRequest($opname);
+        $reqobj = new getPlannedCycleCounts();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getActiveCycleCount(GetActiveCycleCountRequest $request, ?string $requestId = null) : GetActiveCycleCountResponse {
+        $opname = 'getActiveCycleCount';
+        $this->startRequest($opname);
+        $reqobj = new getActiveCycleCount();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function setArticleRecalled(SetArticleRecalledRequest $request, ?string $requestId = null) : SetArticleRecalledResponse {
+        $opname = 'setArticleRecalled';
+        $this->startRequest($opname);
+        $reqobj = new setArticleRecalled();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);
@@ -3744,6 +3553,256 @@ class MplusApiClient extends BaseSoapClient {
         $this->endRequest();
         return $res;
     }
+    public function getBranches(?string $requestId = null) : getBranchesResponse {
+        $opname = 'getBranches';
+        $this->startRequest($opname);
+        $reqobj = new getBranches();
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getCurrentSyncMarkers(?string $requestId = null) : getCurrentSyncMarkersResponse {
+        $opname = 'getCurrentSyncMarkers';
+        $this->startRequest($opname);
+        $reqobj = new getCurrentSyncMarkers();
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getCurrentSyncMarkersV2(GetCurrentSyncMarkersV2Request $request, ?string $requestId = null) : GetCurrentSyncMarkersV2Response {
+        $opname = 'getCurrentSyncMarkersV2';
+        $this->startRequest($opname);
+        $reqobj = new getCurrentSyncMarkersV2();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getNutrientTypes(GetNutrientTypesRequest $request, ?string $requestId = null) : GetNutrientTypesResponse {
+        $opname = 'getNutrientTypes';
+        $this->startRequest($opname);
+        $reqobj = new getNutrientTypes();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function verifyCredentials(VerifyCredentialsRequest $request, ?string $requestId = null) : VerifyCredentialsResponse {
+        $opname = 'verifyCredentials';
+        $this->startRequest($opname);
+        $reqobj = new verifyCredentials();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function saveCredentials(SaveCredentialsRequest $request, ?string $requestId = null) : SaveCredentialsResponse {
+        $opname = 'saveCredentials';
+        $this->startRequest($opname);
+        $reqobj = new saveCredentials();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getPasswordRequirements(PasswordRequirementsRequest $request, ?string $requestId = null) : PasswordRequirementsResponse {
+        $opname = 'getPasswordRequirements';
+        $this->startRequest($opname);
+        $reqobj = new getPasswordRequirements();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function passwordReset(PasswordResetRequest $request, ?string $requestId = null) : PasswordResetResponse {
+        $opname = 'passwordReset';
+        $this->startRequest($opname);
+        $reqobj = new passwordReset();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getFloorplans(GetFloorplansRequest $request, ?string $requestId = null) : GetFloorplansResponse {
+        $opname = 'getFloorplans';
+        $this->startRequest($opname);
+        $reqobj = new getFloorplans();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function changeTableProperty(ChangeTablePropertyReq $request, ?string $requestId = null) : ChangeTablePropertyResp {
+        $opname = 'changeTableProperty';
+        $this->startRequest($opname);
+        $reqobj = new changeTableProperty();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getEmployeeAuthorizations(GetEmployeeAuthorizationsRequest $request, ?string $requestId = null) : GetEmployeeAuthorizationsResponse {
+        $opname = 'getEmployeeAuthorizations';
+        $this->startRequest($opname);
+        $reqobj = new getEmployeeAuthorizations();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getGroupAuthorizations(GetGroupAuthorizationsRequest $request, ?string $requestId = null) : GetGroupAuthorizationsResponse {
+        $opname = 'getGroupAuthorizations';
+        $this->startRequest($opname);
+        $reqobj = new getGroupAuthorizations();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function updateGroupAuthorizations(UpdateGroupAuthorizationsRequest $request, ?string $requestId = null) : UpdateGroupAuthorizationsResponse {
+        $opname = 'updateGroupAuthorizations';
+        $this->startRequest($opname);
+        $reqobj = new updateGroupAuthorizations();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getAuthorizationGroups(GetAuthorizationGroupsRequest $request, ?string $requestId = null) : GetAuthorizationGroupsResponse {
+        $opname = 'getAuthorizationGroups';
+        $this->startRequest($opname);
+        $reqobj = new getAuthorizationGroups();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getAuthorizationTree(GetAuthorizationTreeRequest $request, ?string $requestId = null) : GetAuthorizationTreeResponse {
+        $opname = 'getAuthorizationTree';
+        $this->startRequest($opname);
+        $reqobj = new getAuthorizationTree();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getEmployeeBranchAuthorizations(GetEmployeeBranchAuthorizationsRequest $request, ?string $requestId = null) : GetEmployeeBranchAuthorizationsResponse {
+        $opname = 'getEmployeeBranchAuthorizations';
+        $this->startRequest($opname);
+        $reqobj = new getEmployeeBranchAuthorizations();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function saveAuthorizationGroup(SaveAuthorizationGroupRequest $request, ?string $requestId = null) : SaveAuthorizationGroupResponse {
+        $opname = 'saveAuthorizationGroup';
+        $this->startRequest($opname);
+        $reqobj = new saveAuthorizationGroup();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function deleteAuthorizationGroup(DeleteAuthorizationGroupRequest $request, ?string $requestId = null) : DeleteAuthorizationGroupResponse {
+        $opname = 'deleteAuthorizationGroup';
+        $this->startRequest($opname);
+        $reqobj = new deleteAuthorizationGroup();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getEmployeeAuthorizationGroups(GetEmployeeAuthorizationGroupsRequest $request, ?string $requestId = null) : GetEmployeeAuthorizationGroupsResponse {
+        $opname = 'getEmployeeAuthorizationGroups';
+        $this->startRequest($opname);
+        $reqobj = new getEmployeeAuthorizationGroups();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function updateEmployeeAuthorizationGroups(UpdateEmployeeAuthorizationGroupsRequest $request, ?string $requestId = null) : UpdateEmployeeAuthorizationGroupsResponse {
+        $opname = 'updateEmployeeAuthorizationGroups';
+        $this->startRequest($opname);
+        $reqobj = new updateEmployeeAuthorizationGroups();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getEmployeeAuthorizationSyncMarkers(GetEmployeeAuthorizationSyncMarkersRequest $request, ?string $requestId = null) : GetEmployeeAuthorizationSyncMarkersResponse {
+        $opname = 'getEmployeeAuthorizationSyncMarkers';
+        $this->startRequest($opname);
+        $reqobj = new getEmployeeAuthorizationSyncMarkers();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
     public function createImage(CreateImageRequest $request, ?string $requestId = null) : CreateImageResponse {
         $opname = 'createImage';
         $this->startRequest($opname);
@@ -3804,6 +3863,18 @@ class MplusApiClient extends BaseSoapClient {
         $this->endRequest();
         return $res;
     }
+    public function getImages(GetImagesRequest $request, ?string $requestId = null) : GetImagesResponse {
+        $opname = 'getImages';
+        $this->startRequest($opname);
+        $reqobj = new getImages();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
     public function getPrintLayouts(GetPrintLayoutsRequest $request, ?string $requestId = null) : GetPrintLayoutsResponse {
         $opname = 'getPrintLayouts';
         $this->startRequest($opname);
@@ -3820,6 +3891,30 @@ class MplusApiClient extends BaseSoapClient {
         $opname = 'getRenderedPrintLayout';
         $this->startRequest($opname);
         $reqobj = new getRenderedPrintLayout();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getPrintLayoutMarkup(GetPrintLayoutMarkupRequest $request, ?string $requestId = null) : GetPrintLayoutMarkupResponse {
+        $opname = 'getPrintLayoutMarkup';
+        $this->startRequest($opname);
+        $reqobj = new getPrintLayoutMarkup();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function printPrintLayout(PrintPrintLayoutRequest $request, ?string $requestId = null) : PrintPrintLayoutResponse {
+        $opname = 'printPrintLayout';
+        $this->startRequest($opname);
+        $reqobj = new printPrintLayout();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);
@@ -4036,6 +4131,66 @@ class MplusApiClient extends BaseSoapClient {
         $opname = 'getVoucherSettings';
         $this->startRequest($opname);
         $reqobj = new getVoucherSettings();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function issueVouchers(IssueVouchersRequest $request, ?string $requestId = null) : IssueVouchersResponse {
+        $opname = 'issueVouchers';
+        $this->startRequest($opname);
+        $reqobj = new issueVouchers();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function issueVoucherExternalScanCodes(IssueVoucherExternalScanCodesRequest $request, ?string $requestId = null) : IssueVoucherExternalScanCodesResponse {
+        $opname = 'issueVoucherExternalScanCodes';
+        $this->startRequest($opname);
+        $reqobj = new issueVoucherExternalScanCodes();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getVoucherExternalScanCodes(GetVoucherExternalScanCodesRequest $request, ?string $requestId = null) : GetVoucherExternalScanCodesResponse {
+        $opname = 'getVoucherExternalScanCodes';
+        $this->startRequest($opname);
+        $reqobj = new getVoucherExternalScanCodes();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getRedeemableVoucherIssuances(GetRedeemableVoucherIssuancesRequest $request, ?string $requestId = null) : GetRedeemableVoucherIssuancesResponse {
+        $opname = 'getRedeemableVoucherIssuances';
+        $this->startRequest($opname);
+        $reqobj = new getRedeemableVoucherIssuances();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function redeemVoucherIssuance(RedeemVoucherIssuanceRequest $request, ?string $requestId = null) : RedeemVoucherIssuanceResponse {
+        $opname = 'redeemVoucherIssuance';
+        $this->startRequest($opname);
+        $reqobj = new redeemVoucherIssuance();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);
@@ -4458,6 +4613,18 @@ class MplusApiClient extends BaseSoapClient {
         $this->endRequest();
         return $res;
     }
+    public function getOrdersByExtOrderIds(GetOrdersByExtOrderIdsRequest $request, ?string $requestId = null) : GetOrdersByExtOrderIdsResponse {
+        $opname = 'getOrdersByExtOrderIds';
+        $this->startRequest($opname);
+        $reqobj = new getOrdersByExtOrderIds();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
     public function getProposals(GetProposalsRequest $request, ?string $requestId = null) : GetProposalsResponse {
         $opname = 'getProposals';
         $this->startRequest($opname);
@@ -4558,6 +4725,54 @@ class MplusApiClient extends BaseSoapClient {
         $opname = 'getOrders';
         $this->startRequest($opname);
         $reqobj = new getOrders();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function determineContractLines(DetermineContractLinesRequest $request, ?string $requestId = null) : DetermineContractLinesResponse {
+        $opname = 'determineContractLines';
+        $this->startRequest($opname);
+        $reqobj = new determineContractLines();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function createInvoiceFromPackingSlips(CreateInvoiceFromPackingSlipsRequest $request, ?string $requestId = null) : CreateInvoiceFromPackingSlipsResponse {
+        $opname = 'createInvoiceFromPackingSlips';
+        $this->startRequest($opname);
+        $reqobj = new createInvoiceFromPackingSlips();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getCashCountInfo(GetCashCountInfoRequest $request, ?string $requestId = null) : GetCashCountInfoResponse {
+        $opname = 'getCashCountInfo';
+        $this->startRequest($opname);
+        $reqobj = new getCashCountInfo();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function saveCashCount(SaveCashCountRequest $request, ?string $requestId = null) : SaveCashCountResponse {
+        $opname = 'saveCashCount';
+        $this->startRequest($opname);
+        $reqobj = new saveCashCount();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);
@@ -4682,6 +4897,150 @@ class MplusApiClient extends BaseSoapClient {
         $opname = 'sendWebhook';
         $this->startRequest($opname);
         $reqobj = new sendWebhook();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getInterbranchOrders(GetInterbranchOrdersRequest $request, ?string $requestId = null) : GetInterbranchOrdersResponse {
+        $opname = 'getInterbranchOrders';
+        $this->startRequest($opname);
+        $reqobj = new getInterbranchOrders();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function createInterbranchOrder(CreateInterbranchOrderRequest $request, ?string $requestId = null) : CreateInterbranchOrderResponse {
+        $opname = 'createInterbranchOrder';
+        $this->startRequest($opname);
+        $reqobj = new createInterbranchOrder();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function updateInterbranchOrder(UpdateInterbranchOrderRequest $request, ?string $requestId = null) : UpdateInterbranchOrderResponse {
+        $opname = 'updateInterbranchOrder';
+        $this->startRequest($opname);
+        $reqobj = new updateInterbranchOrder();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function claimInterbranchOrder(ClaimInterbranchOrderRequest $request, ?string $requestId = null) : ClaimInterbranchOrderResponse {
+        $opname = 'claimInterbranchOrder';
+        $this->startRequest($opname);
+        $reqobj = new claimInterbranchOrder();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function releaseInterbranchOrder(ReleaseInterbranchOrderRequest $request, ?string $requestId = null) : ReleaseInterbranchOrderResponse {
+        $opname = 'releaseInterbranchOrder';
+        $this->startRequest($opname);
+        $reqobj = new releaseInterbranchOrder();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getInterbranchShipments(GetInterbranchShipmentsRequest $request, ?string $requestId = null) : GetInterbranchShipmentsResponse {
+        $opname = 'getInterbranchShipments';
+        $this->startRequest($opname);
+        $reqobj = new getInterbranchShipments();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function shipInterbranchOrder(ShipInterbranchOrderRequest $request, ?string $requestId = null) : ShipInterbranchOrderResponse {
+        $opname = 'shipInterbranchOrder';
+        $this->startRequest($opname);
+        $reqobj = new shipInterbranchOrder();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getInterbranchDeliveries(GetInterbranchDeliveriesRequest $request, ?string $requestId = null) : GetInterbranchDeliveriesResponse {
+        $opname = 'getInterbranchDeliveries';
+        $this->startRequest($opname);
+        $reqobj = new getInterbranchDeliveries();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function deliverInterbranchShipment(DeliverInterbranchShipmentRequest $request, ?string $requestId = null) : DeliverInterbranchShipmentResponse {
+        $opname = 'deliverInterbranchShipment';
+        $this->startRequest($opname);
+        $reqobj = new deliverInterbranchShipment();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function createInterbranchShipment(CreateInterbranchShipmentRequest $request, ?string $requestId = null) : CreateInterbranchShipmentResponse {
+        $opname = 'createInterbranchShipment';
+        $this->startRequest($opname);
+        $reqobj = new createInterbranchShipment();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function createInterbranchDelivery(CreateInterbranchDeliveryRequest $request, ?string $requestId = null) : CreateInterbranchDeliveryResponse {
+        $opname = 'createInterbranchDelivery';
+        $this->startRequest($opname);
+        $reqobj = new createInterbranchDelivery();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function runInterbranchPlanner(RunInterbranchPlannerRequest $request, ?string $requestId = null) : RunInterbranchPlannerResponse {
+        $opname = 'runInterbranchPlanner';
+        $this->startRequest($opname);
+        $reqobj = new runInterbranchPlanner();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);
