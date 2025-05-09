@@ -3,6 +3,7 @@ namespace MplusKASSA\Wsdl2PhpGenerator;
 use Exception;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\HandlerStack;
 
 abstract class BaseSoapClient
 {
@@ -28,7 +29,15 @@ abstract class BaseSoapClient
 
     protected BaseSoapParser $parser;
 
-    public function __construct(string $apiServer, int $apiPort, string $ident, string $secret, ?float $connectTimeout = null, ?float $timeout = null, bool $verify = true)
+    public function __construct(
+        string $apiServer,
+        int $apiPort,
+        string $ident,
+        string $secret,
+        ?float $connectTimeout = null,
+        ?float $timeout = null,
+        bool $verify = true,
+        ?HandlerStack $handlerStack = null)
     {
         if (0 !== stripos($apiServer, 'http')) {
             $apiServer = 'https://' . $apiServer;
@@ -44,6 +53,7 @@ abstract class BaseSoapClient
                 'Content-Type' => 'text/xml; charset=utf-8',
             ],
             'verify' => $verify,
+            'handler' => $handlerStack,
         ]);
         $this->connectTimeout = $connectTimeout ?? self::DEFAULT_CONNECT_TIMEOUT_SECS;
         $this->timeout = $timeout ?? self::DEFAULT_TIMEOUT_SECS;
