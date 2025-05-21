@@ -69,6 +69,7 @@ class MplusApiClient extends BaseSoapClient {
  LineList::class . ':line' => 'MplusKASSA\MplusQapi\Line',
  Line::class . ':preparationList' => 'MplusKASSA\MplusQapi\Line',
  Line::class . ':contractLines' => 'MplusKASSA\MplusQapi\SalesLineContractLine',
+ Line::class . ':uncondensedLines' => 'MplusKASSA\MplusQapi\Line',
  TextList::class . ':text' => 'MplusKASSA\MplusQapi\Text',
  VoucherIdList::class . ':voucherId' => 'MplusKASSA\MplusQapi\VoucherId',
  VoucherIssuanceRedeemList::class . ':voucherIssuanceRedeem' => 'MplusKASSA\MplusQapi\VoucherIssuanceRedeem',

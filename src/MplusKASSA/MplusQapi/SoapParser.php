@@ -2966,6 +2966,7 @@ class SoapParser extends BaseSoapParser {
 						case 'retourReason': $o->retourReason = $this->load_string_property($in); break;
 						case 'sequenceNumber': $o->sequenceNumber = $this->load_int_property($in); break;
 						case 'contractLines': $o->contractLines = ($this->load_SalesLineContractLineList($in))->contractLine; break;
+						case 'uncondensedLines': $o->uncondensedLines = ($this->load_LineList($in))->line; break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -4508,6 +4509,7 @@ class SoapParser extends BaseSoapParser {
 						case 'claimTable': $o->claimTable = $this->load_bool_property($in); break;
 						case 'uncondensedLines': $o->uncondensedLines = $this->load_bool_property($in); break;
 						case 'claimMethod': $o->claimMethod = $this->load_string_property($in); break;
+						case 'forceCondensedLines': $o->forceCondensedLines = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -11906,6 +11908,7 @@ class SoapParser extends BaseSoapParser {
 						case 'salesPriceIncl': $o->salesPriceIncl = $this->load_BigDecimal_property($in); break;
 						case 'salesPriceExcl': $o->salesPriceExcl = $this->load_BigDecimal_property($in); break;
 						case 'specialPrice': $o->specialPrice = $this->load_string_property($in); break;
+						case 'oldestBestBeforeDate': $o->oldestBestBeforeDate = $this->load_Date_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:

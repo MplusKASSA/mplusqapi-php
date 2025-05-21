@@ -1512,6 +1512,8 @@ class Line extends SoapObject {
 	public ?int $sequenceNumber = null;
 	/** @var SalesLineContractLine[] */
 	public $contractLines = null;
+	/** @var Line[] */
+	public $uncondensedLines = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->lineId !== null) $gen->out->writeElementNs(self::TNS, 'lineId', null, $this->lineId);
 		if ($this->employeeNumber !== null) $gen->writeInt('employeeNumber', $this->employeeNumber);
@@ -1540,6 +1542,10 @@ $tmp_preparationList->write($gen, 'preparationList');
 		if ($this->contractLines !== null) {
 $tmp_contractLines = new SalesLineContractLineList($this->contractLines);
 $tmp_contractLines->write($gen, 'contractLines');
+}
+		if ($this->uncondensedLines !== null) {
+$tmp_uncondensedLines = new LineList($this->uncondensedLines);
+$tmp_uncondensedLines->write($gen, 'uncondensedLines');
 }
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
@@ -2839,6 +2845,7 @@ class GetTableOrderV3Request extends SoapObject {
 	public ?bool $claimTable = null;
 	public ?bool $uncondensedLines = null;
 	public ?string $claimMethod = null;
+	public ?bool $forceCondensedLines = null;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->writeInt('branchNumber', $this->branchNumber);
 		$gen->writeInt('workplaceNumber', $this->workplaceNumber);
@@ -2848,6 +2855,7 @@ class GetTableOrderV3Request extends SoapObject {
 		if ($this->claimTable !== null) $gen->writeBool('claimTable', $this->claimTable);
 		if ($this->uncondensedLines !== null) $gen->writeBool('uncondensedLines', $this->uncondensedLines);
 		if ($this->claimMethod !== null) $gen->out->writeElementNs(self::TNS, 'claimMethod', null, $this->claimMethod);
+		if ($this->forceCondensedLines !== null) $gen->writeBool('forceCondensedLines', $this->forceCondensedLines);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -10441,6 +10449,7 @@ class ArticleBranchDeviationLine extends SoapObject {
 	public ?BigDecimal $salesPriceIncl = null;
 	public ?BigDecimal $salesPriceExcl = null;
 	public ?string $specialPrice = null;
+	public ?\DateTime $oldestBestBeforeDate = null;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->writeInt('articleNumber', $this->articleNumber);
 		$gen->writeInt('branchNumber', $this->branchNumber);
@@ -10448,6 +10457,7 @@ class ArticleBranchDeviationLine extends SoapObject {
 		if ($this->salesPriceIncl !== null) $gen->writeBigDecimal('salesPriceIncl', $this->salesPriceIncl);
 		if ($this->salesPriceExcl !== null) $gen->writeBigDecimal('salesPriceExcl', $this->salesPriceExcl);
 		if ($this->specialPrice !== null) $gen->out->writeElementNs(self::TNS, 'specialPrice', null, $this->specialPrice);
+		if ($this->oldestBestBeforeDate !== null) $gen->writeDate('oldestBestBeforeDate', $this->oldestBestBeforeDate);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
