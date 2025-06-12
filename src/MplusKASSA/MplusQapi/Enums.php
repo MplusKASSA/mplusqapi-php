@@ -32,6 +32,7 @@ class DataType {
 	const ARRAY = 'DATA-TYPE-ARRAY';
 	const MULTISELECTINT = 'DATA-TYPE-MULTISELECTINT';
 	const UNKNOWN = 'DATA-TYPE-UNKNOWN';
+	const TEXT_ARRAY = 'DATA-TYPE-TEXT-ARRAY';
 }
 class LoadFileResult {
 	const LOAD_FILE_OK = 'LOAD-FILE-OK';
@@ -645,6 +646,9 @@ class OverviewFilterOperator {
 	const INCOLLECTION = 'INCOLLECTION';
 	const BIGGER_OR_EQUAL = 'BIGGER-OR-EQUAL';
 	const SMALLER_OR_EQUAL = 'SMALLER-OR-EQUAL';
+	const EMPTY = 'EMPTY';
+	const NOT_EMPTY = 'NOT-EMPTY';
+	const NO_OVERLAP = 'NO-OVERLAP';
 }
 class SortOrderType {
 	const ASCENDING = 'ASCENDING';
@@ -1010,6 +1014,16 @@ class DeleteAuthorizationGroupResult {
 class UpdateEmployeeAuthorizationGroupsResult {
 	const OK = 'UPDATE-EMPLOYEE-AUTHORIZATION-GROUPS-RESULT-OK';
 	const FAILED = 'UPDATE-EMPLOYEE-AUTHORIZATION-GROUPS-RESULT-FAILED';
+}
+class BarcodePatternKind {
+	const PRICE = 'BARCODE-PATTERN-KIND-PRICE';
+	const WEIGHT = 'BARCODE-PATTERN-KIND-WEIGHT';
+	const PRICE_AND_WEIGHT = 'BARCODE-PATTERN-KIND-PRICE-AND-WEIGHT';
+}
+class ParseSpecialBarcodeResult {
+	const OK = 'PARSE-SPECIAL-BARCODE-RESULT-OK';
+	const NOT_RECOGNIZED = 'PARSE-SPECIAL-BARCODE-RESULT-NOT-RECOGNIZED';
+	const ARTICLE_NOT_FOUND = 'PARSE-SPECIAL-BARCODE-RESULT-ARTICLE-NOT-FOUND';
 }
 class CreateImageResult {
 	const CREATE_IMAGE_OK = 'CREATE-IMAGE-OK';

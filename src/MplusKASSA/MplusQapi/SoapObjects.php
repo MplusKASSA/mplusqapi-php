@@ -459,6 +459,8 @@ class Relation extends SoapObject {
 	public ?string $companyName = null;
 	/** @var int[] */
 	public $branchesNonPurchasable = array();
+	/** @var string[] */
+	public $cardNumbers = array();
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->relationNumber !== null) $gen->writeInt('relationNumber', $this->relationNumber);
 		if ($this->extRelationId !== null) $gen->out->writeElementNs(self::TNS, 'extRelationId', null, $this->extRelationId);
@@ -522,6 +524,7 @@ $tmp_relationArticleDiscountList->write($gen, 'relationArticleDiscountList');
 }
 		if ($this->companyName !== null) $gen->out->writeElementNs(self::TNS, 'companyName', null, $this->companyName);
 		foreach ($this->branchesNonPurchasable as $elem) $gen->writeInt('branchesNonPurchasable', $elem);
+		foreach ($this->cardNumbers as $elem) $gen->out->writeElementNs(self::TNS, 'cardNumbers', null, $elem);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -8630,10 +8633,12 @@ class OverviewFilter extends SoapObject {
 	public string $fieldName;
 	public string $fieldValue;
 	public ?string $filterOperator = null;
+	public ?bool $caseSensitive = null;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'fieldName', null, $this->fieldName);
 		$gen->out->writeElementNs(self::TNS, 'fieldValue', null, $this->fieldValue);
 		if ($this->filterOperator !== null) $gen->out->writeElementNs(self::TNS, 'filterOperator', null, $this->filterOperator);
+		if ($this->caseSensitive !== null) $gen->writeBool('caseSensitive', $this->caseSensitive);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -16120,6 +16125,58 @@ class GetEmployeeAuthorizationSyncMarkersRequest extends SoapObject {
 	}
 }
 
+class GetSpecialBarcodePatternsRequest extends SoapObject {
+	public function writeProps(SoapGenerator $gen): void {
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class BarcodePattern extends SoapObject {
+	public string $regex;
+	public string $kind;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'regex', null, $this->regex);
+		$gen->out->writeElementNs(self::TNS, 'kind', null, $this->kind);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class ParseSpecialBarcodeRequest extends SoapObject {
+	public string $barcode;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'barcode', null, $this->barcode);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class SpecialBarcodeArticleResult extends SoapObject {
+	public int $articleNumber;
+	public ?BigDecimal $price = null;
+	public ?int $weight = null;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->writeInt('articleNumber', $this->articleNumber);
+		if ($this->price !== null) $gen->writeBigDecimal('price', $this->price);
+		if ($this->weight !== null) $gen->writeInt('weight', $this->weight);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
 class GetConfigurationResponse extends SoapObject {
 	/** @var Configuration[] */
 	public $configurationList = array();
@@ -17318,6 +17375,36 @@ class GetEmployeeAuthorizationSyncMarkersResponse extends SoapObject {
 		$gen->writeInt('authMedewRechtenSyncMarker', $this->authMedewRechtenSyncMarker);
 		if ($this->employeeBranchGroupSyncMarker !== null) $gen->writeInt('employeeBranchGroupSyncMarker', $this->employeeBranchGroupSyncMarker);
 		if ($this->employeeSyncMarker !== null) $gen->writeInt('employeeSyncMarker', $this->employeeSyncMarker);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetSpecialBarcodePatternsResponse extends SoapObject {
+	/** @var BarcodePattern[] */
+	public $patterns = array();
+	public function __construct($list = array()) { $this->patterns = $list; }
+	public function writeProps(SoapGenerator $gen): void {
+		foreach ($this->patterns as $elem) $elem->write($gen, 'patterns');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class ParseSpecialBarcodeResponse extends SoapObject {
+	public string $result;
+	public string $kind;
+	public ?SpecialBarcodeArticleResult $articleResult = null;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
+		$gen->out->writeElementNs(self::TNS, 'kind', null, $this->kind);
+		if ($this->articleResult !== null) $this->articleResult->write($gen, 'articleResult');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -21174,14 +21261,14 @@ class SalesRepeatTemplateSchedule extends SoapObject {
 	public $specificDates = array();
 	public string $repeatInterval;
 	public ?SalesRepeatTemplateWeeklySchedule $weeklySchedule = null;
-	public int $yearlyDateMonth;
-	public int $yearlyDateDay;
+	public ?int $yearlyDateMonth = null;
+	public ?int $yearlyDateDay = null;
 	public function writeProps(SoapGenerator $gen): void {
 		foreach ($this->specificDates as $elem) $gen->writeDate('specificDates', $elem);
 		$gen->out->writeElementNs(self::TNS, 'repeatInterval', null, $this->repeatInterval);
 		if ($this->weeklySchedule !== null) $this->weeklySchedule->write($gen, 'weeklySchedule');
-		$gen->writeInt('yearlyDateMonth', $this->yearlyDateMonth);
-		$gen->writeInt('yearlyDateDay', $this->yearlyDateDay);
+		if ($this->yearlyDateMonth !== null) $gen->writeInt('yearlyDateMonth', $this->yearlyDateMonth);
+		if ($this->yearlyDateDay !== null) $gen->writeInt('yearlyDateDay', $this->yearlyDateDay);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -28636,6 +28723,36 @@ class getEmployeeAuthorizationSyncMarkers extends SoapObject {
 	public GetEmployeeAuthorizationSyncMarkersRequest $request;
 	public function __construct() {
 		$this->request = new GetEmployeeAuthorizationSyncMarkersRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class getSpecialBarcodePatterns extends SoapObject {
+	public GetSpecialBarcodePatternsRequest $request;
+	public function __construct() {
+		$this->request = new GetSpecialBarcodePatternsRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class parseSpecialBarcode extends SoapObject {
+	public ParseSpecialBarcodeRequest $request;
+	public function __construct() {
+		$this->request = new ParseSpecialBarcodeRequest();
 	}
 	public function writeProps(SoapGenerator $gen): void {
 		$this->request->write($gen, 'request');

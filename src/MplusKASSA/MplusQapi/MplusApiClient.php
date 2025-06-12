@@ -37,6 +37,7 @@ class MplusApiClient extends BaseSoapClient {
  Relation::class . ':contactList' => 'MplusKASSA\MplusQapi\Relation',
  Relation::class . ':relationArticleDiscountList' => 'MplusKASSA\MplusQapi\RelationArticleDiscount',
  Relation::class . ':branchesNonPurchasable' => 'int',
+ Relation::class . ':cardNumbers' => 'string',
  BranchAccountNumberList::class . ':branchAccountNumber' => 'MplusKASSA\MplusQapi\BranchAccountNumber',
  GiftcardType::class . ':branchNumbers' => 'int',
  GiftcardType::class . ':availableValues' => 'int',
@@ -613,6 +614,7 @@ class MplusApiClient extends BaseSoapClient {
  GetEmployeeBranchAuthorizationsResponse::class . ':branchAuthorizationsList' => 'MplusKASSA\MplusQapi\EmployeeBranchAuthorization',
  GetEmployeeAuthorizationGroupsResponse::class . ':branchAuthorizationGroups' => 'MplusKASSA\MplusQapi\BranchAuthorizationGroup',
  GetEmployeeAuthorizationGroupsResponse::class . ':branchGroupAuthorizationGroups' => 'MplusKASSA\MplusQapi\BranchGroupAuthorizationGroup',
+ GetSpecialBarcodePatternsResponse::class . ':patterns' => 'MplusKASSA\MplusQapi\BarcodePattern',
  ImageCardLabelIds::class . ':labelId' => 'int',
  ImageData::class . ':labels' => 'int',
  CardImageData::class . ':images' => 'MplusKASSA\MplusQapi\ImageData',
@@ -3796,6 +3798,30 @@ class MplusApiClient extends BaseSoapClient {
         $opname = 'getEmployeeAuthorizationSyncMarkers';
         $this->startRequest($opname);
         $reqobj = new getEmployeeAuthorizationSyncMarkers();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getSpecialBarcodePatterns(GetSpecialBarcodePatternsRequest $request, ?string $requestId = null) : GetSpecialBarcodePatternsResponse {
+        $opname = 'getSpecialBarcodePatterns';
+        $this->startRequest($opname);
+        $reqobj = new getSpecialBarcodePatterns();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function parseSpecialBarcode(ParseSpecialBarcodeRequest $request, ?string $requestId = null) : ParseSpecialBarcodeResponse {
+        $opname = 'parseSpecialBarcode';
+        $this->startRequest($opname);
+        $reqobj = new parseSpecialBarcode();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);

@@ -749,6 +749,10 @@ class SoapParser extends BaseSoapParser {
 			case 'BranchGroupAuthorizationGroupNumber': return $this->load_BranchGroupAuthorizationGroupNumber($in);
 			case 'UpdateEmployeeAuthorizationGroupsRequest': return $this->load_UpdateEmployeeAuthorizationGroupsRequest($in);
 			case 'GetEmployeeAuthorizationSyncMarkersRequest': return $this->load_GetEmployeeAuthorizationSyncMarkersRequest($in);
+			case 'GetSpecialBarcodePatternsRequest': return $this->load_GetSpecialBarcodePatternsRequest($in);
+			case 'BarcodePattern': return $this->load_BarcodePattern($in);
+			case 'ParseSpecialBarcodeRequest': return $this->load_ParseSpecialBarcodeRequest($in);
+			case 'SpecialBarcodeArticleResult': return $this->load_SpecialBarcodeArticleResult($in);
 			case 'GetConfigurationResponse': return $this->load_GetConfigurationResponse($in);
 			case 'UpdateConfigurationResponse': return $this->load_UpdateConfigurationResponse($in);
 			case 'GetConfigurationTreeResponse': return $this->load_GetConfigurationTreeResponse($in);
@@ -815,6 +819,8 @@ class SoapParser extends BaseSoapParser {
 			case 'GetEmployeeAuthorizationGroupsResponse': return $this->load_GetEmployeeAuthorizationGroupsResponse($in);
 			case 'UpdateEmployeeAuthorizationGroupsResponse': return $this->load_UpdateEmployeeAuthorizationGroupsResponse($in);
 			case 'GetEmployeeAuthorizationSyncMarkersResponse': return $this->load_GetEmployeeAuthorizationSyncMarkersResponse($in);
+			case 'GetSpecialBarcodePatternsResponse': return $this->load_GetSpecialBarcodePatternsResponse($in);
+			case 'ParseSpecialBarcodeResponse': return $this->load_ParseSpecialBarcodeResponse($in);
 			case 'ImageLabel': return $this->load_ImageLabel($in);
 			case 'ImageCardLabelIds': return $this->load_ImageCardLabelIds($in);
 			case 'ImageData': return $this->load_ImageData($in);
@@ -1427,6 +1433,8 @@ class SoapParser extends BaseSoapParser {
 			case 'getEmployeeAuthorizationGroups': return $this->load_getEmployeeAuthorizationGroups($in);
 			case 'updateEmployeeAuthorizationGroups': return $this->load_updateEmployeeAuthorizationGroups($in);
 			case 'getEmployeeAuthorizationSyncMarkers': return $this->load_getEmployeeAuthorizationSyncMarkers($in);
+			case 'getSpecialBarcodePatterns': return $this->load_getSpecialBarcodePatterns($in);
+			case 'parseSpecialBarcode': return $this->load_parseSpecialBarcode($in);
 			case 'createImage': return $this->load_createImage($in);
 			case 'createImageFromUrl': return $this->load_createImageFromUrl($in);
 			case 'getCardImageLabels': return $this->load_getCardImageLabels($in);
@@ -1951,6 +1959,7 @@ class SoapParser extends BaseSoapParser {
 						case 'relationArticleDiscountList': $o->relationArticleDiscountList = ($this->load_RelationArticleDiscountList($in))->relationArticleDiscount; break;
 						case 'companyName': $o->companyName = $this->load_string_property($in); break;
 						case 'branchesNonPurchasable': $o->branchesNonPurchasable[] = $this->load_int_property($in); break;
+						case 'cardNumbers': $o->cardNumbers[] = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -9878,6 +9887,7 @@ class SoapParser extends BaseSoapParser {
 						case 'fieldName': $o->fieldName = $this->load_string_property($in); break;
 						case 'fieldValue': $o->fieldValue = $this->load_string_property($in); break;
 						case 'filterOperator': $o->filterOperator = $this->load_string_property($in); break;
+						case 'caseSensitive': $o->caseSensitive = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -18651,6 +18661,84 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_GetSpecialBarcodePatternsRequest(\XMLReader $in) : GetSpecialBarcodePatternsRequest {
+		$n = $in->name;
+		$o = new GetSpecialBarcodePatternsRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_BarcodePattern(\XMLReader $in) : BarcodePattern {
+		$n = $in->name;
+		$o = new BarcodePattern();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'regex': $o->regex = $this->load_string_property($in); break;
+						case 'kind': $o->kind = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_ParseSpecialBarcodeRequest(\XMLReader $in) : ParseSpecialBarcodeRequest {
+		$n = $in->name;
+		$o = new ParseSpecialBarcodeRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'barcode': $o->barcode = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_SpecialBarcodeArticleResult(\XMLReader $in) : SpecialBarcodeArticleResult {
+		$n = $in->name;
+		$o = new SpecialBarcodeArticleResult();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'articleNumber': $o->articleNumber = $this->load_int_property($in); break;
+						case 'price': $o->price = $this->load_BigDecimal_property($in); break;
+						case 'weight': $o->weight = $this->load_int_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_GetConfigurationResponse(\XMLReader $in) : GetConfigurationResponse {
 		$n = $in->name;
 		$o = new GetConfigurationResponse();
@@ -20043,6 +20131,46 @@ class SoapParser extends BaseSoapParser {
 						case 'authMedewRechtenSyncMarker': $o->authMedewRechtenSyncMarker = $this->load_int_property($in); break;
 						case 'employeeBranchGroupSyncMarker': $o->employeeBranchGroupSyncMarker = $this->load_int_property($in); break;
 						case 'employeeSyncMarker': $o->employeeSyncMarker = $this->load_int_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetSpecialBarcodePatternsResponse(\XMLReader $in) : GetSpecialBarcodePatternsResponse {
+		$n = $in->name;
+		$o = new GetSpecialBarcodePatternsResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'patterns': $o->patterns[] = $this->load_BarcodePattern($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_ParseSpecialBarcodeResponse(\XMLReader $in) : ParseSpecialBarcodeResponse {
+		$n = $in->name;
+		$o = new ParseSpecialBarcodeResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'result': $o->result = $this->load_string_property($in); break;
+						case 'kind': $o->kind = $this->load_string_property($in); break;
+						case 'articleResult': $o->articleResult = $this->load_SpecialBarcodeArticleResult($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -32907,6 +33035,44 @@ class SoapParser extends BaseSoapParser {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
 						case 'request': $o->request = $this->load_GetEmployeeAuthorizationSyncMarkersRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_getSpecialBarcodePatterns(\XMLReader $in) : getSpecialBarcodePatterns {
+		$n = $in->name;
+		$o = new getSpecialBarcodePatterns();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_GetSpecialBarcodePatternsRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_parseSpecialBarcode(\XMLReader $in) : parseSpecialBarcode {
+		$n = $in->name;
+		$o = new parseSpecialBarcode();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_ParseSpecialBarcodeRequest($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
