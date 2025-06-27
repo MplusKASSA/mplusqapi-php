@@ -2135,6 +2135,7 @@ class SoapParser extends BaseSoapParser {
 						case 'personalizable': $o->personalizable = $this->load_bool_property($in); break;
 						case 'branchNumbers': $o->branchNumbers[] = $this->load_int_property($in); break;
 						case 'availableValues': $o->availableValues[] = $this->load_int_property($in); break;
+						case 'maximumBalance': $o->maximumBalance = $this->load_int_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -20692,6 +20693,7 @@ class SoapParser extends BaseSoapParser {
 						case 'printLayoutUuid': $o->printLayoutUuid = $this->load_string_property($in); break;
 						case 'markupType': $o->markupType = $this->load_string_property($in); break;
 						case 'printInfo': $o->printInfo = $this->load_PrintInfo($in); break;
+						case 'responseAsBase64': $o->responseAsBase64 = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -24872,6 +24874,8 @@ class SoapParser extends BaseSoapParser {
 						case 'applySalesPrices': $o->applySalesPrices = $this->load_bool_property($in); break;
 						case 'applyPriceGroups': $o->applyPriceGroups = $this->load_bool_property($in); break;
 						case 'scannedVoucherIssuanceCodes': $o->scannedVoucherIssuanceCodes[] = $this->load_string_property($in); break;
+						case 'prepay': $o->prepay = $this->load_bool_property($in); break;
+						case 'paymentList': $o->paymentList = ($this->load_PaymentList($in))->payment; break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -25736,6 +25740,10 @@ class SoapParser extends BaseSoapParser {
 						case 'order': $o->order = $this->load_Order($in); break;
 						case 'errorMessage': $o->errorMessage = $this->load_string_property($in); break;
 						case 'info': $o->info = $this->load_CreateOrderInfo($in); break;
+						case 'payResult': $o->payResult = $this->load_string_property($in); break;
+						case 'invoiceId': $o->invoiceId = $this->load_string_property($in); break;
+						case 'voucherIssuances': $o->voucherIssuances = ($this->load_VoucherIssuanceList($in))->voucherIssuance; break;
+						case 'unappliedVoucherIssuances': $o->unappliedVoucherIssuances = ($this->load_UnappliedVoucherIssuanceList($in))->unappliedVoucherIssuance; break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:

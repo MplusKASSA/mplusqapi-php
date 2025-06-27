@@ -1103,6 +1103,7 @@ class GetRenderedPrintLayoutResponseResult {
 }
 class PrintLayoutMarkupType {
 	const STAR_DOCUMENT_MARKUP = 'STAR-DOCUMENT-MARKUP';
+	const ESC_POS_MARKUP = 'ESC-POS-MARKUP';
 }
 class GetPrintLayoutMarkupResult {
 	const OK = 'OK';
@@ -1315,6 +1316,7 @@ class CreateOrderResult {
 	const OK = 'CREATE-ORDER-RESULT-OK';
 	const EXT_ORDER_ID_ALREADY_EXISTS = 'CREATE-ORDER-RESULT-EXT-ORDER-ID-ALREADY-EXISTS';
 	const FAILED = 'CREATE-ORDER-RESULT-FAILED';
+	const PAYMENT_FAILED = 'CREATE-ORDER-RESULT-PAYMENT-FAILED';
 }
 class PayOrderResult {
 	const OK = 'PAY-ORDER-RESULT-OK';

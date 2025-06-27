@@ -655,6 +655,7 @@ class GiftcardType extends SoapObject {
 	public $branchNumbers = array();
 	/** @var int[] */
 	public $availableValues = array();
+	public ?int $maximumBalance = null;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'cardTypeId', null, $this->cardTypeId);
 		$gen->out->writeElementNs(self::TNS, 'name', null, $this->name);
@@ -671,6 +672,7 @@ class GiftcardType extends SoapObject {
 		$gen->writeBool('personalizable', $this->personalizable);
 		foreach ($this->branchNumbers as $elem) $gen->writeInt('branchNumbers', $elem);
 		foreach ($this->availableValues as $elem) $gen->writeInt('availableValues', $elem);
+		if ($this->maximumBalance !== null) $gen->writeInt('maximumBalance', $this->maximumBalance);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -17821,10 +17823,12 @@ class GetPrintLayoutMarkupRequest extends SoapObject {
 	public string $printLayoutUuid;
 	public string $markupType;
 	public ?PrintInfo $printInfo = null;
+	public ?bool $responseAsBase64 = null;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'printLayoutUuid', null, $this->printLayoutUuid);
 		$gen->out->writeElementNs(self::TNS, 'markupType', null, $this->markupType);
 		if ($this->printInfo !== null) $this->printInfo->write($gen, 'printInfo');
+		if ($this->responseAsBase64 !== null) $gen->writeBool('responseAsBase64', $this->responseAsBase64);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -21881,6 +21885,9 @@ class CreateOrderV3Request extends IdempotentReq {
 	public ?bool $applyPriceGroups = null;
 	/** @var string[] */
 	public $scannedVoucherIssuanceCodes = array();
+	public ?bool $prepay = null;
+	/** @var Payment[] */
+	public $paymentList = null;
 	public function __construct() {
 		$this->order = new Order();
 	}
@@ -21891,6 +21898,11 @@ class CreateOrderV3Request extends IdempotentReq {
 		if ($this->applySalesPrices !== null) $gen->writeBool('applySalesPrices', $this->applySalesPrices);
 		if ($this->applyPriceGroups !== null) $gen->writeBool('applyPriceGroups', $this->applyPriceGroups);
 		foreach ($this->scannedVoucherIssuanceCodes as $elem) $gen->out->writeElementNs(self::TNS, 'scannedVoucherIssuanceCodes', null, $elem);
+		if ($this->prepay !== null) $gen->writeBool('prepay', $this->prepay);
+		if ($this->paymentList !== null) {
+$tmp_paymentList = new PaymentList($this->paymentList);
+$tmp_paymentList->write($gen, 'paymentList');
+}
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -22799,6 +22811,12 @@ class CreateOrderV3Response extends IdempotentResp {
 	public ?Order $order = null;
 	public ?string $errorMessage = null;
 	public CreateOrderInfo $info;
+	public ?string $payResult = null;
+	public ?string $invoiceId = null;
+	/** @var VoucherIssuance[] */
+	public $voucherIssuances = null;
+	/** @var UnappliedVoucherIssuance[] */
+	public $unappliedVoucherIssuances = null;
 	public function __construct() {
 		$this->info = new CreateOrderInfo();
 	}
@@ -22808,6 +22826,16 @@ class CreateOrderV3Response extends IdempotentResp {
 		if ($this->order !== null) $this->order->write($gen, 'order');
 		if ($this->errorMessage !== null) $gen->out->writeElementNs(self::TNS, 'errorMessage', null, $this->errorMessage);
 		$this->info->write($gen, 'info');
+		if ($this->payResult !== null) $gen->out->writeElementNs(self::TNS, 'payResult', null, $this->payResult);
+		if ($this->invoiceId !== null) $gen->out->writeElementNs(self::TNS, 'invoiceId', null, $this->invoiceId);
+		if ($this->voucherIssuances !== null) {
+$tmp_voucherIssuances = new VoucherIssuanceList($this->voucherIssuances);
+$tmp_voucherIssuances->write($gen, 'voucherIssuances');
+}
+		if ($this->unappliedVoucherIssuances !== null) {
+$tmp_unappliedVoucherIssuances = new UnappliedVoucherIssuanceList($this->unappliedVoucherIssuances);
+$tmp_unappliedVoucherIssuances->write($gen, 'unappliedVoucherIssuances');
+}
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
