@@ -117,6 +117,7 @@ class MplusApiClient extends BaseSoapClient {
  GetPackingSlipsRequest::class . ':packingSlipNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
  GetPackingSlipsRequest::class . ':ownerFilter' => 'string',
  GetPackingSlipsRequest::class . ':branchGroupFilter' => 'int',
+ GetPackingSlipsRequest::class . ':typeFilter' => 'string',
  LineChangeList::class . ':lineChange' => 'MplusKASSA\MplusQapi\LineChange',
  LineChange::class . ':preparationList' => 'MplusKASSA\MplusQapi\LineChange',
  OrderChange::class . ':lineChangeList' => 'MplusKASSA\MplusQapi\LineChange',
@@ -631,6 +632,7 @@ class MplusApiClient extends BaseSoapClient {
  PrintParams::class . ':params' => 'MplusKASSA\MplusQapi\PrintParam',
  PrintInfo::class . ':paramsList' => 'MplusKASSA\MplusQapi\PrintParams',
  GetPrintLayoutsResponse::class . ':printLayouts' => 'MplusKASSA\MplusQapi\PrintLayoutView',
+ GetPrintLayoutAssignmentsResponse::class . ':printLayoutAssignments' => 'MplusKASSA\MplusQapi\PrintLayoutAssignment',
  GetRenderedPrintLayoutResponse::class . ':renderedPrintLayouts' => 'string',
  VoucherViewList::class . ':voucherView' => 'MplusKASSA\MplusQapi\VoucherView',
  VoucherSettingsV1List::class . ':voucherSettingsV1' => 'MplusKASSA\MplusQapi\VoucherSettingsV1',
@@ -3909,6 +3911,18 @@ class MplusApiClient extends BaseSoapClient {
         $opname = 'getPrintLayouts';
         $this->startRequest($opname);
         $reqobj = new getPrintLayouts();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getPrintLayoutAssignments(GetPrintLayoutAssignmentsRequest $request, ?string $requestId = null) : GetPrintLayoutAssignmentsResponse {
+        $opname = 'getPrintLayoutAssignments';
+        $this->startRequest($opname);
+        $reqobj = new getPrintLayoutAssignments();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);

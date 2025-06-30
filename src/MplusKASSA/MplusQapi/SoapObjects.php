@@ -3225,6 +3225,8 @@ class GetPackingSlipsRequest extends SoapObject {
 	/** @var int[] */
 	public $branchGroupFilter = null;
 	public ?bool $includeLineList = null;
+	/** @var string[] */
+	public $typeFilter = array();
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
 		if ($this->syncMarkerLimit !== null) $gen->writeInt('syncMarkerLimit', $this->syncMarkerLimit);
@@ -3256,6 +3258,7 @@ $tmp_branchGroupFilter = new BranchGroupFilter($this->branchGroupFilter);
 $tmp_branchGroupFilter->write($gen, 'branchGroupFilter');
 }
 		if ($this->includeLineList !== null) $gen->writeBool('includeLineList', $this->includeLineList);
+		foreach ($this->typeFilter as $elem) $gen->out->writeElementNs(self::TNS, 'typeFilter', null, $elem);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -17755,6 +17758,64 @@ class PrintLayoutView extends SoapObject {
 	}
 }
 
+class GetPrintLayoutAssignmentsRequest extends SoapObject {
+	public ?string $type = null;
+	public ?string $kind = null;
+	public ?int $branchNumber = null;
+	public ?int $workplaceNumber = null;
+	public ?bool $useOnlinePrinter = null;
+	public function writeProps(SoapGenerator $gen): void {
+		if ($this->type !== null) $gen->out->writeElementNs(self::TNS, 'type', null, $this->type);
+		if ($this->kind !== null) $gen->out->writeElementNs(self::TNS, 'kind', null, $this->kind);
+		if ($this->branchNumber !== null) $gen->writeInt('branchNumber', $this->branchNumber);
+		if ($this->workplaceNumber !== null) $gen->writeInt('workplaceNumber', $this->workplaceNumber);
+		if ($this->useOnlinePrinter !== null) $gen->writeBool('useOnlinePrinter', $this->useOnlinePrinter);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class PrintLayoutAssignmentPrintLayoutView extends SoapObject {
+	public string $id;
+	public string $name;
+	public string $type;
+	public string $kind;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'id', null, $this->id);
+		$gen->out->writeElementNs(self::TNS, 'name', null, $this->name);
+		$gen->out->writeElementNs(self::TNS, 'type', null, $this->type);
+		$gen->out->writeElementNs(self::TNS, 'kind', null, $this->kind);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class PrintLayoutAssignment extends SoapObject {
+	public WorkplaceIdentifier $workplace;
+	public PrintLayoutAssignmentPrintLayoutView $printLayout;
+	public bool $useOnlinePrinter;
+	public function __construct() {
+		$this->workplace = new WorkplaceIdentifier();
+		$this->printLayout = new PrintLayoutAssignmentPrintLayoutView();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->workplace->write($gen, 'workplace');
+		$this->printLayout->write($gen, 'printLayout');
+		$gen->writeBool('useOnlinePrinter', $this->useOnlinePrinter);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
 class PrintParam extends SoapObject {
 	public string $key;
 	public string $value;
@@ -17866,6 +17927,20 @@ class GetPrintLayoutsResponse extends SoapObject {
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
 		foreach ($this->printLayouts as $elem) $elem->write($gen, 'printLayouts');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetPrintLayoutAssignmentsResponse extends SoapObject {
+	/** @var PrintLayoutAssignment[] */
+	public $printLayoutAssignments = array();
+	public function __construct($list = array()) { $this->printLayoutAssignments = $list; }
+	public function writeProps(SoapGenerator $gen): void {
+		foreach ($this->printLayoutAssignments as $elem) $elem->write($gen, 'printLayoutAssignments');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -28883,6 +28958,21 @@ class getPrintLayouts extends SoapObject {
 	public GetPrintLayoutsRequest $request;
 	public function __construct() {
 		$this->request = new GetPrintLayoutsRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class getPrintLayoutAssignments extends SoapObject {
+	public GetPrintLayoutAssignmentsRequest $request;
+	public function __construct() {
+		$this->request = new GetPrintLayoutAssignmentsRequest();
 	}
 	public function writeProps(SoapGenerator $gen): void {
 		$this->request->write($gen, 'request');
