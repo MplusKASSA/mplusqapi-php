@@ -64,6 +64,19 @@ class MplusApiClient extends BaseSoapClient {
  Order::class . ':packingSlipNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
  OrderList::class . ':order' => 'MplusKASSA\MplusQapi\Order',
  OrderTypeList::class . ':orderType' => 'string',
+ Invoice::class . ':orderIds' => 'string',
+ Invoice::class . ':extOrderIds' => 'string',
+ Invoice::class . ':vatGroupList' => 'MplusKASSA\MplusQapi\VatGroup',
+ Invoice::class . ':lineList' => 'MplusKASSA\MplusQapi\Line',
+ Invoice::class . ':paymentList' => 'MplusKASSA\MplusQapi\Payment',
+ Invoice::class . ':answerList' => 'MplusKASSA\MplusQapi\Answer',
+ Invoice::class . ':orderNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
+ Invoice::class . ':packingSlipIds' => 'string',
+ Invoice::class . ':packingSlipNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
+ Invoice::class . ':proposalIds' => 'string',
+ Invoice::class . ':extProposalIds' => 'string',
+ Invoice::class . ':proposalNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
+ InvoiceList::class . ':invoice' => 'MplusKASSA\MplusQapi\Invoice',
  YearNumberList::class . ':yearNumber' => 'MplusKASSA\MplusQapi\YearNumber',
  ContractFrequencyList::class . ':contractFrequency' => 'string',
  SalesLineContractLineList::class . ':contractLine' => 'MplusKASSA\MplusQapi\SalesLineContractLine',
@@ -171,19 +184,6 @@ class MplusApiClient extends BaseSoapClient {
  GetReceiptsRequest::class . ':ownerFilter' => 'string',
  GetReceiptsRequest::class . ':branchGroupFilter' => 'int',
  GetReceiptsRequest::class . ':receiptIds' => 'string',
- Invoice::class . ':orderIds' => 'string',
- Invoice::class . ':extOrderIds' => 'string',
- Invoice::class . ':vatGroupList' => 'MplusKASSA\MplusQapi\VatGroup',
- Invoice::class . ':lineList' => 'MplusKASSA\MplusQapi\Line',
- Invoice::class . ':paymentList' => 'MplusKASSA\MplusQapi\Payment',
- Invoice::class . ':answerList' => 'MplusKASSA\MplusQapi\Answer',
- Invoice::class . ':orderNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
- Invoice::class . ':packingSlipIds' => 'string',
- Invoice::class . ':packingSlipNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
- Invoice::class . ':proposalIds' => 'string',
- Invoice::class . ':extProposalIds' => 'string',
- Invoice::class . ':proposalNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
- InvoiceList::class . ':invoice' => 'MplusKASSA\MplusQapi\Invoice',
  GetInvoicesRequest::class . ':branchNumbers' => 'int',
  GetInvoicesRequest::class . ':employeeNumbers' => 'int',
  GetInvoicesRequest::class . ':relationNumbers' => 'int',
@@ -259,6 +259,7 @@ class MplusApiClient extends BaseSoapClient {
  GetArticlesVariantsRequest::class . ':articleNumbers' => 'int',
  GetArticlesVariantsResponseElem::class . ':variants' => 'MplusKASSA\MplusQapi\ArticleVariant',
  DeleteArticleVariantsRequest::class . ':articleVariantIds' => 'int',
+ ArticleStock::class . ':subArticle' => 'MplusKASSA\MplusQapi\ArticleStock',
  ArticleNumberList::class . ':articleNumbers' => 'int',
  GetStockRequest::class . ':articleNumbers' => 'int',
  GetStockHistoryRequest::class . ':articleNumbers' => 'int',
@@ -410,6 +411,8 @@ class MplusApiClient extends BaseSoapClient {
  PlannedCycleCountList::class . ':plannedCycleCount' => 'MplusKASSA\MplusQapi\PlannedCycleCount',
  ActiveCycleCountLineList::class . ':activeCycleCountLine' => 'MplusKASSA\MplusQapi\ActiveCycleCountLine',
  ActiveCycleCount::class . ':lines' => 'MplusKASSA\MplusQapi\ActiveCycleCountLine',
+ ArticleComponentList::class . ':articleComponent' => 'MplusKASSA\MplusQapi\ArticleComponent',
+ SaveArticleComponentsRequest::class . ':articleComponents' => 'MplusKASSA\MplusQapi\ArticleComponent',
  getSalesPriceListResponse::class . ':salesPrice' => 'MplusKASSA\MplusQapi\SalesPrice',
  getPriceGroupListResponse::class . ':priceGroup' => 'MplusKASSA\MplusQapi\PriceGroup',
  GetRelationsResponse::class . ':relationList' => 'MplusKASSA\MplusQapi\Relation',
@@ -499,6 +502,8 @@ class MplusApiClient extends BaseSoapClient {
  GetCardFilterOptionsResponse::class . ':fields' => 'MplusKASSA\MplusQapi\CardFieldInfoResponse',
  GetCardFilterOptionsResponse::class . ':filterErrors' => 'MplusKASSA\MplusQapi\GetOverviewError',
  GetPlannedCycleCountsResponse::class . ':plannedCycleCounts' => 'MplusKASSA\MplusQapi\PlannedCycleCount',
+ GetArticleComponentsResponse::class . ':articleComponents' => 'MplusKASSA\MplusQapi\ArticleComponent',
+ SaveArticleComponentsResponse::class . ':newArticleComponents' => 'MplusKASSA\MplusQapi\ArticleComponent',
  RequestBranchFilter::class . ':branchNumbers' => 'int',
  RequestEmployeeFilter::class . ':employeeNumbers' => 'int',
  RequestTurnoverGroupFilter::class . ':turnoverGroups' => 'int',
@@ -3017,6 +3022,30 @@ class MplusApiClient extends BaseSoapClient {
         $opname = 'setArticleRecalled';
         $this->startRequest($opname);
         $reqobj = new setArticleRecalled();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getArticleComponents(GetArticleComponentsRequest $request, ?string $requestId = null) : GetArticleComponentsResponse {
+        $opname = 'getArticleComponents';
+        $this->startRequest($opname);
+        $reqobj = new getArticleComponents();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function saveArticleComponents(SaveArticleComponentsRequest $request, ?string $requestId = null) : SaveArticleComponentsResponse {
+        $opname = 'saveArticleComponents';
+        $this->startRequest($opname);
+        $reqobj = new saveArticleComponents();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);

@@ -54,6 +54,8 @@ class SoapParser extends BaseSoapParser {
 			case 'Order': return $this->load_Order($in);
 			case 'OrderList': return $this->load_OrderList($in);
 			case 'OrderTypeList': return $this->load_OrderTypeList($in);
+			case 'Invoice': return $this->load_Invoice($in);
+			case 'InvoiceList': return $this->load_InvoiceList($in);
 			case 'Address': return $this->load_Address($in);
 			case 'YearNumber': return $this->load_YearNumber($in);
 			case 'YearNumberList': return $this->load_YearNumberList($in);
@@ -198,8 +200,6 @@ class SoapParser extends BaseSoapParser {
 			case 'PrintReceiptV2Request': return $this->load_PrintReceiptV2Request($in);
 			case 'PrintTableReceiptRequest': return $this->load_PrintTableReceiptRequest($in);
 			case 'PrintTableReceiptV3Request': return $this->load_PrintTableReceiptV3Request($in);
-			case 'Invoice': return $this->load_Invoice($in);
-			case 'InvoiceList': return $this->load_InvoiceList($in);
 			case 'GetInvoicesRequest': return $this->load_GetInvoicesRequest($in);
 			case 'SaveInvoiceInfo': return $this->load_SaveInvoiceInfo($in);
 			case 'JournalFilterList': return $this->load_JournalFilterList($in);
@@ -448,6 +448,10 @@ class SoapParser extends BaseSoapParser {
 			case 'ActiveCycleCount': return $this->load_ActiveCycleCount($in);
 			case 'GetActiveCycleCountRequest': return $this->load_GetActiveCycleCountRequest($in);
 			case 'SetArticleRecalledRequest': return $this->load_SetArticleRecalledRequest($in);
+			case 'GetArticleComponentsRequest': return $this->load_GetArticleComponentsRequest($in);
+			case 'ArticleComponent': return $this->load_ArticleComponent($in);
+			case 'ArticleComponentList': return $this->load_ArticleComponentList($in);
+			case 'SaveArticleComponentsRequest': return $this->load_SaveArticleComponentsRequest($in);
 			case 'getSalesPriceListResponse': return $this->load_getSalesPriceListResponse($in);
 			case 'getPriceGroupListResponse': return $this->load_getPriceGroupListResponse($in);
 			case 'LogMistakeResponse': return $this->load_LogMistakeResponse($in);
@@ -595,6 +599,8 @@ class SoapParser extends BaseSoapParser {
 			case 'GetPlannedCycleCountsResponse': return $this->load_GetPlannedCycleCountsResponse($in);
 			case 'GetActiveCycleCountResponse': return $this->load_GetActiveCycleCountResponse($in);
 			case 'SetArticleRecalledResponse': return $this->load_SetArticleRecalledResponse($in);
+			case 'GetArticleComponentsResponse': return $this->load_GetArticleComponentsResponse($in);
+			case 'SaveArticleComponentsResponse': return $this->load_SaveArticleComponentsResponse($in);
 			case 'RequestDateFilter': return $this->load_RequestDateFilter($in);
 			case 'RequestBranchFilter': return $this->load_RequestBranchFilter($in);
 			case 'RequestEmployeeFilter': return $this->load_RequestEmployeeFilter($in);
@@ -1371,6 +1377,8 @@ class SoapParser extends BaseSoapParser {
 			case 'getPlannedCycleCounts': return $this->load_getPlannedCycleCounts($in);
 			case 'getActiveCycleCount': return $this->load_getActiveCycleCount($in);
 			case 'setArticleRecalled': return $this->load_setArticleRecalled($in);
+			case 'getArticleComponents': return $this->load_getArticleComponents($in);
+			case 'saveArticleComponents': return $this->load_saveArticleComponents($in);
 			case 'getConfiguration': return $this->load_getConfiguration($in);
 			case 'updateConfiguration': return $this->load_updateConfiguration($in);
 			case 'getConfigurationTree': return $this->load_getConfigurationTree($in);
@@ -2748,6 +2756,103 @@ class SoapParser extends BaseSoapParser {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
 						case 'orderType': $o->orderType[] = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_Invoice(\XMLReader $in) : Invoice {
+		$n = $in->name;
+		$o = new Invoice();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'invoiceId': $o->invoiceId = $this->load_string_property($in); break;
+						case 'extInvoiceId': $o->extInvoiceId = $this->load_string_property($in); break;
+						case 'orderIds': $o->orderIds = ($this->load_IdList($in))->id; break;
+						case 'extOrderIds': $o->extOrderIds = ($this->load_IdList($in))->id; break;
+						case 'transactionString': $o->transactionString = $this->load_string_property($in); break;
+						case 'syncMarker': $o->syncMarker = $this->load_int_property($in); break;
+						case 'invoiceNumber': $o->invoiceNumber = $this->load_YearNumber($in); break;
+						case 'invoiceBarcode': $o->invoiceBarcode = $this->load_string_property($in); break;
+						case 'invoiceType': $o->invoiceType = $this->load_string_property($in); break;
+						case 'employeeNumber': $o->employeeNumber = $this->load_int_property($in); break;
+						case 'employeeName': $o->employeeName = $this->load_string_property($in); break;
+						case 'entryTimestamp': $o->entryTimestamp = $this->load_SoapMplusDateTime($in)->toDateTime(); break;
+						case 'relationNumber': $o->relationNumber = $this->load_int_property($in); break;
+						case 'relationName': $o->relationName = $this->load_string_property($in); break;
+						case 'relationCategoryId': $o->relationCategoryId = $this->load_int_property($in); break;
+						case 'relationBankAccountNumber': $o->relationBankAccountNumber = $this->load_string_property($in); break;
+						case 'relationVatNumber': $o->relationVatNumber = $this->load_string_property($in); break;
+						case 'deliveryAddress': $o->deliveryAddress = $this->load_Address($in); break;
+						case 'invoiceAddress': $o->invoiceAddress = $this->load_Address($in); break;
+						case 'financialDate': $o->financialDate = $this->load_SoapMplusDate($in)->toDateTime(); break;
+						case 'financialBranchNumber': $o->financialBranchNumber = $this->load_int_property($in); break;
+						case 'financialExtBranchId': $o->financialExtBranchId = $this->load_string_property($in); break;
+						case 'workplaceNumber': $o->workplaceNumber = $this->load_int_property($in); break;
+						case 'entryBranchNumber': $o->entryBranchNumber = $this->load_int_property($in); break;
+						case 'entryExtBranchId': $o->entryExtBranchId = $this->load_string_property($in); break;
+						case 'reference': $o->reference = $this->load_string_property($in); break;
+						case 'activityId': $o->activityId = $this->load_string_property($in); break;
+						case 'dueDate': $o->dueDate = $this->load_SoapMplusDate($in)->toDateTime(); break;
+						case 'totalInclAmount': $totalInclAmount = $this->load_int_property($in); break;
+						case 'totalExclAmount': $totalExclAmount = $this->load_int_property($in); break;
+						case 'vatMethod': $o->vatMethod = $this->load_string_property($in); break;
+						case 'vatGroupList': $o->vatGroupList = ($this->load_VatGroupList($in))->vatGroup; break;
+						case 'changeCounter': $o->changeCounter = $this->load_int_property($in); break;
+						case 'versionNumber': $o->versionNumber = $this->load_int_property($in); break;
+						case 'paidAmount': $paidAmount = $this->load_int_property($in); break;
+						case 'state': $o->state = $this->load_string_property($in); break;
+						case 'finalized': $o->finalized = $this->load_bool_property($in); break;
+						case 'finalizedTimestamp': $o->finalizedTimestamp = $this->load_SoapMplusDateTime($in)->toDateTime(); break;
+						case 'lineList': $o->lineList = ($this->load_LineList($in))->line; break;
+						case 'paymentList': $o->paymentList = ($this->load_PaymentList($in))->payment; break;
+						case 'answerList': $o->answerList = ($this->load_AnswerList($in))->answer; break;
+						case 'vatChange': $o->vatChange = $this->load_string_property($in); break;
+						case 'vatCountryCode': $o->vatCountryCode = $this->load_int_property($in); break;
+						case 'vatCountryIso3': $o->vatCountryIso3 = $this->load_string_property($in); break;
+						case 'costCenter': $o->costCenter = $this->load_string_property($in); break;
+						case 'creditedInvoiceId': $o->creditedInvoiceId = $this->load_string_property($in); break;
+						case 'creditedReason': $o->creditedReason = $this->load_string_property($in); break;
+						case 'orderCategoryNumber': $o->orderCategoryNumber = $this->load_int_property($in); break;
+						case 'sessionId': $o->sessionId = $this->load_string_property($in); break;
+						case 'orderNumbers': $o->orderNumbers = ($this->load_YearNumberList($in))->yearNumber; break;
+						case 'packingSlipIds': $o->packingSlipIds = ($this->load_IdList($in))->id; break;
+						case 'packingSlipNumbers': $o->packingSlipNumbers = ($this->load_YearNumberList($in))->yearNumber; break;
+						case 'proposalIds': $o->proposalIds = ($this->load_IdList($in))->id; break;
+						case 'extProposalIds': $o->extProposalIds = ($this->load_IdList($in))->id; break;
+						case 'proposalNumbers': $o->proposalNumbers = ($this->load_YearNumberList($in))->yearNumber; break;
+						case 'salesCategoryNumber': $o->salesCategoryNumber = $this->load_int_property($in); break;
+						case 'salesCategoryDescription': $o->salesCategoryDescription = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		$o->totalInclAmount = isset($totalInclAmount) ? BigDecimal::ofUnscaledValue($totalInclAmount, 2) : null;
+		$o->totalExclAmount = isset($totalExclAmount) ? BigDecimal::ofUnscaledValue($totalExclAmount, 2) : null;
+		$o->paidAmount = isset($paidAmount) ? BigDecimal::ofUnscaledValue($paidAmount, 2) : null;
+		return $o;
+	}
+	private function load_InvoiceList(\XMLReader $in) : InvoiceList {
+		$n = $in->name;
+		$o = new InvoiceList();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'invoice': $o->invoice[] = $this->load_Invoice($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -6318,103 +6423,6 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
-	private function load_Invoice(\XMLReader $in) : Invoice {
-		$n = $in->name;
-		$o = new Invoice();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'invoiceId': $o->invoiceId = $this->load_string_property($in); break;
-						case 'extInvoiceId': $o->extInvoiceId = $this->load_string_property($in); break;
-						case 'orderIds': $o->orderIds = ($this->load_IdList($in))->id; break;
-						case 'extOrderIds': $o->extOrderIds = ($this->load_IdList($in))->id; break;
-						case 'transactionString': $o->transactionString = $this->load_string_property($in); break;
-						case 'syncMarker': $o->syncMarker = $this->load_int_property($in); break;
-						case 'invoiceNumber': $o->invoiceNumber = $this->load_YearNumber($in); break;
-						case 'invoiceBarcode': $o->invoiceBarcode = $this->load_string_property($in); break;
-						case 'invoiceType': $o->invoiceType = $this->load_string_property($in); break;
-						case 'employeeNumber': $o->employeeNumber = $this->load_int_property($in); break;
-						case 'employeeName': $o->employeeName = $this->load_string_property($in); break;
-						case 'entryTimestamp': $o->entryTimestamp = $this->load_SoapMplusDateTime($in)->toDateTime(); break;
-						case 'relationNumber': $o->relationNumber = $this->load_int_property($in); break;
-						case 'relationName': $o->relationName = $this->load_string_property($in); break;
-						case 'relationCategoryId': $o->relationCategoryId = $this->load_int_property($in); break;
-						case 'relationBankAccountNumber': $o->relationBankAccountNumber = $this->load_string_property($in); break;
-						case 'relationVatNumber': $o->relationVatNumber = $this->load_string_property($in); break;
-						case 'deliveryAddress': $o->deliveryAddress = $this->load_Address($in); break;
-						case 'invoiceAddress': $o->invoiceAddress = $this->load_Address($in); break;
-						case 'financialDate': $o->financialDate = $this->load_SoapMplusDate($in)->toDateTime(); break;
-						case 'financialBranchNumber': $o->financialBranchNumber = $this->load_int_property($in); break;
-						case 'financialExtBranchId': $o->financialExtBranchId = $this->load_string_property($in); break;
-						case 'workplaceNumber': $o->workplaceNumber = $this->load_int_property($in); break;
-						case 'entryBranchNumber': $o->entryBranchNumber = $this->load_int_property($in); break;
-						case 'entryExtBranchId': $o->entryExtBranchId = $this->load_string_property($in); break;
-						case 'reference': $o->reference = $this->load_string_property($in); break;
-						case 'activityId': $o->activityId = $this->load_string_property($in); break;
-						case 'dueDate': $o->dueDate = $this->load_SoapMplusDate($in)->toDateTime(); break;
-						case 'totalInclAmount': $totalInclAmount = $this->load_int_property($in); break;
-						case 'totalExclAmount': $totalExclAmount = $this->load_int_property($in); break;
-						case 'vatMethod': $o->vatMethod = $this->load_string_property($in); break;
-						case 'vatGroupList': $o->vatGroupList = ($this->load_VatGroupList($in))->vatGroup; break;
-						case 'changeCounter': $o->changeCounter = $this->load_int_property($in); break;
-						case 'versionNumber': $o->versionNumber = $this->load_int_property($in); break;
-						case 'paidAmount': $paidAmount = $this->load_int_property($in); break;
-						case 'state': $o->state = $this->load_string_property($in); break;
-						case 'finalized': $o->finalized = $this->load_bool_property($in); break;
-						case 'finalizedTimestamp': $o->finalizedTimestamp = $this->load_SoapMplusDateTime($in)->toDateTime(); break;
-						case 'lineList': $o->lineList = ($this->load_LineList($in))->line; break;
-						case 'paymentList': $o->paymentList = ($this->load_PaymentList($in))->payment; break;
-						case 'answerList': $o->answerList = ($this->load_AnswerList($in))->answer; break;
-						case 'vatChange': $o->vatChange = $this->load_string_property($in); break;
-						case 'vatCountryCode': $o->vatCountryCode = $this->load_int_property($in); break;
-						case 'vatCountryIso3': $o->vatCountryIso3 = $this->load_string_property($in); break;
-						case 'costCenter': $o->costCenter = $this->load_string_property($in); break;
-						case 'creditedInvoiceId': $o->creditedInvoiceId = $this->load_string_property($in); break;
-						case 'creditedReason': $o->creditedReason = $this->load_string_property($in); break;
-						case 'orderCategoryNumber': $o->orderCategoryNumber = $this->load_int_property($in); break;
-						case 'sessionId': $o->sessionId = $this->load_string_property($in); break;
-						case 'orderNumbers': $o->orderNumbers = ($this->load_YearNumberList($in))->yearNumber; break;
-						case 'packingSlipIds': $o->packingSlipIds = ($this->load_IdList($in))->id; break;
-						case 'packingSlipNumbers': $o->packingSlipNumbers = ($this->load_YearNumberList($in))->yearNumber; break;
-						case 'proposalIds': $o->proposalIds = ($this->load_IdList($in))->id; break;
-						case 'extProposalIds': $o->extProposalIds = ($this->load_IdList($in))->id; break;
-						case 'proposalNumbers': $o->proposalNumbers = ($this->load_YearNumberList($in))->yearNumber; break;
-						case 'salesCategoryNumber': $o->salesCategoryNumber = $this->load_int_property($in); break;
-						case 'salesCategoryDescription': $o->salesCategoryDescription = $this->load_string_property($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		$o->totalInclAmount = isset($totalInclAmount) ? BigDecimal::ofUnscaledValue($totalInclAmount, 2) : null;
-		$o->totalExclAmount = isset($totalExclAmount) ? BigDecimal::ofUnscaledValue($totalExclAmount, 2) : null;
-		$o->paidAmount = isset($paidAmount) ? BigDecimal::ofUnscaledValue($paidAmount, 2) : null;
-		return $o;
-	}
-	private function load_InvoiceList(\XMLReader $in) : InvoiceList {
-		$n = $in->name;
-		$o = new InvoiceList();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'invoice': $o->invoice[] = $this->load_Invoice($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
 	private function load_GetInvoicesRequest(\XMLReader $in) : GetInvoicesRequest {
 		$n = $in->name;
 		$o = new GetInvoicesRequest();
@@ -7537,6 +7545,7 @@ class SoapParser extends BaseSoapParser {
 						case 'nutritionalCharacteristics': $o->nutritionalCharacteristics = $this->load_NutritionalCharacteristics($in); break;
 						case 'discontinued': $o->discontinued = $this->load_bool_property($in); break;
 						case 'stockSiUnit': $o->stockSiUnit = $this->load_string_property($in); break;
+						case 'specialBehaviour': $o->specialBehaviour = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -7921,6 +7930,11 @@ class SoapParser extends BaseSoapParser {
 						case 'decimalPlacesReserved': $decimalPlacesReserved = $this->load_int_property($in); break;
 						case 'amountIncoming': $amountIncoming = $this->load_int_property($in); break;
 						case 'decimalPlacesIncoming': $decimalPlacesIncoming = $this->load_int_property($in); break;
+						case 'ownAmountFree': $o->ownAmountFree = $this->load_BigDecimal_property($in); break;
+						case 'ownAmountReserved': $o->ownAmountReserved = $this->load_BigDecimal_property($in); break;
+						case 'ownAmountIncoming': $o->ownAmountIncoming = $this->load_BigDecimal_property($in); break;
+						case 'subArticle': $o->subArticle[] = $this->load_ArticleStock($in); break;
+						case 'isDayStockArticle': $o->isDayStockArticle = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -7964,6 +7978,7 @@ class SoapParser extends BaseSoapParser {
 						case 'branchNumber': $o->branchNumber = $this->load_int_property($in); break;
 						case 'articleNumbers': $o->articleNumbers = ($this->load_ArticleNumberList($in))->articleNumbers; break;
 						case 'stockId': $o->stockId = $this->load_int_property($in); break;
+						case 'dayStockOnlyFilter': $o->dayStockOnlyFilter = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -12382,6 +12397,90 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_GetArticleComponentsRequest(\XMLReader $in) : GetArticleComponentsRequest {
+		$n = $in->name;
+		$o = new GetArticleComponentsRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'articleNumber': $o->articleNumber = $this->load_int_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_ArticleComponent(\XMLReader $in) : ArticleComponent {
+		$n = $in->name;
+		$o = new ArticleComponent();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'sequenceNumber': $o->sequenceNumber = $this->load_int_property($in); break;
+						case 'parentArticleNumber': $o->parentArticleNumber = $this->load_int_property($in); break;
+						case 'articleNumber': $o->articleNumber = $this->load_int_property($in); break;
+						case 'quantity': $o->quantity = $this->load_BigDecimal_property($in); break;
+						case 'priceExcl': $o->priceExcl = $this->load_BigDecimal_property($in); break;
+						case 'priceIncl': $o->priceIncl = $this->load_BigDecimal_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_ArticleComponentList(\XMLReader $in) : ArticleComponentList {
+		$n = $in->name;
+		$o = new ArticleComponentList();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'articleComponent': $o->articleComponent[] = $this->load_ArticleComponent($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_SaveArticleComponentsRequest(\XMLReader $in) : SaveArticleComponentsRequest {
+		$n = $in->name;
+		$o = new SaveArticleComponentsRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'idempotencyKey': $o->idempotencyKey = $this->load_string_property($in); break;
+						case 'mode': $o->mode = $this->load_string_property($in); break;
+						case 'articleNumber': $o->articleNumber = $this->load_int_property($in); break;
+						case 'articleComponents': $o->articleComponents = ($this->load_ArticleComponentList($in))->articleComponent; break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_getSalesPriceListResponse(\XMLReader $in) : getSalesPriceListResponse {
 		$n = $in->name;
 		$o = new getSalesPriceListResponse();
@@ -15347,6 +15446,46 @@ class SoapParser extends BaseSoapParser {
 					switch ($in->localName) {
 						case 'result': $o->result = $this->load_string_property($in); break;
 						case 'errorMessage': $o->errorMessage = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetArticleComponentsResponse(\XMLReader $in) : GetArticleComponentsResponse {
+		$n = $in->name;
+		$o = new GetArticleComponentsResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'articleComponents': $o->articleComponents = ($this->load_ArticleComponentList($in))->articleComponent; break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_SaveArticleComponentsResponse(\XMLReader $in) : SaveArticleComponentsResponse {
+		$n = $in->name;
+		$o = new SaveArticleComponentsResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'idempotencyResult': $o->idempotencyResult = $this->load_string_property($in); break;
+						case 'result': $o->result = $this->load_string_property($in); break;
+						case 'newArticleComponents': $o->newArticleComponents = ($this->load_ArticleComponentList($in))->articleComponent; break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -20766,6 +20905,8 @@ class SoapParser extends BaseSoapParser {
 						case 'markupType': $o->markupType = $this->load_string_property($in); break;
 						case 'printInfo': $o->printInfo = $this->load_PrintInfo($in); break;
 						case 'responseAsBase64': $o->responseAsBase64 = $this->load_bool_property($in); break;
+						case 'normalWidthInCharacters': $o->normalWidthInCharacters = $this->load_int_property($in); break;
+						case 'smallWidthInCharacters': $o->smallWidthInCharacters = $this->load_int_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -31886,6 +32027,44 @@ class SoapParser extends BaseSoapParser {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
 						case 'request': $o->request = $this->load_SetArticleRecalledRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_getArticleComponents(\XMLReader $in) : getArticleComponents {
+		$n = $in->name;
+		$o = new getArticleComponents();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_GetArticleComponentsRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_saveArticleComponents(\XMLReader $in) : saveArticleComponents {
+		$n = $in->name;
+		$o = new saveArticleComponents();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_SaveArticleComponentsRequest($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
