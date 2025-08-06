@@ -54,6 +54,7 @@ class MplusApiClient extends BaseSoapClient {
  Authorization::class . ':subAuthorizations' => 'MplusKASSA\MplusQapi\Authorization',
  BranchGroupFilter::class . ':branchGroups' => 'int',
  OwnerLabelFilter::class . ':ownerLabels' => 'string',
+ IdList::class . ':id' => 'string',
  Order::class . ':invoiceIds' => 'string',
  Order::class . ':extInvoiceIds' => 'string',
  Order::class . ':vatGroupList' => 'MplusKASSA\MplusQapi\VatGroup',
@@ -63,7 +64,19 @@ class MplusApiClient extends BaseSoapClient {
  Order::class . ':packingSlipIds' => 'string',
  Order::class . ':packingSlipNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
  OrderList::class . ':order' => 'MplusKASSA\MplusQapi\Order',
+ OrderInput::class . ':lineList' => 'MplusKASSA\MplusQapi\LineInput',
  OrderTypeList::class . ':orderType' => 'string',
+ YearNumberList::class . ':yearNumber' => 'MplusKASSA\MplusQapi\YearNumber',
+ ContractFrequencyList::class . ':contractFrequency' => 'string',
+ SalesLineContractLineList::class . ':contractLine' => 'MplusKASSA\MplusQapi\SalesLineContractLine',
+ LineList::class . ':line' => 'MplusKASSA\MplusQapi\Line',
+ Line::class . ':preparationList' => 'MplusKASSA\MplusQapi\Line',
+ Line::class . ':contractLines' => 'MplusKASSA\MplusQapi\SalesLineContractLine',
+ Line::class . ':uncondensedLines' => 'MplusKASSA\MplusQapi\Line',
+ LineInputList::class . ':line' => 'MplusKASSA\MplusQapi\LineInput',
+ LineInput::class . ':preparationList' => 'MplusKASSA\MplusQapi\LineInput',
+ LineInput::class . ':contractLines' => 'MplusKASSA\MplusQapi\SalesLineContractLine',
+ AnswerList::class . ':answer' => 'MplusKASSA\MplusQapi\Answer',
  Invoice::class . ':orderIds' => 'string',
  Invoice::class . ':extOrderIds' => 'string',
  Invoice::class . ':vatGroupList' => 'MplusKASSA\MplusQapi\VatGroup',
@@ -77,19 +90,15 @@ class MplusApiClient extends BaseSoapClient {
  Invoice::class . ':extProposalIds' => 'string',
  Invoice::class . ':proposalNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
  InvoiceList::class . ':invoice' => 'MplusKASSA\MplusQapi\Invoice',
- YearNumberList::class . ':yearNumber' => 'MplusKASSA\MplusQapi\YearNumber',
- ContractFrequencyList::class . ':contractFrequency' => 'string',
- SalesLineContractLineList::class . ':contractLine' => 'MplusKASSA\MplusQapi\SalesLineContractLine',
- LineList::class . ':line' => 'MplusKASSA\MplusQapi\Line',
- Line::class . ':preparationList' => 'MplusKASSA\MplusQapi\Line',
- Line::class . ':contractLines' => 'MplusKASSA\MplusQapi\SalesLineContractLine',
- Line::class . ':uncondensedLines' => 'MplusKASSA\MplusQapi\Line',
+ InvoiceInput::class . ':lineList' => 'MplusKASSA\MplusQapi\LineInput',
  TextList::class . ':text' => 'MplusKASSA\MplusQapi\Text',
  VoucherIdList::class . ':voucherId' => 'MplusKASSA\MplusQapi\VoucherId',
+ VoucherViewList::class . ':voucherView' => 'MplusKASSA\MplusQapi\VoucherView',
  VoucherIssuanceRedeemList::class . ':voucherIssuanceRedeem' => 'MplusKASSA\MplusQapi\VoucherIssuanceRedeem',
  VoucherIssuance::class . ':voucherIssuanceRedeems' => 'MplusKASSA\MplusQapi\VoucherIssuanceRedeem',
  VoucherIssuanceList::class . ':voucherIssuance' => 'MplusKASSA\MplusQapi\VoucherIssuance',
  VoucherIssuanceCompactList::class . ':voucherIssuanceCompact' => 'MplusKASSA\MplusQapi\VoucherIssuanceCompact',
+ VoucherIssuanceCandidate::class . ':externalScanCodes' => 'string',
  VoucherIssuanceCandidateList::class . ':voucherIssuanceCandidate' => 'MplusKASSA\MplusQapi\VoucherIssuanceCandidate',
  VoucherRedeemCountList::class . ':voucherRedeemCount' => 'MplusKASSA\MplusQapi\VoucherRedeemCount',
  VoucherCanApplyResult::class . ':recentRedeemCounts' => 'MplusKASSA\MplusQapi\VoucherRedeemCount',
@@ -100,7 +109,6 @@ class MplusApiClient extends BaseSoapClient {
  RequestSalesRepeatTemplateTypeFilter::class . ':salesRepeatTemplateTypes' => 'string',
  RequestSalesRepeatTemplateIdsFilter::class . ':templateIds' => 'string',
  NumberSet::class . ':number' => 'int',
- IdList::class . ':id' => 'string',
  SalesPriceList::class . ':salesPrice' => 'MplusKASSA\MplusQapi\SalesPrice',
  PriceGroupList::class . ':priceGroup' => 'MplusKASSA\MplusQapi\PriceGroup',
  MistakeList::class . ':mistake' => 'MplusKASSA\MplusQapi\Mistake',
@@ -165,7 +173,6 @@ class MplusApiClient extends BaseSoapClient {
  OrderDeliveryLineList::class . ':line' => 'MplusKASSA\MplusQapi\OrderDeliveryLine',
  OrderDelivery::class . ':lineList' => 'MplusKASSA\MplusQapi\OrderDeliveryLine',
  OrderCategory::class . ':orderCategoryDependencyNumbers' => 'int',
- AnswerList::class . ':answer' => 'MplusKASSA\MplusQapi\Answer',
  Receipt::class . ':orderIds' => 'string',
  Receipt::class . ':extOrderIds' => 'string',
  Receipt::class . ':vatGroupList' => 'MplusKASSA\MplusQapi\VatGroup',
@@ -634,12 +641,6 @@ class MplusApiClient extends BaseSoapClient {
  GetCardImageLabelsResponse::class . ':labels' => 'MplusKASSA\MplusQapi\ImageLabel',
  GetCardImagesResponse::class . ':items' => 'MplusKASSA\MplusQapi\CardImageData',
  GetImagesResponse::class . ':imageList' => 'MplusKASSA\MplusQapi\Image',
- PrintParams::class . ':params' => 'MplusKASSA\MplusQapi\PrintParam',
- PrintInfo::class . ':paramsList' => 'MplusKASSA\MplusQapi\PrintParams',
- GetPrintLayoutsResponse::class . ':printLayouts' => 'MplusKASSA\MplusQapi\PrintLayoutView',
- GetPrintLayoutAssignmentsResponse::class . ':printLayoutAssignments' => 'MplusKASSA\MplusQapi\PrintLayoutAssignment',
- GetRenderedPrintLayoutResponse::class . ':renderedPrintLayouts' => 'string',
- VoucherViewList::class . ':voucherView' => 'MplusKASSA\MplusQapi\VoucherView',
  VoucherSettingsV1List::class . ':voucherSettingsV1' => 'MplusKASSA\MplusQapi\VoucherSettingsV1',
  VoucherRedeemLocations::class . ':branchGroupIds' => 'int',
  VoucherRedeemLocations::class . ':branchIds' => 'int',
@@ -879,6 +880,14 @@ class MplusApiClient extends BaseSoapClient {
  CashCountInfoCountedPaymentMethodAmountList::class . ':countedPaymentMethodAmount' => 'MplusKASSA\MplusQapi\CashCountInfoCountedPaymentMethodAmount',
  SaveCashCountRequest::class . ':extraWorkplacesData' => 'MplusKASSA\MplusQapi\CashCountInfoWorkplaceData',
  SaveCashCountRequest::class . ':countedPaymentMethodAmounts' => 'MplusKASSA\MplusQapi\CashCountInfoCountedPaymentMethodAmount',
+ SalesProcessorContext::class . ':scannedVoucherIssuanceCodes' => 'string',
+ SalesProcessorResult::class . ':voucherIssuances' => 'MplusKASSA\MplusQapi\VoucherIssuance',
+ SalesProcessorResult::class . ':voucherIssuanceCandidates' => 'MplusKASSA\MplusQapi\VoucherIssuanceCandidate',
+ SalesProcessorResult::class . ':voucherIssuancesToCancel' => 'MplusKASSA\MplusQapi\VoucherIssuanceCompact',
+ SalesProcessorResult::class . ':unappliedVoucherIssuances' => 'MplusKASSA\MplusQapi\UnappliedVoucherIssuance',
+ SalesProcessorResult::class . ':scannedVoucherIssuances' => 'MplusKASSA\MplusQapi\VoucherIssuanceRedeemable',
+ SalesProcessorResult::class . ':errorMessages' => 'string',
+ ProposalInput::class . ':lineList' => 'MplusKASSA\MplusQapi\LineInput',
  GetSalesRepeatTemplatesResponse::class . ':salesRepeatTemplateList' => 'MplusKASSA\MplusQapi\SalesRepeatTemplate',
  PerformBpeBudgetChecksResponse::class . ':bpeResults' => 'MplusKASSA\MplusQapi\BpeBudgetCheckResponse',
  GetTicketCounterSalesResponse::class . ':ticketCounterSaleList' => 'MplusKASSA\MplusQapi\TicketCounterSale',
@@ -936,6 +945,11 @@ class MplusApiClient extends BaseSoapClient {
  WebhookResp::class . ':lineChanges' => 'MplusKASSA\MplusQapi\WebhookLineChange',
  WebhookResp::class . ':lineAdditions' => 'MplusKASSA\MplusQapi\WebhookLineAddition',
  WebhookResp::class . ':lineDeletions' => 'MplusKASSA\MplusQapi\WebhookLineDeletion',
+ PrintParams::class . ':params' => 'MplusKASSA\MplusQapi\PrintParam',
+ PrintInfo::class . ':paramsList' => 'MplusKASSA\MplusQapi\PrintParams',
+ GetPrintLayoutsResponse::class . ':printLayouts' => 'MplusKASSA\MplusQapi\PrintLayoutView',
+ GetPrintLayoutAssignmentsResponse::class . ':printLayoutAssignments' => 'MplusKASSA\MplusQapi\PrintLayoutAssignment',
+ GetRenderedPrintLayoutResponse::class . ':renderedPrintLayouts' => 'string',
  InterbranchOrderLineList::class . ':interbranchOrderLine' => 'MplusKASSA\MplusQapi\InterbranchOrderLine',
  InterbranchOrder::class . ':interbranchOrderLineList' => 'MplusKASSA\MplusQapi\InterbranchOrderLine',
  InterbranchOrderList::class . ':interbranchOrder' => 'MplusKASSA\MplusQapi\InterbranchOrder',
@@ -3936,66 +3950,6 @@ class MplusApiClient extends BaseSoapClient {
         $this->endRequest();
         return $res;
     }
-    public function getPrintLayouts(GetPrintLayoutsRequest $request, ?string $requestId = null) : GetPrintLayoutsResponse {
-        $opname = 'getPrintLayouts';
-        $this->startRequest($opname);
-        $reqobj = new getPrintLayouts();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function getPrintLayoutAssignments(GetPrintLayoutAssignmentsRequest $request, ?string $requestId = null) : GetPrintLayoutAssignmentsResponse {
-        $opname = 'getPrintLayoutAssignments';
-        $this->startRequest($opname);
-        $reqobj = new getPrintLayoutAssignments();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function getRenderedPrintLayout(GetRenderedPrintLayoutRequest $request, ?string $requestId = null) : GetRenderedPrintLayoutResponse {
-        $opname = 'getRenderedPrintLayout';
-        $this->startRequest($opname);
-        $reqobj = new getRenderedPrintLayout();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function getPrintLayoutMarkup(GetPrintLayoutMarkupRequest $request, ?string $requestId = null) : GetPrintLayoutMarkupResponse {
-        $opname = 'getPrintLayoutMarkup';
-        $this->startRequest($opname);
-        $reqobj = new getPrintLayoutMarkup();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function printPrintLayout(PrintPrintLayoutRequest $request, ?string $requestId = null) : PrintPrintLayoutResponse {
-        $opname = 'printPrintLayout';
-        $this->startRequest($opname);
-        $reqobj = new printPrintLayout();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
     public function checkGiftcardPayment(CheckGiftcardPaymentRequest $request, ?string $requestId = null) : CheckGiftcardPaymentResponse {
         $opname = 'checkGiftcardPayment';
         $this->startRequest($opname);
@@ -4854,6 +4808,42 @@ class MplusApiClient extends BaseSoapClient {
         $this->endRequest();
         return $res;
     }
+    public function processInvoice(ProcessInvoiceRequest $request, ?string $requestId = null) : ProcessInvoiceResponse {
+        $opname = 'processInvoice';
+        $this->startRequest($opname);
+        $reqobj = new processInvoice();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function processProposal(ProcessProposalRequest $request, ?string $requestId = null) : ProcessProposalResponse {
+        $opname = 'processProposal';
+        $this->startRequest($opname);
+        $reqobj = new processProposal();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function processOrder(ProcessOrderRequest $request, ?string $requestId = null) : ProcessOrderResponse {
+        $opname = 'processOrder';
+        $this->startRequest($opname);
+        $reqobj = new processOrder();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
     public function getWebhookConsumers(GetWebhookConsumersRequest $request, ?string $requestId = null) : GetWebhookConsumersResponse {
         $opname = 'getWebhookConsumers';
         $this->startRequest($opname);
@@ -4978,6 +4968,66 @@ class MplusApiClient extends BaseSoapClient {
         $this->endRequest();
         return $res;
     }
+    public function getPrintLayouts(GetPrintLayoutsRequest $request, ?string $requestId = null) : GetPrintLayoutsResponse {
+        $opname = 'getPrintLayouts';
+        $this->startRequest($opname);
+        $reqobj = new getPrintLayouts();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getPrintLayoutAssignments(GetPrintLayoutAssignmentsRequest $request, ?string $requestId = null) : GetPrintLayoutAssignmentsResponse {
+        $opname = 'getPrintLayoutAssignments';
+        $this->startRequest($opname);
+        $reqobj = new getPrintLayoutAssignments();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getRenderedPrintLayout(GetRenderedPrintLayoutRequest $request, ?string $requestId = null) : GetRenderedPrintLayoutResponse {
+        $opname = 'getRenderedPrintLayout';
+        $this->startRequest($opname);
+        $reqobj = new getRenderedPrintLayout();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getPrintLayoutMarkup(GetPrintLayoutMarkupRequest $request, ?string $requestId = null) : GetPrintLayoutMarkupResponse {
+        $opname = 'getPrintLayoutMarkup';
+        $this->startRequest($opname);
+        $reqobj = new getPrintLayoutMarkup();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function printPrintLayout(PrintPrintLayoutRequest $request, ?string $requestId = null) : PrintPrintLayoutResponse {
+        $opname = 'printPrintLayout';
+        $this->startRequest($opname);
+        $reqobj = new printPrintLayout();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
     public function getInterbranchOrders(GetInterbranchOrdersRequest $request, ?string $requestId = null) : GetInterbranchOrdersResponse {
         $opname = 'getInterbranchOrders';
         $this->startRequest($opname);
@@ -5030,6 +5080,18 @@ class MplusApiClient extends BaseSoapClient {
         $opname = 'releaseInterbranchOrder';
         $this->startRequest($opname);
         $reqobj = new releaseInterbranchOrder();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function cancelInterbranchOrder(CancelInterbranchOrderRequest $request, ?string $requestId = null) : CancelInterbranchOrderResponse {
+        $opname = 'cancelInterbranchOrder';
+        $this->startRequest($opname);
+        $reqobj = new cancelInterbranchOrder();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);
