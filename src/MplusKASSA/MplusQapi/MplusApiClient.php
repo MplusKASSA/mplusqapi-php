@@ -38,6 +38,7 @@ class MplusApiClient extends BaseSoapClient {
  Relation::class . ':relationArticleDiscountList' => 'MplusKASSA\MplusQapi\RelationArticleDiscount',
  Relation::class . ':branchesNonPurchasable' => 'int',
  Relation::class . ':cardNumbers' => 'string',
+ WorkplaceIdentifierSet::class . ':workplaceIdentifier' => 'MplusKASSA\MplusQapi\WorkplaceIdentifier',
  BranchAccountNumberList::class . ':branchAccountNumber' => 'MplusKASSA\MplusQapi\BranchAccountNumber',
  GiftcardType::class . ':branchNumbers' => 'int',
  GiftcardType::class . ':availableValues' => 'int',
@@ -591,6 +592,7 @@ class MplusApiClient extends BaseSoapClient {
  EmployeeBranchAuthorizationsList::class . ':branchAuthorizations' => 'MplusKASSA\MplusQapi\EmployeeBranchAuthorization',
  UpdateEmployeeAuthorizationGroupsRequest::class . ':branchAuthorizationGroupNumbers' => 'MplusKASSA\MplusQapi\BranchAuthorizationGroupNumber',
  UpdateEmployeeAuthorizationGroupsRequest::class . ':branchGroupAuthorizationGroupNumbers' => 'MplusKASSA\MplusQapi\BranchGroupAuthorizationGroupNumber',
+ GetEmployeeWorkplaceLoginStatesRequest::class . ':workplaceIdentifiers' => 'MplusKASSA\MplusQapi\WorkplaceIdentifier',
  GetConfigurationResponse::class . ':configurationList' => 'MplusKASSA\MplusQapi\Configuration',
  GetConfigurationTreeResponse::class . ':configurations' => 'MplusKASSA\MplusQapi\ConfigurationGroup',
  GetConfigurationValuesResponse::class . ':configurationKeyValues' => 'MplusKASSA\MplusQapi\ConfigurationKeyValues',
@@ -628,6 +630,7 @@ class MplusApiClient extends BaseSoapClient {
  GetEmployeeAuthorizationGroupsResponse::class . ':branchAuthorizationGroups' => 'MplusKASSA\MplusQapi\BranchAuthorizationGroup',
  GetEmployeeAuthorizationGroupsResponse::class . ':branchGroupAuthorizationGroups' => 'MplusKASSA\MplusQapi\BranchGroupAuthorizationGroup',
  GetSpecialBarcodePatternsResponse::class . ':patterns' => 'MplusKASSA\MplusQapi\BarcodePattern',
+ GetEmployeeWorkplaceLoginStatesResponse::class . ':workplaceLoginStateInfo' => 'MplusKASSA\MplusQapi\WorkplaceLoginStateInfo',
  ImageCardLabelIds::class . ':labelId' => 'int',
  ImageData::class . ':labels' => 'int',
  CardImageData::class . ':images' => 'MplusKASSA\MplusQapi\ImageData',
@@ -3870,6 +3873,18 @@ class MplusApiClient extends BaseSoapClient {
         $opname = 'parseSpecialBarcode';
         $this->startRequest($opname);
         $reqobj = new parseSpecialBarcode();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getEmployeeWorkplaceLoginStates(GetEmployeeWorkplaceLoginStatesRequest $request, ?string $requestId = null) : GetEmployeeWorkplaceLoginStatesResponse {
+        $opname = 'getEmployeeWorkplaceLoginStates';
+        $this->startRequest($opname);
+        $reqobj = new getEmployeeWorkplaceLoginStates();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);

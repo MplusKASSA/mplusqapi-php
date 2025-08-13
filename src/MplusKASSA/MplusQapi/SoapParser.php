@@ -27,6 +27,7 @@ class SoapParser extends BaseSoapParser {
 			case 'RelationIdentifier': return $this->load_RelationIdentifier($in);
 			case 'TableIdentifier': return $this->load_TableIdentifier($in);
 			case 'WorkplaceIdentifier': return $this->load_WorkplaceIdentifier($in);
+			case 'WorkplaceIdentifierSet': return $this->load_WorkplaceIdentifierSet($in);
 			case 'BranchAccountNumber': return $this->load_BranchAccountNumber($in);
 			case 'BranchAccountNumberList': return $this->load_BranchAccountNumberList($in);
 			case 'GiftcardType': return $this->load_GiftcardType($in);
@@ -767,6 +768,8 @@ class SoapParser extends BaseSoapParser {
 			case 'BarcodePattern': return $this->load_BarcodePattern($in);
 			case 'ParseSpecialBarcodeRequest': return $this->load_ParseSpecialBarcodeRequest($in);
 			case 'SpecialBarcodeArticleResult': return $this->load_SpecialBarcodeArticleResult($in);
+			case 'WorkplaceLoginStateInfo': return $this->load_WorkplaceLoginStateInfo($in);
+			case 'GetEmployeeWorkplaceLoginStatesRequest': return $this->load_GetEmployeeWorkplaceLoginStatesRequest($in);
 			case 'GetConfigurationResponse': return $this->load_GetConfigurationResponse($in);
 			case 'UpdateConfigurationResponse': return $this->load_UpdateConfigurationResponse($in);
 			case 'GetConfigurationTreeResponse': return $this->load_GetConfigurationTreeResponse($in);
@@ -835,6 +838,7 @@ class SoapParser extends BaseSoapParser {
 			case 'GetEmployeeAuthorizationSyncMarkersResponse': return $this->load_GetEmployeeAuthorizationSyncMarkersResponse($in);
 			case 'GetSpecialBarcodePatternsResponse': return $this->load_GetSpecialBarcodePatternsResponse($in);
 			case 'ParseSpecialBarcodeResponse': return $this->load_ParseSpecialBarcodeResponse($in);
+			case 'GetEmployeeWorkplaceLoginStatesResponse': return $this->load_GetEmployeeWorkplaceLoginStatesResponse($in);
 			case 'ImageLabel': return $this->load_ImageLabel($in);
 			case 'ImageCardLabelIds': return $this->load_ImageCardLabelIds($in);
 			case 'ImageData': return $this->load_ImageData($in);
@@ -1464,6 +1468,7 @@ class SoapParser extends BaseSoapParser {
 			case 'getEmployeeAuthorizationSyncMarkers': return $this->load_getEmployeeAuthorizationSyncMarkers($in);
 			case 'getSpecialBarcodePatterns': return $this->load_getSpecialBarcodePatterns($in);
 			case 'parseSpecialBarcode': return $this->load_parseSpecialBarcode($in);
+			case 'getEmployeeWorkplaceLoginStates': return $this->load_getEmployeeWorkplaceLoginStates($in);
 			case 'createImage': return $this->load_createImage($in);
 			case 'createImageFromUrl': return $this->load_createImageFromUrl($in);
 			case 'getCardImageLabels': return $this->load_getCardImageLabels($in);
@@ -2103,6 +2108,25 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_WorkplaceIdentifierSet(\XMLReader $in) : WorkplaceIdentifierSet {
+		$n = $in->name;
+		$o = new WorkplaceIdentifierSet();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'workplaceIdentifier': $o->workplaceIdentifier[] = $this->load_WorkplaceIdentifier($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_BranchAccountNumber(\XMLReader $in) : BranchAccountNumber {
 		$n = $in->name;
 		$o = new BranchAccountNumber();
@@ -2464,7 +2488,6 @@ class SoapParser extends BaseSoapParser {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
 						case 'salePromotionLineId': $o->salePromotionLineId = $this->load_string_property($in); break;
-						case 'description': $o->description = $this->load_string_property($in); break;
 						case 'setNumber': $o->setNumber = $this->load_int_property($in); break;
 					}
 					break;
@@ -2819,13 +2842,13 @@ class SoapParser extends BaseSoapParser {
 						case 'orderId': $o->orderId = $this->load_string_property($in); break;
 						case 'extOrderId': $o->extOrderId = $this->load_string_property($in); break;
 						case 'orderType': $o->orderType = $this->load_string_property($in); break;
-						case 'entryBranchNumber': $o->entryBranchNumber = $this->load_int_property($in); break;
 						case 'employeeNumber': $o->employeeNumber = $this->load_int_property($in); break;
 						case 'relationNumber': $o->relationNumber = $this->load_int_property($in); break;
+						case 'financialDate': $o->financialDate = $this->load_Date_property($in); break;
 						case 'deliveryAddress': $o->deliveryAddress = $this->load_Address($in); break;
 						case 'invoiceAddress': $o->invoiceAddress = $this->load_Address($in); break;
-						case 'financialDate': $o->financialDate = $this->load_Date_property($in); break;
 						case 'financialBranchNumber': $o->financialBranchNumber = $this->load_int_property($in); break;
+						case 'entryBranchNumber': $o->entryBranchNumber = $this->load_int_property($in); break;
 						case 'workplaceNumber': $o->workplaceNumber = $this->load_int_property($in); break;
 						case 'reference': $o->reference = $this->load_string_property($in); break;
 						case 'vatMethod': $o->vatMethod = $this->load_string_property($in); break;
@@ -2835,8 +2858,6 @@ class SoapParser extends BaseSoapParser {
 						case 'deliveryPeriodEnd': $o->deliveryPeriodEnd = $this->load_SoapMplusDateTime($in)->toDateTime(); break;
 						case 'changeCounter': $o->changeCounter = $this->load_int_property($in); break;
 						case 'versionNumber': $o->versionNumber = $this->load_int_property($in); break;
-						case 'tableNumber': $o->tableNumber = $this->load_int_property($in); break;
-						case 'tableSubNumber': $o->tableSubNumber = $this->load_int_property($in); break;
 						case 'orderCategoryNumber': $o->orderCategoryNumber = $this->load_int_property($in); break;
 						case 'onDeliveryUrl': $o->onDeliveryUrl = $this->load_string_property($in); break;
 						case 'onInvoiceUrl': $o->onInvoiceUrl = $this->load_string_property($in); break;
@@ -3175,6 +3196,7 @@ class SoapParser extends BaseSoapParser {
 						case 'contractLines': $o->contractLines = ($this->load_SalesLineContractLineList($in))->contractLine; break;
 						case 'uncondensedLines': $o->uncondensedLines = ($this->load_LineList($in))->line; break;
 						case 'tempLineId': $o->tempLineId = $this->load_string_property($in); break;
+						case 'subLineType': $o->subLineType = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -3200,7 +3222,6 @@ class SoapParser extends BaseSoapParser {
 						case 'originalPrice': $o->originalPrice = $this->load_BigDecimal_property($in); break;
 						case 'purchasePrice': $o->purchasePrice = $this->load_BigDecimal_property($in); break;
 						case 'vatCode': $o->vatCode = $this->load_int_property($in); break;
-						case 'vatPercentage': $o->vatPercentage = $this->load_BigDecimal_property($in); break;
 						case 'discountType': $o->discountType = $this->load_string_property($in); break;
 						case 'discountPercentage': $o->discountPercentage = $this->load_BigDecimal_property($in); break;
 						case 'discountAmount': $o->discountAmount = $this->load_BigDecimal_property($in); break;
@@ -3249,19 +3270,17 @@ class SoapParser extends BaseSoapParser {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
 						case 'lineId': $o->lineId = $this->load_string_property($in); break;
+						case 'tempLineId': $o->tempLineId = $this->load_string_property($in); break;
+						case 'lineType': $o->lineType = $this->load_string_property($in); break;
 						case 'articleNumber': $o->articleNumber = $this->load_int_property($in); break;
 						case 'pluNumber': $o->pluNumber = $this->load_string_property($in); break;
 						case 'text': $o->text = $this->load_string_property($in); break;
 						case 'data': $o->data = $this->load_LineDataInput($in); break;
-						case 'menuHash': $o->menuHash = $this->load_string_property($in); break;
-						case 'menuAmount': $o->menuAmount = $this->load_BigDecimal_property($in); break;
-						case 'salePromotionData': $o->salePromotionData = $this->load_SalePromotionLineDataInput($in); break;
-						case 'lineType': $o->lineType = $this->load_string_property($in); break;
 						case 'preparationList': $o->preparationList = ($this->load_LineInputList($in))->line; break;
+						case 'contractLines': $o->contractLines = ($this->load_SalesLineContractLineList($in))->contractLine; break;
 						case 'suppressDisposableComponent': $o->suppressDisposableComponent = $this->load_bool_property($in); break;
 						case 'sequenceNumber': $o->sequenceNumber = $this->load_int_property($in); break;
-						case 'contractLines': $o->contractLines = ($this->load_SalesLineContractLineList($in))->contractLine; break;
-						case 'tempLineId': $o->tempLineId = $this->load_string_property($in); break;
+						case 'salePromotionData': $o->salePromotionData = $this->load_SalePromotionLineDataInput($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -3423,14 +3442,11 @@ class SoapParser extends BaseSoapParser {
 						case 'extInvoiceId': $o->extInvoiceId = $this->load_string_property($in); break;
 						case 'employeeNumber': $o->employeeNumber = $this->load_int_property($in); break;
 						case 'relationNumber': $o->relationNumber = $this->load_int_property($in); break;
-						case 'deliveryAddress': $o->deliveryAddress = $this->load_Address($in); break;
-						case 'invoiceAddress': $o->invoiceAddress = $this->load_Address($in); break;
 						case 'financialDate': $o->financialDate = $this->load_Date_property($in); break;
 						case 'financialBranchNumber': $o->financialBranchNumber = $this->load_int_property($in); break;
-						case 'workplaceNumber': $o->workplaceNumber = $this->load_int_property($in); break;
 						case 'entryBranchNumber': $o->entryBranchNumber = $this->load_int_property($in); break;
+						case 'workplaceNumber': $o->workplaceNumber = $this->load_int_property($in); break;
 						case 'reference': $o->reference = $this->load_string_property($in); break;
-						case 'activityId': $o->activityId = $this->load_string_property($in); break;
 						case 'dueDate': $o->dueDate = $this->load_Date_property($in); break;
 						case 'vatMethod': $o->vatMethod = $this->load_string_property($in); break;
 						case 'changeCounter': $o->changeCounter = $this->load_int_property($in); break;
@@ -19151,6 +19167,46 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_WorkplaceLoginStateInfo(\XMLReader $in) : WorkplaceLoginStateInfo {
+		$n = $in->name;
+		$o = new WorkplaceLoginStateInfo();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'workplaceIdentifier': $o->workplaceIdentifier = $this->load_WorkplaceIdentifier($in); break;
+						case 'workplaceLoginState': $o->workplaceLoginState = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetEmployeeWorkplaceLoginStatesRequest(\XMLReader $in) : GetEmployeeWorkplaceLoginStatesRequest {
+		$n = $in->name;
+		$o = new GetEmployeeWorkplaceLoginStatesRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'employeeNumber': $o->employeeNumber = $this->load_int_property($in); break;
+						case 'workplaceIdentifiers': $o->workplaceIdentifiers = ($this->load_WorkplaceIdentifierSet($in))->workplaceIdentifier; break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_GetConfigurationResponse(\XMLReader $in) : GetConfigurationResponse {
 		$n = $in->name;
 		$o = new GetConfigurationResponse();
@@ -20583,6 +20639,25 @@ class SoapParser extends BaseSoapParser {
 						case 'result': $o->result = $this->load_string_property($in); break;
 						case 'kind': $o->kind = $this->load_string_property($in); break;
 						case 'articleResult': $o->articleResult = $this->load_SpecialBarcodeArticleResult($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetEmployeeWorkplaceLoginStatesResponse(\XMLReader $in) : GetEmployeeWorkplaceLoginStatesResponse {
+		$n = $in->name;
+		$o = new GetEmployeeWorkplaceLoginStatesResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'workplaceLoginStateInfo': $o->workplaceLoginStateInfo[] = $this->load_WorkplaceLoginStateInfo($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -25734,8 +25809,8 @@ class SoapParser extends BaseSoapParser {
 						case 'relationNumber': $o->relationNumber = $this->load_int_property($in); break;
 						case 'financialDate': $o->financialDate = $this->load_SoapMplusDate($in)->toDateTime(); break;
 						case 'financialBranchNumber': $o->financialBranchNumber = $this->load_int_property($in); break;
-						case 'workplaceNumber': $o->workplaceNumber = $this->load_int_property($in); break;
 						case 'entryBranchNumber': $o->entryBranchNumber = $this->load_int_property($in); break;
+						case 'workplaceNumber': $o->workplaceNumber = $this->load_int_property($in); break;
 						case 'reference': $o->reference = $this->load_string_property($in); break;
 						case 'vatMethod': $o->vatMethod = $this->load_string_property($in); break;
 						case 'changeCounter': $o->changeCounter = $this->load_int_property($in); break;
@@ -33817,6 +33892,25 @@ class SoapParser extends BaseSoapParser {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
 						case 'request': $o->request = $this->load_ParseSpecialBarcodeRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_getEmployeeWorkplaceLoginStates(\XMLReader $in) : getEmployeeWorkplaceLoginStates {
+		$n = $in->name;
+		$o = new getEmployeeWorkplaceLoginStates();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_GetEmployeeWorkplaceLoginStatesRequest($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
