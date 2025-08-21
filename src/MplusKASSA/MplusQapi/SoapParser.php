@@ -857,6 +857,22 @@ class SoapParser extends BaseSoapParser {
 			case 'GetCardImagesResponse': return $this->load_GetCardImagesResponse($in);
 			case 'SaveCardImagesResponse': return $this->load_SaveCardImagesResponse($in);
 			case 'GetImagesResponse': return $this->load_GetImagesResponse($in);
+			case 'GetPrintLayoutsRequest': return $this->load_GetPrintLayoutsRequest($in);
+			case 'PrintLayoutView': return $this->load_PrintLayoutView($in);
+			case 'GetPrintLayoutAssignmentsRequest': return $this->load_GetPrintLayoutAssignmentsRequest($in);
+			case 'PrintLayoutAssignmentPrintLayoutView': return $this->load_PrintLayoutAssignmentPrintLayoutView($in);
+			case 'PrintLayoutAssignment': return $this->load_PrintLayoutAssignment($in);
+			case 'PrintParam': return $this->load_PrintParam($in);
+			case 'PrintParams': return $this->load_PrintParams($in);
+			case 'PrintInfo': return $this->load_PrintInfo($in);
+			case 'GetRenderedPrintLayoutRequest': return $this->load_GetRenderedPrintLayoutRequest($in);
+			case 'GetPrintLayoutMarkupRequest': return $this->load_GetPrintLayoutMarkupRequest($in);
+			case 'PrintPrintLayoutRequest': return $this->load_PrintPrintLayoutRequest($in);
+			case 'GetPrintLayoutsResponse': return $this->load_GetPrintLayoutsResponse($in);
+			case 'GetPrintLayoutAssignmentsResponse': return $this->load_GetPrintLayoutAssignmentsResponse($in);
+			case 'GetRenderedPrintLayoutResponse': return $this->load_GetRenderedPrintLayoutResponse($in);
+			case 'GetPrintLayoutMarkupResponse': return $this->load_GetPrintLayoutMarkupResponse($in);
+			case 'PrintPrintLayoutResponse': return $this->load_PrintPrintLayoutResponse($in);
 			case 'VoucherSettingsV1': return $this->load_VoucherSettingsV1($in);
 			case 'VoucherSettingsV1List': return $this->load_VoucherSettingsV1List($in);
 			case 'VoucherRedeemLocations': return $this->load_VoucherRedeemLocations($in);
@@ -1163,22 +1179,6 @@ class SoapParser extends BaseSoapParser {
 			case 'CancelExternalPaymentResponse': return $this->load_CancelExternalPaymentResponse($in);
 			case 'ExternalPaymentWebhookResponse': return $this->load_ExternalPaymentWebhookResponse($in);
 			case 'WebhookResp': return $this->load_WebhookResp($in);
-			case 'GetPrintLayoutsRequest': return $this->load_GetPrintLayoutsRequest($in);
-			case 'PrintLayoutView': return $this->load_PrintLayoutView($in);
-			case 'GetPrintLayoutAssignmentsRequest': return $this->load_GetPrintLayoutAssignmentsRequest($in);
-			case 'PrintLayoutAssignmentPrintLayoutView': return $this->load_PrintLayoutAssignmentPrintLayoutView($in);
-			case 'PrintLayoutAssignment': return $this->load_PrintLayoutAssignment($in);
-			case 'PrintParam': return $this->load_PrintParam($in);
-			case 'PrintParams': return $this->load_PrintParams($in);
-			case 'PrintInfo': return $this->load_PrintInfo($in);
-			case 'GetRenderedPrintLayoutRequest': return $this->load_GetRenderedPrintLayoutRequest($in);
-			case 'GetPrintLayoutMarkupRequest': return $this->load_GetPrintLayoutMarkupRequest($in);
-			case 'PrintPrintLayoutRequest': return $this->load_PrintPrintLayoutRequest($in);
-			case 'GetPrintLayoutsResponse': return $this->load_GetPrintLayoutsResponse($in);
-			case 'GetPrintLayoutAssignmentsResponse': return $this->load_GetPrintLayoutAssignmentsResponse($in);
-			case 'GetRenderedPrintLayoutResponse': return $this->load_GetRenderedPrintLayoutResponse($in);
-			case 'GetPrintLayoutMarkupResponse': return $this->load_GetPrintLayoutMarkupResponse($in);
-			case 'PrintPrintLayoutResponse': return $this->load_PrintPrintLayoutResponse($in);
 			case 'InterbranchOrderLine': return $this->load_InterbranchOrderLine($in);
 			case 'InterbranchOrderLineList': return $this->load_InterbranchOrderLineList($in);
 			case 'InterbranchOrder': return $this->load_InterbranchOrder($in);
@@ -1475,6 +1475,11 @@ class SoapParser extends BaseSoapParser {
 			case 'getCardImages': return $this->load_getCardImages($in);
 			case 'saveCardImages': return $this->load_saveCardImages($in);
 			case 'getImages': return $this->load_getImages($in);
+			case 'getPrintLayouts': return $this->load_getPrintLayouts($in);
+			case 'getPrintLayoutAssignments': return $this->load_getPrintLayoutAssignments($in);
+			case 'getRenderedPrintLayout': return $this->load_getRenderedPrintLayout($in);
+			case 'getPrintLayoutMarkup': return $this->load_getPrintLayoutMarkup($in);
+			case 'printPrintLayout': return $this->load_printPrintLayout($in);
 			case 'checkGiftcardPayment': return $this->load_checkGiftcardPayment($in);
 			case 'registerGiftcardPayment': return $this->load_registerGiftcardPayment($in);
 			case 'registerGiftcardPaymentV2': return $this->load_registerGiftcardPaymentV2($in);
@@ -1559,11 +1564,6 @@ class SoapParser extends BaseSoapParser {
 			case 'requestCancelExternalPaymentV2': return $this->load_requestCancelExternalPaymentV2($in);
 			case 'cancelExternalPaymentV2': return $this->load_cancelExternalPaymentV2($in);
 			case 'sendWebhook': return $this->load_sendWebhook($in);
-			case 'getPrintLayouts': return $this->load_getPrintLayouts($in);
-			case 'getPrintLayoutAssignments': return $this->load_getPrintLayoutAssignments($in);
-			case 'getRenderedPrintLayout': return $this->load_getRenderedPrintLayout($in);
-			case 'getPrintLayoutMarkup': return $this->load_getPrintLayoutMarkup($in);
-			case 'printPrintLayout': return $this->load_printPrintLayout($in);
 			case 'getInterbranchOrders': return $this->load_getInterbranchOrders($in);
 			case 'createInterbranchOrder': return $this->load_createInterbranchOrder($in);
 			case 'updateInterbranchOrder': return $this->load_updateInterbranchOrder($in);
@@ -3279,7 +3279,6 @@ class SoapParser extends BaseSoapParser {
 						case 'preparationList': $o->preparationList = ($this->load_LineInputList($in))->line; break;
 						case 'contractLines': $o->contractLines = ($this->load_SalesLineContractLineList($in))->contractLine; break;
 						case 'suppressDisposableComponent': $o->suppressDisposableComponent = $this->load_bool_property($in); break;
-						case 'sequenceNumber': $o->sequenceNumber = $this->load_int_property($in); break;
 						case 'salePromotionData': $o->salePromotionData = $this->load_SalePromotionLineDataInput($in); break;
 					}
 					break;
@@ -21038,6 +21037,349 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_GetPrintLayoutsRequest(\XMLReader $in) : GetPrintLayoutsRequest {
+		$n = $in->name;
+		$o = new GetPrintLayoutsRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'type': $o->type = $this->load_string_property($in); break;
+						case 'kind': $o->kind = $this->load_string_property($in); break;
+						case 'fieldType': $o->fieldType = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_PrintLayoutView(\XMLReader $in) : PrintLayoutView {
+		$n = $in->name;
+		$o = new PrintLayoutView();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'id': $o->id = $this->load_string_property($in); break;
+						case 'name': $o->name = $this->load_string_property($in); break;
+						case 'type': $o->type = $this->load_string_property($in); break;
+						case 'kind': $o->kind = $this->load_string_property($in); break;
+						case 'createdTimestamp': $o->createdTimestamp = $this->load_DateTime_property($in); break;
+						case 'updatedTimestamp': $o->updatedTimestamp = $this->load_DateTime_property($in); break;
+						case 'hasDigitalSignatureField': $o->hasDigitalSignatureField = $this->load_bool_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetPrintLayoutAssignmentsRequest(\XMLReader $in) : GetPrintLayoutAssignmentsRequest {
+		$n = $in->name;
+		$o = new GetPrintLayoutAssignmentsRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'type': $o->type = $this->load_string_property($in); break;
+						case 'kind': $o->kind = $this->load_string_property($in); break;
+						case 'branchNumber': $o->branchNumber = $this->load_int_property($in); break;
+						case 'workplaceNumber': $o->workplaceNumber = $this->load_int_property($in); break;
+						case 'useOnlinePrinter': $o->useOnlinePrinter = $this->load_bool_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_PrintLayoutAssignmentPrintLayoutView(\XMLReader $in) : PrintLayoutAssignmentPrintLayoutView {
+		$n = $in->name;
+		$o = new PrintLayoutAssignmentPrintLayoutView();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'id': $o->id = $this->load_string_property($in); break;
+						case 'name': $o->name = $this->load_string_property($in); break;
+						case 'type': $o->type = $this->load_string_property($in); break;
+						case 'kind': $o->kind = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_PrintLayoutAssignment(\XMLReader $in) : PrintLayoutAssignment {
+		$n = $in->name;
+		$o = new PrintLayoutAssignment();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'workplace': $o->workplace = $this->load_WorkplaceIdentifier($in); break;
+						case 'printLayout': $o->printLayout = $this->load_PrintLayoutAssignmentPrintLayoutView($in); break;
+						case 'useOnlinePrinter': $o->useOnlinePrinter = $this->load_bool_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_PrintParam(\XMLReader $in) : PrintParam {
+		$n = $in->name;
+		$o = new PrintParam();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'key': $o->key = $this->load_string_property($in); break;
+						case 'value': $o->value = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_PrintParams(\XMLReader $in) : PrintParams {
+		$n = $in->name;
+		$o = new PrintParams();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'uuid': $o->uuid = $this->load_string_property($in); break;
+						case 'yearNumber': $o->yearNumber = $this->load_YearNumber($in); break;
+						case 'params': $o->params[] = $this->load_PrintParam($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_PrintInfo(\XMLReader $in) : PrintInfo {
+		$n = $in->name;
+		$o = new PrintInfo();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'paramsList': $o->paramsList[] = $this->load_PrintParams($in); break;
+						case 'globalParams': $o->globalParams = $this->load_PrintParams($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetRenderedPrintLayoutRequest(\XMLReader $in) : GetRenderedPrintLayoutRequest {
+		$n = $in->name;
+		$o = new GetRenderedPrintLayoutRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'printLayoutUuid': $o->printLayoutUuid = $this->load_string_property($in); break;
+						case 'renderType': $o->renderType = $this->load_string_property($in); break;
+						case 'printInfo': $o->printInfo = $this->load_PrintInfo($in); break;
+						case 'dpi': $o->dpi = $this->load_int_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetPrintLayoutMarkupRequest(\XMLReader $in) : GetPrintLayoutMarkupRequest {
+		$n = $in->name;
+		$o = new GetPrintLayoutMarkupRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'printLayoutUuid': $o->printLayoutUuid = $this->load_string_property($in); break;
+						case 'markupType': $o->markupType = $this->load_string_property($in); break;
+						case 'printInfo': $o->printInfo = $this->load_PrintInfo($in); break;
+						case 'responseAsBase64': $o->responseAsBase64 = $this->load_bool_property($in); break;
+						case 'normalWidthInCharacters': $o->normalWidthInCharacters = $this->load_int_property($in); break;
+						case 'smallWidthInCharacters': $o->smallWidthInCharacters = $this->load_int_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_PrintPrintLayoutRequest(\XMLReader $in) : PrintPrintLayoutRequest {
+		$n = $in->name;
+		$o = new PrintPrintLayoutRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'type': $o->type = $this->load_string_property($in); break;
+						case 'kind': $o->kind = $this->load_string_property($in); break;
+						case 'printInfo': $o->printInfo = $this->load_PrintInfo($in); break;
+						case 'workplaceIdentifier': $o->workplaceIdentifier = $this->load_WorkplaceIdentifier($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetPrintLayoutsResponse(\XMLReader $in) : GetPrintLayoutsResponse {
+		$n = $in->name;
+		$o = new GetPrintLayoutsResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'result': $o->result = $this->load_string_property($in); break;
+						case 'printLayouts': $o->printLayouts[] = $this->load_PrintLayoutView($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetPrintLayoutAssignmentsResponse(\XMLReader $in) : GetPrintLayoutAssignmentsResponse {
+		$n = $in->name;
+		$o = new GetPrintLayoutAssignmentsResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'printLayoutAssignments': $o->printLayoutAssignments[] = $this->load_PrintLayoutAssignment($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetRenderedPrintLayoutResponse(\XMLReader $in) : GetRenderedPrintLayoutResponse {
+		$n = $in->name;
+		$o = new GetRenderedPrintLayoutResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'result': $o->result = $this->load_string_property($in); break;
+						case 'errorMessage': $o->errorMessage = $this->load_string_property($in); break;
+						case 'renderedPrintLayouts': $o->renderedPrintLayouts[] = $this->load_string_property($in); break;
+						case 'hasDigitalSignatureField': $o->hasDigitalSignatureField = $this->load_bool_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetPrintLayoutMarkupResponse(\XMLReader $in) : GetPrintLayoutMarkupResponse {
+		$n = $in->name;
+		$o = new GetPrintLayoutMarkupResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'result': $o->result = $this->load_string_property($in); break;
+						case 'errorMessage': $o->errorMessage = $this->load_string_property($in); break;
+						case 'printLayoutMarkup': $o->printLayoutMarkup = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_PrintPrintLayoutResponse(\XMLReader $in) : PrintPrintLayoutResponse {
+		$n = $in->name;
+		$o = new PrintPrintLayoutResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'result': $o->result = $this->load_string_property($in); break;
+						case 'errorMessage': $o->errorMessage = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_VoucherSettingsV1(\XMLReader $in) : VoucherSettingsV1 {
 		$n = $in->name;
 		$o = new VoucherSettingsV1();
@@ -27936,349 +28278,6 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
-	private function load_GetPrintLayoutsRequest(\XMLReader $in) : GetPrintLayoutsRequest {
-		$n = $in->name;
-		$o = new GetPrintLayoutsRequest();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'type': $o->type = $this->load_string_property($in); break;
-						case 'kind': $o->kind = $this->load_string_property($in); break;
-						case 'fieldType': $o->fieldType = $this->load_string_property($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_PrintLayoutView(\XMLReader $in) : PrintLayoutView {
-		$n = $in->name;
-		$o = new PrintLayoutView();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'id': $o->id = $this->load_string_property($in); break;
-						case 'name': $o->name = $this->load_string_property($in); break;
-						case 'type': $o->type = $this->load_string_property($in); break;
-						case 'kind': $o->kind = $this->load_string_property($in); break;
-						case 'createdTimestamp': $o->createdTimestamp = $this->load_DateTime_property($in); break;
-						case 'updatedTimestamp': $o->updatedTimestamp = $this->load_DateTime_property($in); break;
-						case 'hasDigitalSignatureField': $o->hasDigitalSignatureField = $this->load_bool_property($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_GetPrintLayoutAssignmentsRequest(\XMLReader $in) : GetPrintLayoutAssignmentsRequest {
-		$n = $in->name;
-		$o = new GetPrintLayoutAssignmentsRequest();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'type': $o->type = $this->load_string_property($in); break;
-						case 'kind': $o->kind = $this->load_string_property($in); break;
-						case 'branchNumber': $o->branchNumber = $this->load_int_property($in); break;
-						case 'workplaceNumber': $o->workplaceNumber = $this->load_int_property($in); break;
-						case 'useOnlinePrinter': $o->useOnlinePrinter = $this->load_bool_property($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_PrintLayoutAssignmentPrintLayoutView(\XMLReader $in) : PrintLayoutAssignmentPrintLayoutView {
-		$n = $in->name;
-		$o = new PrintLayoutAssignmentPrintLayoutView();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'id': $o->id = $this->load_string_property($in); break;
-						case 'name': $o->name = $this->load_string_property($in); break;
-						case 'type': $o->type = $this->load_string_property($in); break;
-						case 'kind': $o->kind = $this->load_string_property($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_PrintLayoutAssignment(\XMLReader $in) : PrintLayoutAssignment {
-		$n = $in->name;
-		$o = new PrintLayoutAssignment();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'workplace': $o->workplace = $this->load_WorkplaceIdentifier($in); break;
-						case 'printLayout': $o->printLayout = $this->load_PrintLayoutAssignmentPrintLayoutView($in); break;
-						case 'useOnlinePrinter': $o->useOnlinePrinter = $this->load_bool_property($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_PrintParam(\XMLReader $in) : PrintParam {
-		$n = $in->name;
-		$o = new PrintParam();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'key': $o->key = $this->load_string_property($in); break;
-						case 'value': $o->value = $this->load_string_property($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_PrintParams(\XMLReader $in) : PrintParams {
-		$n = $in->name;
-		$o = new PrintParams();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'uuid': $o->uuid = $this->load_string_property($in); break;
-						case 'yearNumber': $o->yearNumber = $this->load_YearNumber($in); break;
-						case 'params': $o->params[] = $this->load_PrintParam($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_PrintInfo(\XMLReader $in) : PrintInfo {
-		$n = $in->name;
-		$o = new PrintInfo();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'paramsList': $o->paramsList[] = $this->load_PrintParams($in); break;
-						case 'globalParams': $o->globalParams = $this->load_PrintParams($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_GetRenderedPrintLayoutRequest(\XMLReader $in) : GetRenderedPrintLayoutRequest {
-		$n = $in->name;
-		$o = new GetRenderedPrintLayoutRequest();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'printLayoutUuid': $o->printLayoutUuid = $this->load_string_property($in); break;
-						case 'renderType': $o->renderType = $this->load_string_property($in); break;
-						case 'printInfo': $o->printInfo = $this->load_PrintInfo($in); break;
-						case 'dpi': $o->dpi = $this->load_int_property($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_GetPrintLayoutMarkupRequest(\XMLReader $in) : GetPrintLayoutMarkupRequest {
-		$n = $in->name;
-		$o = new GetPrintLayoutMarkupRequest();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'printLayoutUuid': $o->printLayoutUuid = $this->load_string_property($in); break;
-						case 'markupType': $o->markupType = $this->load_string_property($in); break;
-						case 'printInfo': $o->printInfo = $this->load_PrintInfo($in); break;
-						case 'responseAsBase64': $o->responseAsBase64 = $this->load_bool_property($in); break;
-						case 'normalWidthInCharacters': $o->normalWidthInCharacters = $this->load_int_property($in); break;
-						case 'smallWidthInCharacters': $o->smallWidthInCharacters = $this->load_int_property($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_PrintPrintLayoutRequest(\XMLReader $in) : PrintPrintLayoutRequest {
-		$n = $in->name;
-		$o = new PrintPrintLayoutRequest();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'type': $o->type = $this->load_string_property($in); break;
-						case 'kind': $o->kind = $this->load_string_property($in); break;
-						case 'printInfo': $o->printInfo = $this->load_PrintInfo($in); break;
-						case 'workplaceIdentifier': $o->workplaceIdentifier = $this->load_WorkplaceIdentifier($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_GetPrintLayoutsResponse(\XMLReader $in) : GetPrintLayoutsResponse {
-		$n = $in->name;
-		$o = new GetPrintLayoutsResponse();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'result': $o->result = $this->load_string_property($in); break;
-						case 'printLayouts': $o->printLayouts[] = $this->load_PrintLayoutView($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_GetPrintLayoutAssignmentsResponse(\XMLReader $in) : GetPrintLayoutAssignmentsResponse {
-		$n = $in->name;
-		$o = new GetPrintLayoutAssignmentsResponse();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'printLayoutAssignments': $o->printLayoutAssignments[] = $this->load_PrintLayoutAssignment($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_GetRenderedPrintLayoutResponse(\XMLReader $in) : GetRenderedPrintLayoutResponse {
-		$n = $in->name;
-		$o = new GetRenderedPrintLayoutResponse();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'result': $o->result = $this->load_string_property($in); break;
-						case 'errorMessage': $o->errorMessage = $this->load_string_property($in); break;
-						case 'renderedPrintLayouts': $o->renderedPrintLayouts[] = $this->load_string_property($in); break;
-						case 'hasDigitalSignatureField': $o->hasDigitalSignatureField = $this->load_bool_property($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_GetPrintLayoutMarkupResponse(\XMLReader $in) : GetPrintLayoutMarkupResponse {
-		$n = $in->name;
-		$o = new GetPrintLayoutMarkupResponse();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'result': $o->result = $this->load_string_property($in); break;
-						case 'errorMessage': $o->errorMessage = $this->load_string_property($in); break;
-						case 'printLayoutMarkup': $o->printLayoutMarkup = $this->load_string_property($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_PrintPrintLayoutResponse(\XMLReader $in) : PrintPrintLayoutResponse {
-		$n = $in->name;
-		$o = new PrintPrintLayoutResponse();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'result': $o->result = $this->load_string_property($in); break;
-						case 'errorMessage': $o->errorMessage = $this->load_string_property($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
 	private function load_InterbranchOrderLine(\XMLReader $in) : InterbranchOrderLine {
 		$n = $in->name;
 		$o = new InterbranchOrderLine();
@@ -34034,6 +34033,101 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_getPrintLayouts(\XMLReader $in) : getPrintLayouts {
+		$n = $in->name;
+		$o = new getPrintLayouts();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_GetPrintLayoutsRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_getPrintLayoutAssignments(\XMLReader $in) : getPrintLayoutAssignments {
+		$n = $in->name;
+		$o = new getPrintLayoutAssignments();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_GetPrintLayoutAssignmentsRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_getRenderedPrintLayout(\XMLReader $in) : getRenderedPrintLayout {
+		$n = $in->name;
+		$o = new getRenderedPrintLayout();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_GetRenderedPrintLayoutRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_getPrintLayoutMarkup(\XMLReader $in) : getPrintLayoutMarkup {
+		$n = $in->name;
+		$o = new getPrintLayoutMarkup();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_GetPrintLayoutMarkupRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_printPrintLayout(\XMLReader $in) : printPrintLayout {
+		$n = $in->name;
+		$o = new printPrintLayout();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_PrintPrintLayoutRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_checkGiftcardPayment(\XMLReader $in) : checkGiftcardPayment {
 		$n = $in->name;
 		$o = new checkGiftcardPayment();
@@ -35632,101 +35726,6 @@ class SoapParser extends BaseSoapParser {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
 						case 'request': $o->request = $this->load_SendWebhookRequest($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_getPrintLayouts(\XMLReader $in) : getPrintLayouts {
-		$n = $in->name;
-		$o = new getPrintLayouts();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'request': $o->request = $this->load_GetPrintLayoutsRequest($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_getPrintLayoutAssignments(\XMLReader $in) : getPrintLayoutAssignments {
-		$n = $in->name;
-		$o = new getPrintLayoutAssignments();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'request': $o->request = $this->load_GetPrintLayoutAssignmentsRequest($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_getRenderedPrintLayout(\XMLReader $in) : getRenderedPrintLayout {
-		$n = $in->name;
-		$o = new getRenderedPrintLayout();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'request': $o->request = $this->load_GetRenderedPrintLayoutRequest($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_getPrintLayoutMarkup(\XMLReader $in) : getPrintLayoutMarkup {
-		$n = $in->name;
-		$o = new getPrintLayoutMarkup();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'request': $o->request = $this->load_GetPrintLayoutMarkupRequest($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_printPrintLayout(\XMLReader $in) : printPrintLayout {
-		$n = $in->name;
-		$o = new printPrintLayout();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'request': $o->request = $this->load_PrintPrintLayoutRequest($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:

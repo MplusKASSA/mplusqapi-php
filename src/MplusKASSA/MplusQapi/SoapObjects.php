@@ -1827,7 +1827,6 @@ class LineInput extends SoapObject {
 	/** @var SalesLineContractLine[] */
 	public $contractLines = null;
 	public ?bool $suppressDisposableComponent = null;
-	public ?int $sequenceNumber = null;
 	public ?SalePromotionLineDataInput $salePromotionData = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->lineId !== null) $gen->out->writeElementNs(self::TNS, 'lineId', null, $this->lineId);
@@ -1846,7 +1845,6 @@ $tmp_contractLines = new SalesLineContractLineList($this->contractLines);
 $tmp_contractLines->write($gen, 'contractLines');
 }
 		if ($this->suppressDisposableComponent !== null) $gen->writeBool('suppressDisposableComponent', $this->suppressDisposableComponent);
-		if ($this->sequenceNumber !== null) $gen->writeInt('sequenceNumber', $this->sequenceNumber);
 		if ($this->salePromotionData !== null) $this->salePromotionData->write($gen, 'salePromotionData');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
@@ -18192,6 +18190,290 @@ $tmp_imageList->write($gen, 'imageList');
 	}
 }
 
+class GetPrintLayoutsRequest extends SoapObject {
+	public ?string $type = null;
+	public ?string $kind = null;
+	public ?string $fieldType = null;
+	public function writeProps(SoapGenerator $gen): void {
+		if ($this->type !== null) $gen->out->writeElementNs(self::TNS, 'type', null, $this->type);
+		if ($this->kind !== null) $gen->out->writeElementNs(self::TNS, 'kind', null, $this->kind);
+		if ($this->fieldType !== null) $gen->out->writeElementNs(self::TNS, 'fieldType', null, $this->fieldType);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class PrintLayoutView extends SoapObject {
+	public string $id;
+	public string $name;
+	public string $type;
+	public string $kind;
+	public \DateTime $createdTimestamp;
+	public \DateTime $updatedTimestamp;
+	public bool $hasDigitalSignatureField;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'id', null, $this->id);
+		$gen->out->writeElementNs(self::TNS, 'name', null, $this->name);
+		$gen->out->writeElementNs(self::TNS, 'type', null, $this->type);
+		$gen->out->writeElementNs(self::TNS, 'kind', null, $this->kind);
+		$gen->writeDateTime('createdTimestamp', $this->createdTimestamp);
+		$gen->writeDateTime('updatedTimestamp', $this->updatedTimestamp);
+		$gen->writeBool('hasDigitalSignatureField', $this->hasDigitalSignatureField);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetPrintLayoutAssignmentsRequest extends SoapObject {
+	public ?string $type = null;
+	public ?string $kind = null;
+	public ?int $branchNumber = null;
+	public ?int $workplaceNumber = null;
+	public ?bool $useOnlinePrinter = null;
+	public function writeProps(SoapGenerator $gen): void {
+		if ($this->type !== null) $gen->out->writeElementNs(self::TNS, 'type', null, $this->type);
+		if ($this->kind !== null) $gen->out->writeElementNs(self::TNS, 'kind', null, $this->kind);
+		if ($this->branchNumber !== null) $gen->writeInt('branchNumber', $this->branchNumber);
+		if ($this->workplaceNumber !== null) $gen->writeInt('workplaceNumber', $this->workplaceNumber);
+		if ($this->useOnlinePrinter !== null) $gen->writeBool('useOnlinePrinter', $this->useOnlinePrinter);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class PrintLayoutAssignmentPrintLayoutView extends SoapObject {
+	public string $id;
+	public string $name;
+	public string $type;
+	public string $kind;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'id', null, $this->id);
+		$gen->out->writeElementNs(self::TNS, 'name', null, $this->name);
+		$gen->out->writeElementNs(self::TNS, 'type', null, $this->type);
+		$gen->out->writeElementNs(self::TNS, 'kind', null, $this->kind);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class PrintLayoutAssignment extends SoapObject {
+	public WorkplaceIdentifier $workplace;
+	public PrintLayoutAssignmentPrintLayoutView $printLayout;
+	public bool $useOnlinePrinter;
+	public function __construct() {
+		$this->workplace = new WorkplaceIdentifier();
+		$this->printLayout = new PrintLayoutAssignmentPrintLayoutView();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->workplace->write($gen, 'workplace');
+		$this->printLayout->write($gen, 'printLayout');
+		$gen->writeBool('useOnlinePrinter', $this->useOnlinePrinter);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class PrintParam extends SoapObject {
+	public string $key;
+	public string $value;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'key', null, $this->key);
+		$gen->out->writeElementNs(self::TNS, 'value', null, $this->value);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class PrintParams extends SoapObject {
+	public ?string $uuid = null;
+	public ?YearNumber $yearNumber = null;
+	/** @var PrintParam[] */
+	public $params = array();
+	public function writeProps(SoapGenerator $gen): void {
+		if ($this->uuid !== null) $gen->out->writeElementNs(self::TNS, 'uuid', null, $this->uuid);
+		if ($this->yearNumber !== null) $this->yearNumber->write($gen, 'yearNumber');
+		foreach ($this->params as $elem) $elem->write($gen, 'params');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class PrintInfo extends SoapObject {
+	/** @var PrintParams[] */
+	public $paramsList = array();
+	public ?PrintParams $globalParams = null;
+	public function writeProps(SoapGenerator $gen): void {
+		foreach ($this->paramsList as $elem) $elem->write($gen, 'paramsList');
+		if ($this->globalParams !== null) $this->globalParams->write($gen, 'globalParams');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetRenderedPrintLayoutRequest extends SoapObject {
+	public string $printLayoutUuid;
+	public string $renderType;
+	public ?PrintInfo $printInfo = null;
+	public ?int $dpi = null;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'printLayoutUuid', null, $this->printLayoutUuid);
+		$gen->out->writeElementNs(self::TNS, 'renderType', null, $this->renderType);
+		if ($this->printInfo !== null) $this->printInfo->write($gen, 'printInfo');
+		if ($this->dpi !== null) $gen->writeInt('dpi', $this->dpi);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetPrintLayoutMarkupRequest extends SoapObject {
+	public string $printLayoutUuid;
+	public string $markupType;
+	public ?PrintInfo $printInfo = null;
+	public ?bool $responseAsBase64 = null;
+	public ?int $normalWidthInCharacters = null;
+	public ?int $smallWidthInCharacters = null;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'printLayoutUuid', null, $this->printLayoutUuid);
+		$gen->out->writeElementNs(self::TNS, 'markupType', null, $this->markupType);
+		if ($this->printInfo !== null) $this->printInfo->write($gen, 'printInfo');
+		if ($this->responseAsBase64 !== null) $gen->writeBool('responseAsBase64', $this->responseAsBase64);
+		if ($this->normalWidthInCharacters !== null) $gen->writeInt('normalWidthInCharacters', $this->normalWidthInCharacters);
+		if ($this->smallWidthInCharacters !== null) $gen->writeInt('smallWidthInCharacters', $this->smallWidthInCharacters);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class PrintPrintLayoutRequest extends SoapObject {
+	public ?string $type = null;
+	public string $kind;
+	public PrintInfo $printInfo;
+	public WorkplaceIdentifier $workplaceIdentifier;
+	public function __construct() {
+		$this->printInfo = new PrintInfo();
+		$this->workplaceIdentifier = new WorkplaceIdentifier();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		if ($this->type !== null) $gen->out->writeElementNs(self::TNS, 'type', null, $this->type);
+		$gen->out->writeElementNs(self::TNS, 'kind', null, $this->kind);
+		$this->printInfo->write($gen, 'printInfo');
+		$this->workplaceIdentifier->write($gen, 'workplaceIdentifier');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetPrintLayoutsResponse extends SoapObject {
+	public string $result;
+	/** @var PrintLayoutView[] */
+	public $printLayouts = array();
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
+		foreach ($this->printLayouts as $elem) $elem->write($gen, 'printLayouts');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetPrintLayoutAssignmentsResponse extends SoapObject {
+	/** @var PrintLayoutAssignment[] */
+	public $printLayoutAssignments = array();
+	public function __construct($list = array()) { $this->printLayoutAssignments = $list; }
+	public function writeProps(SoapGenerator $gen): void {
+		foreach ($this->printLayoutAssignments as $elem) $elem->write($gen, 'printLayoutAssignments');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetRenderedPrintLayoutResponse extends SoapObject {
+	public string $result;
+	public string $errorMessage;
+	/** @var string[] */
+	public $renderedPrintLayouts = array();
+	public bool $hasDigitalSignatureField;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
+		$gen->out->writeElementNs(self::TNS, 'errorMessage', null, $this->errorMessage);
+		foreach ($this->renderedPrintLayouts as $elem) $gen->out->writeElementNs(self::TNS, 'renderedPrintLayouts', null, $elem);
+		$gen->writeBool('hasDigitalSignatureField', $this->hasDigitalSignatureField);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetPrintLayoutMarkupResponse extends SoapObject {
+	public string $result;
+	public string $errorMessage;
+	public string $printLayoutMarkup;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
+		$gen->out->writeElementNs(self::TNS, 'errorMessage', null, $this->errorMessage);
+		$gen->out->writeElementNs(self::TNS, 'printLayoutMarkup', null, $this->printLayoutMarkup);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class PrintPrintLayoutResponse extends SoapObject {
+	public string $result;
+	public ?string $errorMessage = null;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
+		if ($this->errorMessage !== null) $gen->out->writeElementNs(self::TNS, 'errorMessage', null, $this->errorMessage);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
 class VoucherSettingsV1 extends SoapObject {
 	public ?VoucherId $requestedVoucherId = null;
 	public VoucherId $voucherId;
@@ -24864,290 +25146,6 @@ class WebhookResp extends IdempotentResp {
 	}
 }
 
-class GetPrintLayoutsRequest extends SoapObject {
-	public ?string $type = null;
-	public ?string $kind = null;
-	public ?string $fieldType = null;
-	public function writeProps(SoapGenerator $gen): void {
-		if ($this->type !== null) $gen->out->writeElementNs(self::TNS, 'type', null, $this->type);
-		if ($this->kind !== null) $gen->out->writeElementNs(self::TNS, 'kind', null, $this->kind);
-		if ($this->fieldType !== null) $gen->out->writeElementNs(self::TNS, 'fieldType', null, $this->fieldType);
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class PrintLayoutView extends SoapObject {
-	public string $id;
-	public string $name;
-	public string $type;
-	public string $kind;
-	public \DateTime $createdTimestamp;
-	public \DateTime $updatedTimestamp;
-	public bool $hasDigitalSignatureField;
-	public function writeProps(SoapGenerator $gen): void {
-		$gen->out->writeElementNs(self::TNS, 'id', null, $this->id);
-		$gen->out->writeElementNs(self::TNS, 'name', null, $this->name);
-		$gen->out->writeElementNs(self::TNS, 'type', null, $this->type);
-		$gen->out->writeElementNs(self::TNS, 'kind', null, $this->kind);
-		$gen->writeDateTime('createdTimestamp', $this->createdTimestamp);
-		$gen->writeDateTime('updatedTimestamp', $this->updatedTimestamp);
-		$gen->writeBool('hasDigitalSignatureField', $this->hasDigitalSignatureField);
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class GetPrintLayoutAssignmentsRequest extends SoapObject {
-	public ?string $type = null;
-	public ?string $kind = null;
-	public ?int $branchNumber = null;
-	public ?int $workplaceNumber = null;
-	public ?bool $useOnlinePrinter = null;
-	public function writeProps(SoapGenerator $gen): void {
-		if ($this->type !== null) $gen->out->writeElementNs(self::TNS, 'type', null, $this->type);
-		if ($this->kind !== null) $gen->out->writeElementNs(self::TNS, 'kind', null, $this->kind);
-		if ($this->branchNumber !== null) $gen->writeInt('branchNumber', $this->branchNumber);
-		if ($this->workplaceNumber !== null) $gen->writeInt('workplaceNumber', $this->workplaceNumber);
-		if ($this->useOnlinePrinter !== null) $gen->writeBool('useOnlinePrinter', $this->useOnlinePrinter);
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class PrintLayoutAssignmentPrintLayoutView extends SoapObject {
-	public string $id;
-	public string $name;
-	public string $type;
-	public string $kind;
-	public function writeProps(SoapGenerator $gen): void {
-		$gen->out->writeElementNs(self::TNS, 'id', null, $this->id);
-		$gen->out->writeElementNs(self::TNS, 'name', null, $this->name);
-		$gen->out->writeElementNs(self::TNS, 'type', null, $this->type);
-		$gen->out->writeElementNs(self::TNS, 'kind', null, $this->kind);
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class PrintLayoutAssignment extends SoapObject {
-	public WorkplaceIdentifier $workplace;
-	public PrintLayoutAssignmentPrintLayoutView $printLayout;
-	public bool $useOnlinePrinter;
-	public function __construct() {
-		$this->workplace = new WorkplaceIdentifier();
-		$this->printLayout = new PrintLayoutAssignmentPrintLayoutView();
-	}
-	public function writeProps(SoapGenerator $gen): void {
-		$this->workplace->write($gen, 'workplace');
-		$this->printLayout->write($gen, 'printLayout');
-		$gen->writeBool('useOnlinePrinter', $this->useOnlinePrinter);
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class PrintParam extends SoapObject {
-	public string $key;
-	public string $value;
-	public function writeProps(SoapGenerator $gen): void {
-		$gen->out->writeElementNs(self::TNS, 'key', null, $this->key);
-		$gen->out->writeElementNs(self::TNS, 'value', null, $this->value);
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class PrintParams extends SoapObject {
-	public ?string $uuid = null;
-	public ?YearNumber $yearNumber = null;
-	/** @var PrintParam[] */
-	public $params = array();
-	public function writeProps(SoapGenerator $gen): void {
-		if ($this->uuid !== null) $gen->out->writeElementNs(self::TNS, 'uuid', null, $this->uuid);
-		if ($this->yearNumber !== null) $this->yearNumber->write($gen, 'yearNumber');
-		foreach ($this->params as $elem) $elem->write($gen, 'params');
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class PrintInfo extends SoapObject {
-	/** @var PrintParams[] */
-	public $paramsList = array();
-	public ?PrintParams $globalParams = null;
-	public function writeProps(SoapGenerator $gen): void {
-		foreach ($this->paramsList as $elem) $elem->write($gen, 'paramsList');
-		if ($this->globalParams !== null) $this->globalParams->write($gen, 'globalParams');
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class GetRenderedPrintLayoutRequest extends SoapObject {
-	public string $printLayoutUuid;
-	public string $renderType;
-	public ?PrintInfo $printInfo = null;
-	public ?int $dpi = null;
-	public function writeProps(SoapGenerator $gen): void {
-		$gen->out->writeElementNs(self::TNS, 'printLayoutUuid', null, $this->printLayoutUuid);
-		$gen->out->writeElementNs(self::TNS, 'renderType', null, $this->renderType);
-		if ($this->printInfo !== null) $this->printInfo->write($gen, 'printInfo');
-		if ($this->dpi !== null) $gen->writeInt('dpi', $this->dpi);
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class GetPrintLayoutMarkupRequest extends SoapObject {
-	public string $printLayoutUuid;
-	public string $markupType;
-	public ?PrintInfo $printInfo = null;
-	public ?bool $responseAsBase64 = null;
-	public ?int $normalWidthInCharacters = null;
-	public ?int $smallWidthInCharacters = null;
-	public function writeProps(SoapGenerator $gen): void {
-		$gen->out->writeElementNs(self::TNS, 'printLayoutUuid', null, $this->printLayoutUuid);
-		$gen->out->writeElementNs(self::TNS, 'markupType', null, $this->markupType);
-		if ($this->printInfo !== null) $this->printInfo->write($gen, 'printInfo');
-		if ($this->responseAsBase64 !== null) $gen->writeBool('responseAsBase64', $this->responseAsBase64);
-		if ($this->normalWidthInCharacters !== null) $gen->writeInt('normalWidthInCharacters', $this->normalWidthInCharacters);
-		if ($this->smallWidthInCharacters !== null) $gen->writeInt('smallWidthInCharacters', $this->smallWidthInCharacters);
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class PrintPrintLayoutRequest extends SoapObject {
-	public ?string $type = null;
-	public string $kind;
-	public PrintInfo $printInfo;
-	public WorkplaceIdentifier $workplaceIdentifier;
-	public function __construct() {
-		$this->printInfo = new PrintInfo();
-		$this->workplaceIdentifier = new WorkplaceIdentifier();
-	}
-	public function writeProps(SoapGenerator $gen): void {
-		if ($this->type !== null) $gen->out->writeElementNs(self::TNS, 'type', null, $this->type);
-		$gen->out->writeElementNs(self::TNS, 'kind', null, $this->kind);
-		$this->printInfo->write($gen, 'printInfo');
-		$this->workplaceIdentifier->write($gen, 'workplaceIdentifier');
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class GetPrintLayoutsResponse extends SoapObject {
-	public string $result;
-	/** @var PrintLayoutView[] */
-	public $printLayouts = array();
-	public function writeProps(SoapGenerator $gen): void {
-		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
-		foreach ($this->printLayouts as $elem) $elem->write($gen, 'printLayouts');
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class GetPrintLayoutAssignmentsResponse extends SoapObject {
-	/** @var PrintLayoutAssignment[] */
-	public $printLayoutAssignments = array();
-	public function __construct($list = array()) { $this->printLayoutAssignments = $list; }
-	public function writeProps(SoapGenerator $gen): void {
-		foreach ($this->printLayoutAssignments as $elem) $elem->write($gen, 'printLayoutAssignments');
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class GetRenderedPrintLayoutResponse extends SoapObject {
-	public string $result;
-	public string $errorMessage;
-	/** @var string[] */
-	public $renderedPrintLayouts = array();
-	public bool $hasDigitalSignatureField;
-	public function writeProps(SoapGenerator $gen): void {
-		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
-		$gen->out->writeElementNs(self::TNS, 'errorMessage', null, $this->errorMessage);
-		foreach ($this->renderedPrintLayouts as $elem) $gen->out->writeElementNs(self::TNS, 'renderedPrintLayouts', null, $elem);
-		$gen->writeBool('hasDigitalSignatureField', $this->hasDigitalSignatureField);
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class GetPrintLayoutMarkupResponse extends SoapObject {
-	public string $result;
-	public string $errorMessage;
-	public string $printLayoutMarkup;
-	public function writeProps(SoapGenerator $gen): void {
-		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
-		$gen->out->writeElementNs(self::TNS, 'errorMessage', null, $this->errorMessage);
-		$gen->out->writeElementNs(self::TNS, 'printLayoutMarkup', null, $this->printLayoutMarkup);
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class PrintPrintLayoutResponse extends SoapObject {
-	public string $result;
-	public ?string $errorMessage = null;
-	public function writeProps(SoapGenerator $gen): void {
-		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
-		if ($this->errorMessage !== null) $gen->out->writeElementNs(self::TNS, 'errorMessage', null, $this->errorMessage);
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
 class InterbranchOrderLine extends SoapObject {
 	public int $articleNumber;
 	public BigDecimal $quantity;
@@ -29673,6 +29671,81 @@ class getImages extends SoapObject {
 	}
 }
 
+class getPrintLayouts extends SoapObject {
+	public GetPrintLayoutsRequest $request;
+	public function __construct() {
+		$this->request = new GetPrintLayoutsRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class getPrintLayoutAssignments extends SoapObject {
+	public GetPrintLayoutAssignmentsRequest $request;
+	public function __construct() {
+		$this->request = new GetPrintLayoutAssignmentsRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class getRenderedPrintLayout extends SoapObject {
+	public GetRenderedPrintLayoutRequest $request;
+	public function __construct() {
+		$this->request = new GetRenderedPrintLayoutRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class getPrintLayoutMarkup extends SoapObject {
+	public GetPrintLayoutMarkupRequest $request;
+	public function __construct() {
+		$this->request = new GetPrintLayoutMarkupRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class printPrintLayout extends SoapObject {
+	public PrintPrintLayoutRequest $request;
+	public function __construct() {
+		$this->request = new PrintPrintLayoutRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
 class checkGiftcardPayment extends SoapObject {
 	public CheckGiftcardPaymentRequest $request;
 	public function __construct() {
@@ -30933,81 +31006,6 @@ class sendWebhook extends SoapObject {
 	public SendWebhookRequest $request;
 	public function __construct() {
 		$this->request = new SendWebhookRequest();
-	}
-	public function writeProps(SoapGenerator $gen): void {
-		$this->request->write($gen, 'request');
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class getPrintLayouts extends SoapObject {
-	public GetPrintLayoutsRequest $request;
-	public function __construct() {
-		$this->request = new GetPrintLayoutsRequest();
-	}
-	public function writeProps(SoapGenerator $gen): void {
-		$this->request->write($gen, 'request');
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class getPrintLayoutAssignments extends SoapObject {
-	public GetPrintLayoutAssignmentsRequest $request;
-	public function __construct() {
-		$this->request = new GetPrintLayoutAssignmentsRequest();
-	}
-	public function writeProps(SoapGenerator $gen): void {
-		$this->request->write($gen, 'request');
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class getRenderedPrintLayout extends SoapObject {
-	public GetRenderedPrintLayoutRequest $request;
-	public function __construct() {
-		$this->request = new GetRenderedPrintLayoutRequest();
-	}
-	public function writeProps(SoapGenerator $gen): void {
-		$this->request->write($gen, 'request');
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class getPrintLayoutMarkup extends SoapObject {
-	public GetPrintLayoutMarkupRequest $request;
-	public function __construct() {
-		$this->request = new GetPrintLayoutMarkupRequest();
-	}
-	public function writeProps(SoapGenerator $gen): void {
-		$this->request->write($gen, 'request');
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class printPrintLayout extends SoapObject {
-	public PrintPrintLayoutRequest $request;
-	public function __construct() {
-		$this->request = new PrintPrintLayoutRequest();
 	}
 	public function writeProps(SoapGenerator $gen): void {
 		$this->request->write($gen, 'request');

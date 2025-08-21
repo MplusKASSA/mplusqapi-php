@@ -644,6 +644,11 @@ class MplusApiClient extends BaseSoapClient {
  GetCardImageLabelsResponse::class . ':labels' => 'MplusKASSA\MplusQapi\ImageLabel',
  GetCardImagesResponse::class . ':items' => 'MplusKASSA\MplusQapi\CardImageData',
  GetImagesResponse::class . ':imageList' => 'MplusKASSA\MplusQapi\Image',
+ PrintParams::class . ':params' => 'MplusKASSA\MplusQapi\PrintParam',
+ PrintInfo::class . ':paramsList' => 'MplusKASSA\MplusQapi\PrintParams',
+ GetPrintLayoutsResponse::class . ':printLayouts' => 'MplusKASSA\MplusQapi\PrintLayoutView',
+ GetPrintLayoutAssignmentsResponse::class . ':printLayoutAssignments' => 'MplusKASSA\MplusQapi\PrintLayoutAssignment',
+ GetRenderedPrintLayoutResponse::class . ':renderedPrintLayouts' => 'string',
  VoucherSettingsV1List::class . ':voucherSettingsV1' => 'MplusKASSA\MplusQapi\VoucherSettingsV1',
  VoucherRedeemLocations::class . ':branchGroupIds' => 'int',
  VoucherRedeemLocations::class . ':branchIds' => 'int',
@@ -948,11 +953,6 @@ class MplusApiClient extends BaseSoapClient {
  WebhookResp::class . ':lineChanges' => 'MplusKASSA\MplusQapi\WebhookLineChange',
  WebhookResp::class . ':lineAdditions' => 'MplusKASSA\MplusQapi\WebhookLineAddition',
  WebhookResp::class . ':lineDeletions' => 'MplusKASSA\MplusQapi\WebhookLineDeletion',
- PrintParams::class . ':params' => 'MplusKASSA\MplusQapi\PrintParam',
- PrintInfo::class . ':paramsList' => 'MplusKASSA\MplusQapi\PrintParams',
- GetPrintLayoutsResponse::class . ':printLayouts' => 'MplusKASSA\MplusQapi\PrintLayoutView',
- GetPrintLayoutAssignmentsResponse::class . ':printLayoutAssignments' => 'MplusKASSA\MplusQapi\PrintLayoutAssignment',
- GetRenderedPrintLayoutResponse::class . ':renderedPrintLayouts' => 'string',
  InterbranchOrderLineList::class . ':interbranchOrderLine' => 'MplusKASSA\MplusQapi\InterbranchOrderLine',
  InterbranchOrder::class . ':interbranchOrderLineList' => 'MplusKASSA\MplusQapi\InterbranchOrderLine',
  InterbranchOrderList::class . ':interbranchOrder' => 'MplusKASSA\MplusQapi\InterbranchOrder',
@@ -3965,6 +3965,66 @@ class MplusApiClient extends BaseSoapClient {
         $this->endRequest();
         return $res;
     }
+    public function getPrintLayouts(GetPrintLayoutsRequest $request, ?string $requestId = null) : GetPrintLayoutsResponse {
+        $opname = 'getPrintLayouts';
+        $this->startRequest($opname);
+        $reqobj = new getPrintLayouts();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getPrintLayoutAssignments(GetPrintLayoutAssignmentsRequest $request, ?string $requestId = null) : GetPrintLayoutAssignmentsResponse {
+        $opname = 'getPrintLayoutAssignments';
+        $this->startRequest($opname);
+        $reqobj = new getPrintLayoutAssignments();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getRenderedPrintLayout(GetRenderedPrintLayoutRequest $request, ?string $requestId = null) : GetRenderedPrintLayoutResponse {
+        $opname = 'getRenderedPrintLayout';
+        $this->startRequest($opname);
+        $reqobj = new getRenderedPrintLayout();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getPrintLayoutMarkup(GetPrintLayoutMarkupRequest $request, ?string $requestId = null) : GetPrintLayoutMarkupResponse {
+        $opname = 'getPrintLayoutMarkup';
+        $this->startRequest($opname);
+        $reqobj = new getPrintLayoutMarkup();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function printPrintLayout(PrintPrintLayoutRequest $request, ?string $requestId = null) : PrintPrintLayoutResponse {
+        $opname = 'printPrintLayout';
+        $this->startRequest($opname);
+        $reqobj = new printPrintLayout();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
     public function checkGiftcardPayment(CheckGiftcardPaymentRequest $request, ?string $requestId = null) : CheckGiftcardPaymentResponse {
         $opname = 'checkGiftcardPayment';
         $this->startRequest($opname);
@@ -4975,66 +5035,6 @@ class MplusApiClient extends BaseSoapClient {
         $opname = 'sendWebhook';
         $this->startRequest($opname);
         $reqobj = new sendWebhook();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function getPrintLayouts(GetPrintLayoutsRequest $request, ?string $requestId = null) : GetPrintLayoutsResponse {
-        $opname = 'getPrintLayouts';
-        $this->startRequest($opname);
-        $reqobj = new getPrintLayouts();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function getPrintLayoutAssignments(GetPrintLayoutAssignmentsRequest $request, ?string $requestId = null) : GetPrintLayoutAssignmentsResponse {
-        $opname = 'getPrintLayoutAssignments';
-        $this->startRequest($opname);
-        $reqobj = new getPrintLayoutAssignments();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function getRenderedPrintLayout(GetRenderedPrintLayoutRequest $request, ?string $requestId = null) : GetRenderedPrintLayoutResponse {
-        $opname = 'getRenderedPrintLayout';
-        $this->startRequest($opname);
-        $reqobj = new getRenderedPrintLayout();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function getPrintLayoutMarkup(GetPrintLayoutMarkupRequest $request, ?string $requestId = null) : GetPrintLayoutMarkupResponse {
-        $opname = 'getPrintLayoutMarkup';
-        $this->startRequest($opname);
-        $reqobj = new getPrintLayoutMarkup();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function printPrintLayout(PrintPrintLayoutRequest $request, ?string $requestId = null) : PrintPrintLayoutResponse {
-        $opname = 'printPrintLayout';
-        $this->startRequest($opname);
-        $reqobj = new printPrintLayout();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);
