@@ -1174,6 +1174,20 @@ class IdList extends SoapObject {
 	}
 }
 
+class IdSet extends SoapObject {
+	/** @var string[] */
+	public $id = array();
+	public function __construct($list = array()) { $this->id = $list; }
+	public function writeProps(SoapGenerator $gen): void {
+		foreach ($this->id as $elem) $gen->out->writeElementNs(self::TNS, 'id', null, $elem);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
 class Order extends SoapObject {
 	public string $orderId;
 	public ?string $extOrderId = null;
@@ -2330,9 +2344,21 @@ class VoucherIssuanceList extends SoapObject {
 
 class VoucherIssuanceCompact extends VoucherIssuance {
 	public int $quantity;
+	/** @var string[] */
+	public $positiveIssuanceIds = null;
+	/** @var string[] */
+	public $negativeIssuanceIds = null;
 	public function writeProps(SoapGenerator $gen): void {
 	    parent::writeProps($gen);
 		$gen->writeInt('quantity', $this->quantity);
+		if ($this->positiveIssuanceIds !== null) {
+$tmp_positiveIssuanceIds = new IdSet($this->positiveIssuanceIds);
+$tmp_positiveIssuanceIds->write($gen, 'positiveIssuanceIds');
+}
+		if ($this->negativeIssuanceIds !== null) {
+$tmp_negativeIssuanceIds = new IdSet($this->negativeIssuanceIds);
+$tmp_negativeIssuanceIds->write($gen, 'negativeIssuanceIds');
+}
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -23171,12 +23197,12 @@ class SalesProcessorContext extends SoapObject {
 }
 
 class SalesProcessorResult extends SoapObject {
-	/** @var VoucherIssuance[] */
+	/** @var VoucherIssuanceCompact[] */
 	public $voucherIssuances = null;
-	/** @var VoucherIssuanceCandidate[] */
-	public $voucherIssuanceCandidates = null;
 	/** @var VoucherIssuanceCompact[] */
 	public $voucherIssuancesToCancel = null;
+	/** @var VoucherIssuanceCandidate[] */
+	public $voucherIssuanceCandidates = null;
 	/** @var UnappliedVoucherIssuance[] */
 	public $unappliedVoucherIssuances = null;
 	/** @var VoucherIssuanceRedeemable[] */
@@ -23185,16 +23211,16 @@ class SalesProcessorResult extends SoapObject {
 	public $errorMessages = array();
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->voucherIssuances !== null) {
-$tmp_voucherIssuances = new VoucherIssuanceList($this->voucherIssuances);
+$tmp_voucherIssuances = new VoucherIssuanceCompactList($this->voucherIssuances);
 $tmp_voucherIssuances->write($gen, 'voucherIssuances');
-}
-		if ($this->voucherIssuanceCandidates !== null) {
-$tmp_voucherIssuanceCandidates = new VoucherIssuanceCandidateList($this->voucherIssuanceCandidates);
-$tmp_voucherIssuanceCandidates->write($gen, 'voucherIssuanceCandidates');
 }
 		if ($this->voucherIssuancesToCancel !== null) {
 $tmp_voucherIssuancesToCancel = new VoucherIssuanceCompactList($this->voucherIssuancesToCancel);
 $tmp_voucherIssuancesToCancel->write($gen, 'voucherIssuancesToCancel');
+}
+		if ($this->voucherIssuanceCandidates !== null) {
+$tmp_voucherIssuanceCandidates = new VoucherIssuanceCandidateList($this->voucherIssuanceCandidates);
+$tmp_voucherIssuanceCandidates->write($gen, 'voucherIssuanceCandidates');
 }
 		if ($this->unappliedVoucherIssuances !== null) {
 $tmp_unappliedVoucherIssuances = new UnappliedVoucherIssuanceList($this->unappliedVoucherIssuances);

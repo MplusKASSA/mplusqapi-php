@@ -54,6 +54,7 @@ class SoapParser extends BaseSoapParser {
 			case 'BranchGroupFilter': return $this->load_BranchGroupFilter($in);
 			case 'OwnerLabelFilter': return $this->load_OwnerLabelFilter($in);
 			case 'IdList': return $this->load_IdList($in);
+			case 'IdSet': return $this->load_IdSet($in);
 			case 'Order': return $this->load_Order($in);
 			case 'OrderList': return $this->load_OrderList($in);
 			case 'OrderInput': return $this->load_OrderInput($in);
@@ -2725,6 +2726,25 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_IdSet(\XMLReader $in) : IdSet {
+		$n = $in->name;
+		$o = new IdSet();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'id': $o->id[] = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_Order(\XMLReader $in) : Order {
 		$n = $in->name;
 		$o = new Order();
@@ -3710,6 +3730,8 @@ class SoapParser extends BaseSoapParser {
 						case 'voucherIssuanceRedeems': $o->voucherIssuanceRedeems = ($this->load_VoucherIssuanceRedeemList($in))->voucherIssuanceRedeem; break;
 						case 'groupScanCode': $o->groupScanCode = $this->load_string_property($in); break;
 						case 'quantity': $o->quantity = $this->load_int_property($in); break;
+						case 'positiveIssuanceIds': $o->positiveIssuanceIds = ($this->load_IdSet($in))->id; break;
+						case 'negativeIssuanceIds': $o->negativeIssuanceIds = ($this->load_IdSet($in))->id; break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -3762,6 +3784,8 @@ class SoapParser extends BaseSoapParser {
 						case 'voucherIssuanceRedeems': $o->voucherIssuanceRedeems = ($this->load_VoucherIssuanceRedeemList($in))->voucherIssuanceRedeem; break;
 						case 'groupScanCode': $o->groupScanCode = $this->load_string_property($in); break;
 						case 'quantity': $o->quantity = $this->load_int_property($in); break;
+						case 'positiveIssuanceIds': $o->positiveIssuanceIds = ($this->load_IdSet($in))->id; break;
+						case 'negativeIssuanceIds': $o->negativeIssuanceIds = ($this->load_IdSet($in))->id; break;
 						case 'sourceArticleNumber': $o->sourceArticleNumber = $this->load_int_property($in); break;
 						case 'relationRequired': $o->relationRequired = $this->load_bool_property($in); break;
 						case 'pendingStartTsRequired': $o->pendingStartTsRequired = $this->load_bool_property($in); break;
@@ -26100,9 +26124,9 @@ class SoapParser extends BaseSoapParser {
 			switch ($in->nodeType) {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
-						case 'voucherIssuances': $o->voucherIssuances = ($this->load_VoucherIssuanceList($in))->voucherIssuance; break;
-						case 'voucherIssuanceCandidates': $o->voucherIssuanceCandidates = ($this->load_VoucherIssuanceCandidateList($in))->voucherIssuanceCandidate; break;
+						case 'voucherIssuances': $o->voucherIssuances = ($this->load_VoucherIssuanceCompactList($in))->voucherIssuanceCompact; break;
 						case 'voucherIssuancesToCancel': $o->voucherIssuancesToCancel = ($this->load_VoucherIssuanceCompactList($in))->voucherIssuanceCompact; break;
+						case 'voucherIssuanceCandidates': $o->voucherIssuanceCandidates = ($this->load_VoucherIssuanceCandidateList($in))->voucherIssuanceCandidate; break;
 						case 'unappliedVoucherIssuances': $o->unappliedVoucherIssuances = ($this->load_UnappliedVoucherIssuanceList($in))->unappliedVoucherIssuance; break;
 						case 'scannedVoucherIssuances': $o->scannedVoucherIssuances = ($this->load_VoucherIssuanceRedeemableList($in))->voucherIssuanceRedeemable; break;
 						case 'errorMessages': $o->errorMessages[] = $this->load_string_property($in); break;
