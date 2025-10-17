@@ -40,12 +40,14 @@ class MplusApiClient extends BaseSoapClient {
  Relation::class . ':cardNumbers' => 'string',
  WorkplaceIdentifierSet::class . ':workplaceIdentifier' => 'MplusKASSA\MplusQapi\WorkplaceIdentifier',
  BranchAccountNumberList::class . ':branchAccountNumber' => 'MplusKASSA\MplusQapi\BranchAccountNumber',
+ BranchCostCenterNumberList::class . ':branchCostCenterNumber' => 'MplusKASSA\MplusQapi\BranchCostCenterNumber',
  GiftcardType::class . ':branchNumbers' => 'int',
  GiftcardType::class . ':availableValues' => 'int',
  EftReceipt::class . ':line' => 'MplusKASSA\MplusQapi\EftReceiptLine',
  EftTransactionDetails::class . ':customerReceipt' => 'MplusKASSA\MplusQapi\EftReceiptLine',
  EftTransactionDetails::class . ':merchantReceipt' => 'MplusKASSA\MplusQapi\EftReceiptLine',
  ExternalPaymentTransactionDetails::class . ':receiptTexts' => 'MplusKASSA\MplusQapi\ExternalPaymentReceiptText',
+ ExternalPaymentTransactionDetails::class . ':receiptFooters' => 'MplusKASSA\MplusQapi\ExternalPaymentReceiptFooter',
  Payment::class . ':branchAccountNumberList' => 'MplusKASSA\MplusQapi\BranchAccountNumber',
  PaymentList::class . ':payment' => 'MplusKASSA\MplusQapi\Payment',
  PaymentMethod::class . ':branchAccountNumberList' => 'MplusKASSA\MplusQapi\BranchAccountNumber',
@@ -209,6 +211,7 @@ class MplusApiClient extends BaseSoapClient {
  GetInvoicesRequest::class . ':branchGroupFilter' => 'int',
  JournalFilterList::class . ':journalFilter' => 'string',
  TurnoverGroup::class . ':branchAccountNumberList' => 'MplusKASSA\MplusQapi\BranchAccountNumber',
+ TurnoverGroup::class . ':branchCostCenterNumberList' => 'MplusKASSA\MplusQapi\BranchCostCenterNumber',
  TurnoverGroupList::class . ':turnoverGroup' => 'MplusKASSA\MplusQapi\TurnoverGroup',
  CashCountLineList::class . ':cashCountLine' => 'MplusKASSA\MplusQapi\CashCountLine',
  CashCountExtraWorkplaceList::class . ':cashCountExtraWorkplace' => 'MplusKASSA\MplusQapi\CashCountExtraWorkplace',
@@ -272,7 +275,9 @@ class MplusApiClient extends BaseSoapClient {
  DeleteArticleVariantsRequest::class . ':articleVariantIds' => 'int',
  ArticleStock::class . ':subArticle' => 'MplusKASSA\MplusQapi\ArticleStock',
  ArticleNumberList::class . ':articleNumbers' => 'int',
+ BranchNumberList::class . ':branchNumber' => 'int',
  GetStockRequest::class . ':articleNumbers' => 'int',
+ GetStockRequest::class . ':branchNumbers' => 'int',
  GetStockHistoryRequest::class . ':articleNumbers' => 'int',
  GetStockHistoryV2Request::class . ':branchNumbers' => 'int',
  GetStockHistoryV2Request::class . ':articleNumbers' => 'int',
@@ -567,6 +572,8 @@ class MplusApiClient extends BaseSoapClient {
  SaveArticleMenuArticleSettingsList::class . ':articleSettings' => 'MplusKASSA\MplusQapi\SaveArticleMenuArticleSettings',
  UpdateArticleMenuRequest::class . ':articlesSettings' => 'MplusKASSA\MplusQapi\SaveArticleMenuArticleSettings',
  UpdateOnlineAuthorizationTreeRequest::class . ':authorizationList' => 'MplusKASSA\MplusQapi\Authorization',
+ SaveOwnerLabelList::class . ':saveOwnerLabel' => 'MplusKASSA\MplusQapi\SaveOwnerLabel',
+ SaveOwnerLabelsRequest::class . ':saveOwnerLabels' => 'MplusKASSA\MplusQapi\SaveOwnerLabel',
  WordAliasList::class . ':wordAlias' => 'MplusKASSA\MplusQapi\WordAlias',
  LicensedModuleList::class . ':licensedModule' => 'MplusKASSA\MplusQapi\LicensedModule',
  LicensedBranch::class . ':licensedModules' => 'MplusKASSA\MplusQapi\LicensedModule',
@@ -609,6 +616,7 @@ class MplusApiClient extends BaseSoapClient {
  GetScheduledMealPlansResponse::class . ':scheduledMealPlans' => 'MplusKASSA\MplusQapi\ScheduledMealPlan',
  GetArticleAlterationsGroupsResponse::class . ':articleAlterationsGroupList' => 'MplusKASSA\MplusQapi\ArticleAlterationsGroup',
  GetOwnerLabelsResponse::class . ':ownerLabels' => 'MplusKASSA\MplusQapi\OwnerLabel',
+ SaveOwnerLabelsResponse::class . ':newOwnerLabels' => 'MplusKASSA\MplusQapi\OwnerLabel',
  GetWordAliasesResponse::class . ':wordAliasList' => 'MplusKASSA\MplusQapi\WordAlias',
  getApiVersionResponse::class . ':serviceIpAddresses' => 'string',
  GetLicenseInformationResponse::class . ':licensedBranches' => 'MplusKASSA\MplusQapi\LicensedBranch',
@@ -948,6 +956,7 @@ class MplusApiClient extends BaseSoapClient {
  WebhookFormSelect::class . ':options' => 'MplusKASSA\MplusQapi\WebhookFormOption',
  WebhookForm::class . ':fields' => 'MplusKASSA\MplusQapi\WebhookFormField',
  ExternalPaymentResp::class . ':receiptTexts' => 'MplusKASSA\MplusQapi\ExternalPaymentReceiptText',
+ ExternalPaymentResp::class . ':receiptFooters' => 'MplusKASSA\MplusQapi\ExternalPaymentReceiptFooter',
  GetWebhookConsumersResponse::class . ':webhookConsumerList' => 'MplusKASSA\MplusQapi\WebhookConsumer',
  StartExternalPaymentResponse::class . ':messages' => 'MplusKASSA\MplusQapi\ExternalPaymentMessage',
  PollExternalPaymentResponse::class . ':messages' => 'MplusKASSA\MplusQapi\ExternalPaymentMessage',
@@ -3450,6 +3459,18 @@ class MplusApiClient extends BaseSoapClient {
         $opname = 'getOwnerLabels';
         $this->startRequest($opname);
         $reqobj = new getOwnerLabels();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function saveOwnerLabels(SaveOwnerLabelsRequest $request, ?string $requestId = null) : SaveOwnerLabelsResponse {
+        $opname = 'saveOwnerLabels';
+        $this->startRequest($opname);
+        $reqobj = new saveOwnerLabels();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);
