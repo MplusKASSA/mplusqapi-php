@@ -6539,6 +6539,8 @@ class Article extends SoapObject {
 	public ?string $specialBehaviour = null;
 	public ?int $ageCheckMinimumAge = null;
 	public ?\DateTime $oldestBestBeforeDate = null;
+	public ?int $shelfLifeInDays = null;
+	public ?int $shelfLifeInHours = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->articleNumber !== null) $gen->writeInt('articleNumber', $this->articleNumber);
 		if ($this->extArticleId !== null) $gen->out->writeElementNs(self::TNS, 'extArticleId', null, $this->extArticleId);
@@ -6635,6 +6637,8 @@ $tmp_relationArticleDiscountList->write($gen, 'relationArticleDiscountList');
 		if ($this->specialBehaviour !== null) $gen->out->writeElementNs(self::TNS, 'specialBehaviour', null, $this->specialBehaviour);
 		if ($this->ageCheckMinimumAge !== null) $gen->writeInt('ageCheckMinimumAge', $this->ageCheckMinimumAge);
 		if ($this->oldestBestBeforeDate !== null) $gen->writeDate('oldestBestBeforeDate', $this->oldestBestBeforeDate);
+		if ($this->shelfLifeInDays !== null) $gen->writeInt('shelfLifeInDays', $this->shelfLifeInDays);
+		if ($this->shelfLifeInHours !== null) $gen->writeInt('shelfLifeInHours', $this->shelfLifeInHours);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -24673,9 +24677,6 @@ class WebhookSessionInput extends SoapObject {
 	public ?BigDecimal $openAmount = null;
 	public ?BigDecimal $totalInclAmount = null;
 	public ?BigDecimal $totalExclAmount = null;
-	public string $webhookConsumerId;
-	public string $salesBaseId;
-	public string $salesTypeId;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'sessionId', null, $this->sessionId);
 		if ($this->table !== null) $this->table->write($gen, 'table');
@@ -24684,9 +24685,6 @@ class WebhookSessionInput extends SoapObject {
 		if ($this->openAmount !== null) $gen->writeBigDecimal('openAmount', $this->openAmount);
 		if ($this->totalInclAmount !== null) $gen->writeBigDecimal('totalInclAmount', $this->totalInclAmount);
 		if ($this->totalExclAmount !== null) $gen->writeBigDecimal('totalExclAmount', $this->totalExclAmount);
-		$gen->out->writeElementNs(self::TNS, 'webhookConsumerId', null, $this->webhookConsumerId);
-		$gen->out->writeElementNs(self::TNS, 'salesBaseId', null, $this->salesBaseId);
-		$gen->out->writeElementNs(self::TNS, 'salesTypeId', null, $this->salesTypeId);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
