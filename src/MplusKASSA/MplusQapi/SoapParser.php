@@ -3318,6 +3318,7 @@ class SoapParser extends BaseSoapParser {
 						case 'uncondensedLines': $o->uncondensedLines = ($this->load_LineList($in))->line; break;
 						case 'tempLineId': $o->tempLineId = $this->load_string_property($in); break;
 						case 'subLineType': $o->subLineType = $this->load_string_property($in); break;
+						case 'articleAlterationId': $o->articleAlterationId = $this->load_int_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -3401,6 +3402,7 @@ class SoapParser extends BaseSoapParser {
 						case 'contractLines': $o->contractLines = ($this->load_SalesLineContractLineList($in))->contractLine; break;
 						case 'suppressDisposableComponent': $o->suppressDisposableComponent = $this->load_bool_property($in); break;
 						case 'salePromotionData': $o->salePromotionData = $this->load_SalePromotionLineDataInput($in); break;
+						case 'articleAlterationId': $o->articleAlterationId = $this->load_int_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -7793,6 +7795,8 @@ class SoapParser extends BaseSoapParser {
 						case 'maxOneSelection': $o->maxOneSelection = $this->load_bool_property($in); break;
 						case 'selectionRequired': $o->selectionRequired = $this->load_bool_property($in); break;
 						case 'nutritionalCharacteristics': $o->nutritionalCharacteristics = $this->load_NutritionalCharacteristics($in); break;
+						case 'selectionRangeMin': $o->selectionRangeMin = $this->load_int_property($in); break;
+						case 'selectionRangeMax': $o->selectionRangeMax = $this->load_int_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -11486,6 +11490,8 @@ class SoapParser extends BaseSoapParser {
 						case 'syncMarker': $o->syncMarker = $this->load_int_property($in); break;
 						case 'isPosGroup': $o->isPosGroup = $this->load_bool_property($in); break;
 						case 'isOnlineGroup': $o->isOnlineGroup = $this->load_bool_property($in); break;
+						case 'selectionRangeMin': $o->selectionRangeMin = $this->load_int_property($in); break;
+						case 'selectionRangeMax': $o->selectionRangeMax = $this->load_int_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -11659,6 +11665,7 @@ class SoapParser extends BaseSoapParser {
 						case 'suppressDisposableComponent': $o->suppressDisposableComponent = $this->load_bool_property($in); break;
 						case 'lineType': $o->lineType = $this->load_string_property($in); break;
 						case 'tempId': $o->tempId = $this->load_string_property($in); break;
+						case 'articleAlterationId': $o->articleAlterationId = $this->load_int_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -12140,6 +12147,8 @@ class SoapParser extends BaseSoapParser {
 						case 'preparationMethodItems': $o->preparationMethodItems[] = $this->load_SavePreparationMethodItem($in); break;
 						case 'isPosGroup': $o->isPosGroup = $this->load_bool_property($in); break;
 						case 'isOnlineGroup': $o->isOnlineGroup = $this->load_bool_property($in); break;
+						case 'selectionRangeMin': $o->selectionRangeMin = $this->load_int_property($in); break;
+						case 'selectionRangeMax': $o->selectionRangeMax = $this->load_int_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -12276,6 +12285,7 @@ class SoapParser extends BaseSoapParser {
 						case 'priceExcl': $o->priceExcl = $this->load_BigDecimal_property($in); break;
 						case 'discountAmountExcl': $o->discountAmountExcl = $this->load_BigDecimal_property($in); break;
 						case 'amountExcl': $o->amountExcl = $this->load_BigDecimal_property($in); break;
+						case 'articleAlterationId': $o->articleAlterationId = $this->load_int_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -17618,6 +17628,8 @@ class SoapParser extends BaseSoapParser {
 						case 'isPosGroup': $o->isPosGroup = $this->load_bool_property($in); break;
 						case 'isOnlineGroup': $o->isOnlineGroup = $this->load_bool_property($in); break;
 						case 'groupType': $o->groupType = $this->load_string_property($in); break;
+						case 'selectionRangeMin': $o->selectionRangeMin = $this->load_int_property($in); break;
+						case 'selectionRangeMax': $o->selectionRangeMax = $this->load_int_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -17708,6 +17720,8 @@ class SoapParser extends BaseSoapParser {
 						case 'isPosGroup': $o->isPosGroup = $this->load_bool_property($in); break;
 						case 'isOnlineGroup': $o->isOnlineGroup = $this->load_bool_property($in); break;
 						case 'groupType': $o->groupType = $this->load_string_property($in); break;
+						case 'selectionRangeMin': $o->selectionRangeMin = $this->load_int_property($in); break;
+						case 'selectionRangeMax': $o->selectionRangeMax = $this->load_int_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -27730,6 +27744,9 @@ class SoapParser extends BaseSoapParser {
 						case 'openAmount': $o->openAmount = $this->load_BigDecimal_property($in); break;
 						case 'totalInclAmount': $o->totalInclAmount = $this->load_BigDecimal_property($in); break;
 						case 'totalExclAmount': $o->totalExclAmount = $this->load_BigDecimal_property($in); break;
+						case 'webhookConsumerId': $o->webhookConsumerId = $this->load_string_property($in); break;
+						case 'salesBaseId': $o->salesBaseId = $this->load_string_property($in); break;
+						case 'salesTypeId': $o->salesTypeId = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:

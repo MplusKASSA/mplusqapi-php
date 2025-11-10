@@ -1813,6 +1813,7 @@ class Line extends SoapObject {
 	public $uncondensedLines = null;
 	public ?string $tempLineId = null;
 	public ?string $subLineType = null;
+	public ?int $articleAlterationId = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->lineId !== null) $gen->out->writeElementNs(self::TNS, 'lineId', null, $this->lineId);
 		if ($this->employeeNumber !== null) $gen->writeInt('employeeNumber', $this->employeeNumber);
@@ -1848,6 +1849,7 @@ $tmp_uncondensedLines->write($gen, 'uncondensedLines');
 }
 		if ($this->tempLineId !== null) $gen->out->writeElementNs(self::TNS, 'tempLineId', null, $this->tempLineId);
 		if ($this->subLineType !== null) $gen->out->writeElementNs(self::TNS, 'subLineType', null, $this->subLineType);
+		if ($this->articleAlterationId !== null) $gen->writeInt('articleAlterationId', $this->articleAlterationId);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -1926,6 +1928,7 @@ class LineInput extends SoapObject {
 	public $contractLines = null;
 	public ?bool $suppressDisposableComponent = null;
 	public ?SalePromotionLineDataInput $salePromotionData = null;
+	public ?int $articleAlterationId = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->lineId !== null) $gen->out->writeElementNs(self::TNS, 'lineId', null, $this->lineId);
 		if ($this->tempLineId !== null) $gen->out->writeElementNs(self::TNS, 'tempLineId', null, $this->tempLineId);
@@ -1944,6 +1947,7 @@ $tmp_contractLines->write($gen, 'contractLines');
 }
 		if ($this->suppressDisposableComponent !== null) $gen->writeBool('suppressDisposableComponent', $this->suppressDisposableComponent);
 		if ($this->salePromotionData !== null) $this->salePromotionData->write($gen, 'salePromotionData');
+		if ($this->articleAlterationId !== null) $gen->writeInt('articleAlterationId', $this->articleAlterationId);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -6359,6 +6363,8 @@ class PreparationMethod extends SoapObject {
 	public bool $maxOneSelection;
 	public bool $selectionRequired;
 	public ?NutritionalCharacteristics $nutritionalCharacteristics = null;
+	public ?int $selectionRangeMin = null;
+	public ?int $selectionRangeMax = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->articleNumber !== null) $gen->writeInt('articleNumber', $this->articleNumber);
 		$gen->out->writeElementNs(self::TNS, 'description', null, $this->description);
@@ -6375,6 +6381,8 @@ class PreparationMethod extends SoapObject {
 		$gen->writeBool('maxOneSelection', $this->maxOneSelection);
 		$gen->writeBool('selectionRequired', $this->selectionRequired);
 		if ($this->nutritionalCharacteristics !== null) $this->nutritionalCharacteristics->write($gen, 'nutritionalCharacteristics');
+		if ($this->selectionRangeMin !== null) $gen->writeInt('selectionRangeMin', $this->selectionRangeMin);
+		if ($this->selectionRangeMax !== null) $gen->writeInt('selectionRangeMax', $this->selectionRangeMax);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -10134,6 +10142,8 @@ class PreparationMethodGroup extends SoapObject {
 	public int $syncMarker;
 	public bool $isPosGroup;
 	public bool $isOnlineGroup;
+	public ?int $selectionRangeMin = null;
+	public ?int $selectionRangeMax = null;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->writeInt('groupNumber', $this->groupNumber);
 		$gen->out->writeElementNs(self::TNS, 'description', null, $this->description);
@@ -10149,6 +10159,8 @@ $tmp_preparationMethods->write($gen, 'preparationMethods');
 		$gen->writeInt('syncMarker', $this->syncMarker);
 		$gen->writeBool('isPosGroup', $this->isPosGroup);
 		$gen->writeBool('isOnlineGroup', $this->isOnlineGroup);
+		if ($this->selectionRangeMin !== null) $gen->writeInt('selectionRangeMin', $this->selectionRangeMin);
+		if ($this->selectionRangeMax !== null) $gen->writeInt('selectionRangeMax', $this->selectionRangeMax);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -10289,6 +10301,7 @@ class PlaceTableOrderLineElem extends SoapObject {
 	public ?bool $suppressDisposableComponent = null;
 	public ?string $lineType = null;
 	public ?string $tempId = null;
+	public ?int $articleAlterationId = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->articleNumber !== null) $gen->writeInt('articleNumber', $this->articleNumber);
 		if ($this->text !== null) $gen->out->writeElementNs(self::TNS, 'text', null, $this->text);
@@ -10298,6 +10311,7 @@ class PlaceTableOrderLineElem extends SoapObject {
 		if ($this->suppressDisposableComponent !== null) $gen->writeBool('suppressDisposableComponent', $this->suppressDisposableComponent);
 		if ($this->lineType !== null) $gen->out->writeElementNs(self::TNS, 'lineType', null, $this->lineType);
 		if ($this->tempId !== null) $gen->out->writeElementNs(self::TNS, 'tempId', null, $this->tempId);
+		if ($this->articleAlterationId !== null) $gen->writeInt('articleAlterationId', $this->articleAlterationId);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -10695,6 +10709,8 @@ class SavePreparationMethodGroupRequest extends SoapObject {
 	public $preparationMethodItems = array();
 	public ?bool $isPosGroup = null;
 	public ?bool $isOnlineGroup = null;
+	public ?int $selectionRangeMin = null;
+	public ?int $selectionRangeMax = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->preparationMethodGroupNumber !== null) $gen->writeInt('preparationMethodGroupNumber', $this->preparationMethodGroupNumber);
 		$gen->out->writeElementNs(self::TNS, 'description', null, $this->description);
@@ -10704,6 +10720,8 @@ class SavePreparationMethodGroupRequest extends SoapObject {
 		foreach ($this->preparationMethodItems as $elem) $elem->write($gen, 'preparationMethodItems');
 		if ($this->isPosGroup !== null) $gen->writeBool('isPosGroup', $this->isPosGroup);
 		if ($this->isOnlineGroup !== null) $gen->writeBool('isOnlineGroup', $this->isOnlineGroup);
+		if ($this->selectionRangeMin !== null) $gen->writeInt('selectionRangeMin', $this->selectionRangeMin);
+		if ($this->selectionRangeMax !== null) $gen->writeInt('selectionRangeMax', $this->selectionRangeMax);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -10834,6 +10852,7 @@ class DeterminePricingResponseLine extends SoapObject {
 	public BigDecimal $priceExcl;
 	public BigDecimal $discountAmountExcl;
 	public BigDecimal $amountExcl;
+	public ?int $articleAlterationId = null;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->writeInt('articleNumber', $this->articleNumber);
 		if ($this->description !== null) $gen->out->writeElementNs(self::TNS, 'description', null, $this->description);
@@ -10859,6 +10878,7 @@ class DeterminePricingResponseLine extends SoapObject {
 		$gen->writeBigDecimal('priceExcl', $this->priceExcl);
 		$gen->writeBigDecimal('discountAmountExcl', $this->discountAmountExcl);
 		$gen->writeBigDecimal('amountExcl', $this->amountExcl);
+		if ($this->articleAlterationId !== null) $gen->writeInt('articleAlterationId', $this->articleAlterationId);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -15348,6 +15368,8 @@ class ArticleAlterationsGroup extends SoapObject {
 	public bool $isPosGroup;
 	public bool $isOnlineGroup;
 	public string $groupType;
+	public ?int $selectionRangeMin = null;
+	public ?int $selectionRangeMax = null;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->writeInt('groupNumber', $this->groupNumber);
 		$gen->out->writeElementNs(self::TNS, 'description', null, $this->description);
@@ -15364,6 +15386,8 @@ $tmp_articleAlterations->write($gen, 'articleAlterations');
 		$gen->writeBool('isPosGroup', $this->isPosGroup);
 		$gen->writeBool('isOnlineGroup', $this->isOnlineGroup);
 		$gen->out->writeElementNs(self::TNS, 'groupType', null, $this->groupType);
+		if ($this->selectionRangeMin !== null) $gen->writeInt('selectionRangeMin', $this->selectionRangeMin);
+		if ($this->selectionRangeMax !== null) $gen->writeInt('selectionRangeMax', $this->selectionRangeMax);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -15434,6 +15458,8 @@ class SaveArticleAlterationsGroupRequest extends SoapObject {
 	public ?bool $isPosGroup = null;
 	public ?bool $isOnlineGroup = null;
 	public string $groupType;
+	public ?int $selectionRangeMin = null;
+	public ?int $selectionRangeMax = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->groupNumber !== null) $gen->writeInt('groupNumber', $this->groupNumber);
 		$gen->out->writeElementNs(self::TNS, 'description', null, $this->description);
@@ -15448,6 +15474,8 @@ $tmp_articleAlterations->write($gen, 'articleAlterations');
 		if ($this->isPosGroup !== null) $gen->writeBool('isPosGroup', $this->isPosGroup);
 		if ($this->isOnlineGroup !== null) $gen->writeBool('isOnlineGroup', $this->isOnlineGroup);
 		$gen->out->writeElementNs(self::TNS, 'groupType', null, $this->groupType);
+		if ($this->selectionRangeMin !== null) $gen->writeInt('selectionRangeMin', $this->selectionRangeMin);
+		if ($this->selectionRangeMax !== null) $gen->writeInt('selectionRangeMax', $this->selectionRangeMax);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -24677,6 +24705,9 @@ class WebhookSessionInput extends SoapObject {
 	public ?BigDecimal $openAmount = null;
 	public ?BigDecimal $totalInclAmount = null;
 	public ?BigDecimal $totalExclAmount = null;
+	public string $webhookConsumerId;
+	public string $salesBaseId;
+	public string $salesTypeId;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'sessionId', null, $this->sessionId);
 		if ($this->table !== null) $this->table->write($gen, 'table');
@@ -24685,6 +24716,9 @@ class WebhookSessionInput extends SoapObject {
 		if ($this->openAmount !== null) $gen->writeBigDecimal('openAmount', $this->openAmount);
 		if ($this->totalInclAmount !== null) $gen->writeBigDecimal('totalInclAmount', $this->totalInclAmount);
 		if ($this->totalExclAmount !== null) $gen->writeBigDecimal('totalExclAmount', $this->totalExclAmount);
+		$gen->out->writeElementNs(self::TNS, 'webhookConsumerId', null, $this->webhookConsumerId);
+		$gen->out->writeElementNs(self::TNS, 'salesBaseId', null, $this->salesBaseId);
+		$gen->out->writeElementNs(self::TNS, 'salesTypeId', null, $this->salesTypeId);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
