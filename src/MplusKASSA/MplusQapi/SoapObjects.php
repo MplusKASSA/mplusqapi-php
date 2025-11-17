@@ -24705,9 +24705,6 @@ class WebhookSessionInput extends SoapObject {
 	public ?BigDecimal $openAmount = null;
 	public ?BigDecimal $totalInclAmount = null;
 	public ?BigDecimal $totalExclAmount = null;
-	public string $webhookConsumerId;
-	public string $salesBaseId;
-	public string $salesTypeId;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'sessionId', null, $this->sessionId);
 		if ($this->table !== null) $this->table->write($gen, 'table');
@@ -24716,9 +24713,6 @@ class WebhookSessionInput extends SoapObject {
 		if ($this->openAmount !== null) $gen->writeBigDecimal('openAmount', $this->openAmount);
 		if ($this->totalInclAmount !== null) $gen->writeBigDecimal('totalInclAmount', $this->totalInclAmount);
 		if ($this->totalExclAmount !== null) $gen->writeBigDecimal('totalExclAmount', $this->totalExclAmount);
-		$gen->out->writeElementNs(self::TNS, 'webhookConsumerId', null, $this->webhookConsumerId);
-		$gen->out->writeElementNs(self::TNS, 'salesBaseId', null, $this->salesBaseId);
-		$gen->out->writeElementNs(self::TNS, 'salesTypeId', null, $this->salesTypeId);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
