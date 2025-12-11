@@ -28249,9 +28249,6 @@ class SoapParser extends BaseSoapParser {
 						case 'openAmount': $o->openAmount = $this->load_BigDecimal_property($in); break;
 						case 'totalInclAmount': $o->totalInclAmount = $this->load_BigDecimal_property($in); break;
 						case 'totalExclAmount': $o->totalExclAmount = $this->load_BigDecimal_property($in); break;
-						case 'webhookConsumerId': $o->webhookConsumerId = $this->load_string_property($in); break;
-						case 'salesBaseId': $o->salesBaseId = $this->load_string_property($in); break;
-						case 'salesTypeId': $o->salesTypeId = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
