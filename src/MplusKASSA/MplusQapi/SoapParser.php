@@ -79,6 +79,8 @@ class SoapParser extends BaseSoapParser {
 			case 'LineInput': return $this->load_LineInput($in);
 			case 'Answer': return $this->load_Answer($in);
 			case 'AnswerList': return $this->load_AnswerList($in);
+			case 'TransactionNumber': return $this->load_TransactionNumber($in);
+			case 'TransactionNumberList': return $this->load_TransactionNumberList($in);
 			case 'Invoice': return $this->load_Invoice($in);
 			case 'InvoiceList': return $this->load_InvoiceList($in);
 			case 'InvoiceInput': return $this->load_InvoiceInput($in);
@@ -119,6 +121,9 @@ class SoapParser extends BaseSoapParser {
 			case 'GetRelationsRequest': return $this->load_GetRelationsRequest($in);
 			case 'CardCategory': return $this->load_CardCategory($in);
 			case 'CardCategoryList': return $this->load_CardCategoryList($in);
+			case 'CardCategoryV2': return $this->load_CardCategoryV2($in);
+			case 'CardCategoryV2List': return $this->load_CardCategoryV2List($in);
+			case 'GetCardCategoriesV2Request': return $this->load_GetCardCategoriesV2Request($in);
 			case 'AdjustPointsRequest': return $this->load_AdjustPointsRequest($in);
 			case 'GetRelationPoints': return $this->load_GetRelationPoints($in);
 			case 'GetRelationPointsRequest': return $this->load_GetRelationPointsRequest($in);
@@ -477,6 +482,7 @@ class SoapParser extends BaseSoapParser {
 			case 'GetRelationsResponse': return $this->load_GetRelationsResponse($in);
 			case 'GetCustomFieldListsResponse': return $this->load_GetCustomFieldListsResponse($in);
 			case 'GetCardCategoriesResponse': return $this->load_GetCardCategoriesResponse($in);
+			case 'GetCardCategoriesV2Response': return $this->load_GetCardCategoriesV2Response($in);
 			case 'AdjustPointsResponse': return $this->load_AdjustPointsResponse($in);
 			case 'GetRelationPointsResponse': return $this->load_GetRelationPointsResponse($in);
 			case 'GetEmployeesResponse': return $this->load_GetEmployeesResponse($in);
@@ -625,6 +631,15 @@ class SoapParser extends BaseSoapParser {
 			case 'RequestActivityFilter': return $this->load_RequestActivityFilter($in);
 			case 'RequestRelationFilter': return $this->load_RequestRelationFilter($in);
 			case 'RequestSyncMarkerFilter': return $this->load_RequestSyncMarkerFilter($in);
+			case 'EmailTemplateContentLayout': return $this->load_EmailTemplateContentLayout($in);
+			case 'EmailTemplateContentLayoutList': return $this->load_EmailTemplateContentLayoutList($in);
+			case 'EmailTemplateContentAttachment': return $this->load_EmailTemplateContentAttachment($in);
+			case 'EmailTemplateContentAttachmentList': return $this->load_EmailTemplateContentAttachmentList($in);
+			case 'EmailTemplateContent': return $this->load_EmailTemplateContent($in);
+			case 'EmailTemplateContentList': return $this->load_EmailTemplateContentList($in);
+			case 'EmailTemplateOrderCategoryNumberList': return $this->load_EmailTemplateOrderCategoryNumberList($in);
+			case 'EmailTemplate': return $this->load_EmailTemplate($in);
+			case 'EmailTemplateList': return $this->load_EmailTemplateList($in);
 			case 'ConfigurationList': return $this->load_ConfigurationList($in);
 			case 'Configuration': return $this->load_Configuration($in);
 			case 'GetConfigurationRequest': return $this->load_GetConfigurationRequest($in);
@@ -779,6 +794,9 @@ class SoapParser extends BaseSoapParser {
 			case 'SpecialBarcodeArticleResult': return $this->load_SpecialBarcodeArticleResult($in);
 			case 'WorkplaceLoginStateInfo': return $this->load_WorkplaceLoginStateInfo($in);
 			case 'GetEmployeeWorkplaceLoginStatesRequest': return $this->load_GetEmployeeWorkplaceLoginStatesRequest($in);
+			case 'EmailTemplateIdsFilter': return $this->load_EmailTemplateIdsFilter($in);
+			case 'EmailTemplateLayoutCodesFilter': return $this->load_EmailTemplateLayoutCodesFilter($in);
+			case 'GetEmailTemplatesRequest': return $this->load_GetEmailTemplatesRequest($in);
 			case 'GetConfigurationResponse': return $this->load_GetConfigurationResponse($in);
 			case 'UpdateConfigurationResponse': return $this->load_UpdateConfigurationResponse($in);
 			case 'GetConfigurationTreeResponse': return $this->load_GetConfigurationTreeResponse($in);
@@ -849,6 +867,7 @@ class SoapParser extends BaseSoapParser {
 			case 'GetSpecialBarcodePatternsResponse': return $this->load_GetSpecialBarcodePatternsResponse($in);
 			case 'ParseSpecialBarcodeResponse': return $this->load_ParseSpecialBarcodeResponse($in);
 			case 'GetEmployeeWorkplaceLoginStatesResponse': return $this->load_GetEmployeeWorkplaceLoginStatesResponse($in);
+			case 'GetEmailTemplatesResponse': return $this->load_GetEmailTemplatesResponse($in);
 			case 'ImageLabel': return $this->load_ImageLabel($in);
 			case 'ImageCardLabelIds': return $this->load_ImageCardLabelIds($in);
 			case 'ImageData': return $this->load_ImageData($in);
@@ -878,11 +897,14 @@ class SoapParser extends BaseSoapParser {
 			case 'GetRenderedPrintLayoutRequest': return $this->load_GetRenderedPrintLayoutRequest($in);
 			case 'GetPrintLayoutMarkupRequest': return $this->load_GetPrintLayoutMarkupRequest($in);
 			case 'PrintPrintLayoutRequest': return $this->load_PrintPrintLayoutRequest($in);
+			case 'PrintTemplateList': return $this->load_PrintTemplateList($in);
+			case 'GetResolvedPrintTemplatesRequest': return $this->load_GetResolvedPrintTemplatesRequest($in);
 			case 'GetPrintLayoutsResponse': return $this->load_GetPrintLayoutsResponse($in);
 			case 'GetPrintLayoutAssignmentsResponse': return $this->load_GetPrintLayoutAssignmentsResponse($in);
 			case 'GetRenderedPrintLayoutResponse': return $this->load_GetRenderedPrintLayoutResponse($in);
 			case 'GetPrintLayoutMarkupResponse': return $this->load_GetPrintLayoutMarkupResponse($in);
 			case 'PrintPrintLayoutResponse': return $this->load_PrintPrintLayoutResponse($in);
+			case 'GetResolvedPrintTemplatesResponse': return $this->load_GetResolvedPrintTemplatesResponse($in);
 			case 'VoucherSettingsV1': return $this->load_VoucherSettingsV1($in);
 			case 'VoucherSettingsV1List': return $this->load_VoucherSettingsV1List($in);
 			case 'VoucherRedeemLocations': return $this->load_VoucherRedeemLocations($in);
@@ -1055,6 +1077,7 @@ class SoapParser extends BaseSoapParser {
 			case 'GetSalePromotionsRequest': return $this->load_GetSalePromotionsRequest($in);
 			case 'SalePromotionLineDiscount': return $this->load_SalePromotionLineDiscount($in);
 			case 'SalePromotionLineDiscountList': return $this->load_SalePromotionLineDiscountList($in);
+			case 'SalePromotionLineFreeArticleData': return $this->load_SalePromotionLineFreeArticleData($in);
 			case 'SalePromotionLine': return $this->load_SalePromotionLine($in);
 			case 'SalePromotionLineList': return $this->load_SalePromotionLineList($in);
 			case 'SalePromotions': return $this->load_SalePromotions($in);
@@ -1242,6 +1265,7 @@ class SoapParser extends BaseSoapParser {
 			case 'getRelations': return $this->load_getRelations($in);
 			case 'getCustomFieldLists': return $this->load_getCustomFieldLists($in);
 			case 'getCardCategories': return $this->load_getCardCategories($in);
+			case 'getCardCategoriesV2': return $this->load_getCardCategoriesV2($in);
 			case 'adjustPoints': return $this->load_adjustPoints($in);
 			case 'getRelationPoints': return $this->load_getRelationPoints_($in);
 			case 'getEmployees': return $this->load_getEmployees($in);
@@ -1480,6 +1504,7 @@ class SoapParser extends BaseSoapParser {
 			case 'getSpecialBarcodePatterns': return $this->load_getSpecialBarcodePatterns($in);
 			case 'parseSpecialBarcode': return $this->load_parseSpecialBarcode($in);
 			case 'getEmployeeWorkplaceLoginStates': return $this->load_getEmployeeWorkplaceLoginStates($in);
+			case 'getEmailTemplates': return $this->load_getEmailTemplates($in);
 			case 'createImage': return $this->load_createImage($in);
 			case 'createImageFromUrl': return $this->load_createImageFromUrl($in);
 			case 'getCardImageLabels': return $this->load_getCardImageLabels($in);
@@ -1491,6 +1516,7 @@ class SoapParser extends BaseSoapParser {
 			case 'getRenderedPrintLayout': return $this->load_getRenderedPrintLayout($in);
 			case 'getPrintLayoutMarkup': return $this->load_getPrintLayoutMarkup($in);
 			case 'printPrintLayout': return $this->load_printPrintLayout($in);
+			case 'getResolvedPrintTemplates': return $this->load_getResolvedPrintTemplates($in);
 			case 'checkGiftcardPayment': return $this->load_checkGiftcardPayment($in);
 			case 'registerGiftcardPayment': return $this->load_registerGiftcardPayment($in);
 			case 'registerGiftcardPaymentV2': return $this->load_registerGiftcardPaymentV2($in);
@@ -2919,6 +2945,7 @@ class SoapParser extends BaseSoapParser {
 						case 'proposalNumber': $o->proposalNumber = $this->load_YearNumber($in); break;
 						case 'branchGroupNumber': $o->branchGroupNumber = $this->load_int_property($in); break;
 						case 'ownerId': $o->ownerId = $this->load_string_property($in); break;
+						case 'branchInvoiceNumbers': $o->branchInvoiceNumbers = ($this->load_TransactionNumberList($in))->transactionNumber; break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -3319,6 +3346,7 @@ class SoapParser extends BaseSoapParser {
 						case 'tempLineId': $o->tempLineId = $this->load_string_property($in); break;
 						case 'subLineType': $o->subLineType = $this->load_string_property($in); break;
 						case 'articleAlterationId': $o->articleAlterationId = $this->load_int_property($in); break;
+						case 'lineKind': $o->lineKind = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -3403,6 +3431,7 @@ class SoapParser extends BaseSoapParser {
 						case 'suppressDisposableComponent': $o->suppressDisposableComponent = $this->load_bool_property($in); break;
 						case 'salePromotionData': $o->salePromotionData = $this->load_SalePromotionLineDataInput($in); break;
 						case 'articleAlterationId': $o->articleAlterationId = $this->load_int_property($in); break;
+						case 'lineKind': $o->lineKind = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -3443,6 +3472,47 @@ class SoapParser extends BaseSoapParser {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
 						case 'answer': $o->answer[] = $this->load_Answer($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_TransactionNumber(\XMLReader $in) : TransactionNumber {
+		$n = $in->name;
+		$o = new TransactionNumber();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'displayString': $o->displayString = $this->load_string_property($in); break;
+						case 'branch': $o->branch = $this->load_unsignedInt($in); break;
+						case 'workplace': $o->workplace = $this->load_unsignedInt($in); break;
+						case 'number': $o->number = $this->load_YearNumber($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_TransactionNumberList(\XMLReader $in) : TransactionNumberList {
+		$n = $in->name;
+		$o = new TransactionNumberList();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'transactionNumber': $o->transactionNumber[] = $this->load_TransactionNumber($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -3520,6 +3590,7 @@ class SoapParser extends BaseSoapParser {
 						case 'salesCategoryDescription': $o->salesCategoryDescription = $this->load_string_property($in); break;
 						case 'branchGroupNumber': $o->branchGroupNumber = $this->load_int_property($in); break;
 						case 'ownerId': $o->ownerId = $this->load_string_property($in); break;
+						case 'branchInvoiceNumber': $o->branchInvoiceNumber = $this->load_TransactionNumber($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -4403,6 +4474,66 @@ class SoapParser extends BaseSoapParser {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
 						case 'cardCategory': $o->cardCategory[] = $this->load_CardCategory($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_CardCategoryV2(\XMLReader $in) : CardCategoryV2 {
+		$n = $in->name;
+		$o = new CardCategoryV2();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'id': $o->id = $this->load_int_property($in); break;
+						case 'name': $o->name = $this->load_string_property($in); break;
+						case 'isVipGroup': $o->isVipGroup = $this->load_bool_property($in); break;
+						case 'isSupplierGroup': $o->isSupplierGroup = $this->load_bool_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_CardCategoryV2List(\XMLReader $in) : CardCategoryV2List {
+		$n = $in->name;
+		$o = new CardCategoryV2List();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'cardCategory': $o->cardCategory[] = $this->load_CardCategoryV2($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetCardCategoriesV2Request(\XMLReader $in) : GetCardCategoriesV2Request {
+		$n = $in->name;
+		$o = new GetCardCategoriesV2Request();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'workplaceKey': $o->workplaceKey = $this->load_WorkplaceIdentifier($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -5392,6 +5523,7 @@ class SoapParser extends BaseSoapParser {
 						case 'proposalNumber': $o->proposalNumber = $this->load_YearNumber($in); break;
 						case 'branchGroupNumber': $o->branchGroupNumber = $this->load_int_property($in); break;
 						case 'ownerId': $o->ownerId = $this->load_string_property($in); break;
+						case 'branchInvoiceNumber': $o->branchInvoiceNumber = $this->load_TransactionNumber($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -6861,6 +6993,7 @@ class SoapParser extends BaseSoapParser {
 						case 'ownerFilter': $o->ownerFilter = ($this->load_OwnerLabelFilter($in))->ownerLabels; break;
 						case 'branchGroupFilter': $o->branchGroupFilter = ($this->load_BranchGroupFilter($in))->branchGroups; break;
 						case 'includeLineList': $o->includeLineList = $this->load_bool_property($in); break;
+						case 'branchInvoiceNumbers': $o->branchInvoiceNumbers = ($this->load_TransactionNumberList($in))->transactionNumber; break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -8464,6 +8597,7 @@ class SoapParser extends BaseSoapParser {
 						case 'deliveryNumber': $o->deliveryNumber = $this->load_YearNumber($in); break;
 						case 'internalShipmentNumber': $o->internalShipmentNumber = $this->load_YearNumber($in); break;
 						case 'internalDeliveryNumber': $o->internalDeliveryNumber = $this->load_YearNumberPart($in); break;
+						case 'branchInvoiceNumber': $o->branchInvoiceNumber = $this->load_TransactionNumber($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -13134,6 +13268,27 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_GetCardCategoriesV2Response(\XMLReader $in) : GetCardCategoriesV2Response {
+		$n = $in->name;
+		$o = new GetCardCategoriesV2Response();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'articleCardCategories': $o->articleCardCategories = ($this->load_CardCategoryV2List($in))->cardCategory; break;
+						case 'employeeCardCategories': $o->employeeCardCategories = ($this->load_CardCategoryV2List($in))->cardCategory; break;
+						case 'relationCardCategories': $o->relationCardCategories = ($this->load_CardCategoryV2List($in))->cardCategory; break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_AdjustPointsResponse(\XMLReader $in) : AdjustPointsResponse {
 		$n = $in->name;
 		$o = new AdjustPointsResponse();
@@ -16109,6 +16264,194 @@ class SoapParser extends BaseSoapParser {
 					switch ($in->localName) {
 						case 'syncMarker': $o->syncMarker = $this->load_int_property($in); break;
 						case 'syncMarkerLimit': $o->syncMarkerLimit = $this->load_int_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_EmailTemplateContentLayout(\XMLReader $in) : EmailTemplateContentLayout {
+		$n = $in->name;
+		$o = new EmailTemplateContentLayout();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'layoutId': $o->layoutId = $this->load_string_property($in); break;
+						case 'layoutRenderType': $o->layoutRenderType = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_EmailTemplateContentLayoutList(\XMLReader $in) : EmailTemplateContentLayoutList {
+		$n = $in->name;
+		$o = new EmailTemplateContentLayoutList();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'emailTemplateContentLayout': $o->emailTemplateContentLayout[] = $this->load_EmailTemplateContentLayout($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_EmailTemplateContentAttachment(\XMLReader $in) : EmailTemplateContentAttachment {
+		$n = $in->name;
+		$o = new EmailTemplateContentAttachment();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'mediaFileId': $o->mediaFileId = $this->load_unsignedLong($in); break;
+						case 'fileName': $o->fileName = $this->load_string_property($in); break;
+						case 'originalFileName': $o->originalFileName = $this->load_string_property($in); break;
+						case 'sizeBytes': $o->sizeBytes = $this->load_unsignedLong($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_EmailTemplateContentAttachmentList(\XMLReader $in) : EmailTemplateContentAttachmentList {
+		$n = $in->name;
+		$o = new EmailTemplateContentAttachmentList();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'emailTemplateContentAttachment': $o->emailTemplateContentAttachment[] = $this->load_EmailTemplateContentAttachment($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_EmailTemplateContent(\XMLReader $in) : EmailTemplateContent {
+		$n = $in->name;
+		$o = new EmailTemplateContent();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'countryCode': $o->countryCode = $this->load_unsignedShort($in); break;
+						case 'sender': $o->sender = $this->load_string_property($in); break;
+						case 'type': $o->type = $this->load_string_property($in); break;
+						case 'subject': $o->subject = $this->load_string_property($in); break;
+						case 'body': $o->body = $this->load_string_property($in); break;
+						case 'layouts': $o->layouts = ($this->load_EmailTemplateContentLayoutList($in))->emailTemplateContentLayout; break;
+						case 'attachments': $o->attachments = ($this->load_EmailTemplateContentAttachmentList($in))->emailTemplateContentAttachment; break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_EmailTemplateContentList(\XMLReader $in) : EmailTemplateContentList {
+		$n = $in->name;
+		$o = new EmailTemplateContentList();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'emailTemplateContent': $o->emailTemplateContent[] = $this->load_EmailTemplateContent($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_EmailTemplateOrderCategoryNumberList(\XMLReader $in) : EmailTemplateOrderCategoryNumberList {
+		$n = $in->name;
+		$o = new EmailTemplateOrderCategoryNumberList();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'orderCategoryNumber': $o->orderCategoryNumber[] = $this->load_int_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_EmailTemplate(\XMLReader $in) : EmailTemplate {
+		$n = $in->name;
+		$o = new EmailTemplate();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'id': $o->id = $this->load_string_property($in); break;
+						case 'description': $o->description = $this->load_string_property($in); break;
+						case 'layoutCode': $o->layoutCode = $this->load_string_property($in); break;
+						case 'orderCategoryNumbers': $o->orderCategoryNumbers = ($this->load_EmailTemplateOrderCategoryNumberList($in))->orderCategoryNumber; break;
+						case 'contents': $o->contents = ($this->load_EmailTemplateContentList($in))->emailTemplateContent; break;
+						case 'createdTs': $o->createdTs = $this->load_DateTime_property($in); break;
+						case 'updatedTs': $o->updatedTs = $this->load_DateTime_property($in); break;
+						case 'deletedTs': $o->deletedTs = $this->load_DateTime_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_EmailTemplateList(\XMLReader $in) : EmailTemplateList {
+		$n = $in->name;
+		$o = new EmailTemplateList();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'emailTemplate': $o->emailTemplate[] = $this->load_EmailTemplate($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -19446,6 +19789,64 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_EmailTemplateIdsFilter(\XMLReader $in) : EmailTemplateIdsFilter {
+		$n = $in->name;
+		$o = new EmailTemplateIdsFilter();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'id': $o->id[] = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_EmailTemplateLayoutCodesFilter(\XMLReader $in) : EmailTemplateLayoutCodesFilter {
+		$n = $in->name;
+		$o = new EmailTemplateLayoutCodesFilter();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'layoutCode': $o->layoutCode[] = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetEmailTemplatesRequest(\XMLReader $in) : GetEmailTemplatesRequest {
+		$n = $in->name;
+		$o = new GetEmailTemplatesRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'idsFilter': $o->idsFilter = ($this->load_EmailTemplateIdsFilter($in))->id; break;
+						case 'layoutCodesFilter': $o->layoutCodesFilter = ($this->load_EmailTemplateLayoutCodesFilter($in))->layoutCode; break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_GetConfigurationResponse(\XMLReader $in) : GetConfigurationResponse {
 		$n = $in->name;
 		$o = new GetConfigurationResponse();
@@ -20926,6 +21327,25 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_GetEmailTemplatesResponse(\XMLReader $in) : GetEmailTemplatesResponse {
+		$n = $in->name;
+		$o = new GetEmailTemplatesResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'emailTemplates': $o->emailTemplates = ($this->load_EmailTemplateList($in))->emailTemplate; break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_ImageLabel(\XMLReader $in) : ImageLabel {
 		$n = $in->name;
 		$o = new ImageLabel();
@@ -21538,6 +21958,46 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_PrintTemplateList(\XMLReader $in) : PrintTemplateList {
+		$n = $in->name;
+		$o = new PrintTemplateList();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'printTemplate': $o->printTemplate[] = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetResolvedPrintTemplatesRequest(\XMLReader $in) : GetResolvedPrintTemplatesRequest {
+		$n = $in->name;
+		$o = new GetResolvedPrintTemplatesRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'kind': $o->kind = $this->load_string_property($in); break;
+						case 'printInfo': $o->printInfo = $this->load_PrintInfo($in); break;
+						case 'printTemplates': $o->printTemplates = ($this->load_PrintTemplateList($in))->printTemplate; break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_GetPrintLayoutsResponse(\XMLReader $in) : GetPrintLayoutsResponse {
 		$n = $in->name;
 		$o = new GetPrintLayoutsResponse();
@@ -21631,6 +22091,27 @@ class SoapParser extends BaseSoapParser {
 					switch ($in->localName) {
 						case 'result': $o->result = $this->load_string_property($in); break;
 						case 'errorMessage': $o->errorMessage = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetResolvedPrintTemplatesResponse(\XMLReader $in) : GetResolvedPrintTemplatesResponse {
+		$n = $in->name;
+		$o = new GetResolvedPrintTemplatesResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'result': $o->result = $this->load_string_property($in); break;
+						case 'errorMessage': $o->errorMessage = $this->load_string_property($in); break;
+						case 'resolvedPrintTemplates': $o->resolvedPrintTemplates = ($this->load_PrintTemplateList($in))->printTemplate; break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -25451,6 +25932,28 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_SalePromotionLineFreeArticleData(\XMLReader $in) : SalePromotionLineFreeArticleData {
+		$n = $in->name;
+		$o = new SalePromotionLineFreeArticleData();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'selectionQuantity': $o->selectionQuantity = $this->load_BigDecimal_property($in); break;
+						case 'freeArticleNumber': $o->freeArticleNumber = $this->load_int_property($in); break;
+						case 'freeArticleQuantity': $o->freeArticleQuantity = $this->load_BigDecimal_property($in); break;
+						case 'maxFreeArticleQuantity': $o->maxFreeArticleQuantity = $this->load_BigDecimal_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_SalePromotionLine(\XMLReader $in) : SalePromotionLine {
 		$n = $in->name;
 		$o = new SalePromotionLine();
@@ -25482,6 +25985,7 @@ class SoapParser extends BaseSoapParser {
 						case 'arrangementArticleNumber': $o->arrangementArticleNumber = $this->load_int_property($in); break;
 						case 'hoursValid': $o->hoursValid = $this->load_int_property($in); break;
 						case 'salePromotionLineDiscountList': $o->salePromotionLineDiscountList = ($this->load_SalePromotionLineDiscountList($in))->salePromotionLineDiscountList; break;
+						case 'freeArticleData': $o->freeArticleData = $this->load_SalePromotionLineFreeArticleData($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -25835,6 +26339,7 @@ class SoapParser extends BaseSoapParser {
 						case 'invoiceNumbers': $o->invoiceNumbers = ($this->load_YearNumberList($in))->yearNumber; break;
 						case 'branchGroupNumber': $o->branchGroupNumber = $this->load_int_property($in); break;
 						case 'ownerId': $o->ownerId = $this->load_string_property($in); break;
+						case 'branchInvoiceNumbers': $o->branchInvoiceNumbers = ($this->load_TransactionNumberList($in))->transactionNumber; break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -27744,6 +28249,9 @@ class SoapParser extends BaseSoapParser {
 						case 'openAmount': $o->openAmount = $this->load_BigDecimal_property($in); break;
 						case 'totalInclAmount': $o->totalInclAmount = $this->load_BigDecimal_property($in); break;
 						case 'totalExclAmount': $o->totalExclAmount = $this->load_BigDecimal_property($in); break;
+						case 'webhookConsumerId': $o->webhookConsumerId = $this->load_string_property($in); break;
+						case 'salesBaseId': $o->salesBaseId = $this->load_string_property($in); break;
+						case 'salesTypeId': $o->salesTypeId = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -28555,6 +29063,9 @@ class SoapParser extends BaseSoapParser {
 						case 'articleNumber': $o->articleNumber = $this->load_int_property($in); break;
 						case 'quantity': $quantity = $this->load_int_property($in); break;
 						case 'decimalPlaces': $decimalPlaces = $this->load_int_property($in); break;
+						case 'quantityShipped': $o->quantityShipped = $this->load_BigDecimal_property($in); break;
+						case 'quantityCancelled': $o->quantityCancelled = $this->load_BigDecimal_property($in); break;
+						case 'quantityUndetermined': $o->quantityUndetermined = $this->load_BigDecimal_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -29653,6 +30164,25 @@ class SoapParser extends BaseSoapParser {
 			switch ($in->nodeType) {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_getCardCategoriesV2(\XMLReader $in) : getCardCategoriesV2 {
+		$n = $in->name;
+		$o = new getCardCategoriesV2();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_GetCardCategoriesV2Request($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -34204,6 +34734,25 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_getEmailTemplates(\XMLReader $in) : getEmailTemplates {
+		$n = $in->name;
+		$o = new getEmailTemplates();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_GetEmailTemplatesRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_createImage(\XMLReader $in) : createImage {
 		$n = $in->name;
 		$o = new createImage();
@@ -34404,6 +34953,25 @@ class SoapParser extends BaseSoapParser {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
 						case 'request': $o->request = $this->load_PrintPrintLayoutRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_getResolvedPrintTemplates(\XMLReader $in) : getResolvedPrintTemplates {
+		$n = $in->name;
+		$o = new getResolvedPrintTemplates();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_GetResolvedPrintTemplatesRequest($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:

@@ -67,6 +67,7 @@ class MplusApiClient extends BaseSoapClient {
  Order::class . ':invoiceNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
  Order::class . ':packingSlipIds' => 'string',
  Order::class . ':packingSlipNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
+ Order::class . ':branchInvoiceNumbers' => 'MplusKASSA\MplusQapi\TransactionNumber',
  OrderList::class . ':order' => 'MplusKASSA\MplusQapi\Order',
  OrderInput::class . ':lineList' => 'MplusKASSA\MplusQapi\LineInput',
  OrderTypeList::class . ':orderType' => 'string',
@@ -81,6 +82,7 @@ class MplusApiClient extends BaseSoapClient {
  LineInput::class . ':preparationList' => 'MplusKASSA\MplusQapi\LineInput',
  LineInput::class . ':contractLines' => 'MplusKASSA\MplusQapi\SalesLineContractLine',
  AnswerList::class . ':answer' => 'MplusKASSA\MplusQapi\Answer',
+ TransactionNumberList::class . ':transactionNumber' => 'MplusKASSA\MplusQapi\TransactionNumber',
  Invoice::class . ':orderIds' => 'string',
  Invoice::class . ':extOrderIds' => 'string',
  Invoice::class . ':vatGroupList' => 'MplusKASSA\MplusQapi\VatGroup',
@@ -121,6 +123,7 @@ class MplusApiClient extends BaseSoapClient {
  LogMistakeRequest::class . ':mistakeList' => 'MplusKASSA\MplusQapi\Mistake',
  GetRelationsRequest::class . ':relationNumbers' => 'int',
  CardCategoryList::class . ':cardCategory' => 'MplusKASSA\MplusQapi\CardCategory',
+ CardCategoryV2List::class . ':cardCategory' => 'MplusKASSA\MplusQapi\CardCategoryV2',
  GetRelationPointsRequest::class . ':relationNumbers' => 'int',
  getEmployeesRequest::class . ':employeeNumbers' => 'int',
  TableNumberList::class . ':tableNumber' => 'MplusKASSA\MplusQapi\TableNumber',
@@ -209,6 +212,7 @@ class MplusApiClient extends BaseSoapClient {
  GetInvoicesRequest::class . ':invoiceNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
  GetInvoicesRequest::class . ':ownerFilter' => 'string',
  GetInvoicesRequest::class . ':branchGroupFilter' => 'int',
+ GetInvoicesRequest::class . ':branchInvoiceNumbers' => 'MplusKASSA\MplusQapi\TransactionNumber',
  JournalFilterList::class . ':journalFilter' => 'string',
  TurnoverGroup::class . ':branchAccountNumberList' => 'MplusKASSA\MplusQapi\BranchAccountNumber',
  TurnoverGroup::class . ':branchCostCenterNumberList' => 'MplusKASSA\MplusQapi\BranchCostCenterNumber',
@@ -438,6 +442,9 @@ class MplusApiClient extends BaseSoapClient {
  GetCardCategoriesResponse::class . ':articleCardCategoryList' => 'MplusKASSA\MplusQapi\CardCategory',
  GetCardCategoriesResponse::class . ':employeeCardCategoryList' => 'MplusKASSA\MplusQapi\CardCategory',
  GetCardCategoriesResponse::class . ':relationCardCategoryList' => 'MplusKASSA\MplusQapi\CardCategory',
+ GetCardCategoriesV2Response::class . ':articleCardCategories' => 'MplusKASSA\MplusQapi\CardCategoryV2',
+ GetCardCategoriesV2Response::class . ':employeeCardCategories' => 'MplusKASSA\MplusQapi\CardCategoryV2',
+ GetCardCategoriesV2Response::class . ':relationCardCategories' => 'MplusKASSA\MplusQapi\CardCategoryV2',
  GetRelationPointsResponse::class . ':relationPointsLst' => 'MplusKASSA\MplusQapi\GetRelationPoints',
  GetEmployeesResponse::class . ':employeeList' => 'MplusKASSA\MplusQapi\Employee',
  getEmployeeListResponse::class . ':return' => 'MplusKASSA\MplusQapi\EmployeeName',
@@ -527,6 +534,15 @@ class MplusApiClient extends BaseSoapClient {
  RequestArticleFilter::class . ':articleNumbers' => 'int',
  RequestActivityFilter::class . ':activityNumbers' => 'string',
  RequestRelationFilter::class . ':relationNumbers' => 'int',
+ EmailTemplateContentLayoutList::class . ':emailTemplateContentLayout' => 'MplusKASSA\MplusQapi\EmailTemplateContentLayout',
+ EmailTemplateContentAttachmentList::class . ':emailTemplateContentAttachment' => 'MplusKASSA\MplusQapi\EmailTemplateContentAttachment',
+ EmailTemplateContent::class . ':layouts' => 'MplusKASSA\MplusQapi\EmailTemplateContentLayout',
+ EmailTemplateContent::class . ':attachments' => 'MplusKASSA\MplusQapi\EmailTemplateContentAttachment',
+ EmailTemplateContentList::class . ':emailTemplateContent' => 'MplusKASSA\MplusQapi\EmailTemplateContent',
+ EmailTemplateOrderCategoryNumberList::class . ':orderCategoryNumber' => 'int',
+ EmailTemplate::class . ':orderCategoryNumbers' => 'int',
+ EmailTemplate::class . ':contents' => 'MplusKASSA\MplusQapi\EmailTemplateContent',
+ EmailTemplateList::class . ':emailTemplate' => 'MplusKASSA\MplusQapi\EmailTemplate',
  ConfigurationList::class . ':configuration' => 'MplusKASSA\MplusQapi\Configuration',
  Configuration::class . ':configurationList' => 'MplusKASSA\MplusQapi\Configuration',
  UpdateConfigurationRequest::class . ':configurationList' => 'MplusKASSA\MplusQapi\Configuration',
@@ -603,6 +619,10 @@ class MplusApiClient extends BaseSoapClient {
  UpdateEmployeeAuthorizationGroupsRequest::class . ':branchAuthorizationGroupNumbers' => 'MplusKASSA\MplusQapi\BranchAuthorizationGroupNumber',
  UpdateEmployeeAuthorizationGroupsRequest::class . ':branchGroupAuthorizationGroupNumbers' => 'MplusKASSA\MplusQapi\BranchGroupAuthorizationGroupNumber',
  GetEmployeeWorkplaceLoginStatesRequest::class . ':workplaceIdentifiers' => 'MplusKASSA\MplusQapi\WorkplaceIdentifier',
+ EmailTemplateIdsFilter::class . ':id' => 'string',
+ EmailTemplateLayoutCodesFilter::class . ':layoutCode' => 'string',
+ GetEmailTemplatesRequest::class . ':idsFilter' => 'string',
+ GetEmailTemplatesRequest::class . ':layoutCodesFilter' => 'string',
  GetConfigurationResponse::class . ':configurationList' => 'MplusKASSA\MplusQapi\Configuration',
  GetConfigurationTreeResponse::class . ':configurations' => 'MplusKASSA\MplusQapi\ConfigurationGroup',
  GetConfigurationValuesResponse::class . ':configurationKeyValues' => 'MplusKASSA\MplusQapi\ConfigurationKeyValues',
@@ -642,6 +662,7 @@ class MplusApiClient extends BaseSoapClient {
  GetEmployeeAuthorizationGroupsResponse::class . ':branchGroupAuthorizationGroups' => 'MplusKASSA\MplusQapi\BranchGroupAuthorizationGroup',
  GetSpecialBarcodePatternsResponse::class . ':patterns' => 'MplusKASSA\MplusQapi\BarcodePattern',
  GetEmployeeWorkplaceLoginStatesResponse::class . ':workplaceLoginStateInfo' => 'MplusKASSA\MplusQapi\WorkplaceLoginStateInfo',
+ GetEmailTemplatesResponse::class . ':emailTemplates' => 'MplusKASSA\MplusQapi\EmailTemplate',
  ImageCardLabelIds::class . ':labelId' => 'int',
  ImageData::class . ':labels' => 'int',
  CardImageData::class . ':images' => 'MplusKASSA\MplusQapi\ImageData',
@@ -657,9 +678,12 @@ class MplusApiClient extends BaseSoapClient {
  GetImagesResponse::class . ':imageList' => 'MplusKASSA\MplusQapi\Image',
  PrintParams::class . ':params' => 'MplusKASSA\MplusQapi\PrintParam',
  PrintInfo::class . ':paramsList' => 'MplusKASSA\MplusQapi\PrintParams',
+ PrintTemplateList::class . ':printTemplate' => 'string',
+ GetResolvedPrintTemplatesRequest::class . ':printTemplates' => 'string',
  GetPrintLayoutsResponse::class . ':printLayouts' => 'MplusKASSA\MplusQapi\PrintLayoutView',
  GetPrintLayoutAssignmentsResponse::class . ':printLayoutAssignments' => 'MplusKASSA\MplusQapi\PrintLayoutAssignment',
  GetRenderedPrintLayoutResponse::class . ':renderedPrintLayouts' => 'string',
+ GetResolvedPrintTemplatesResponse::class . ':resolvedPrintTemplates' => 'string',
  VoucherSettingsV1List::class . ':voucherSettingsV1' => 'MplusKASSA\MplusQapi\VoucherSettingsV1',
  VoucherRedeemLocations::class . ':branchGroupIds' => 'int',
  VoucherRedeemLocations::class . ':branchIds' => 'int',
@@ -861,6 +885,7 @@ class MplusApiClient extends BaseSoapClient {
  Proposal::class . ':invoiceIds' => 'string',
  Proposal::class . ':extInvoiceIds' => 'string',
  Proposal::class . ':invoiceNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
+ Proposal::class . ':branchInvoiceNumbers' => 'MplusKASSA\MplusQapi\TransactionNumber',
  ProposalList::class . ':proposal' => 'MplusKASSA\MplusQapi\Proposal',
  GetProposalsRequest::class . ':branchNumbers' => 'int',
  GetProposalsRequest::class . ':employeeNumbers' => 'int',
@@ -1106,6 +1131,18 @@ class MplusApiClient extends BaseSoapClient {
         $opname = 'getCardCategories';
         $this->startRequest($opname);
         $reqobj = new getCardCategories();
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getCardCategoriesV2(GetCardCategoriesV2Request $request, ?string $requestId = null) : GetCardCategoriesV2Response {
+        $opname = 'getCardCategoriesV2';
+        $this->startRequest($opname);
+        $reqobj = new getCardCategoriesV2();
+        $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);
         $resp = $this->communicate($opname, $rq, $requestId);
@@ -3917,6 +3954,18 @@ class MplusApiClient extends BaseSoapClient {
         $this->endRequest();
         return $res;
     }
+    public function getEmailTemplates(GetEmailTemplatesRequest $request, ?string $requestId = null) : GetEmailTemplatesResponse {
+        $opname = 'getEmailTemplates';
+        $this->startRequest($opname);
+        $reqobj = new getEmailTemplates();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
     public function createImage(CreateImageRequest $request, ?string $requestId = null) : CreateImageResponse {
         $opname = 'createImage';
         $this->startRequest($opname);
@@ -4041,6 +4090,18 @@ class MplusApiClient extends BaseSoapClient {
         $opname = 'printPrintLayout';
         $this->startRequest($opname);
         $reqobj = new printPrintLayout();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getResolvedPrintTemplates(GetResolvedPrintTemplatesRequest $request, ?string $requestId = null) : GetResolvedPrintTemplatesResponse {
+        $opname = 'getResolvedPrintTemplates';
+        $this->startRequest($opname);
+        $reqobj = new getResolvedPrintTemplates();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);
