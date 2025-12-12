@@ -1998,17 +1998,16 @@ class AnswerList extends SoapObject {
 
 class TransactionNumber extends SoapObject {
 	public ?string $displayString = null;
-	public unsignedInt $branch;
-	public ?unsignedInt $workplace = null;
+	public int $branch;
+	public ?int $workplace = null;
 	public YearNumber $number;
 	public function __construct() {
-		$this->branch = new unsignedInt();
 		$this->number = new YearNumber();
 	}
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->displayString !== null) $gen->out->writeElementNs(self::TNS, 'displayString', null, $this->displayString);
-		$this->branch->write($gen, 'branch');
-		if ($this->workplace !== null) $this->workplace->write($gen, 'workplace');
+		$gen->writeInt('branch', $this->branch);
+		if ($this->workplace !== null) $gen->writeInt('workplace', $this->workplace);
 		$this->number->write($gen, 'number');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
@@ -14152,18 +14151,15 @@ class EmailTemplateContentLayoutList extends SoapObject {
 }
 
 class EmailTemplateContentAttachment extends SoapObject {
-	public ?unsignedLong $mediaFileId = null;
+	public ?int $mediaFileId = null;
 	public string $fileName;
 	public string $originalFileName;
-	public unsignedLong $sizeBytes;
-	public function __construct() {
-		$this->sizeBytes = new unsignedLong();
-	}
+	public int $sizeBytes;
 	public function writeProps(SoapGenerator $gen): void {
-		if ($this->mediaFileId !== null) $this->mediaFileId->write($gen, 'mediaFileId');
+		if ($this->mediaFileId !== null) $gen->writeInt('mediaFileId', $this->mediaFileId);
 		$gen->out->writeElementNs(self::TNS, 'fileName', null, $this->fileName);
 		$gen->out->writeElementNs(self::TNS, 'originalFileName', null, $this->originalFileName);
-		$this->sizeBytes->write($gen, 'sizeBytes');
+		$gen->writeInt('sizeBytes', $this->sizeBytes);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -14187,7 +14183,7 @@ class EmailTemplateContentAttachmentList extends SoapObject {
 }
 
 class EmailTemplateContent extends SoapObject {
-	public unsignedShort $countryCode;
+	public int $countryCode;
 	public string $sender;
 	public string $type;
 	public string $subject;
@@ -14196,11 +14192,8 @@ class EmailTemplateContent extends SoapObject {
 	public $layouts = null;
 	/** @var EmailTemplateContentAttachment[] */
 	public $attachments = null;
-	public function __construct() {
-		$this->countryCode = new unsignedShort();
-	}
 	public function writeProps(SoapGenerator $gen): void {
-		$this->countryCode->write($gen, 'countryCode');
+		$gen->writeInt('countryCode', $this->countryCode);
 		$gen->out->writeElementNs(self::TNS, 'sender', null, $this->sender);
 		$gen->out->writeElementNs(self::TNS, 'type', null, $this->type);
 		$gen->out->writeElementNs(self::TNS, 'subject', null, $this->subject);

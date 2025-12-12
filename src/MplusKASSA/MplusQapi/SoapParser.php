@@ -3491,8 +3491,8 @@ class SoapParser extends BaseSoapParser {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
 						case 'displayString': $o->displayString = $this->load_string_property($in); break;
-						case 'branch': $o->branch = $this->load_unsignedInt($in); break;
-						case 'workplace': $o->workplace = $this->load_unsignedInt($in); break;
+						case 'branch': $o->branch = $this->load_int_property($in); break;
+						case 'workplace': $o->workplace = $this->load_int_property($in); break;
 						case 'number': $o->number = $this->load_YearNumber($in); break;
 					}
 					break;
@@ -16321,10 +16321,10 @@ class SoapParser extends BaseSoapParser {
 			switch ($in->nodeType) {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
-						case 'mediaFileId': $o->mediaFileId = $this->load_unsignedLong($in); break;
+						case 'mediaFileId': $o->mediaFileId = $this->load_int_property($in); break;
 						case 'fileName': $o->fileName = $this->load_string_property($in); break;
 						case 'originalFileName': $o->originalFileName = $this->load_string_property($in); break;
-						case 'sizeBytes': $o->sizeBytes = $this->load_unsignedLong($in); break;
+						case 'sizeBytes': $o->sizeBytes = $this->load_int_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -16362,7 +16362,7 @@ class SoapParser extends BaseSoapParser {
 			switch ($in->nodeType) {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
-						case 'countryCode': $o->countryCode = $this->load_unsignedShort($in); break;
+						case 'countryCode': $o->countryCode = $this->load_int_property($in); break;
 						case 'sender': $o->sender = $this->load_string_property($in); break;
 						case 'type': $o->type = $this->load_string_property($in); break;
 						case 'subject': $o->subject = $this->load_string_property($in); break;
