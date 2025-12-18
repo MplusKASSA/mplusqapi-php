@@ -837,6 +837,7 @@ class MplusApiClient extends BaseSoapClient {
  ReportPaymentMethodDetailsResponse::class . ':paymentSourceList' => 'MplusKASSA\MplusQapi\ReportPaymentSource',
  ReportPrintableFinancialTotalsResponse::class . ':printableFinancialTotalsList' => 'MplusKASSA\MplusQapi\ReportPrintableFinancialTotalsLine',
  ReportArticlePerformanceResponse::class . ':articlePerformanceList' => 'MplusKASSA\MplusQapi\ReportArticlePerformance',
+ ArticleNumberFilter::class . ':articleNumber' => 'int',
  GetSalesRepeatTemplatesRequest::class . ':relationFilter' => 'int',
  GetSalesRepeatTemplatesRequest::class . ':contractFrequencyFilter' => 'string',
  GetSalesRepeatTemplatesRequest::class . ':salesRepeatTemplateTypeFilter' => 'string',
@@ -859,6 +860,7 @@ class MplusApiClient extends BaseSoapClient {
  BpeBudgetCheckResponseList::class . ':result' => 'MplusKASSA\MplusQapi\BpeBudgetCheckResponse',
  TicketCounterSaleList::class . ':ticketCounterSale' => 'MplusKASSA\MplusQapi\TicketCounterSale',
  GetSalePromotionsRequest::class . ':branchFilter' => 'int',
+ GetSalePromotionsRequest::class . ':articleNumberFilter' => 'int',
  SalePromotionLineDiscountList::class . ':salePromotionLineDiscountList' => 'MplusKASSA\MplusQapi\SalePromotionLineDiscount',
  SalePromotionLine::class . ':articleNumbers' => 'int',
  SalePromotionLine::class . ':relationNumbers' => 'int',
@@ -2033,6 +2035,18 @@ class MplusApiClient extends BaseSoapClient {
         $this->startRequest($opname);
         $reqobj = new creditInvoice();
         $reqobj->invoiceId = $invoiceId;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function CreditInvoiceV2(CreditInvoiceV2Request $request, ?string $requestId = null) : CreditInvoiceV2Response {
+        $opname = 'CreditInvoiceV2';
+        $this->startRequest($opname);
+        $reqobj = new CreditInvoiceV2();
+        $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);
         $resp = $this->communicate($opname, $rq, $requestId);

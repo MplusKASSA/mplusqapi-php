@@ -5588,6 +5588,22 @@ class SaveInvoiceInfo extends SoapObject {
 	}
 }
 
+class CreditInvoiceV2Request extends SoapObject {
+	public ?string $invoiceId = null;
+	public ?\DateTime $financialDate = null;
+	public ?string $explanation = null;
+	public function writeProps(SoapGenerator $gen): void {
+		if ($this->invoiceId !== null) $gen->out->writeElementNs(self::TNS, 'invoiceId', null, $this->invoiceId);
+		if ($this->financialDate !== null) (SoapMplusDate::fromDateTime($this->financialDate))->write($gen, 'financialDate');
+		if ($this->explanation !== null) $gen->out->writeElementNs(self::TNS, 'explanation', null, $this->explanation);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
 class JournalFilterList extends SoapObject {
 	/** @var string[] */
 	public $journalFilter = array();
@@ -12640,6 +12656,18 @@ class CreditInvoiceResponse extends SoapObject {
 	}
 }
 
+class CreditInvoiceV2Response extends SoapObject {
+	public ?string $result = null;
+	public function writeProps(SoapGenerator $gen): void {
+		if ($this->result !== null) $gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
 class GetJournalsResponse extends SoapObject {
 	/** @var Journal[] */
 	public $journalList = array();
@@ -19580,6 +19608,7 @@ class RegisterGiftcardPaymentV2Request extends IdempotentReq {
 	public string $externalReference;
 	/** @var GiftcardPaymentLine[] */
 	public $lineList = array();
+	public ?int $workplaceNumber = null;
 	public function writeProps(SoapGenerator $gen): void {
 	    parent::writeProps($gen);
 		$gen->out->writeElementNs(self::TNS, 'cardNumber', null, $this->cardNumber);
@@ -19589,6 +19618,7 @@ class RegisterGiftcardPaymentV2Request extends IdempotentReq {
 		$tmp_lineList = new GiftcardPaymentLineList($this->lineList);
 $tmp_lineList->write($gen, 'lineList');
 
+		if ($this->workplaceNumber !== null) $gen->writeInt('workplaceNumber', $this->workplaceNumber);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -22289,6 +22319,20 @@ $tmp_articlePerformanceList->write($gen, 'articlePerformanceList');
 	}
 }
 
+class ArticleNumberFilter extends SoapObject {
+	/** @var int[] */
+	public $articleNumber = array();
+	public function __construct($list = array()) { $this->articleNumber = $list; }
+	public function writeProps(SoapGenerator $gen): void {
+		foreach ($this->articleNumber as $elem) $gen->writeInt('articleNumber', $elem);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
 class GetSalesRepeatTemplatesRequest extends SoapObject {
 	public ?RequestDateFilter $dateFilter = null;
 	/** @var int[] */
@@ -22824,11 +22868,16 @@ class GetTicketCounterSalesRequest extends SoapObject {
 class GetSalePromotionsRequest extends SoapObject {
 	/** @var int[] */
 	public $branchFilter = null;
-	public function __construct($list = array()) { $this->branchFilter = $list; }
+	/** @var int[] */
+	public $articleNumberFilter = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->branchFilter !== null) {
 $tmp_branchFilter = new BranchFilter($this->branchFilter);
 $tmp_branchFilter->write($gen, 'branchFilter');
+}
+		if ($this->articleNumberFilter !== null) {
+$tmp_articleNumberFilter = new ArticleNumberFilter($this->articleNumberFilter);
+$tmp_articleNumberFilter->write($gen, 'articleNumberFilter');
 }
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
@@ -27932,6 +27981,21 @@ class creditInvoice extends SoapObject {
 	public string $invoiceId;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'invoiceId', null, $this->invoiceId);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class CreditInvoiceV2 extends SoapObject {
+	public CreditInvoiceV2Request $request;
+	public function __construct() {
+		$this->request = new CreditInvoiceV2Request();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);

@@ -221,6 +221,7 @@ class SoapParser extends BaseSoapParser {
 			case 'PrintTableReceiptV3Request': return $this->load_PrintTableReceiptV3Request($in);
 			case 'GetInvoicesRequest': return $this->load_GetInvoicesRequest($in);
 			case 'SaveInvoiceInfo': return $this->load_SaveInvoiceInfo($in);
+			case 'CreditInvoiceV2Request': return $this->load_CreditInvoiceV2Request($in);
 			case 'JournalFilterList': return $this->load_JournalFilterList($in);
 			case 'TurnoverGroup': return $this->load_TurnoverGroup($in);
 			case 'TurnoverGroupList': return $this->load_TurnoverGroupList($in);
@@ -538,6 +539,7 @@ class SoapParser extends BaseSoapParser {
 			case 'SaveInvoiceResponse': return $this->load_SaveInvoiceResponse($in);
 			case 'GetInvoiceResponse': return $this->load_GetInvoiceResponse($in);
 			case 'CreditInvoiceResponse': return $this->load_CreditInvoiceResponse($in);
+			case 'CreditInvoiceV2Response': return $this->load_CreditInvoiceV2Response($in);
 			case 'GetJournalsResponse': return $this->load_GetJournalsResponse($in);
 			case 'GetFinancialJournalResponse': return $this->load_GetFinancialJournalResponse($in);
 			case 'GetCashCountListResponse': return $this->load_GetCashCountListResponse($in);
@@ -1055,6 +1057,7 @@ class SoapParser extends BaseSoapParser {
 			case 'ReportPaymentMethodDetailsResponse': return $this->load_ReportPaymentMethodDetailsResponse($in);
 			case 'ReportPrintableFinancialTotalsResponse': return $this->load_ReportPrintableFinancialTotalsResponse($in);
 			case 'ReportArticlePerformanceResponse': return $this->load_ReportArticlePerformanceResponse($in);
+			case 'ArticleNumberFilter': return $this->load_ArticleNumberFilter($in);
 			case 'GetSalesRepeatTemplatesRequest': return $this->load_GetSalesRepeatTemplatesRequest($in);
 			case 'SalesRepeatTemplateLine': return $this->load_SalesRepeatTemplateLine($in);
 			case 'SalesRepeatTemplateLineList': return $this->load_SalesRepeatTemplateLineList($in);
@@ -1340,6 +1343,7 @@ class SoapParser extends BaseSoapParser {
 			case 'getInvoice': return $this->load_getInvoice($in);
 			case 'findInvoice': return $this->load_findInvoice($in);
 			case 'creditInvoice': return $this->load_creditInvoice($in);
+			case 'CreditInvoiceV2': return $this->load_CreditInvoiceV2($in);
 			case 'getJournals': return $this->load_getJournals($in);
 			case 'getFinancialJournal': return $this->load_getFinancialJournal($in);
 			case 'getFinancialJournalByCashCount': return $this->load_getFinancialJournalByCashCount($in);
@@ -7016,6 +7020,27 @@ class SoapParser extends BaseSoapParser {
 						case 'invoiceString': $o->invoiceString = $this->load_string_property($in); break;
 						case 'invoiceNumber': $o->invoiceNumber = $this->load_YearNumber($in); break;
 						case 'invoiceBarcode': $o->invoiceBarcode = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_CreditInvoiceV2Request(\XMLReader $in) : CreditInvoiceV2Request {
+		$n = $in->name;
+		$o = new CreditInvoiceV2Request();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'invoiceId': $o->invoiceId = $this->load_string_property($in); break;
+						case 'financialDate': $o->financialDate = $this->load_SoapMplusDate($in)->toDateTime(); break;
+						case 'explanation': $o->explanation = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -14404,6 +14429,25 @@ class SoapParser extends BaseSoapParser {
 					switch ($in->localName) {
 						case 'result': $o->result = $this->load_string_property($in); break;
 						case 'message': $o->message = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_CreditInvoiceV2Response(\XMLReader $in) : CreditInvoiceV2Response {
+		$n = $in->name;
+		$o = new CreditInvoiceV2Response();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'result': $o->result = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -22583,6 +22627,7 @@ class SoapParser extends BaseSoapParser {
 						case 'employeeNumber': $o->employeeNumber = $this->load_int_property($in); break;
 						case 'externalReference': $o->externalReference = $this->load_string_property($in); break;
 						case 'lineList': $o->lineList = ($this->load_GiftcardPaymentLineList($in))->line; break;
+						case 'workplaceNumber': $o->workplaceNumber = $this->load_int_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -25386,6 +25431,25 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_ArticleNumberFilter(\XMLReader $in) : ArticleNumberFilter {
+		$n = $in->name;
+		$o = new ArticleNumberFilter();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'articleNumber': $o->articleNumber[] = $this->load_int_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_GetSalesRepeatTemplatesRequest(\XMLReader $in) : GetSalesRepeatTemplatesRequest {
 		$n = $in->name;
 		$o = new GetSalesRepeatTemplatesRequest();
@@ -25875,6 +25939,7 @@ class SoapParser extends BaseSoapParser {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
 						case 'branchFilter': $o->branchFilter = ($this->load_BranchFilter($in))->branchNumbers; break;
+						case 'articleNumberFilter': $o->articleNumberFilter = ($this->load_ArticleNumberFilter($in))->articleNumber; break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -31612,6 +31677,25 @@ class SoapParser extends BaseSoapParser {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
 						case 'invoiceId': $o->invoiceId = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_CreditInvoiceV2(\XMLReader $in) : CreditInvoiceV2 {
+		$n = $in->name;
+		$o = new CreditInvoiceV2();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_CreditInvoiceV2Request($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
