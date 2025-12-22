@@ -20,6 +20,8 @@ class SoapParser extends BaseSoapParser {
 			case 'RelationArticleDiscountList': return $this->load_RelationArticleDiscountList($in);
 			case 'VatGroup': return $this->load_VatGroup($in);
 			case 'VatGroupList': return $this->load_VatGroupList($in);
+			case 'IdList': return $this->load_IdList($in);
+			case 'IdSet': return $this->load_IdSet($in);
 			case 'RelationList': return $this->load_RelationList($in);
 			case 'Relation': return $this->load_Relation($in);
 			case 'Colour': return $this->load_Colour($in);
@@ -57,8 +59,6 @@ class SoapParser extends BaseSoapParser {
 			case 'Authorization': return $this->load_Authorization($in);
 			case 'BranchGroupFilter': return $this->load_BranchGroupFilter($in);
 			case 'OwnerLabelFilter': return $this->load_OwnerLabelFilter($in);
-			case 'IdList': return $this->load_IdList($in);
-			case 'IdSet': return $this->load_IdSet($in);
 			case 'Order': return $this->load_Order($in);
 			case 'OrderList': return $this->load_OrderList($in);
 			case 'OrderInput': return $this->load_OrderInput($in);
@@ -1964,6 +1964,44 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_IdList(\XMLReader $in) : IdList {
+		$n = $in->name;
+		$o = new IdList();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'id': $o->id[] = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_IdSet(\XMLReader $in) : IdSet {
+		$n = $in->name;
+		$o = new IdSet();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'id': $o->id[] = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_RelationList(\XMLReader $in) : RelationList {
 		$n = $in->name;
 		$o = new RelationList();
@@ -2042,6 +2080,7 @@ class SoapParser extends BaseSoapParser {
 						case 'cardNumbers': $o->cardNumbers[] = $this->load_string_property($in); break;
 						case 'invoiceCredit': $o->invoiceCredit = $this->load_BigDecimal_property($in); break;
 						case 'accountBalance': $o->accountBalance = $this->load_BigDecimal_property($in); break;
+						case 'salePromotionIds': $o->salePromotionIds = ($this->load_IdList($in))->id; break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -2826,44 +2865,6 @@ class SoapParser extends BaseSoapParser {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
 						case 'ownerLabels': $o->ownerLabels[] = $this->load_string_property($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_IdList(\XMLReader $in) : IdList {
-		$n = $in->name;
-		$o = new IdList();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'id': $o->id[] = $this->load_string_property($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_IdSet(\XMLReader $in) : IdSet {
-		$n = $in->name;
-		$o = new IdSet();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'id': $o->id[] = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -26101,6 +26102,7 @@ class SoapParser extends BaseSoapParser {
 						case 'startDate': $o->startDate = $this->load_Date_property($in); break;
 						case 'endDate': $o->endDate = $this->load_Date_property($in); break;
 						case 'salePromotionLineList': $o->salePromotionLineList = ($this->load_SalePromotionLineList($in))->salePromotionLineList; break;
+						case 'type': $o->type = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
