@@ -799,6 +799,8 @@ class SoapParser extends BaseSoapParser {
 			case 'EmailTemplateIdsFilter': return $this->load_EmailTemplateIdsFilter($in);
 			case 'EmailTemplateLayoutCodesFilter': return $this->load_EmailTemplateLayoutCodesFilter($in);
 			case 'GetEmailTemplatesRequest': return $this->load_GetEmailTemplatesRequest($in);
+			case 'GetAppConfigurationRequest': return $this->load_GetAppConfigurationRequest($in);
+			case 'SetWorkplaceActiveActivityRequest': return $this->load_SetWorkplaceActiveActivityRequest($in);
 			case 'GetConfigurationResponse': return $this->load_GetConfigurationResponse($in);
 			case 'UpdateConfigurationResponse': return $this->load_UpdateConfigurationResponse($in);
 			case 'GetConfigurationTreeResponse': return $this->load_GetConfigurationTreeResponse($in);
@@ -870,6 +872,8 @@ class SoapParser extends BaseSoapParser {
 			case 'ParseSpecialBarcodeResponse': return $this->load_ParseSpecialBarcodeResponse($in);
 			case 'GetEmployeeWorkplaceLoginStatesResponse': return $this->load_GetEmployeeWorkplaceLoginStatesResponse($in);
 			case 'GetEmailTemplatesResponse': return $this->load_GetEmailTemplatesResponse($in);
+			case 'GetAppConfigurationResponse': return $this->load_GetAppConfigurationResponse($in);
+			case 'SetWorkplaceActiveActivityResponse': return $this->load_SetWorkplaceActiveActivityResponse($in);
 			case 'ImageLabel': return $this->load_ImageLabel($in);
 			case 'ImageCardLabelIds': return $this->load_ImageCardLabelIds($in);
 			case 'ImageData': return $this->load_ImageData($in);
@@ -1123,6 +1127,9 @@ class SoapParser extends BaseSoapParser {
 			case 'ProposalInput': return $this->load_ProposalInput($in);
 			case 'ProcessProposalRequest': return $this->load_ProcessProposalRequest($in);
 			case 'ProcessOrderRequest': return $this->load_ProcessOrderRequest($in);
+			case 'CreateInvoiceRemindersRequest': return $this->load_CreateInvoiceRemindersRequest($in);
+			case 'CreatedInvoiceReminder': return $this->load_CreatedInvoiceReminder($in);
+			case 'CreatedInvoiceReminderList': return $this->load_CreatedInvoiceReminderList($in);
 			case 'GetSalesRepeatTemplatesResponse': return $this->load_GetSalesRepeatTemplatesResponse($in);
 			case 'SaveSalesRepeatTemplateResponse': return $this->load_SaveSalesRepeatTemplateResponse($in);
 			case 'PerformBpeBudgetChecksResponse': return $this->load_PerformBpeBudgetChecksResponse($in);
@@ -1154,6 +1161,7 @@ class SoapParser extends BaseSoapParser {
 			case 'ProcessInvoiceResponse': return $this->load_ProcessInvoiceResponse($in);
 			case 'ProcessProposalResponse': return $this->load_ProcessProposalResponse($in);
 			case 'ProcessOrderResponse': return $this->load_ProcessOrderResponse($in);
+			case 'CreateInvoiceRemindersResponse': return $this->load_CreateInvoiceRemindersResponse($in);
 			case 'WebhookConsumerEvent': return $this->load_WebhookConsumerEvent($in);
 			case 'WebhookConsumerEventList': return $this->load_WebhookConsumerEventList($in);
 			case 'WebhookConsumerTriggerPattern': return $this->load_WebhookConsumerTriggerPattern($in);
@@ -1509,6 +1517,8 @@ class SoapParser extends BaseSoapParser {
 			case 'parseSpecialBarcode': return $this->load_parseSpecialBarcode($in);
 			case 'getEmployeeWorkplaceLoginStates': return $this->load_getEmployeeWorkplaceLoginStates($in);
 			case 'getEmailTemplates': return $this->load_getEmailTemplates($in);
+			case 'getAppConfiguration': return $this->load_getAppConfiguration($in);
+			case 'setWorkplaceActiveActivity': return $this->load_setWorkplaceActiveActivity($in);
 			case 'createImage': return $this->load_createImage($in);
 			case 'createImageFromUrl': return $this->load_createImageFromUrl($in);
 			case 'getCardImageLabels': return $this->load_getCardImageLabels($in);
@@ -1595,6 +1605,7 @@ class SoapParser extends BaseSoapParser {
 			case 'processInvoice': return $this->load_processInvoice($in);
 			case 'processProposal': return $this->load_processProposal($in);
 			case 'processOrder': return $this->load_processOrder($in);
+			case 'createInvoiceReminders': return $this->load_createInvoiceReminders($in);
 			case 'getWebhookConsumers': return $this->load_getWebhookConsumers($in);
 			case 'startExternalPayment': return $this->load_startExternalPayment($in);
 			case 'pollExternalPayment': return $this->load_pollExternalPayment($in);
@@ -2081,6 +2092,7 @@ class SoapParser extends BaseSoapParser {
 						case 'invoiceCredit': $o->invoiceCredit = $this->load_BigDecimal_property($in); break;
 						case 'accountBalance': $o->accountBalance = $this->load_BigDecimal_property($in); break;
 						case 'salePromotionIds': $o->salePromotionIds = ($this->load_IdList($in))->id; break;
+						case 'directDebit': $o->directDebit = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -3596,6 +3608,9 @@ class SoapParser extends BaseSoapParser {
 						case 'branchGroupNumber': $o->branchGroupNumber = $this->load_int_property($in); break;
 						case 'ownerId': $o->ownerId = $this->load_string_property($in); break;
 						case 'branchInvoiceNumber': $o->branchInvoiceNumber = $this->load_TransactionNumber($in); break;
+						case 'invoiceReminder': $o->invoiceReminder = $this->load_int_property($in); break;
+						case 'targetInvoiceReminder': $o->targetInvoiceReminder = $this->load_int_property($in); break;
+						case 'directDebit': $o->directDebit = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -3653,6 +3668,7 @@ class SoapParser extends BaseSoapParser {
 						case 'vatCountryCode': $o->vatCountryCode = $this->load_int_property($in); break;
 						case 'vatCountryIso3': $o->vatCountryIso3 = $this->load_string_property($in); break;
 						case 'lineList': $o->lineList = ($this->load_LineInputList($in))->line; break;
+						case 'directDebit': $o->directDebit = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -6999,6 +7015,7 @@ class SoapParser extends BaseSoapParser {
 						case 'branchGroupFilter': $o->branchGroupFilter = ($this->load_BranchGroupFilter($in))->branchGroups; break;
 						case 'includeLineList': $o->includeLineList = $this->load_bool_property($in); break;
 						case 'branchInvoiceNumbers': $o->branchInvoiceNumbers = ($this->load_TransactionNumberList($in))->transactionNumber; break;
+						case 'directDebit': $o->directDebit = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -16474,6 +16491,7 @@ class SoapParser extends BaseSoapParser {
 						case 'description': $o->description = $this->load_string_property($in); break;
 						case 'layoutCode': $o->layoutCode = $this->load_string_property($in); break;
 						case 'orderCategoryNumbers': $o->orderCategoryNumbers = ($this->load_EmailTemplateOrderCategoryNumberList($in))->orderCategoryNumber; break;
+						case 'invoiceReminder': $o->invoiceReminder = $this->load_int_property($in); break;
 						case 'contents': $o->contents = ($this->load_EmailTemplateContentList($in))->emailTemplateContent; break;
 						case 'createdTs': $o->createdTs = $this->load_DateTime_property($in); break;
 						case 'updatedTs': $o->updatedTs = $this->load_DateTime_property($in); break;
@@ -19892,6 +19910,44 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_GetAppConfigurationRequest(\XMLReader $in) : GetAppConfigurationRequest {
+		$n = $in->name;
+		$o = new GetAppConfigurationRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_SetWorkplaceActiveActivityRequest(\XMLReader $in) : SetWorkplaceActiveActivityRequest {
+		$n = $in->name;
+		$o = new SetWorkplaceActiveActivityRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'workplaceIdentifier': $o->workplaceIdentifier = $this->load_WorkplaceIdentifier($in); break;
+						case 'activityId': $o->activityId = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_GetConfigurationResponse(\XMLReader $in) : GetConfigurationResponse {
 		$n = $in->name;
 		$o = new GetConfigurationResponse();
@@ -21382,6 +21438,44 @@ class SoapParser extends BaseSoapParser {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
 						case 'emailTemplates': $o->emailTemplates = ($this->load_EmailTemplateList($in))->emailTemplate; break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetAppConfigurationResponse(\XMLReader $in) : GetAppConfigurationResponse {
+		$n = $in->name;
+		$o = new GetAppConfigurationResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'appConfiguration': $o->appConfiguration = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_SetWorkplaceActiveActivityResponse(\XMLReader $in) : SetWorkplaceActiveActivityResponse {
+		$n = $in->name;
+		$o = new SetWorkplaceActiveActivityResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'result': $o->result = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -23674,6 +23768,7 @@ class SoapParser extends BaseSoapParser {
 						case 'idempotencyResult': $o->idempotencyResult = $this->load_string_property($in); break;
 						case 'result': $o->result = $this->load_string_property($in); break;
 						case 'voucherIssuances': $o->voucherIssuances = ($this->load_VoucherIssuanceList($in))->voucherIssuance; break;
+						case 'errorMessage': $o->errorMessage = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -25508,6 +25603,7 @@ class SoapParser extends BaseSoapParser {
 						case 'discountAmountIncl': $o->discountAmountIncl = $this->load_BigDecimal_property($in); break;
 						case 'discountAmountExcl': $o->discountAmountExcl = $this->load_BigDecimal_property($in); break;
 						case 'discountType': $o->discountType = $this->load_string_property($in); break;
+						case 'lineKind': $o->lineKind = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -25681,6 +25777,7 @@ class SoapParser extends BaseSoapParser {
 						case 'discountAmountExcl': $o->discountAmountExcl = $this->load_BigDecimal_property($in); break;
 						case 'discountType': $o->discountType = $this->load_string_property($in); break;
 						case 'salesRepeatTemplateLineId': $o->salesRepeatTemplateLineId = $this->load_string_property($in); break;
+						case 'lineKind': $o->lineKind = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -27045,6 +27142,64 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_CreateInvoiceRemindersRequest(\XMLReader $in) : CreateInvoiceRemindersRequest {
+		$n = $in->name;
+		$o = new CreateInvoiceRemindersRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'invoiceIds': $o->invoiceIds = ($this->load_IdList($in))->id; break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_CreatedInvoiceReminder(\XMLReader $in) : CreatedInvoiceReminder {
+		$n = $in->name;
+		$o = new CreatedInvoiceReminder();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'invoiceId': $o->invoiceId = $this->load_string_property($in); break;
+						case 'invoiceReminder': $o->invoiceReminder = $this->load_int_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_CreatedInvoiceReminderList(\XMLReader $in) : CreatedInvoiceReminderList {
+		$n = $in->name;
+		$o = new CreatedInvoiceReminderList();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'createdInvoiceReminder': $o->createdInvoiceReminder[] = $this->load_CreatedInvoiceReminder($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_GetSalesRepeatTemplatesResponse(\XMLReader $in) : GetSalesRepeatTemplatesResponse {
 		$n = $in->name;
 		$o = new GetSalesRepeatTemplatesResponse();
@@ -27687,6 +27842,26 @@ class SoapParser extends BaseSoapParser {
 						case 'queuedOrderId': $o->queuedOrderId = $this->load_string_property($in); break;
 						case 'processorResult': $o->processorResult = $this->load_SalesProcessorResult($in); break;
 						case 'resultCode': $o->resultCode = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_CreateInvoiceRemindersResponse(\XMLReader $in) : CreateInvoiceRemindersResponse {
+		$n = $in->name;
+		$o = new CreateInvoiceRemindersResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'resultCode': $o->resultCode = $this->load_string_property($in); break;
+						case 'createdInvoiceReminders': $o->createdInvoiceReminders = ($this->load_CreatedInvoiceReminderList($in))->createdInvoiceReminder; break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -34836,6 +35011,44 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_getAppConfiguration(\XMLReader $in) : getAppConfiguration {
+		$n = $in->name;
+		$o = new getAppConfiguration();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_GetAppConfigurationRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_setWorkplaceActiveActivity(\XMLReader $in) : setWorkplaceActiveActivity {
+		$n = $in->name;
+		$o = new setWorkplaceActiveActivity();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_SetWorkplaceActiveActivityRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_createImage(\XMLReader $in) : createImage {
 		$n = $in->name;
 		$o = new createImage();
@@ -36468,6 +36681,25 @@ class SoapParser extends BaseSoapParser {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
 						case 'request': $o->request = $this->load_ProcessOrderRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_createInvoiceReminders(\XMLReader $in) : createInvoiceReminders {
+		$n = $in->name;
+		$o = new createInvoiceReminders();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_CreateInvoiceRemindersRequest($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:

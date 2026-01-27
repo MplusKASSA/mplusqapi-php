@@ -935,6 +935,8 @@ class MplusApiClient extends BaseSoapClient {
  SalesProcessorResult::class . ':scannedVoucherIssuances' => 'MplusKASSA\MplusQapi\VoucherIssuanceRedeemable',
  SalesProcessorResult::class . ':errorMessages' => 'string',
  ProposalInput::class . ':lineList' => 'MplusKASSA\MplusQapi\LineInput',
+ CreateInvoiceRemindersRequest::class . ':invoiceIds' => 'string',
+ CreatedInvoiceReminderList::class . ':createdInvoiceReminder' => 'MplusKASSA\MplusQapi\CreatedInvoiceReminder',
  GetSalesRepeatTemplatesResponse::class . ':salesRepeatTemplateList' => 'MplusKASSA\MplusQapi\SalesRepeatTemplate',
  PerformBpeBudgetChecksResponse::class . ':bpeResults' => 'MplusKASSA\MplusQapi\BpeBudgetCheckResponse',
  GetTicketCounterSalesResponse::class . ':ticketCounterSaleList' => 'MplusKASSA\MplusQapi\TicketCounterSale',
@@ -962,6 +964,7 @@ class MplusApiClient extends BaseSoapClient {
  DetermineContractLinesResponse::class . ':lineList' => 'MplusKASSA\MplusQapi\Line',
  CreateInvoiceFromPackingSlipsResponse::class . ':voucherIssuances' => 'MplusKASSA\MplusQapi\VoucherIssuance',
  CreateInvoiceFromPackingSlipsResponse::class . ':unappliedVoucherIssuances' => 'MplusKASSA\MplusQapi\UnappliedVoucherIssuance',
+ CreateInvoiceRemindersResponse::class . ':createdInvoiceReminders' => 'MplusKASSA\MplusQapi\CreatedInvoiceReminder',
  WebhookConsumerEventList::class . ':webhookConsumerEvent' => 'MplusKASSA\MplusQapi\WebhookConsumerEvent',
  WebhookConsumerTriggerPatternList::class . ':webhookConsumerTriggerPattern' => 'MplusKASSA\MplusQapi\WebhookConsumerTriggerPattern',
  WebhookConsumerWorkplace::class . ':workplaceNumbers' => 'int',
@@ -3981,6 +3984,30 @@ class MplusApiClient extends BaseSoapClient {
         $this->endRequest();
         return $res;
     }
+    public function getAppConfiguration(GetAppConfigurationRequest $request, ?string $requestId = null) : GetAppConfigurationResponse {
+        $opname = 'getAppConfiguration';
+        $this->startRequest($opname);
+        $reqobj = new getAppConfiguration();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function setWorkplaceActiveActivity(SetWorkplaceActiveActivityRequest $request, ?string $requestId = null) : SetWorkplaceActiveActivityResponse {
+        $opname = 'setWorkplaceActiveActivity';
+        $this->startRequest($opname);
+        $reqobj = new setWorkplaceActiveActivity();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
     public function createImage(CreateImageRequest $request, ?string $requestId = null) : CreateImageResponse {
         $opname = 'createImage';
         $this->startRequest($opname);
@@ -5011,6 +5038,18 @@ class MplusApiClient extends BaseSoapClient {
         $opname = 'processOrder';
         $this->startRequest($opname);
         $reqobj = new processOrder();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function createInvoiceReminders(CreateInvoiceRemindersRequest $request, ?string $requestId = null) : CreateInvoiceRemindersResponse {
+        $opname = 'createInvoiceReminders';
+        $this->startRequest($opname);
+        $reqobj = new createInvoiceReminders();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);
