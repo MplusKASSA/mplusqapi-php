@@ -3611,6 +3611,7 @@ class SoapParser extends BaseSoapParser {
 						case 'invoiceReminder': $o->invoiceReminder = $this->load_int_property($in); break;
 						case 'targetInvoiceReminder': $o->targetInvoiceReminder = $this->load_int_property($in); break;
 						case 'directDebit': $o->directDebit = $this->load_bool_property($in); break;
+						case 'mailedTimestamp': $o->mailedTimestamp = $this->load_SoapMplusDateTime($in)->toDateTime(); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -7015,6 +7016,7 @@ class SoapParser extends BaseSoapParser {
 						case 'branchGroupFilter': $o->branchGroupFilter = ($this->load_BranchGroupFilter($in))->branchGroups; break;
 						case 'includeLineList': $o->includeLineList = $this->load_bool_property($in); break;
 						case 'branchInvoiceNumbers': $o->branchInvoiceNumbers = ($this->load_TransactionNumberList($in))->transactionNumber; break;
+						case 'contractFrequencyFilter': $o->contractFrequencyFilter = ($this->load_ContractFrequencyList($in))->contractFrequency; break;
 						case 'directDebit': $o->directDebit = $this->load_bool_property($in); break;
 					}
 					break;
@@ -26200,6 +26202,7 @@ class SoapParser extends BaseSoapParser {
 						case 'endDate': $o->endDate = $this->load_Date_property($in); break;
 						case 'salePromotionLineList': $o->salePromotionLineList = ($this->load_SalePromotionLineList($in))->salePromotionLineList; break;
 						case 'type': $o->type = $this->load_string_property($in); break;
+						case 'hasEndDate': $o->hasEndDate = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -26703,6 +26706,7 @@ class SoapParser extends BaseSoapParser {
 						case 'ownerFilter': $o->ownerFilter = ($this->load_OwnerLabelFilter($in))->ownerLabels; break;
 						case 'branchGroupFilter': $o->branchGroupFilter = ($this->load_BranchGroupFilter($in))->branchGroups; break;
 						case 'includeLineList': $o->includeLineList = $this->load_bool_property($in); break;
+						case 'contractFrequencyFilter': $o->contractFrequencyFilter = ($this->load_ContractFrequencyList($in))->contractFrequency; break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:

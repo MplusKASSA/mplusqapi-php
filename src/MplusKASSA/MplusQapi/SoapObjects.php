@@ -2115,6 +2115,7 @@ class Invoice extends SoapObject {
 	public ?int $invoiceReminder = null;
 	public ?int $targetInvoiceReminder = null;
 	public ?bool $directDebit = null;
+	public ?\DateTime $mailedTimestamp = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->invoiceId !== null) $gen->out->writeElementNs(self::TNS, 'invoiceId', null, $this->invoiceId);
 		if ($this->extInvoiceId !== null) $gen->out->writeElementNs(self::TNS, 'extInvoiceId', null, $this->extInvoiceId);
@@ -2215,6 +2216,7 @@ $tmp_proposalNumbers->write($gen, 'proposalNumbers');
 		if ($this->invoiceReminder !== null) $gen->writeInt('invoiceReminder', $this->invoiceReminder);
 		if ($this->targetInvoiceReminder !== null) $gen->writeInt('targetInvoiceReminder', $this->targetInvoiceReminder);
 		if ($this->directDebit !== null) $gen->writeBool('directDebit', $this->directDebit);
+		if ($this->mailedTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->mailedTimestamp))->write($gen, 'mailedTimestamp');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -5545,6 +5547,8 @@ class GetInvoicesRequest extends SoapObject {
 	public ?bool $includeLineList = null;
 	/** @var TransactionNumber[] */
 	public $branchInvoiceNumbers = null;
+	/** @var string[] */
+	public $contractFrequencyFilter = null;
 	public ?bool $directDebit = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
@@ -5579,6 +5583,10 @@ $tmp_branchGroupFilter->write($gen, 'branchGroupFilter');
 		if ($this->branchInvoiceNumbers !== null) {
 $tmp_branchInvoiceNumbers = new TransactionNumberList($this->branchInvoiceNumbers);
 $tmp_branchInvoiceNumbers->write($gen, 'branchInvoiceNumbers');
+}
+		if ($this->contractFrequencyFilter !== null) {
+$tmp_contractFrequencyFilter = new ContractFrequencyList($this->contractFrequencyFilter);
+$tmp_contractFrequencyFilter->write($gen, 'contractFrequencyFilter');
 }
 		if ($this->directDebit !== null) $gen->writeBool('directDebit', $this->directDebit);
 	}
@@ -23108,6 +23116,7 @@ class SalePromotions extends SoapObject {
 	/** @var SalePromotionLine[] */
 	public $salePromotionLineList = array();
 	public string $type;
+	public bool $hasEndDate;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->writeInt('branchNumber', $this->branchNumber);
 		$gen->out->writeElementNs(self::TNS, 'id', null, $this->id);
@@ -23118,6 +23127,7 @@ class SalePromotions extends SoapObject {
 $tmp_salePromotionLineList->write($gen, 'salePromotionLineList');
 
 		$gen->out->writeElementNs(self::TNS, 'type', null, $this->type);
+		$gen->writeBool('hasEndDate', $this->hasEndDate);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -23685,6 +23695,8 @@ class GetOrdersRequest extends SoapObject {
 	/** @var int[] */
 	public $branchGroupFilter = null;
 	public ?bool $includeLineList = null;
+	/** @var string[] */
+	public $contractFrequencyFilter = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
 		if ($this->syncMarkerLimit !== null) $gen->writeInt('syncMarkerLimit', $this->syncMarkerLimit);
@@ -23718,6 +23730,10 @@ $tmp_branchGroupFilter = new BranchGroupFilter($this->branchGroupFilter);
 $tmp_branchGroupFilter->write($gen, 'branchGroupFilter');
 }
 		if ($this->includeLineList !== null) $gen->writeBool('includeLineList', $this->includeLineList);
+		if ($this->contractFrequencyFilter !== null) {
+$tmp_contractFrequencyFilter = new ContractFrequencyList($this->contractFrequencyFilter);
+$tmp_contractFrequencyFilter->write($gen, 'contractFrequencyFilter');
+}
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
