@@ -42,6 +42,7 @@ class MplusApiClient extends BaseSoapClient {
  Relation::class . ':cardNumbers' => 'string',
  Relation::class . ':salePromotionIds' => 'string',
  WorkplaceIdentifierSet::class . ':workplaceIdentifier' => 'MplusKASSA\MplusQapi\WorkplaceIdentifier',
+ WorkplaceIdentifierList::class . ':workplaceIdentifier' => 'MplusKASSA\MplusQapi\WorkplaceIdentifier',
  BranchAccountNumberList::class . ':branchAccountNumber' => 'MplusKASSA\MplusQapi\BranchAccountNumber',
  BranchCostCenterNumberList::class . ':branchCostCenterNumber' => 'MplusKASSA\MplusQapi\BranchCostCenterNumber',
  GiftcardType::class . ':branchNumbers' => 'int',
@@ -56,10 +57,12 @@ class MplusApiClient extends BaseSoapClient {
  PaymentMethod::class . ':branchAccountNumberList' => 'MplusKASSA\MplusQapi\BranchAccountNumber',
  PaymentMethodList::class . ':paymentMethod' => 'MplusKASSA\MplusQapi\PaymentMethod',
  BranchFilter::class . ':branchNumbers' => 'int',
- AuthorizationsList::class . ':authorizations' => 'MplusKASSA\MplusQapi\Authorization',
- Authorization::class . ':subAuthorizations' => 'MplusKASSA\MplusQapi\Authorization',
  BranchGroupFilter::class . ':branchGroups' => 'int',
  OwnerLabelFilter::class . ':ownerLabels' => 'string',
+ TimelineEventEntityList::class . ':entity' => 'MplusKASSA\MplusQapi\TimelineEventEntity',
+ TimelineEventCategoryList::class . ':category' => 'string',
+ TimelineEventTypeList::class . ':type' => 'string',
+ TimelineEventList::class . ':event' => 'MplusKASSA\MplusQapi\TimelineEvent',
  Order::class . ':invoiceIds' => 'string',
  Order::class . ':extInvoiceIds' => 'string',
  Order::class . ':vatGroupList' => 'MplusKASSA\MplusQapi\VatGroup',
@@ -69,6 +72,7 @@ class MplusApiClient extends BaseSoapClient {
  Order::class . ':packingSlipIds' => 'string',
  Order::class . ':packingSlipNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
  Order::class . ':branchInvoiceNumbers' => 'MplusKASSA\MplusQapi\TransactionNumber',
+ Order::class . ':timelineEvents' => 'MplusKASSA\MplusQapi\TimelineEvent',
  OrderList::class . ':order' => 'MplusKASSA\MplusQapi\Order',
  OrderInput::class . ':lineList' => 'MplusKASSA\MplusQapi\LineInput',
  OrderTypeList::class . ':orderType' => 'string',
@@ -82,22 +86,6 @@ class MplusApiClient extends BaseSoapClient {
  LineInputList::class . ':line' => 'MplusKASSA\MplusQapi\LineInput',
  LineInput::class . ':preparationList' => 'MplusKASSA\MplusQapi\LineInput',
  LineInput::class . ':contractLines' => 'MplusKASSA\MplusQapi\SalesLineContractLine',
- AnswerList::class . ':answer' => 'MplusKASSA\MplusQapi\Answer',
- TransactionNumberList::class . ':transactionNumber' => 'MplusKASSA\MplusQapi\TransactionNumber',
- Invoice::class . ':orderIds' => 'string',
- Invoice::class . ':extOrderIds' => 'string',
- Invoice::class . ':vatGroupList' => 'MplusKASSA\MplusQapi\VatGroup',
- Invoice::class . ':lineList' => 'MplusKASSA\MplusQapi\Line',
- Invoice::class . ':paymentList' => 'MplusKASSA\MplusQapi\Payment',
- Invoice::class . ':answerList' => 'MplusKASSA\MplusQapi\Answer',
- Invoice::class . ':orderNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
- Invoice::class . ':packingSlipIds' => 'string',
- Invoice::class . ':packingSlipNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
- Invoice::class . ':proposalIds' => 'string',
- Invoice::class . ':extProposalIds' => 'string',
- Invoice::class . ':proposalNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
- InvoiceList::class . ':invoice' => 'MplusKASSA\MplusQapi\Invoice',
- InvoiceInput::class . ':lineList' => 'MplusKASSA\MplusQapi\LineInput',
  TextList::class . ':text' => 'MplusKASSA\MplusQapi\Text',
  VoucherIdList::class . ':voucherId' => 'MplusKASSA\MplusQapi\VoucherId',
  VoucherViewList::class . ':voucherView' => 'MplusKASSA\MplusQapi\VoucherView',
@@ -115,8 +103,19 @@ class MplusApiClient extends BaseSoapClient {
  VoucherIssuanceRedeemable::class . ':issuances' => 'MplusKASSA\MplusQapi\VoucherIssuance',
  VoucherIssuanceRedeemable::class . ':unappliedIssuances' => 'MplusKASSA\MplusQapi\UnappliedVoucherIssuance',
  VoucherIssuanceRedeemableList::class . ':voucherIssuanceRedeemable' => 'MplusKASSA\MplusQapi\VoucherIssuanceRedeemable',
- RequestSalesRepeatTemplateTypeFilter::class . ':salesRepeatTemplateTypes' => 'string',
- RequestSalesRepeatTemplateIdsFilter::class . ':templateIds' => 'string',
+ AnswerList::class . ':answer' => 'MplusKASSA\MplusQapi\Answer',
+ TransactionNumberList::class . ':transactionNumber' => 'MplusKASSA\MplusQapi\TransactionNumber',
+ EmployeeNumberList::class . ':employeeNumber' => 'int',
+ ApiIdentList::class . ':apiIdent' => 'string',
+ JsonValueList::class . ':data' => 'string',
+ TimelineEventSubFilter::class . ':ids' => 'string',
+ TimelineEventSubFilter::class . ':employeeNumbers' => 'int',
+ TimelineEventSubFilter::class . ':workplaceKeys' => 'MplusKASSA\MplusQapi\WorkplaceIdentifier',
+ TimelineEventSubFilter::class . ':apiIdents' => 'string',
+ TimelineEventSubFilter::class . ':types' => 'string',
+ TimelineEventSubFilter::class . ':data' => 'string',
+ TimelineEventFilter::class . ':entities' => 'MplusKASSA\MplusQapi\TimelineEventEntity',
+ TimelineEventFilter::class . ':categories' => 'string',
  NumberSet::class . ':number' => 'int',
  SalesPriceList::class . ':salesPrice' => 'MplusKASSA\MplusQapi\SalesPrice',
  PriceGroupList::class . ':priceGroup' => 'MplusKASSA\MplusQapi\PriceGroup',
@@ -189,6 +188,7 @@ class MplusApiClient extends BaseSoapClient {
  Receipt::class . ':lineList' => 'MplusKASSA\MplusQapi\Line',
  Receipt::class . ':paymentList' => 'MplusKASSA\MplusQapi\Payment',
  Receipt::class . ':answerList' => 'MplusKASSA\MplusQapi\Answer',
+ Receipt::class . ':timelineEvents' => 'MplusKASSA\MplusQapi\TimelineEvent',
  ReceiptList::class . ':receipt' => 'MplusKASSA\MplusQapi\Receipt',
  GetReceiptsRequest::class . ':branchNumbers' => 'int',
  GetReceiptsRequest::class . ':employeeNumbers' => 'int',
@@ -201,20 +201,6 @@ class MplusApiClient extends BaseSoapClient {
  GetReceiptsRequest::class . ':ownerFilter' => 'string',
  GetReceiptsRequest::class . ':branchGroupFilter' => 'int',
  GetReceiptsRequest::class . ':receiptIds' => 'string',
- GetInvoicesRequest::class . ':branchNumbers' => 'int',
- GetInvoicesRequest::class . ':employeeNumbers' => 'int',
- GetInvoicesRequest::class . ':relationNumbers' => 'int',
- GetInvoicesRequest::class . ':supplierRelationNumbers' => 'int',
- GetInvoicesRequest::class . ':articleNumbers' => 'int',
- GetInvoicesRequest::class . ':articleTurnoverGroups' => 'int',
- GetInvoicesRequest::class . ':articlePluNumbers' => 'MplusKASSA\MplusQapi\Text',
- GetInvoicesRequest::class . ':articleBarcodes' => 'MplusKASSA\MplusQapi\Text',
- GetInvoicesRequest::class . ':invoiceIds' => 'string',
- GetInvoicesRequest::class . ':invoiceNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
- GetInvoicesRequest::class . ':ownerFilter' => 'string',
- GetInvoicesRequest::class . ':branchGroupFilter' => 'int',
- GetInvoicesRequest::class . ':branchInvoiceNumbers' => 'MplusKASSA\MplusQapi\TransactionNumber',
- GetInvoicesRequest::class . ':contractFrequencyFilter' => 'string',
  JournalFilterList::class . ':journalFilter' => 'string',
  TurnoverGroup::class . ':branchAccountNumberList' => 'MplusKASSA\MplusQapi\BranchAccountNumber',
  TurnoverGroup::class . ':branchCostCenterNumberList' => 'MplusKASSA\MplusQapi\BranchCostCenterNumber',
@@ -473,9 +459,6 @@ class MplusApiClient extends BaseSoapClient {
  GetReceiptsResponse::class . ':receiptList' => 'MplusKASSA\MplusQapi\Receipt',
  GetReceiptsByOrderResponse::class . ':receiptList' => 'MplusKASSA\MplusQapi\Receipt',
  GetReceiptsByCashCountResponse::class . ':receiptList' => 'MplusKASSA\MplusQapi\Receipt',
- GetInvoicesResponse::class . ':invoiceList' => 'MplusKASSA\MplusQapi\Invoice',
- SaveInvoiceResponse::class . ':voucherIssuances' => 'MplusKASSA\MplusQapi\VoucherIssuance',
- SaveInvoiceResponse::class . ':unappliedVoucherIssuances' => 'MplusKASSA\MplusQapi\UnappliedVoucherIssuance',
  GetJournalsResponse::class . ':journalList' => 'MplusKASSA\MplusQapi\Journal',
  GetFinancialJournalResponse::class . ':financialGroupList' => 'MplusKASSA\MplusQapi\FinancialGroup',
  GetCashCountListResponse::class . ':cashCountList' => 'MplusKASSA\MplusQapi\CashCount',
@@ -536,6 +519,8 @@ class MplusApiClient extends BaseSoapClient {
  RequestArticleFilter::class . ':articleNumbers' => 'int',
  RequestActivityFilter::class . ':activityNumbers' => 'string',
  RequestRelationFilter::class . ':relationNumbers' => 'int',
+ AuthorizationsList::class . ':authorizations' => 'MplusKASSA\MplusQapi\Authorization',
+ Authorization::class . ':subAuthorizations' => 'MplusKASSA\MplusQapi\Authorization',
  EmailTemplateContentLayoutList::class . ':emailTemplateContentLayout' => 'MplusKASSA\MplusQapi\EmailTemplateContentLayout',
  EmailTemplateContentAttachmentList::class . ':emailTemplateContentAttachment' => 'MplusKASSA\MplusQapi\EmailTemplateContentAttachment',
  EmailTemplateContent::class . ':layouts' => 'MplusKASSA\MplusQapi\EmailTemplateContentLayout',
@@ -823,6 +808,7 @@ class MplusApiClient extends BaseSoapClient {
  ReportArticlePerformanceBranchList::class . ':branch' => 'MplusKASSA\MplusQapi\ReportArticlePerformanceBranch',
  ReportArticlePerformance::class . ':branchList' => 'MplusKASSA\MplusQapi\ReportArticlePerformanceBranch',
  ReportArticlePerformanceList::class . ':articlePerformance' => 'MplusKASSA\MplusQapi\ReportArticlePerformance',
+ RegisterTimelineEventsRequest::class . ':events' => 'MplusKASSA\MplusQapi\TimelineEvent',
  ReportTurnoverByBranchResponse::class . ':turnoverList' => 'MplusKASSA\MplusQapi\ReportTurnoverByBranch',
  ReportTurnoverByEmployeeResponse::class . ':turnoverList' => 'MplusKASSA\MplusQapi\ReportTurnoverByEmployee',
  ReportTurnoverByActivityResponse::class . ':turnoverList' => 'MplusKASSA\MplusQapi\ReportTurnoverByActivity',
@@ -839,7 +825,25 @@ class MplusApiClient extends BaseSoapClient {
  ReportPaymentMethodDetailsResponse::class . ':paymentSourceList' => 'MplusKASSA\MplusQapi\ReportPaymentSource',
  ReportPrintableFinancialTotalsResponse::class . ':printableFinancialTotalsList' => 'MplusKASSA\MplusQapi\ReportPrintableFinancialTotalsLine',
  ReportArticlePerformanceResponse::class . ':articlePerformanceList' => 'MplusKASSA\MplusQapi\ReportArticlePerformance',
+ GetTimelineEventsResponse::class . ':events' => 'MplusKASSA\MplusQapi\TimelineEvent',
  ArticleNumberFilter::class . ':articleNumber' => 'int',
+ Invoice::class . ':orderIds' => 'string',
+ Invoice::class . ':extOrderIds' => 'string',
+ Invoice::class . ':vatGroupList' => 'MplusKASSA\MplusQapi\VatGroup',
+ Invoice::class . ':lineList' => 'MplusKASSA\MplusQapi\Line',
+ Invoice::class . ':paymentList' => 'MplusKASSA\MplusQapi\Payment',
+ Invoice::class . ':answerList' => 'MplusKASSA\MplusQapi\Answer',
+ Invoice::class . ':orderNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
+ Invoice::class . ':packingSlipIds' => 'string',
+ Invoice::class . ':packingSlipNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
+ Invoice::class . ':proposalIds' => 'string',
+ Invoice::class . ':extProposalIds' => 'string',
+ Invoice::class . ':proposalNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
+ Invoice::class . ':timelineEvents' => 'MplusKASSA\MplusQapi\TimelineEvent',
+ InvoiceList::class . ':invoice' => 'MplusKASSA\MplusQapi\Invoice',
+ InvoiceInput::class . ':lineList' => 'MplusKASSA\MplusQapi\LineInput',
+ RequestSalesRepeatTemplateTypeFilter::class . ':salesRepeatTemplateTypes' => 'string',
+ RequestSalesRepeatTemplateIdsFilter::class . ':templateIds' => 'string',
  GetSalesRepeatTemplatesRequest::class . ':relationFilter' => 'int',
  GetSalesRepeatTemplatesRequest::class . ':contractFrequencyFilter' => 'string',
  GetSalesRepeatTemplatesRequest::class . ':salesRepeatTemplateTypeFilter' => 'string',
@@ -890,6 +894,7 @@ class MplusApiClient extends BaseSoapClient {
  Proposal::class . ':extInvoiceIds' => 'string',
  Proposal::class . ':invoiceNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
  Proposal::class . ':branchInvoiceNumbers' => 'MplusKASSA\MplusQapi\TransactionNumber',
+ Proposal::class . ':timelineEvents' => 'MplusKASSA\MplusQapi\TimelineEvent',
  ProposalList::class . ':proposal' => 'MplusKASSA\MplusQapi\Proposal',
  GetProposalsRequest::class . ':branchNumbers' => 'int',
  GetProposalsRequest::class . ':employeeNumbers' => 'int',
@@ -939,6 +944,20 @@ class MplusApiClient extends BaseSoapClient {
  ProposalInput::class . ':lineList' => 'MplusKASSA\MplusQapi\LineInput',
  CreateInvoiceRemindersRequest::class . ':invoiceIds' => 'string',
  CreatedInvoiceReminderList::class . ':createdInvoiceReminder' => 'MplusKASSA\MplusQapi\CreatedInvoiceReminder',
+ GetInvoicesRequest::class . ':branchNumbers' => 'int',
+ GetInvoicesRequest::class . ':employeeNumbers' => 'int',
+ GetInvoicesRequest::class . ':relationNumbers' => 'int',
+ GetInvoicesRequest::class . ':supplierRelationNumbers' => 'int',
+ GetInvoicesRequest::class . ':articleNumbers' => 'int',
+ GetInvoicesRequest::class . ':articleTurnoverGroups' => 'int',
+ GetInvoicesRequest::class . ':articlePluNumbers' => 'MplusKASSA\MplusQapi\Text',
+ GetInvoicesRequest::class . ':articleBarcodes' => 'MplusKASSA\MplusQapi\Text',
+ GetInvoicesRequest::class . ':invoiceIds' => 'string',
+ GetInvoicesRequest::class . ':invoiceNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
+ GetInvoicesRequest::class . ':ownerFilter' => 'string',
+ GetInvoicesRequest::class . ':branchGroupFilter' => 'int',
+ GetInvoicesRequest::class . ':branchInvoiceNumbers' => 'MplusKASSA\MplusQapi\TransactionNumber',
+ GetInvoicesRequest::class . ':contractFrequencyFilter' => 'string',
  GetSalesRepeatTemplatesResponse::class . ':salesRepeatTemplateList' => 'MplusKASSA\MplusQapi\SalesRepeatTemplate',
  PerformBpeBudgetChecksResponse::class . ':bpeResults' => 'MplusKASSA\MplusQapi\BpeBudgetCheckResponse',
  GetTicketCounterSalesResponse::class . ':ticketCounterSaleList' => 'MplusKASSA\MplusQapi\TicketCounterSale',
@@ -967,6 +986,9 @@ class MplusApiClient extends BaseSoapClient {
  CreateInvoiceFromPackingSlipsResponse::class . ':voucherIssuances' => 'MplusKASSA\MplusQapi\VoucherIssuance',
  CreateInvoiceFromPackingSlipsResponse::class . ':unappliedVoucherIssuances' => 'MplusKASSA\MplusQapi\UnappliedVoucherIssuance',
  CreateInvoiceRemindersResponse::class . ':createdInvoiceReminders' => 'MplusKASSA\MplusQapi\CreatedInvoiceReminder',
+ GetInvoicesResponse::class . ':invoiceList' => 'MplusKASSA\MplusQapi\Invoice',
+ SaveInvoiceResponse::class . ':voucherIssuances' => 'MplusKASSA\MplusQapi\VoucherIssuance',
+ SaveInvoiceResponse::class . ':unappliedVoucherIssuances' => 'MplusKASSA\MplusQapi\UnappliedVoucherIssuance',
  WebhookConsumerEventList::class . ':webhookConsumerEvent' => 'MplusKASSA\MplusQapi\WebhookConsumerEvent',
  WebhookConsumerTriggerPatternList::class . ':webhookConsumerTriggerPattern' => 'MplusKASSA\MplusQapi\WebhookConsumerTriggerPattern',
  WebhookConsumerWorkplace::class . ':workplaceNumbers' => 'int',
@@ -1980,78 +2002,6 @@ class MplusApiClient extends BaseSoapClient {
         $opname = 'printTableReceiptV3';
         $this->startRequest($opname);
         $reqobj = new printTableReceiptV3();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function getInvoices(GetInvoicesRequest $request, ?string $requestId = null) : GetInvoicesResponse {
-        $opname = 'getInvoices';
-        $this->startRequest($opname);
-        $reqobj = new getInvoices();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function saveInvoice(Invoice $invoice, ?string $requestId = null) : SaveInvoiceResponse {
-        $opname = 'saveInvoice';
-        $this->startRequest($opname);
-        $reqobj = new saveInvoice();
-        $reqobj->invoice = $invoice;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function getInvoice(string $invoiceId, ?string $requestId = null) : GetInvoiceResponse {
-        $opname = 'getInvoice';
-        $this->startRequest($opname);
-        $reqobj = new getInvoice();
-        $reqobj->invoiceId = $invoiceId;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function findInvoice(string $extInvoiceId, ?string $requestId = null) : GetInvoiceResponse {
-        $opname = 'findInvoice';
-        $this->startRequest($opname);
-        $reqobj = new findInvoice();
-        $reqobj->extInvoiceId = $extInvoiceId;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function creditInvoice(string $invoiceId, ?string $requestId = null) : CreditInvoiceResponse {
-        $opname = 'creditInvoice';
-        $this->startRequest($opname);
-        $reqobj = new creditInvoice();
-        $reqobj->invoiceId = $invoiceId;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function CreditInvoiceV2(CreditInvoiceV2Request $request, ?string $requestId = null) : CreditInvoiceV2Response {
-        $opname = 'CreditInvoiceV2';
-        $this->startRequest($opname);
-        $reqobj = new CreditInvoiceV2();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);
@@ -4622,6 +4572,30 @@ class MplusApiClient extends BaseSoapClient {
         $this->endRequest();
         return $res;
     }
+    public function registerTimelineEvents(RegisterTimelineEventsRequest $request, ?string $requestId = null) : RegisterTimelineEventsResponse {
+        $opname = 'registerTimelineEvents';
+        $this->startRequest($opname);
+        $reqobj = new registerTimelineEvents();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getTimelineEvents(GetTimelineEventsRequest $request, ?string $requestId = null) : GetTimelineEventsResponse {
+        $opname = 'getTimelineEvents';
+        $this->startRequest($opname);
+        $reqobj = new getTimelineEvents();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
     public function getSalesRepeatTemplates(GetSalesRepeatTemplatesRequest $request, ?string $requestId = null) : GetSalesRepeatTemplatesResponse {
         $opname = 'getSalesRepeatTemplates';
         $this->startRequest($opname);
@@ -5053,6 +5027,78 @@ class MplusApiClient extends BaseSoapClient {
         $this->startRequest($opname);
         $reqobj = new createInvoiceReminders();
         $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getInvoices(GetInvoicesRequest $request, ?string $requestId = null) : GetInvoicesResponse {
+        $opname = 'getInvoices';
+        $this->startRequest($opname);
+        $reqobj = new getInvoices();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function creditInvoiceV2(CreditInvoiceV2Request $request, ?string $requestId = null) : CreditInvoiceV2Response {
+        $opname = 'creditInvoiceV2';
+        $this->startRequest($opname);
+        $reqobj = new creditInvoiceV2();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function saveInvoice(Invoice $invoice, ?string $requestId = null) : SaveInvoiceResponse {
+        $opname = 'saveInvoice';
+        $this->startRequest($opname);
+        $reqobj = new saveInvoice();
+        $reqobj->invoice = $invoice;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getInvoice(string $invoiceId, ?string $requestId = null) : GetInvoiceResponse {
+        $opname = 'getInvoice';
+        $this->startRequest($opname);
+        $reqobj = new getInvoice();
+        $reqobj->invoiceId = $invoiceId;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function findInvoice(string $extInvoiceId, ?string $requestId = null) : GetInvoiceResponse {
+        $opname = 'findInvoice';
+        $this->startRequest($opname);
+        $reqobj = new findInvoice();
+        $reqobj->extInvoiceId = $extInvoiceId;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function creditInvoice(string $invoiceId, ?string $requestId = null) : CreditInvoiceResponse {
+        $opname = 'creditInvoice';
+        $this->startRequest($opname);
+        $reqobj = new creditInvoice();
+        $reqobj->invoiceId = $invoiceId;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);
         $resp = $this->communicate($opname, $rq, $requestId);
