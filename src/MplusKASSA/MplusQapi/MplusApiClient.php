@@ -610,6 +610,7 @@ class MplusApiClient extends BaseSoapClient {
  EmailTemplateLayoutCodesFilter::class . ':layoutCode' => 'string',
  GetEmailTemplatesRequest::class . ':idsFilter' => 'string',
  GetEmailTemplatesRequest::class . ':layoutCodesFilter' => 'string',
+ CostCenterList::class . ':costCenter' => 'MplusKASSA\MplusQapi\CostCenter',
  GetConfigurationResponse::class . ':configurationList' => 'MplusKASSA\MplusQapi\Configuration',
  GetConfigurationTreeResponse::class . ':configurations' => 'MplusKASSA\MplusQapi\ConfigurationGroup',
  GetConfigurationValuesResponse::class . ':configurationKeyValues' => 'MplusKASSA\MplusQapi\ConfigurationKeyValues',
@@ -650,6 +651,8 @@ class MplusApiClient extends BaseSoapClient {
  GetSpecialBarcodePatternsResponse::class . ':patterns' => 'MplusKASSA\MplusQapi\BarcodePattern',
  GetEmployeeWorkplaceLoginStatesResponse::class . ':workplaceLoginStateInfo' => 'MplusKASSA\MplusQapi\WorkplaceLoginStateInfo',
  GetEmailTemplatesResponse::class . ':emailTemplates' => 'MplusKASSA\MplusQapi\EmailTemplate',
+ GetCostCentersResponse::class . ':costCenterList' => 'MplusKASSA\MplusQapi\CostCenter',
+ CreateCostCenterResponse::class . ':newCostCenterList' => 'MplusKASSA\MplusQapi\CostCenter',
  ImageCardLabelIds::class . ':labelId' => 'int',
  ImageData::class . ':labels' => 'int',
  CardImageData::class . ':images' => 'MplusKASSA\MplusQapi\ImageData',
@@ -861,6 +864,9 @@ class MplusApiClient extends BaseSoapClient {
  SaveSalesRepeatTemplateLine::class . ':preparationList' => 'MplusKASSA\MplusQapi\SaveSalesRepeatTemplateLine',
  SaveSalesRepeatTemplateLineList::class . ':line' => 'MplusKASSA\MplusQapi\SaveSalesRepeatTemplateLine',
  SaveSalesRepeatTemplate::class . ':lineList' => 'MplusKASSA\MplusQapi\SaveSalesRepeatTemplateLine',
+ PauseSalesRepeatTemplatesRequest::class . ':templateIds' => 'string',
+ RestartSalesRepeatTemplatesRequest::class . ':templateIds' => 'string',
+ StopSalesRepeatTemplatesRequest::class . ':templateIds' => 'string',
  BpeBudgetCheckList::class . ':item' => 'MplusKASSA\MplusQapi\BpeBudgetCheck',
  PerformBpeBudgetChecksRequest::class . ':bpeList' => 'MplusKASSA\MplusQapi\BpeBudgetCheck',
  BpeBudgetCheckResponseList::class . ':result' => 'MplusKASSA\MplusQapi\BpeBudgetCheckResponse',
@@ -3960,6 +3966,66 @@ class MplusApiClient extends BaseSoapClient {
         $this->endRequest();
         return $res;
     }
+    public function getCostCenters(GetCostCentersRequest $request, ?string $requestId = null) : GetCostCentersResponse {
+        $opname = 'getCostCenters';
+        $this->startRequest($opname);
+        $reqobj = new getCostCenters();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function createCostCenter(CreateCostCenterRequest $request, ?string $requestId = null) : CreateCostCenterResponse {
+        $opname = 'createCostCenter';
+        $this->startRequest($opname);
+        $reqobj = new createCostCenter();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function updateCostCenter(UpdateCostCenterRequest $request, ?string $requestId = null) : UpdateCostCenterResponse {
+        $opname = 'updateCostCenter';
+        $this->startRequest($opname);
+        $reqobj = new updateCostCenter();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function saveCostCenter(SaveCostCenterRequest $request, ?string $requestId = null) : SaveCostCenterResponse {
+        $opname = 'saveCostCenter';
+        $this->startRequest($opname);
+        $reqobj = new saveCostCenter();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function deleteCostCenter(DeleteCostCenterRequest $request, ?string $requestId = null) : DeleteCostCenterResponse {
+        $opname = 'deleteCostCenter';
+        $this->startRequest($opname);
+        $reqobj = new deleteCostCenter();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
     public function createImage(CreateImageRequest $request, ?string $requestId = null) : CreateImageResponse {
         $opname = 'createImage';
         $this->startRequest($opname);
@@ -4612,6 +4678,42 @@ class MplusApiClient extends BaseSoapClient {
         $opname = 'saveSalesRepeatTemplate';
         $this->startRequest($opname);
         $reqobj = new saveSalesRepeatTemplate_();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function pauseSalesRepeatTemplates(PauseSalesRepeatTemplatesRequest $request, ?string $requestId = null) : PauseSalesRepeatTemplatesResponse {
+        $opname = 'pauseSalesRepeatTemplates';
+        $this->startRequest($opname);
+        $reqobj = new pauseSalesRepeatTemplates();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function restartSalesRepeatTemplates(RestartSalesRepeatTemplatesRequest $request, ?string $requestId = null) : RestartSalesRepeatTemplatesResponse {
+        $opname = 'restartSalesRepeatTemplates';
+        $this->startRequest($opname);
+        $reqobj = new restartSalesRepeatTemplates();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function stopSalesRepeatTemplates(StopSalesRepeatTemplatesRequest $request, ?string $requestId = null) : StopSalesRepeatTemplatesResponse {
+        $opname = 'stopSalesRepeatTemplates';
+        $this->startRequest($opname);
+        $reqobj = new stopSalesRepeatTemplates();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);

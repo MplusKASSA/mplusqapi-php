@@ -992,6 +992,7 @@ class Payment extends SoapObject {
 	public ?string $giftcardNumber = null;
 	public ?string $externalPaymentId = null;
 	public ?ExternalPaymentTransactionDetails $externalPaymentTransactionDetails = null;
+	public ?string $externalReference = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->paymentId !== null) $gen->out->writeElementNs(self::TNS, 'paymentId', null, $this->paymentId);
 		if ($this->financialDate !== null) (SoapMplusDate::fromDateTime($this->financialDate))->write($gen, 'financialDate');
@@ -1014,6 +1015,7 @@ $tmp_branchAccountNumberList->write($gen, 'branchAccountNumberList');
 		if ($this->giftcardNumber !== null) $gen->out->writeElementNs(self::TNS, 'giftcardNumber', null, $this->giftcardNumber);
 		if ($this->externalPaymentId !== null) $gen->out->writeElementNs(self::TNS, 'externalPaymentId', null, $this->externalPaymentId);
 		if ($this->externalPaymentTransactionDetails !== null) $this->externalPaymentTransactionDetails->write($gen, 'externalPaymentTransactionDetails');
+		if ($this->externalReference !== null) $gen->out->writeElementNs(self::TNS, 'externalReference', null, $this->externalReference);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -4784,6 +4786,7 @@ class OrderPayment extends SoapObject {
 	public ?BigDecimal $valuePerCredit = null;
 	public ?int $employeeNumber = null;
 	public ?string $employeeName = null;
+	public ?string $externalReference = null;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'orderId', null, $this->orderId);
 		$gen->out->writeElementNs(self::TNS, 'paymentId', null, $this->paymentId);
@@ -4800,6 +4803,7 @@ class OrderPayment extends SoapObject {
 		if ($this->valuePerCredit !== null) $gen->writeBigDecimal('valuePerCredit', $this->valuePerCredit);
 		if ($this->employeeNumber !== null) $gen->writeInt('employeeNumber', $this->employeeNumber);
 		if ($this->employeeName !== null) $gen->out->writeElementNs(self::TNS, 'employeeName', null, $this->employeeName);
+		if ($this->externalReference !== null) $gen->out->writeElementNs(self::TNS, 'externalReference', null, $this->externalReference);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -6526,6 +6530,8 @@ class Article extends SoapObject {
 	public ?\DateTime $oldestBestBeforeDate = null;
 	public ?int $shelfLifeInDays = null;
 	public ?int $shelfLifeInHours = null;
+	public ?double $priceDeviationMin = null;
+	public ?double $priceDeviationMax = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->articleNumber !== null) $gen->writeInt('articleNumber', $this->articleNumber);
 		if ($this->extArticleId !== null) $gen->out->writeElementNs(self::TNS, 'extArticleId', null, $this->extArticleId);
@@ -6624,6 +6630,8 @@ $tmp_relationArticleDiscountList->write($gen, 'relationArticleDiscountList');
 		if ($this->oldestBestBeforeDate !== null) $gen->writeDate('oldestBestBeforeDate', $this->oldestBestBeforeDate);
 		if ($this->shelfLifeInDays !== null) $gen->writeInt('shelfLifeInDays', $this->shelfLifeInDays);
 		if ($this->shelfLifeInHours !== null) $gen->writeInt('shelfLifeInHours', $this->shelfLifeInHours);
+		if ($this->priceDeviationMin !== null) $this->priceDeviationMin->write($gen, 'priceDeviationMin');
+		if ($this->priceDeviationMax !== null) $this->priceDeviationMax->write($gen, 'priceDeviationMax');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -17100,6 +17108,103 @@ class SetWorkplaceActiveActivityRequest extends SoapObject {
 	}
 }
 
+class CostCenter extends SoapObject {
+	public string $costCenterNumber;
+	public ?string $description = null;
+	public int $sequenceNumber;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'costCenterNumber', null, $this->costCenterNumber);
+		if ($this->description !== null) $gen->out->writeElementNs(self::TNS, 'description', null, $this->description);
+		$gen->writeInt('sequenceNumber', $this->sequenceNumber);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class CostCenterList extends SoapObject {
+	/** @var CostCenter[] */
+	public $costCenter = array();
+	public function __construct($list = array()) { $this->costCenter = $list; }
+	public function writeProps(SoapGenerator $gen): void {
+		foreach ($this->costCenter as $elem) $elem->write($gen, 'costCenter');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetCostCentersRequest extends SoapObject {
+	public function writeProps(SoapGenerator $gen): void {
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class CreateCostCenterRequest extends SoapObject {
+	public CostCenter $costCenter;
+	public function __construct() {
+		$this->costCenter = new CostCenter();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->costCenter->write($gen, 'costCenter');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class UpdateCostCenterRequest extends SoapObject {
+	public CostCenter $costCenter;
+	public function __construct() {
+		$this->costCenter = new CostCenter();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->costCenter->write($gen, 'costCenter');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class SaveCostCenterRequest extends SoapObject {
+	public CostCenter $costCenter;
+	public function __construct() {
+		$this->costCenter = new CostCenter();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->costCenter->write($gen, 'costCenter');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class DeleteCostCenterRequest extends SoapObject {
+	public string $costCenterNumber;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'costCenterNumber', null, $this->costCenterNumber);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
 class GetConfigurationResponse extends SoapObject {
 	/** @var Configuration[] */
 	public $configurationList = array();
@@ -18398,6 +18503,85 @@ class SetWorkplaceActiveActivityResponse extends SoapObject {
 	public string $result;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetCostCentersResponse extends SoapObject {
+	/** @var CostCenter[] */
+	public $costCenterList = array();
+	public function __construct($list = array()) { $this->costCenterList = $list; }
+	public function writeProps(SoapGenerator $gen): void {
+		$tmp_costCenterList = new CostCenterList($this->costCenterList);
+$tmp_costCenterList->write($gen, 'costCenterList');
+
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class CreateCostCenterResponse extends SoapObject {
+	public string $result;
+	/** @var CostCenter[] */
+	public $newCostCenterList = array();
+	public ?string $errorMessage = null;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
+		foreach ($this->newCostCenterList as $elem) $elem->write($gen, 'newCostCenterList');
+		if ($this->errorMessage !== null) $gen->out->writeElementNs(self::TNS, 'errorMessage', null, $this->errorMessage);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class UpdateCostCenterResponse extends SoapObject {
+	public string $result;
+	public ?CostCenter $costCenter = null;
+	public ?string $errorMessage = null;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
+		if ($this->costCenter !== null) $this->costCenter->write($gen, 'costCenter');
+		if ($this->errorMessage !== null) $gen->out->writeElementNs(self::TNS, 'errorMessage', null, $this->errorMessage);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class SaveCostCenterResponse extends SoapObject {
+	public string $result;
+	public ?CostCenter $costCenter = null;
+	public ?string $errorMessage = null;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
+		if ($this->costCenter !== null) $this->costCenter->write($gen, 'costCenter');
+		if ($this->errorMessage !== null) $gen->out->writeElementNs(self::TNS, 'errorMessage', null, $this->errorMessage);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class DeleteCostCenterResponse extends SoapObject {
+	public string $result;
+	public ?string $errorMessage = null;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
+		if ($this->errorMessage !== null) $gen->out->writeElementNs(self::TNS, 'errorMessage', null, $this->errorMessage);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -22711,12 +22895,14 @@ class SalesRepeatTemplateSchedule extends SoapObject {
 	public ?SalesRepeatTemplateWeeklySchedule $weeklySchedule = null;
 	public ?int $yearlyDateMonth = null;
 	public ?int $yearlyDateDay = null;
+	public ?int $monthlyDay = null;
 	public function writeProps(SoapGenerator $gen): void {
 		foreach ($this->specificDates as $elem) $gen->writeDate('specificDates', $elem);
 		$gen->out->writeElementNs(self::TNS, 'repeatInterval', null, $this->repeatInterval);
 		if ($this->weeklySchedule !== null) $this->weeklySchedule->write($gen, 'weeklySchedule');
 		if ($this->yearlyDateMonth !== null) $gen->writeInt('yearlyDateMonth', $this->yearlyDateMonth);
 		if ($this->yearlyDateDay !== null) $gen->writeInt('yearlyDateDay', $this->yearlyDateDay);
+		if ($this->monthlyDay !== null) $gen->writeInt('monthlyDay', $this->monthlyDay);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -22757,6 +22943,9 @@ class SalesRepeatTemplate extends SoapObject {
 	public ?string $contractFrequency = null;
 	public ?int $branchGroupNumber = null;
 	public ?string $ownerId = null;
+	public ?int $branchNumber = null;
+	public ?bool $staticPrices = null;
+	public ?\DateTime $restartAfterDate = null;
 	public function __construct() {
 		$this->schedule = new SalesRepeatTemplateSchedule();
 	}
@@ -22792,6 +22981,9 @@ $tmp_lineList->write($gen, 'lineList');
 		if ($this->contractFrequency !== null) $gen->out->writeElementNs(self::TNS, 'contractFrequency', null, $this->contractFrequency);
 		if ($this->branchGroupNumber !== null) $gen->writeInt('branchGroupNumber', $this->branchGroupNumber);
 		if ($this->ownerId !== null) $gen->out->writeElementNs(self::TNS, 'ownerId', null, $this->ownerId);
+		if ($this->branchNumber !== null) $gen->writeInt('branchNumber', $this->branchNumber);
+		if ($this->staticPrices !== null) $gen->writeBool('staticPrices', $this->staticPrices);
+		if ($this->restartAfterDate !== null) $gen->writeDate('restartAfterDate', $this->restartAfterDate);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -22896,6 +23088,8 @@ class SaveSalesRepeatTemplate extends SoapObject {
 	public ?string $vatCountryIso3 = null;
 	/** @var SaveSalesRepeatTemplateLine[] */
 	public $lineList = array();
+	public ?int $branchNumber = null;
+	public ?bool $staticPrices = null;
 	public function __construct() {
 		$this->schedule = new SalesRepeatTemplateSchedule();
 	}
@@ -22916,6 +23110,8 @@ class SaveSalesRepeatTemplate extends SoapObject {
 		$tmp_lineList = new SaveSalesRepeatTemplateLineList($this->lineList);
 $tmp_lineList->write($gen, 'lineList');
 
+		if ($this->branchNumber !== null) $gen->writeInt('branchNumber', $this->branchNumber);
+		if ($this->staticPrices !== null) $gen->writeBool('staticPrices', $this->staticPrices);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -22935,6 +23131,61 @@ class SaveSalesRepeatTemplateRequest extends IdempotentReq {
 	    parent::writeProps($gen);
 		$this->workplaceIdentifier->write($gen, 'workplaceIdentifier');
 		$this->salesRepeatTemplate->write($gen, 'salesRepeatTemplate');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class PauseSalesRepeatTemplatesRequest extends IdempotentReq {
+	/** @var string[] */
+	public $templateIds = null;
+	public ?\DateTime $restartAfterDate = null;
+	public function writeProps(SoapGenerator $gen): void {
+	    parent::writeProps($gen);
+		if ($this->templateIds !== null) {
+$tmp_templateIds = new IdList($this->templateIds);
+$tmp_templateIds->write($gen, 'templateIds');
+}
+		if ($this->restartAfterDate !== null) $gen->writeDate('restartAfterDate', $this->restartAfterDate);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class RestartSalesRepeatTemplatesRequest extends IdempotentReq {
+	/** @var string[] */
+	public $templateIds = null;
+	public function __construct($list = array()) { $this->templateIds = $list; }
+	public function writeProps(SoapGenerator $gen): void {
+	    parent::writeProps($gen);
+		if ($this->templateIds !== null) {
+$tmp_templateIds = new IdList($this->templateIds);
+$tmp_templateIds->write($gen, 'templateIds');
+}
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class StopSalesRepeatTemplatesRequest extends IdempotentReq {
+	/** @var string[] */
+	public $templateIds = null;
+	public function __construct($list = array()) { $this->templateIds = $list; }
+	public function writeProps(SoapGenerator $gen): void {
+	    parent::writeProps($gen);
+		if ($this->templateIds !== null) {
+$tmp_templateIds = new IdList($this->templateIds);
+$tmp_templateIds->write($gen, 'templateIds');
+}
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -24520,6 +24771,45 @@ class SaveSalesRepeatTemplateResponse extends IdempotentResp {
 		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
 		if ($this->errorMessage !== null) $gen->out->writeElementNs(self::TNS, 'errorMessage', null, $this->errorMessage);
 		if ($this->salesRepeatTemplateId !== null) $gen->out->writeElementNs(self::TNS, 'salesRepeatTemplateId', null, $this->salesRepeatTemplateId);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class PauseSalesRepeatTemplatesResponse extends IdempotentResp {
+	public string $result;
+	public function writeProps(SoapGenerator $gen): void {
+	    parent::writeProps($gen);
+		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class RestartSalesRepeatTemplatesResponse extends IdempotentResp {
+	public string $result;
+	public function writeProps(SoapGenerator $gen): void {
+	    parent::writeProps($gen);
+		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class StopSalesRepeatTemplatesResponse extends IdempotentResp {
+	public string $result;
+	public function writeProps(SoapGenerator $gen): void {
+	    parent::writeProps($gen);
+		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -30894,6 +31184,81 @@ class setWorkplaceActiveActivity extends SoapObject {
 	}
 }
 
+class getCostCenters extends SoapObject {
+	public GetCostCentersRequest $request;
+	public function __construct() {
+		$this->request = new GetCostCentersRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class createCostCenter extends SoapObject {
+	public CreateCostCenterRequest $request;
+	public function __construct() {
+		$this->request = new CreateCostCenterRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class updateCostCenter extends SoapObject {
+	public UpdateCostCenterRequest $request;
+	public function __construct() {
+		$this->request = new UpdateCostCenterRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class saveCostCenter extends SoapObject {
+	public SaveCostCenterRequest $request;
+	public function __construct() {
+		$this->request = new SaveCostCenterRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class deleteCostCenter extends SoapObject {
+	public DeleteCostCenterRequest $request;
+	public function __construct() {
+		$this->request = new DeleteCostCenterRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
 class createImage extends SoapObject {
 	public CreateImageRequest $request;
 	public function __construct() {
@@ -31705,6 +32070,51 @@ class saveSalesRepeatTemplate_ extends SoapObject {
 	public SaveSalesRepeatTemplateRequest $request;
 	public function __construct() {
 		$this->request = new SaveSalesRepeatTemplateRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class pauseSalesRepeatTemplates extends SoapObject {
+	public PauseSalesRepeatTemplatesRequest $request;
+	public function __construct() {
+		$this->request = new PauseSalesRepeatTemplatesRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class restartSalesRepeatTemplates extends SoapObject {
+	public RestartSalesRepeatTemplatesRequest $request;
+	public function __construct() {
+		$this->request = new RestartSalesRepeatTemplatesRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class stopSalesRepeatTemplates extends SoapObject {
+	public StopSalesRepeatTemplatesRequest $request;
+	public function __construct() {
+		$this->request = new StopSalesRepeatTemplatesRequest();
 	}
 	public function writeProps(SoapGenerator $gen): void {
 		$this->request->write($gen, 'request');
