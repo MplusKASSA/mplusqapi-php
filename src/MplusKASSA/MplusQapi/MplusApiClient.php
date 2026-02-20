@@ -611,6 +611,7 @@ class MplusApiClient extends BaseSoapClient {
  GetEmailTemplatesRequest::class . ':idsFilter' => 'string',
  GetEmailTemplatesRequest::class . ':layoutCodesFilter' => 'string',
  CostCenterList::class . ':costCenter' => 'MplusKASSA\MplusQapi\CostCenter',
+ SaveCostCentersRequest::class . ':costCenters' => 'MplusKASSA\MplusQapi\CostCenter',
  GetConfigurationResponse::class . ':configurationList' => 'MplusKASSA\MplusQapi\Configuration',
  GetConfigurationTreeResponse::class . ':configurations' => 'MplusKASSA\MplusQapi\ConfigurationGroup',
  GetConfigurationValuesResponse::class . ':configurationKeyValues' => 'MplusKASSA\MplusQapi\ConfigurationKeyValues',
@@ -652,7 +653,6 @@ class MplusApiClient extends BaseSoapClient {
  GetEmployeeWorkplaceLoginStatesResponse::class . ':workplaceLoginStateInfo' => 'MplusKASSA\MplusQapi\WorkplaceLoginStateInfo',
  GetEmailTemplatesResponse::class . ':emailTemplates' => 'MplusKASSA\MplusQapi\EmailTemplate',
  GetCostCentersResponse::class . ':costCenterList' => 'MplusKASSA\MplusQapi\CostCenter',
- CreateCostCenterResponse::class . ':newCostCenterList' => 'MplusKASSA\MplusQapi\CostCenter',
  ImageCardLabelIds::class . ':labelId' => 'int',
  ImageData::class . ':labels' => 'int',
  CardImageData::class . ':images' => 'MplusKASSA\MplusQapi\ImageData',
@@ -3978,46 +3978,10 @@ class MplusApiClient extends BaseSoapClient {
         $this->endRequest();
         return $res;
     }
-    public function createCostCenter(CreateCostCenterRequest $request, ?string $requestId = null) : CreateCostCenterResponse {
-        $opname = 'createCostCenter';
+    public function saveCostCenters(SaveCostCentersRequest $request, ?string $requestId = null) : SaveCostCentersResponse {
+        $opname = 'saveCostCenters';
         $this->startRequest($opname);
-        $reqobj = new createCostCenter();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function updateCostCenter(UpdateCostCenterRequest $request, ?string $requestId = null) : UpdateCostCenterResponse {
-        $opname = 'updateCostCenter';
-        $this->startRequest($opname);
-        $reqobj = new updateCostCenter();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function saveCostCenter(SaveCostCenterRequest $request, ?string $requestId = null) : SaveCostCenterResponse {
-        $opname = 'saveCostCenter';
-        $this->startRequest($opname);
-        $reqobj = new saveCostCenter();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function deleteCostCenter(DeleteCostCenterRequest $request, ?string $requestId = null) : DeleteCostCenterResponse {
-        $opname = 'deleteCostCenter';
-        $this->startRequest($opname);
-        $reqobj = new deleteCostCenter();
+        $reqobj = new saveCostCenters();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);

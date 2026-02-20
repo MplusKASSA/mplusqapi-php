@@ -803,10 +803,7 @@ class SoapParser extends BaseSoapParser {
 			case 'CostCenter': return $this->load_CostCenter($in);
 			case 'CostCenterList': return $this->load_CostCenterList($in);
 			case 'GetCostCentersRequest': return $this->load_GetCostCentersRequest($in);
-			case 'CreateCostCenterRequest': return $this->load_CreateCostCenterRequest($in);
-			case 'UpdateCostCenterRequest': return $this->load_UpdateCostCenterRequest($in);
-			case 'SaveCostCenterRequest': return $this->load_SaveCostCenterRequest($in);
-			case 'DeleteCostCenterRequest': return $this->load_DeleteCostCenterRequest($in);
+			case 'SaveCostCentersRequest': return $this->load_SaveCostCentersRequest($in);
 			case 'GetConfigurationResponse': return $this->load_GetConfigurationResponse($in);
 			case 'UpdateConfigurationResponse': return $this->load_UpdateConfigurationResponse($in);
 			case 'GetConfigurationTreeResponse': return $this->load_GetConfigurationTreeResponse($in);
@@ -881,10 +878,7 @@ class SoapParser extends BaseSoapParser {
 			case 'GetAppConfigurationResponse': return $this->load_GetAppConfigurationResponse($in);
 			case 'SetWorkplaceActiveActivityResponse': return $this->load_SetWorkplaceActiveActivityResponse($in);
 			case 'GetCostCentersResponse': return $this->load_GetCostCentersResponse($in);
-			case 'CreateCostCenterResponse': return $this->load_CreateCostCenterResponse($in);
-			case 'UpdateCostCenterResponse': return $this->load_UpdateCostCenterResponse($in);
-			case 'SaveCostCenterResponse': return $this->load_SaveCostCenterResponse($in);
-			case 'DeleteCostCenterResponse': return $this->load_DeleteCostCenterResponse($in);
+			case 'SaveCostCentersResponse': return $this->load_SaveCostCentersResponse($in);
 			case 'ImageLabel': return $this->load_ImageLabel($in);
 			case 'ImageCardLabelIds': return $this->load_ImageCardLabelIds($in);
 			case 'ImageData': return $this->load_ImageData($in);
@@ -1548,10 +1542,7 @@ class SoapParser extends BaseSoapParser {
 			case 'getAppConfiguration': return $this->load_getAppConfiguration($in);
 			case 'setWorkplaceActiveActivity': return $this->load_setWorkplaceActiveActivity($in);
 			case 'getCostCenters': return $this->load_getCostCenters($in);
-			case 'createCostCenter': return $this->load_createCostCenter($in);
-			case 'updateCostCenter': return $this->load_updateCostCenter($in);
-			case 'saveCostCenter': return $this->load_saveCostCenter($in);
-			case 'deleteCostCenter': return $this->load_deleteCostCenter($in);
+			case 'saveCostCenters': return $this->load_saveCostCenters($in);
 			case 'createImage': return $this->load_createImage($in);
 			case 'createImageFromUrl': return $this->load_createImageFromUrl($in);
 			case 'getCardImageLabels': return $this->load_getCardImageLabels($in);
@@ -8160,8 +8151,8 @@ class SoapParser extends BaseSoapParser {
 						case 'oldestBestBeforeDate': $o->oldestBestBeforeDate = $this->load_Date_property($in); break;
 						case 'shelfLifeInDays': $o->shelfLifeInDays = $this->load_int_property($in); break;
 						case 'shelfLifeInHours': $o->shelfLifeInHours = $this->load_int_property($in); break;
-						case 'priceDeviationMin': $o->priceDeviationMin = $this->load_double($in); break;
-						case 'priceDeviationMax': $o->priceDeviationMax = $this->load_double($in); break;
+						case 'priceDeviationMin': $o->priceDeviationMin = $this->load_BigDecimal_property($in); break;
+						case 'priceDeviationMax': $o->priceDeviationMax = $this->load_BigDecimal_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -15708,6 +15699,8 @@ class SoapParser extends BaseSoapParser {
 					switch ($in->localName) {
 						case 'idempotencyResult': $o->idempotencyResult = $this->load_string_property($in); break;
 						case 'id': $o->id = $this->load_int_property($in); break;
+						case 'result': $o->result = $this->load_string_property($in); break;
+						case 'message': $o->message = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -19914,7 +19907,6 @@ class SoapParser extends BaseSoapParser {
 					switch ($in->localName) {
 						case 'costCenterNumber': $o->costCenterNumber = $this->load_string_property($in); break;
 						case 'description': $o->description = $this->load_string_property($in); break;
-						case 'sequenceNumber': $o->sequenceNumber = $this->load_int_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -19961,73 +19953,16 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
-	private function load_CreateCostCenterRequest(\XMLReader $in) : CreateCostCenterRequest {
+	private function load_SaveCostCentersRequest(\XMLReader $in) : SaveCostCentersRequest {
 		$n = $in->name;
-		$o = new CreateCostCenterRequest();
+		$o = new SaveCostCentersRequest();
 		if ($in->isEmptyElement) return $o;
 		$continue = true;
 		while ($continue && $in->read()) {
 			switch ($in->nodeType) {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
-						case 'costCenter': $o->costCenter = $this->load_CostCenter($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_UpdateCostCenterRequest(\XMLReader $in) : UpdateCostCenterRequest {
-		$n = $in->name;
-		$o = new UpdateCostCenterRequest();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'costCenter': $o->costCenter = $this->load_CostCenter($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_SaveCostCenterRequest(\XMLReader $in) : SaveCostCenterRequest {
-		$n = $in->name;
-		$o = new SaveCostCenterRequest();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'costCenter': $o->costCenter = $this->load_CostCenter($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_DeleteCostCenterRequest(\XMLReader $in) : DeleteCostCenterRequest {
-		$n = $in->name;
-		$o = new DeleteCostCenterRequest();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'costCenterNumber': $o->costCenterNumber = $this->load_string_property($in); break;
+						case 'costCenters': $o->costCenters[] = $this->load_CostCenter($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -21593,80 +21528,15 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
-	private function load_CreateCostCenterResponse(\XMLReader $in) : CreateCostCenterResponse {
+	private function load_SaveCostCentersResponse(\XMLReader $in) : SaveCostCentersResponse {
 		$n = $in->name;
-		$o = new CreateCostCenterResponse();
+		$o = new SaveCostCentersResponse();
 		if ($in->isEmptyElement) return $o;
 		$continue = true;
 		while ($continue && $in->read()) {
 			switch ($in->nodeType) {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
-						case 'result': $o->result = $this->load_string_property($in); break;
-						case 'newCostCenterList': $o->newCostCenterList[] = $this->load_CostCenter($in); break;
-						case 'errorMessage': $o->errorMessage = $this->load_string_property($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_UpdateCostCenterResponse(\XMLReader $in) : UpdateCostCenterResponse {
-		$n = $in->name;
-		$o = new UpdateCostCenterResponse();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'result': $o->result = $this->load_string_property($in); break;
-						case 'costCenter': $o->costCenter = $this->load_CostCenter($in); break;
-						case 'errorMessage': $o->errorMessage = $this->load_string_property($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_SaveCostCenterResponse(\XMLReader $in) : SaveCostCenterResponse {
-		$n = $in->name;
-		$o = new SaveCostCenterResponse();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'result': $o->result = $this->load_string_property($in); break;
-						case 'costCenter': $o->costCenter = $this->load_CostCenter($in); break;
-						case 'errorMessage': $o->errorMessage = $this->load_string_property($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_DeleteCostCenterResponse(\XMLReader $in) : DeleteCostCenterResponse {
-		$n = $in->name;
-		$o = new DeleteCostCenterResponse();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'result': $o->result = $this->load_string_property($in); break;
-						case 'errorMessage': $o->errorMessage = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -29487,6 +29357,7 @@ class SoapParser extends BaseSoapParser {
 						case 'extArticleId': $o->extArticleId = $this->load_string_property($in); break;
 						case 'color': $o->color = $this->load_string_property($in); break;
 						case 'image': $o->image = $this->load_string_property($in); break;
+						case 'disabled': $o->disabled = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -35730,73 +35601,16 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
-	private function load_createCostCenter(\XMLReader $in) : createCostCenter {
+	private function load_saveCostCenters(\XMLReader $in) : saveCostCenters {
 		$n = $in->name;
-		$o = new createCostCenter();
+		$o = new saveCostCenters();
 		if ($in->isEmptyElement) return $o;
 		$continue = true;
 		while ($continue && $in->read()) {
 			switch ($in->nodeType) {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
-						case 'request': $o->request = $this->load_CreateCostCenterRequest($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_updateCostCenter(\XMLReader $in) : updateCostCenter {
-		$n = $in->name;
-		$o = new updateCostCenter();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'request': $o->request = $this->load_UpdateCostCenterRequest($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_saveCostCenter(\XMLReader $in) : saveCostCenter {
-		$n = $in->name;
-		$o = new saveCostCenter();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'request': $o->request = $this->load_SaveCostCenterRequest($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_deleteCostCenter(\XMLReader $in) : deleteCostCenter {
-		$n = $in->name;
-		$o = new deleteCostCenter();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'request': $o->request = $this->load_DeleteCostCenterRequest($in); break;
+						case 'request': $o->request = $this->load_SaveCostCentersRequest($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
