@@ -1102,6 +1102,16 @@ class SoapParser extends BaseSoapParser {
 			case 'SalePromotionLineDiscount': return $this->load_SalePromotionLineDiscount($in);
 			case 'SalePromotionLineDiscountList': return $this->load_SalePromotionLineDiscountList($in);
 			case 'SalePromotionLineFreeArticleData': return $this->load_SalePromotionLineFreeArticleData($in);
+			case 'SalePromotionArticleLine': return $this->load_SalePromotionArticleLine($in);
+			case 'SalePromotionArticleLineList': return $this->load_SalePromotionArticleLineList($in);
+			case 'SalePromotionRelationLine': return $this->load_SalePromotionRelationLine($in);
+			case 'SalePromotionRelationLineList': return $this->load_SalePromotionRelationLineList($in);
+			case 'SalePromotionTurnoverGroupLine': return $this->load_SalePromotionTurnoverGroupLine($in);
+			case 'SalePromotionTurnoverGroupLineList': return $this->load_SalePromotionTurnoverGroupLineList($in);
+			case 'SalePromotionSeasonCodeLine': return $this->load_SalePromotionSeasonCodeLine($in);
+			case 'SalePromotionSeasonCodeLineList': return $this->load_SalePromotionSeasonCodeLineList($in);
+			case 'SalePromotionDiscountGroupLine': return $this->load_SalePromotionDiscountGroupLine($in);
+			case 'SalePromotionDiscountGroupLineList': return $this->load_SalePromotionDiscountGroupLineList($in);
 			case 'SalePromotionLine': return $this->load_SalePromotionLine($in);
 			case 'SalePromotionLineList': return $this->load_SalePromotionLineList($in);
 			case 'SalePromotions': return $this->load_SalePromotions($in);
@@ -12909,6 +12919,7 @@ class SoapParser extends BaseSoapParser {
 						case 'fromDate': $o->fromDate = $this->load_Date_property($in); break;
 						case 'throughDate': $o->throughDate = $this->load_Date_property($in); break;
 						case 'branchNumber': $o->branchNumber = $this->load_int_property($in); break;
+						case 'branchNumbers': $o->branchNumbers[] = $this->load_int_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -16001,6 +16012,7 @@ class SoapParser extends BaseSoapParser {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
 						case 'activeCycleCount': $o->activeCycleCount = $this->load_ActiveCycleCount($in); break;
+						case 'errorMessage': $o->errorMessage = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -25295,6 +25307,7 @@ class SoapParser extends BaseSoapParser {
 					switch ($in->localName) {
 						case 'idempotencyKey': $o->idempotencyKey = $this->load_string_property($in); break;
 						case 'events': $o->events = ($this->load_TimelineEventList($in))->event; break;
+						case 'saveMode': $o->saveMode = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -25638,6 +25651,7 @@ class SoapParser extends BaseSoapParser {
 					switch ($in->localName) {
 						case 'idempotencyResult': $o->idempotencyResult = $this->load_string_property($in); break;
 						case 'result': $o->result = $this->load_string_property($in); break;
+						case 'events': $o->events = ($this->load_TimelineEventList($in))->event; break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -26502,6 +26516,201 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_SalePromotionArticleLine(\XMLReader $in) : SalePromotionArticleLine {
+		$n = $in->name;
+		$o = new SalePromotionArticleLine();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'articleNumber': $o->articleNumber = $this->load_int_property($in); break;
+						case 'groupNumber': $o->groupNumber = $this->load_int_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_SalePromotionArticleLineList(\XMLReader $in) : SalePromotionArticleLineList {
+		$n = $in->name;
+		$o = new SalePromotionArticleLineList();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'articleLine': $o->articleLine[] = $this->load_SalePromotionArticleLine($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_SalePromotionRelationLine(\XMLReader $in) : SalePromotionRelationLine {
+		$n = $in->name;
+		$o = new SalePromotionRelationLine();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'relationNumber': $o->relationNumber = $this->load_int_property($in); break;
+						case 'groupNumber': $o->groupNumber = $this->load_int_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_SalePromotionRelationLineList(\XMLReader $in) : SalePromotionRelationLineList {
+		$n = $in->name;
+		$o = new SalePromotionRelationLineList();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'relationLine': $o->relationLine[] = $this->load_SalePromotionRelationLine($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_SalePromotionTurnoverGroupLine(\XMLReader $in) : SalePromotionTurnoverGroupLine {
+		$n = $in->name;
+		$o = new SalePromotionTurnoverGroupLine();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'turnoverGroup': $o->turnoverGroup = $this->load_int_property($in); break;
+						case 'groupNumber': $o->groupNumber = $this->load_int_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_SalePromotionTurnoverGroupLineList(\XMLReader $in) : SalePromotionTurnoverGroupLineList {
+		$n = $in->name;
+		$o = new SalePromotionTurnoverGroupLineList();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'TurnoverGroupLine': $o->TurnoverGroupLine[] = $this->load_SalePromotionTurnoverGroupLine($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_SalePromotionSeasonCodeLine(\XMLReader $in) : SalePromotionSeasonCodeLine {
+		$n = $in->name;
+		$o = new SalePromotionSeasonCodeLine();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'seasonCode': $o->seasonCode = $this->load_int_property($in); break;
+						case 'groupNumber': $o->groupNumber = $this->load_int_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_SalePromotionSeasonCodeLineList(\XMLReader $in) : SalePromotionSeasonCodeLineList {
+		$n = $in->name;
+		$o = new SalePromotionSeasonCodeLineList();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'seasonCodeLine': $o->seasonCodeLine[] = $this->load_SalePromotionSeasonCodeLine($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_SalePromotionDiscountGroupLine(\XMLReader $in) : SalePromotionDiscountGroupLine {
+		$n = $in->name;
+		$o = new SalePromotionDiscountGroupLine();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'discountGroup': $o->discountGroup = $this->load_int_property($in); break;
+						case 'groupNumber': $o->groupNumber = $this->load_int_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_SalePromotionDiscountGroupLineList(\XMLReader $in) : SalePromotionDiscountGroupLineList {
+		$n = $in->name;
+		$o = new SalePromotionDiscountGroupLineList();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'discountGroupLine': $o->discountGroupLine[] = $this->load_SalePromotionDiscountGroupLine($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_SalePromotionLine(\XMLReader $in) : SalePromotionLine {
 		$n = $in->name;
 		$o = new SalePromotionLine();
@@ -26534,6 +26743,11 @@ class SoapParser extends BaseSoapParser {
 						case 'hoursValid': $o->hoursValid = $this->load_int_property($in); break;
 						case 'salePromotionLineDiscountList': $o->salePromotionLineDiscountList = ($this->load_SalePromotionLineDiscountList($in))->salePromotionLineDiscountList; break;
 						case 'freeArticleData': $o->freeArticleData = $this->load_SalePromotionLineFreeArticleData($in); break;
+						case 'articleLines': $o->articleLines = ($this->load_SalePromotionArticleLineList($in))->articleLine; break;
+						case 'relationLines': $o->relationLines = ($this->load_SalePromotionRelationLineList($in))->relationLine; break;
+						case 'turnoverGroupLines': $o->turnoverGroupLines = ($this->load_SalePromotionTurnoverGroupLineList($in))->TurnoverGroupLine; break;
+						case 'seasonCodeLines': $o->seasonCodeLines = ($this->load_SalePromotionSeasonCodeLineList($in))->seasonCodeLine; break;
+						case 'discountGroupLines': $o->discountGroupLines = ($this->load_SalePromotionDiscountGroupLineList($in))->discountGroupLine; break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -30286,6 +30500,12 @@ class SoapParser extends BaseSoapParser {
 					switch ($in->localName) {
 						case 'syncMarker': $o->syncMarker = $this->load_int_property($in); break;
 						case 'syncMarkerLimit': $o->syncMarkerLimit = $this->load_int_property($in); break;
+						case 'fromBranchNumbers': $o->fromBranchNumbers[] = $this->load_int_property($in); break;
+						case 'toBranchNumbers': $o->toBranchNumbers[] = $this->load_int_property($in); break;
+						case 'scancode': $o->scancode = $this->load_string_property($in); break;
+						case 'interbranchShipmentState': $o->interbranchShipmentState[] = $this->load_string_property($in); break;
+						case 'interbranchShipmentNumber': $o->interbranchShipmentNumber = $this->load_YearNumber($in); break;
+						case 'interbranchOrderNumber': $o->interbranchOrderNumber = $this->load_YearNumber($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
