@@ -54,7 +54,7 @@ abstract class BaseSoapGenerator {
 
     public function writeDateTime(string $elem, \DateTime $d) : void
     {
-        $this->out->writeElementNs(self::TNS, $elem, null, $d->format('Y-m-d') . 'T'. $d->format('H:i:s'));
+        $this->out->writeElementNs(self::TNS, $elem, null, $d->format('c'));
     }
 
     public function writeInt(string $elem, int $d) : void

@@ -133,21 +133,6 @@ class MplusApiClient extends BaseSoapClient {
  MoveTableOrderV3Request::class . ':lines' => 'MplusKASSA\MplusQapi\MoveTableLine',
  CourseList::class . ':course' => 'MplusKASSA\MplusQapi\Course',
  QueueBranchOrderPaymentRequest::class . ':paymentList' => 'MplusKASSA\MplusQapi\Payment',
- PackingSlip::class . ':lineList' => 'MplusKASSA\MplusQapi\Line',
- PackingSlipList::class . ':packingSlip' => 'MplusKASSA\MplusQapi\PackingSlip',
- GetPackingSlipsRequest::class . ':branchNumbers' => 'int',
- GetPackingSlipsRequest::class . ':employeeNumbers' => 'int',
- GetPackingSlipsRequest::class . ':relationNumbers' => 'int',
- GetPackingSlipsRequest::class . ':supplierRelationNumbers' => 'int',
- GetPackingSlipsRequest::class . ':articleNumbers' => 'int',
- GetPackingSlipsRequest::class . ':articleTurnoverGroups' => 'int',
- GetPackingSlipsRequest::class . ':articlePluNumbers' => 'MplusKASSA\MplusQapi\Text',
- GetPackingSlipsRequest::class . ':articleBarcodes' => 'MplusKASSA\MplusQapi\Text',
- GetPackingSlipsRequest::class . ':packingSlipIds' => 'string',
- GetPackingSlipsRequest::class . ':packingSlipNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
- GetPackingSlipsRequest::class . ':ownerFilter' => 'string',
- GetPackingSlipsRequest::class . ':branchGroupFilter' => 'int',
- GetPackingSlipsRequest::class . ':typeFilter' => 'string',
  LineChangeList::class . ':lineChange' => 'MplusKASSA\MplusQapi\LineChange',
  LineChange::class . ':preparationList' => 'MplusKASSA\MplusQapi\LineChange',
  OrderChange::class . ':lineChangeList' => 'MplusKASSA\MplusQapi\LineChange',
@@ -449,8 +434,6 @@ class MplusApiClient extends BaseSoapClient {
  CreateAndPayTableOrderResponse::class . ':unappliedVoucherIssuances' => 'MplusKASSA\MplusQapi\UnappliedVoucherIssuance',
  GetTableOrderResponse::class . ':voucherIssuanceCandidates' => 'MplusKASSA\MplusQapi\VoucherIssuanceCandidate',
  GetTableOrderCourseListResponse::class . ':courseList' => 'MplusKASSA\MplusQapi\Course',
- GetPackingSlipsResponse::class . ':packingSlipList' => 'MplusKASSA\MplusQapi\PackingSlip',
- GetPackingSlipsByOrderResponse::class . ':packingSlipList' => 'MplusKASSA\MplusQapi\PackingSlip',
  GetOrderChangesResponse::class . ':orderChangeList' => 'MplusKASSA\MplusQapi\OrderChange',
  DeliverOrderResponse::class . ':voucherIssuances' => 'MplusKASSA\MplusQapi\VoucherIssuance',
  DeliverOrderResponse::class . ':unappliedVoucherIssuances' => 'MplusKASSA\MplusQapi\UnappliedVoucherIssuance',
@@ -953,6 +936,8 @@ class MplusApiClient extends BaseSoapClient {
  SaveCashCountRequest::class . ':extraWorkplacesData' => 'MplusKASSA\MplusQapi\CashCountInfoWorkplaceData',
  SaveCashCountRequest::class . ':countedPaymentMethodAmounts' => 'MplusKASSA\MplusQapi\CashCountInfoCountedPaymentMethodAmount',
  SalesProcessorContext::class . ':scannedVoucherIssuanceCodes' => 'string',
+ SalesQueueTypeList::class . ':type' => 'string',
+ SalesQueueEntryList::class . ':entry' => 'MplusKASSA\MplusQapi\SalesQueueEntry',
  SalesProcessorResult::class . ':voucherIssuances' => 'MplusKASSA\MplusQapi\VoucherIssuanceCompact',
  SalesProcessorResult::class . ':voucherIssuancesToCancel' => 'MplusKASSA\MplusQapi\VoucherIssuanceCompact',
  SalesProcessorResult::class . ':voucherIssuanceCandidates' => 'MplusKASSA\MplusQapi\VoucherIssuanceCandidate',
@@ -976,6 +961,25 @@ class MplusApiClient extends BaseSoapClient {
  GetInvoicesRequest::class . ':branchGroupFilter' => 'int',
  GetInvoicesRequest::class . ':branchInvoiceNumbers' => 'MplusKASSA\MplusQapi\TransactionNumber',
  GetInvoicesRequest::class . ':contractFrequencyFilter' => 'string',
+ PackingSlip::class . ':lineList' => 'MplusKASSA\MplusQapi\Line',
+ PackingSlipInput::class . ':lineList' => 'MplusKASSA\MplusQapi\LineInput',
+ PackingSlipList::class . ':packingSlip' => 'MplusKASSA\MplusQapi\PackingSlip',
+ GetPackingSlipsRequest::class . ':branchNumbers' => 'int',
+ GetPackingSlipsRequest::class . ':employeeNumbers' => 'int',
+ GetPackingSlipsRequest::class . ':relationNumbers' => 'int',
+ GetPackingSlipsRequest::class . ':supplierRelationNumbers' => 'int',
+ GetPackingSlipsRequest::class . ':articleNumbers' => 'int',
+ GetPackingSlipsRequest::class . ':articleTurnoverGroups' => 'int',
+ GetPackingSlipsRequest::class . ':articlePluNumbers' => 'MplusKASSA\MplusQapi\Text',
+ GetPackingSlipsRequest::class . ':articleBarcodes' => 'MplusKASSA\MplusQapi\Text',
+ GetPackingSlipsRequest::class . ':packingSlipIds' => 'string',
+ GetPackingSlipsRequest::class . ':packingSlipNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
+ GetPackingSlipsRequest::class . ':ownerFilter' => 'string',
+ GetPackingSlipsRequest::class . ':branchGroupFilter' => 'int',
+ GetPackingSlipsRequest::class . ':typeFilter' => 'string',
+ SalesQueueFilter::class . ':ids' => 'string',
+ SalesQueueFilter::class . ':salesObjectIds' => 'string',
+ SalesQueueFilter::class . ':types' => 'string',
  GetSalesRepeatTemplatesResponse::class . ':salesRepeatTemplateList' => 'MplusKASSA\MplusQapi\SalesRepeatTemplate',
  PerformBpeBudgetChecksResponse::class . ':bpeResults' => 'MplusKASSA\MplusQapi\BpeBudgetCheckResponse',
  GetTicketCounterSalesResponse::class . ':ticketCounterSaleList' => 'MplusKASSA\MplusQapi\TicketCounterSale',
@@ -1007,6 +1011,9 @@ class MplusApiClient extends BaseSoapClient {
  GetInvoicesResponse::class . ':invoiceList' => 'MplusKASSA\MplusQapi\Invoice',
  SaveInvoiceResponse::class . ':voucherIssuances' => 'MplusKASSA\MplusQapi\VoucherIssuance',
  SaveInvoiceResponse::class . ':unappliedVoucherIssuances' => 'MplusKASSA\MplusQapi\UnappliedVoucherIssuance',
+ GetPackingSlipsResponse::class . ':packingSlipList' => 'MplusKASSA\MplusQapi\PackingSlip',
+ GetPackingSlipsByOrderResponse::class . ':packingSlipList' => 'MplusKASSA\MplusQapi\PackingSlip',
+ GetPackingSlipQueueResponse::class . ':packingSlipQueueEntryList' => 'MplusKASSA\MplusQapi\SalesQueueEntry',
  WebhookConsumerEventList::class . ':webhookConsumerEvent' => 'MplusKASSA\MplusQapi\WebhookConsumerEvent',
  WebhookConsumerTriggerPatternList::class . ':webhookConsumerTriggerPattern' => 'MplusKASSA\MplusQapi\WebhookConsumerTriggerPattern',
  WebhookConsumerWorkplace::class . ':workplaceNumbers' => 'int',
@@ -1755,30 +1762,6 @@ class MplusApiClient extends BaseSoapClient {
         $this->startRequest($opname);
         $reqobj = new getOrder();
         $reqobj->orderId = $orderId;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function getPackingSlips(GetPackingSlipsRequest $request, ?string $requestId = null) : GetPackingSlipsResponse {
-        $opname = 'getPackingSlips';
-        $this->startRequest($opname);
-        $reqobj = new getPackingSlips();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function getPackingSlipsByOrder(GetPackingSlipsByOrderRequest $request, ?string $requestId = null) : GetPackingSlipsByOrderResponse {
-        $opname = 'getPackingSlipsByOrder';
-        $this->startRequest($opname);
-        $reqobj = new getPackingSlipsByOrder();
-        $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);
         $resp = $this->communicate($opname, $rq, $requestId);
@@ -5180,6 +5163,66 @@ class MplusApiClient extends BaseSoapClient {
         $this->startRequest($opname);
         $reqobj = new creditInvoice();
         $reqobj->invoiceId = $invoiceId;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getPackingSlips(GetPackingSlipsRequest $request, ?string $requestId = null) : GetPackingSlipsResponse {
+        $opname = 'getPackingSlips';
+        $this->startRequest($opname);
+        $reqobj = new getPackingSlips();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getPackingSlipsByOrder(GetPackingSlipsByOrderRequest $request, ?string $requestId = null) : GetPackingSlipsByOrderResponse {
+        $opname = 'getPackingSlipsByOrder';
+        $this->startRequest($opname);
+        $reqobj = new getPackingSlipsByOrder();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function processPackingSlip(ProcessPackingSlipRequest $request, ?string $requestId = null) : ProcessPackingSlipResponse {
+        $opname = 'processPackingSlip';
+        $this->startRequest($opname);
+        $reqobj = new processPackingSlip();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function cancelPackingSlip(CancelPackingSlipRequest $request, ?string $requestId = null) : CancelPackingSlipResponse {
+        $opname = 'cancelPackingSlip';
+        $this->startRequest($opname);
+        $reqobj = new cancelPackingSlip();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getPackingSlipQueue(GetPackingSlipQueueRequest $request, ?string $requestId = null) : GetPackingSlipQueueResponse {
+        $opname = 'getPackingSlipQueue';
+        $this->startRequest($opname);
+        $reqobj = new getPackingSlipQueue();
+        $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);
         $resp = $this->communicate($opname, $rq, $requestId);

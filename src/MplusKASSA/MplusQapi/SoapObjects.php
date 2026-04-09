@@ -3758,215 +3758,6 @@ class SaveOrderInfo extends SoapObject {
 	}
 }
 
-class PackingSlip extends SoapObject {
-	public string $packingSlipId;
-	public ?YearNumber $packingSlipNumber = null;
-	public ?string $packingSlipBarcode = null;
-	public ?string $orderId = null;
-	public ?string $extOrderId = null;
-	public ?YearNumber $orderNumber = null;
-	public ?string $orderBarcode = null;
-	public ?string $invoiceId = null;
-	public ?string $extInvoiceId = null;
-	public ?YearNumber $invoiceNumber = null;
-	public ?string $invoiceBarcode = null;
-	public ?string $transactionString = null;
-	public ?int $syncMarker = null;
-	public ?int $employeeNumber = null;
-	public ?string $employeeName = null;
-	public ?\DateTime $entryTimestamp = null;
-	public ?int $relationNumber = null;
-	public ?string $relationName = null;
-	public ?int $relationCategoryId = null;
-	public ?string $relationBankAccountNumber = null;
-	public ?string $relationVatNumber = null;
-	public ?Address $deliveryAddress = null;
-	public ?Address $invoiceAddress = null;
-	public ?\DateTime $financialDate = null;
-	public ?int $financialBranchNumber = null;
-	public ?string $financialExtBranchId = null;
-	public ?int $workplaceNumber = null;
-	public ?int $entryBranchNumber = null;
-	public ?string $entryExtBranchId = null;
-	public ?string $reference = null;
-	public ?string $activityId = null;
-	public ?BigDecimal $totalInclAmount = null;
-	public ?BigDecimal $totalExclAmount = null;
-	public ?int $changeCounter = null;
-	public ?string $state = null;
-	public ?string $onInvoiceUrl = null;
-	/** @var Line[] */
-	public $lineList = null;
-	public ?string $costCenter = null;
-	public ?int $orderCategoryNumber = null;
-	public ?string $packingSlipType = null;
-	public ?string $vatMethod = null;
-	public ?string $sessionId = null;
-	public ?string $proposalId = null;
-	public ?string $extProposalId = null;
-	public ?YearNumber $proposalNumber = null;
-	public ?int $branchGroupNumber = null;
-	public ?string $ownerId = null;
-	public ?TransactionNumber $branchInvoiceNumber = null;
-	public function writeProps(SoapGenerator $gen): void {
-		$gen->out->writeElementNs(self::TNS, 'packingSlipId', null, $this->packingSlipId);
-		if ($this->packingSlipNumber !== null) $this->packingSlipNumber->write($gen, 'packingSlipNumber');
-		if ($this->packingSlipBarcode !== null) $gen->out->writeElementNs(self::TNS, 'packingSlipBarcode', null, $this->packingSlipBarcode);
-		if ($this->orderId !== null) $gen->out->writeElementNs(self::TNS, 'orderId', null, $this->orderId);
-		if ($this->extOrderId !== null) $gen->out->writeElementNs(self::TNS, 'extOrderId', null, $this->extOrderId);
-		if ($this->orderNumber !== null) $this->orderNumber->write($gen, 'orderNumber');
-		if ($this->orderBarcode !== null) $gen->out->writeElementNs(self::TNS, 'orderBarcode', null, $this->orderBarcode);
-		if ($this->invoiceId !== null) $gen->out->writeElementNs(self::TNS, 'invoiceId', null, $this->invoiceId);
-		if ($this->extInvoiceId !== null) $gen->out->writeElementNs(self::TNS, 'extInvoiceId', null, $this->extInvoiceId);
-		if ($this->invoiceNumber !== null) $this->invoiceNumber->write($gen, 'invoiceNumber');
-		if ($this->invoiceBarcode !== null) $gen->out->writeElementNs(self::TNS, 'invoiceBarcode', null, $this->invoiceBarcode);
-		if ($this->transactionString !== null) $gen->out->writeElementNs(self::TNS, 'transactionString', null, $this->transactionString);
-		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
-		if ($this->employeeNumber !== null) $gen->writeInt('employeeNumber', $this->employeeNumber);
-		if ($this->employeeName !== null) $gen->out->writeElementNs(self::TNS, 'employeeName', null, $this->employeeName);
-		if ($this->entryTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->entryTimestamp))->write($gen, 'entryTimestamp');
-		if ($this->relationNumber !== null) $gen->writeInt('relationNumber', $this->relationNumber);
-		if ($this->relationName !== null) $gen->out->writeElementNs(self::TNS, 'relationName', null, $this->relationName);
-		if ($this->relationCategoryId !== null) $gen->writeInt('relationCategoryId', $this->relationCategoryId);
-		if ($this->relationBankAccountNumber !== null) $gen->out->writeElementNs(self::TNS, 'relationBankAccountNumber', null, $this->relationBankAccountNumber);
-		if ($this->relationVatNumber !== null) $gen->out->writeElementNs(self::TNS, 'relationVatNumber', null, $this->relationVatNumber);
-		if ($this->deliveryAddress !== null) $this->deliveryAddress->write($gen, 'deliveryAddress');
-		if ($this->invoiceAddress !== null) $this->invoiceAddress->write($gen, 'invoiceAddress');
-		if ($this->financialDate !== null) (SoapMplusDate::fromDateTime($this->financialDate))->write($gen, 'financialDate');
-		if ($this->financialBranchNumber !== null) $gen->writeInt('financialBranchNumber', $this->financialBranchNumber);
-		if ($this->financialExtBranchId !== null) $gen->out->writeElementNs(self::TNS, 'financialExtBranchId', null, $this->financialExtBranchId);
-		if ($this->workplaceNumber !== null) $gen->writeInt('workplaceNumber', $this->workplaceNumber);
-		if ($this->entryBranchNumber !== null) $gen->writeInt('entryBranchNumber', $this->entryBranchNumber);
-		if ($this->entryExtBranchId !== null) $gen->out->writeElementNs(self::TNS, 'entryExtBranchId', null, $this->entryExtBranchId);
-		if ($this->reference !== null) $gen->out->writeElementNs(self::TNS, 'reference', null, $this->reference);
-		if ($this->activityId !== null) $gen->out->writeElementNs(self::TNS, 'activityId', null, $this->activityId);
-		if ($this->totalInclAmount !== null) $gen->writeValueAndScale('totalInclAmount', '', $this->totalInclAmount, 2);
-		if ($this->totalExclAmount !== null) $gen->writeValueAndScale('totalExclAmount', '', $this->totalExclAmount, 2);
-		if ($this->changeCounter !== null) $gen->writeInt('changeCounter', $this->changeCounter);
-		if ($this->state !== null) $gen->out->writeElementNs(self::TNS, 'state', null, $this->state);
-		if ($this->onInvoiceUrl !== null) $gen->out->writeElementNs(self::TNS, 'onInvoiceUrl', null, $this->onInvoiceUrl);
-		if ($this->lineList !== null) {
-$tmp_lineList = new LineList($this->lineList);
-$tmp_lineList->write($gen, 'lineList');
-}
-		if ($this->costCenter !== null) $gen->out->writeElementNs(self::TNS, 'costCenter', null, $this->costCenter);
-		if ($this->orderCategoryNumber !== null) $gen->writeInt('orderCategoryNumber', $this->orderCategoryNumber);
-		if ($this->packingSlipType !== null) $gen->out->writeElementNs(self::TNS, 'packingSlipType', null, $this->packingSlipType);
-		if ($this->vatMethod !== null) $gen->out->writeElementNs(self::TNS, 'vatMethod', null, $this->vatMethod);
-		if ($this->sessionId !== null) $gen->out->writeElementNs(self::TNS, 'sessionId', null, $this->sessionId);
-		if ($this->proposalId !== null) $gen->out->writeElementNs(self::TNS, 'proposalId', null, $this->proposalId);
-		if ($this->extProposalId !== null) $gen->out->writeElementNs(self::TNS, 'extProposalId', null, $this->extProposalId);
-		if ($this->proposalNumber !== null) $this->proposalNumber->write($gen, 'proposalNumber');
-		if ($this->branchGroupNumber !== null) $gen->writeInt('branchGroupNumber', $this->branchGroupNumber);
-		if ($this->ownerId !== null) $gen->out->writeElementNs(self::TNS, 'ownerId', null, $this->ownerId);
-		if ($this->branchInvoiceNumber !== null) $this->branchInvoiceNumber->write($gen, 'branchInvoiceNumber');
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class PackingSlipList extends SoapObject {
-	/** @var PackingSlip[] */
-	public $packingSlip = array();
-	public function __construct($list = array()) { $this->packingSlip = $list; }
-	public function writeProps(SoapGenerator $gen): void {
-		foreach ($this->packingSlip as $elem) $elem->write($gen, 'packingSlip');
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class GetPackingSlipsRequest extends SoapObject {
-	public ?int $syncMarker = null;
-	public ?int $syncMarkerLimit = null;
-	public ?\DateTime $fromFinancialDate = null;
-	public ?\DateTime $throughFinancialDate = null;
-	/** @var int[] */
-	public $branchNumbers = array();
-	/** @var int[] */
-	public $employeeNumbers = array();
-	/** @var int[] */
-	public $relationNumbers = array();
-	/** @var int[] */
-	public $supplierRelationNumbers = array();
-	/** @var int[] */
-	public $articleNumbers = array();
-	/** @var int[] */
-	public $articleTurnoverGroups = array();
-	/** @var Text[] */
-	public $articlePluNumbers = null;
-	/** @var Text[] */
-	public $articleBarcodes = null;
-	public ?string $activityId = null;
-	/** @var string[] */
-	public $packingSlipIds = array();
-	/** @var YearNumber[] */
-	public $packingSlipNumbers = array();
-	/** @var string[] */
-	public $ownerFilter = null;
-	/** @var int[] */
-	public $branchGroupFilter = null;
-	public ?bool $includeLineList = null;
-	/** @var string[] */
-	public $typeFilter = array();
-	public function writeProps(SoapGenerator $gen): void {
-		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
-		if ($this->syncMarkerLimit !== null) $gen->writeInt('syncMarkerLimit', $this->syncMarkerLimit);
-		if ($this->fromFinancialDate !== null) (SoapMplusDate::fromDateTime($this->fromFinancialDate))->write($gen, 'fromFinancialDate');
-		if ($this->throughFinancialDate !== null) (SoapMplusDate::fromDateTime($this->throughFinancialDate))->write($gen, 'throughFinancialDate');
-		foreach ($this->branchNumbers as $elem) $gen->writeInt('branchNumbers', $elem);
-		foreach ($this->employeeNumbers as $elem) $gen->writeInt('employeeNumbers', $elem);
-		foreach ($this->relationNumbers as $elem) $gen->writeInt('relationNumbers', $elem);
-		foreach ($this->supplierRelationNumbers as $elem) $gen->writeInt('supplierRelationNumbers', $elem);
-		foreach ($this->articleNumbers as $elem) $gen->writeInt('articleNumbers', $elem);
-		foreach ($this->articleTurnoverGroups as $elem) $gen->writeInt('articleTurnoverGroups', $elem);
-		if ($this->articlePluNumbers !== null) {
-$tmp_articlePluNumbers = new TextList($this->articlePluNumbers);
-$tmp_articlePluNumbers->write($gen, 'articlePluNumbers');
-}
-		if ($this->articleBarcodes !== null) {
-$tmp_articleBarcodes = new TextList($this->articleBarcodes);
-$tmp_articleBarcodes->write($gen, 'articleBarcodes');
-}
-		if ($this->activityId !== null) $gen->out->writeElementNs(self::TNS, 'activityId', null, $this->activityId);
-		foreach ($this->packingSlipIds as $elem) $gen->out->writeElementNs(self::TNS, 'packingSlipIds', null, $elem);
-		foreach ($this->packingSlipNumbers as $elem) $elem->write($gen, 'packingSlipNumbers');
-		if ($this->ownerFilter !== null) {
-$tmp_ownerFilter = new OwnerLabelFilter($this->ownerFilter);
-$tmp_ownerFilter->write($gen, 'ownerFilter');
-}
-		if ($this->branchGroupFilter !== null) {
-$tmp_branchGroupFilter = new BranchGroupFilter($this->branchGroupFilter);
-$tmp_branchGroupFilter->write($gen, 'branchGroupFilter');
-}
-		if ($this->includeLineList !== null) $gen->writeBool('includeLineList', $this->includeLineList);
-		foreach ($this->typeFilter as $elem) $gen->out->writeElementNs(self::TNS, 'typeFilter', null, $elem);
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class GetPackingSlipsByOrderRequest extends SoapObject {
-	public string $orderId;
-	public function writeProps(SoapGenerator $gen): void {
-		$gen->out->writeElementNs(self::TNS, 'orderId', null, $this->orderId);
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
 class LineChangeList extends SoapObject {
 	/** @var LineChange[] */
 	public $lineChange = array();
@@ -5168,10 +4959,14 @@ class OrderCategory extends SoapObject {
 	public string $orderCategoryDescription;
 	/** @var int[] */
 	public $orderCategoryDependencyNumbers = array();
+	public bool $allowCancel;
+	public bool $allowProcess;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->writeInt('orderCategoryNumber', $this->orderCategoryNumber);
 		$gen->out->writeElementNs(self::TNS, 'orderCategoryDescription', null, $this->orderCategoryDescription);
 		foreach ($this->orderCategoryDependencyNumbers as $elem) $gen->writeInt('orderCategoryDependencyNumbers', $elem);
+		$gen->writeBool('allowCancel', $this->allowCancel);
+		$gen->writeBool('allowProcess', $this->allowProcess);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -5508,6 +5303,8 @@ class TurnoverGroup extends SoapObject {
 	public ?string $purchaseCostCenterNumber = null;
 	public ?string $defaultStockCostCenterNumber = null;
 	public ?string $stockCostCenterNumber = null;
+	public ?string $topupPaymentId = null;
+	public ?int $quantityPerLabel = null;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'turnoverGroupType', null, $this->turnoverGroupType);
 		$gen->writeInt('turnoverGroup', $this->turnoverGroup);
@@ -5538,6 +5335,8 @@ $tmp_branchCostCenterNumberList->write($gen, 'branchCostCenterNumberList');
 		if ($this->purchaseCostCenterNumber !== null) $gen->out->writeElementNs(self::TNS, 'purchaseCostCenterNumber', null, $this->purchaseCostCenterNumber);
 		if ($this->defaultStockCostCenterNumber !== null) $gen->out->writeElementNs(self::TNS, 'defaultStockCostCenterNumber', null, $this->defaultStockCostCenterNumber);
 		if ($this->stockCostCenterNumber !== null) $gen->out->writeElementNs(self::TNS, 'stockCostCenterNumber', null, $this->stockCostCenterNumber);
+		if ($this->topupPaymentId !== null) $gen->out->writeElementNs(self::TNS, 'topupPaymentId', null, $this->topupPaymentId);
+		if ($this->quantityPerLabel !== null) $gen->writeInt('quantityPerLabel', $this->quantityPerLabel);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -6532,6 +6331,7 @@ class Article extends SoapObject {
 	public ?int $shelfLifeInHours = null;
 	public ?BigDecimal $priceDeviationMin = null;
 	public ?BigDecimal $priceDeviationMax = null;
+	public ?bool $availableForInterbranchOrdering = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->articleNumber !== null) $gen->writeInt('articleNumber', $this->articleNumber);
 		if ($this->extArticleId !== null) $gen->out->writeElementNs(self::TNS, 'extArticleId', null, $this->extArticleId);
@@ -6632,6 +6432,7 @@ $tmp_relationArticleDiscountList->write($gen, 'relationArticleDiscountList');
 		if ($this->shelfLifeInHours !== null) $gen->writeInt('shelfLifeInHours', $this->shelfLifeInHours);
 		if ($this->priceDeviationMin !== null) $gen->writeBigDecimal('priceDeviationMin', $this->priceDeviationMin);
 		if ($this->priceDeviationMax !== null) $gen->writeBigDecimal('priceDeviationMax', $this->priceDeviationMax);
+		if ($this->availableForInterbranchOrdering !== null) $gen->writeBool('availableForInterbranchOrdering', $this->availableForInterbranchOrdering);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -10790,6 +10591,7 @@ class DeterminePricingRequest extends SoapObject {
 	public ?TableNumber $table = null;
 	/** @var string[] */
 	public $scannedVoucherIssuanceCodes = array();
+	public ?bool $automaticNewMenus = null;
 	public function __construct() {
 		$this->workplace = new WorkplaceIdentifier();
 	}
@@ -10805,6 +10607,7 @@ class DeterminePricingRequest extends SoapObject {
 		if ($this->orderId !== null) $gen->out->writeElementNs(self::TNS, 'orderId', null, $this->orderId);
 		if ($this->table !== null) $this->table->write($gen, 'table');
 		foreach ($this->scannedVoucherIssuanceCodes as $elem) $gen->out->writeElementNs(self::TNS, 'scannedVoucherIssuanceCodes', null, $elem);
+		if ($this->automaticNewMenus !== null) $gen->writeBool('automaticNewMenus', $this->automaticNewMenus);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -12157,38 +11960,6 @@ class GetOrderResponse extends SoapObject {
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
 		if ($this->order !== null) $this->order->write($gen, 'order');
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class GetPackingSlipsResponse extends SoapObject {
-	/** @var PackingSlip[] */
-	public $packingSlipList = array();
-	public function __construct($list = array()) { $this->packingSlipList = $list; }
-	public function writeProps(SoapGenerator $gen): void {
-		$tmp_packingSlipList = new PackingSlipList($this->packingSlipList);
-$tmp_packingSlipList->write($gen, 'packingSlipList');
-
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class GetPackingSlipsByOrderResponse extends SoapObject {
-	/** @var PackingSlip[] */
-	public $packingSlipList = array();
-	public function __construct($list = array()) { $this->packingSlipList = $list; }
-	public function writeProps(SoapGenerator $gen): void {
-		$tmp_packingSlipList = new PackingSlipList($this->packingSlipList);
-$tmp_packingSlipList->write($gen, 'packingSlipList');
-
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -14404,6 +14175,8 @@ class ButtonLayout_Button extends SoapObject {
 	public ?bool $showAvailableStock = null;
 	public ?bool $isDayStockArticle = null;
 	public ?bool $showSalesPrice = null;
+	public ?bool $isKitchenTicketPrioButton = null;
+	public ?bool $isTitleButton = null;
 	public function __construct() {
 		$this->colour = new Colour();
 	}
@@ -14419,6 +14192,8 @@ class ButtonLayout_Button extends SoapObject {
 		if ($this->showAvailableStock !== null) $gen->writeBool('showAvailableStock', $this->showAvailableStock);
 		if ($this->isDayStockArticle !== null) $gen->writeBool('isDayStockArticle', $this->isDayStockArticle);
 		if ($this->showSalesPrice !== null) $gen->writeBool('showSalesPrice', $this->showSalesPrice);
+		if ($this->isKitchenTicketPrioButton !== null) $gen->writeBool('isKitchenTicketPrioButton', $this->isKitchenTicketPrioButton);
+		if ($this->isTitleButton !== null) $gen->writeBool('isTitleButton', $this->isTitleButton);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -14610,12 +14385,14 @@ class ButtonLayoutTab extends SoapObject {
 	public ?int $layoutId = null;
 	/** @var ButtonLayoutTabBranchLayout[] */
 	public $branches = array();
+	public ?int $sequenceNumber = null;
 	public ?ButtonLayout $effectiveLayout = null;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->writeInt('id', $this->id);
 		$gen->out->writeElementNs(self::TNS, 'kind', null, $this->kind);
 		if ($this->layoutId !== null) $gen->writeInt('layoutId', $this->layoutId);
 		foreach ($this->branches as $elem) $elem->write($gen, 'branches');
+		if ($this->sequenceNumber !== null) $gen->writeInt('sequenceNumber', $this->sequenceNumber);
 		if ($this->effectiveLayout !== null) $this->effectiveLayout->write($gen, 'effectiveLayout');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
@@ -14631,11 +14408,13 @@ class ButtonLayoutGroup extends SoapObject {
 	/** @var ButtonLayoutTab[] */
 	public $tabs = array();
 	public ?string $ownerId = null;
+	public ?bool $targetsAllBranches = null;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->writeInt('id', $this->id);
 		$gen->out->writeElementNs(self::TNS, 'name', null, $this->name);
 		foreach ($this->tabs as $elem) $elem->write($gen, 'tabs');
 		if ($this->ownerId !== null) $gen->out->writeElementNs(self::TNS, 'ownerId', null, $this->ownerId);
+		if ($this->targetsAllBranches !== null) $gen->writeBool('targetsAllBranches', $this->targetsAllBranches);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -22585,6 +22364,7 @@ class InvoiceInput extends SoapObject {
 	/** @var LineInput[] */
 	public $lineList = null;
 	public ?bool $directDebit = null;
+	public ?int $orderCategoryNumber = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->invoiceId !== null) $gen->out->writeElementNs(self::TNS, 'invoiceId', null, $this->invoiceId);
 		if ($this->extInvoiceId !== null) $gen->out->writeElementNs(self::TNS, 'extInvoiceId', null, $this->extInvoiceId);
@@ -22607,6 +22387,7 @@ $tmp_lineList = new LineInputList($this->lineList);
 $tmp_lineList->write($gen, 'lineList');
 }
 		if ($this->directDebit !== null) $gen->writeBool('directDebit', $this->directDebit);
+		if ($this->orderCategoryNumber !== null) $gen->writeInt('orderCategoryNumber', $this->orderCategoryNumber);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -24520,6 +24301,74 @@ class SalesProcessorContext extends SoapObject {
 	}
 }
 
+class SalesQueueTypeList extends SoapObject {
+	/** @var string[] */
+	public $type = array();
+	public function __construct($list = array()) { $this->type = $list; }
+	public function writeProps(SoapGenerator $gen): void {
+		foreach ($this->type as $elem) $gen->out->writeElementNs(self::TNS, 'type', null, $elem);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class SalesQueueEntry extends SoapObject {
+	public string $id;
+	public string $salesObjectId;
+	public string $type;
+	public \DateTime $createdTs;
+	public ?\DateTime $processedTs = null;
+	public ?\DateTime $cancelledTs = null;
+	public ?\DateTime $failedTs = null;
+	public ?string $failureReason = null;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'id', null, $this->id);
+		$gen->out->writeElementNs(self::TNS, 'salesObjectId', null, $this->salesObjectId);
+		$gen->out->writeElementNs(self::TNS, 'type', null, $this->type);
+		$gen->writeDateTime('createdTs', $this->createdTs);
+		if ($this->processedTs !== null) $gen->writeDateTime('processedTs', $this->processedTs);
+		if ($this->cancelledTs !== null) $gen->writeDateTime('cancelledTs', $this->cancelledTs);
+		if ($this->failedTs !== null) $gen->writeDateTime('failedTs', $this->failedTs);
+		if ($this->failureReason !== null) $gen->out->writeElementNs(self::TNS, 'failureReason', null, $this->failureReason);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class SalesQueueEntryList extends SoapObject {
+	/** @var SalesQueueEntry[] */
+	public $entry = array();
+	public function __construct($list = array()) { $this->entry = $list; }
+	public function writeProps(SoapGenerator $gen): void {
+		foreach ($this->entry as $elem) $elem->write($gen, 'entry');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class SalesQueueResult extends SoapObject {
+	public ?SalesQueueEntry $entry = null;
+	public string $type;
+	public function writeProps(SoapGenerator $gen): void {
+		if ($this->entry !== null) $this->entry->write($gen, 'entry');
+		$gen->out->writeElementNs(self::TNS, 'type', null, $this->type);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
 class SalesProcessorResult extends SoapObject {
 	/** @var VoucherIssuanceCompact[] */
 	public $voucherIssuances = null;
@@ -24533,6 +24382,7 @@ class SalesProcessorResult extends SoapObject {
 	public $scannedVoucherIssuances = null;
 	/** @var string[] */
 	public $errorMessages = array();
+	public ?SalesQueueResult $queueResult = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->voucherIssuances !== null) {
 $tmp_voucherIssuances = new VoucherIssuanceCompactList($this->voucherIssuances);
@@ -24555,6 +24405,7 @@ $tmp_scannedVoucherIssuances = new VoucherIssuanceRedeemableList($this->scannedV
 $tmp_scannedVoucherIssuances->write($gen, 'scannedVoucherIssuances');
 }
 		foreach ($this->errorMessages as $elem) $gen->out->writeElementNs(self::TNS, 'errorMessages', null, $elem);
+		if ($this->queueResult !== null) $this->queueResult->write($gen, 'queueResult');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -24826,6 +24677,343 @@ class SaveInvoiceInfo extends SoapObject {
 		$gen->out->writeElementNs(self::TNS, 'invoiceString', null, $this->invoiceString);
 		if ($this->invoiceNumber !== null) $this->invoiceNumber->write($gen, 'invoiceNumber');
 		if ($this->invoiceBarcode !== null) $gen->out->writeElementNs(self::TNS, 'invoiceBarcode', null, $this->invoiceBarcode);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class PackingSlip extends SoapObject {
+	public string $packingSlipId;
+	public ?YearNumber $packingSlipNumber = null;
+	public ?string $packingSlipBarcode = null;
+	public ?string $orderId = null;
+	public ?string $extOrderId = null;
+	public ?YearNumber $orderNumber = null;
+	public ?string $orderBarcode = null;
+	public ?string $invoiceId = null;
+	public ?string $extInvoiceId = null;
+	public ?YearNumber $invoiceNumber = null;
+	public ?string $invoiceBarcode = null;
+	public ?string $transactionString = null;
+	public ?int $syncMarker = null;
+	public ?int $employeeNumber = null;
+	public ?string $employeeName = null;
+	public ?\DateTime $entryTimestamp = null;
+	public ?int $relationNumber = null;
+	public ?string $relationName = null;
+	public ?int $relationCategoryId = null;
+	public ?string $relationBankAccountNumber = null;
+	public ?string $relationVatNumber = null;
+	public ?Address $deliveryAddress = null;
+	public ?Address $invoiceAddress = null;
+	public ?\DateTime $financialDate = null;
+	public ?int $financialBranchNumber = null;
+	public ?string $financialExtBranchId = null;
+	public ?int $workplaceNumber = null;
+	public ?int $entryBranchNumber = null;
+	public ?string $entryExtBranchId = null;
+	public ?string $reference = null;
+	public ?string $activityId = null;
+	public ?BigDecimal $totalInclAmount = null;
+	public ?BigDecimal $totalExclAmount = null;
+	public ?int $changeCounter = null;
+	public ?string $state = null;
+	public ?string $onInvoiceUrl = null;
+	/** @var Line[] */
+	public $lineList = null;
+	public ?string $costCenter = null;
+	public ?int $orderCategoryNumber = null;
+	public ?string $packingSlipType = null;
+	public ?string $vatMethod = null;
+	public ?string $sessionId = null;
+	public ?string $proposalId = null;
+	public ?string $extProposalId = null;
+	public ?YearNumber $proposalNumber = null;
+	public ?int $branchGroupNumber = null;
+	public ?string $ownerId = null;
+	public ?TransactionNumber $branchInvoiceNumber = null;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'packingSlipId', null, $this->packingSlipId);
+		if ($this->packingSlipNumber !== null) $this->packingSlipNumber->write($gen, 'packingSlipNumber');
+		if ($this->packingSlipBarcode !== null) $gen->out->writeElementNs(self::TNS, 'packingSlipBarcode', null, $this->packingSlipBarcode);
+		if ($this->orderId !== null) $gen->out->writeElementNs(self::TNS, 'orderId', null, $this->orderId);
+		if ($this->extOrderId !== null) $gen->out->writeElementNs(self::TNS, 'extOrderId', null, $this->extOrderId);
+		if ($this->orderNumber !== null) $this->orderNumber->write($gen, 'orderNumber');
+		if ($this->orderBarcode !== null) $gen->out->writeElementNs(self::TNS, 'orderBarcode', null, $this->orderBarcode);
+		if ($this->invoiceId !== null) $gen->out->writeElementNs(self::TNS, 'invoiceId', null, $this->invoiceId);
+		if ($this->extInvoiceId !== null) $gen->out->writeElementNs(self::TNS, 'extInvoiceId', null, $this->extInvoiceId);
+		if ($this->invoiceNumber !== null) $this->invoiceNumber->write($gen, 'invoiceNumber');
+		if ($this->invoiceBarcode !== null) $gen->out->writeElementNs(self::TNS, 'invoiceBarcode', null, $this->invoiceBarcode);
+		if ($this->transactionString !== null) $gen->out->writeElementNs(self::TNS, 'transactionString', null, $this->transactionString);
+		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
+		if ($this->employeeNumber !== null) $gen->writeInt('employeeNumber', $this->employeeNumber);
+		if ($this->employeeName !== null) $gen->out->writeElementNs(self::TNS, 'employeeName', null, $this->employeeName);
+		if ($this->entryTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->entryTimestamp))->write($gen, 'entryTimestamp');
+		if ($this->relationNumber !== null) $gen->writeInt('relationNumber', $this->relationNumber);
+		if ($this->relationName !== null) $gen->out->writeElementNs(self::TNS, 'relationName', null, $this->relationName);
+		if ($this->relationCategoryId !== null) $gen->writeInt('relationCategoryId', $this->relationCategoryId);
+		if ($this->relationBankAccountNumber !== null) $gen->out->writeElementNs(self::TNS, 'relationBankAccountNumber', null, $this->relationBankAccountNumber);
+		if ($this->relationVatNumber !== null) $gen->out->writeElementNs(self::TNS, 'relationVatNumber', null, $this->relationVatNumber);
+		if ($this->deliveryAddress !== null) $this->deliveryAddress->write($gen, 'deliveryAddress');
+		if ($this->invoiceAddress !== null) $this->invoiceAddress->write($gen, 'invoiceAddress');
+		if ($this->financialDate !== null) (SoapMplusDate::fromDateTime($this->financialDate))->write($gen, 'financialDate');
+		if ($this->financialBranchNumber !== null) $gen->writeInt('financialBranchNumber', $this->financialBranchNumber);
+		if ($this->financialExtBranchId !== null) $gen->out->writeElementNs(self::TNS, 'financialExtBranchId', null, $this->financialExtBranchId);
+		if ($this->workplaceNumber !== null) $gen->writeInt('workplaceNumber', $this->workplaceNumber);
+		if ($this->entryBranchNumber !== null) $gen->writeInt('entryBranchNumber', $this->entryBranchNumber);
+		if ($this->entryExtBranchId !== null) $gen->out->writeElementNs(self::TNS, 'entryExtBranchId', null, $this->entryExtBranchId);
+		if ($this->reference !== null) $gen->out->writeElementNs(self::TNS, 'reference', null, $this->reference);
+		if ($this->activityId !== null) $gen->out->writeElementNs(self::TNS, 'activityId', null, $this->activityId);
+		if ($this->totalInclAmount !== null) $gen->writeValueAndScale('totalInclAmount', '', $this->totalInclAmount, 2);
+		if ($this->totalExclAmount !== null) $gen->writeValueAndScale('totalExclAmount', '', $this->totalExclAmount, 2);
+		if ($this->changeCounter !== null) $gen->writeInt('changeCounter', $this->changeCounter);
+		if ($this->state !== null) $gen->out->writeElementNs(self::TNS, 'state', null, $this->state);
+		if ($this->onInvoiceUrl !== null) $gen->out->writeElementNs(self::TNS, 'onInvoiceUrl', null, $this->onInvoiceUrl);
+		if ($this->lineList !== null) {
+$tmp_lineList = new LineList($this->lineList);
+$tmp_lineList->write($gen, 'lineList');
+}
+		if ($this->costCenter !== null) $gen->out->writeElementNs(self::TNS, 'costCenter', null, $this->costCenter);
+		if ($this->orderCategoryNumber !== null) $gen->writeInt('orderCategoryNumber', $this->orderCategoryNumber);
+		if ($this->packingSlipType !== null) $gen->out->writeElementNs(self::TNS, 'packingSlipType', null, $this->packingSlipType);
+		if ($this->vatMethod !== null) $gen->out->writeElementNs(self::TNS, 'vatMethod', null, $this->vatMethod);
+		if ($this->sessionId !== null) $gen->out->writeElementNs(self::TNS, 'sessionId', null, $this->sessionId);
+		if ($this->proposalId !== null) $gen->out->writeElementNs(self::TNS, 'proposalId', null, $this->proposalId);
+		if ($this->extProposalId !== null) $gen->out->writeElementNs(self::TNS, 'extProposalId', null, $this->extProposalId);
+		if ($this->proposalNumber !== null) $this->proposalNumber->write($gen, 'proposalNumber');
+		if ($this->branchGroupNumber !== null) $gen->writeInt('branchGroupNumber', $this->branchGroupNumber);
+		if ($this->ownerId !== null) $gen->out->writeElementNs(self::TNS, 'ownerId', null, $this->ownerId);
+		if ($this->branchInvoiceNumber !== null) $this->branchInvoiceNumber->write($gen, 'branchInvoiceNumber');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class PackingSlipInput extends SoapObject {
+	public ?string $packingSlipId = null;
+	public int $employeeNumber;
+	public int $relationNumber;
+	public ?\DateTime $financialDate = null;
+	public int $financialBranchNumber;
+	public int $entryBranchNumber;
+	public ?int $workplaceNumber = null;
+	public ?string $reference = null;
+	public ?string $vatMethod = null;
+	public ?int $changeCounter = null;
+	public ?string $vatChange = null;
+	public ?int $vatCountryCode = null;
+	public ?string $vatCountryIso3 = null;
+	/** @var LineInput[] */
+	public $lineList = null;
+	public function writeProps(SoapGenerator $gen): void {
+		if ($this->packingSlipId !== null) $gen->out->writeElementNs(self::TNS, 'packingSlipId', null, $this->packingSlipId);
+		$gen->writeInt('employeeNumber', $this->employeeNumber);
+		$gen->writeInt('relationNumber', $this->relationNumber);
+		if ($this->financialDate !== null) $gen->writeDate('financialDate', $this->financialDate);
+		$gen->writeInt('financialBranchNumber', $this->financialBranchNumber);
+		$gen->writeInt('entryBranchNumber', $this->entryBranchNumber);
+		if ($this->workplaceNumber !== null) $gen->writeInt('workplaceNumber', $this->workplaceNumber);
+		if ($this->reference !== null) $gen->out->writeElementNs(self::TNS, 'reference', null, $this->reference);
+		if ($this->vatMethod !== null) $gen->out->writeElementNs(self::TNS, 'vatMethod', null, $this->vatMethod);
+		if ($this->changeCounter !== null) $gen->writeInt('changeCounter', $this->changeCounter);
+		if ($this->vatChange !== null) $gen->out->writeElementNs(self::TNS, 'vatChange', null, $this->vatChange);
+		if ($this->vatCountryCode !== null) $gen->writeInt('vatCountryCode', $this->vatCountryCode);
+		if ($this->vatCountryIso3 !== null) $gen->out->writeElementNs(self::TNS, 'vatCountryIso3', null, $this->vatCountryIso3);
+		if ($this->lineList !== null) {
+$tmp_lineList = new LineInputList($this->lineList);
+$tmp_lineList->write($gen, 'lineList');
+}
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class PackingSlipList extends SoapObject {
+	/** @var PackingSlip[] */
+	public $packingSlip = array();
+	public function __construct($list = array()) { $this->packingSlip = $list; }
+	public function writeProps(SoapGenerator $gen): void {
+		foreach ($this->packingSlip as $elem) $elem->write($gen, 'packingSlip');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetPackingSlipsRequest extends SoapObject {
+	public ?int $syncMarker = null;
+	public ?int $syncMarkerLimit = null;
+	public ?\DateTime $fromFinancialDate = null;
+	public ?\DateTime $throughFinancialDate = null;
+	/** @var int[] */
+	public $branchNumbers = array();
+	/** @var int[] */
+	public $employeeNumbers = array();
+	/** @var int[] */
+	public $relationNumbers = array();
+	/** @var int[] */
+	public $supplierRelationNumbers = array();
+	/** @var int[] */
+	public $articleNumbers = array();
+	/** @var int[] */
+	public $articleTurnoverGroups = array();
+	/** @var Text[] */
+	public $articlePluNumbers = null;
+	/** @var Text[] */
+	public $articleBarcodes = null;
+	public ?string $activityId = null;
+	/** @var string[] */
+	public $packingSlipIds = array();
+	/** @var YearNumber[] */
+	public $packingSlipNumbers = array();
+	/** @var string[] */
+	public $ownerFilter = null;
+	/** @var int[] */
+	public $branchGroupFilter = null;
+	public ?bool $includeLineList = null;
+	/** @var string[] */
+	public $typeFilter = array();
+	public function writeProps(SoapGenerator $gen): void {
+		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
+		if ($this->syncMarkerLimit !== null) $gen->writeInt('syncMarkerLimit', $this->syncMarkerLimit);
+		if ($this->fromFinancialDate !== null) (SoapMplusDate::fromDateTime($this->fromFinancialDate))->write($gen, 'fromFinancialDate');
+		if ($this->throughFinancialDate !== null) (SoapMplusDate::fromDateTime($this->throughFinancialDate))->write($gen, 'throughFinancialDate');
+		foreach ($this->branchNumbers as $elem) $gen->writeInt('branchNumbers', $elem);
+		foreach ($this->employeeNumbers as $elem) $gen->writeInt('employeeNumbers', $elem);
+		foreach ($this->relationNumbers as $elem) $gen->writeInt('relationNumbers', $elem);
+		foreach ($this->supplierRelationNumbers as $elem) $gen->writeInt('supplierRelationNumbers', $elem);
+		foreach ($this->articleNumbers as $elem) $gen->writeInt('articleNumbers', $elem);
+		foreach ($this->articleTurnoverGroups as $elem) $gen->writeInt('articleTurnoverGroups', $elem);
+		if ($this->articlePluNumbers !== null) {
+$tmp_articlePluNumbers = new TextList($this->articlePluNumbers);
+$tmp_articlePluNumbers->write($gen, 'articlePluNumbers');
+}
+		if ($this->articleBarcodes !== null) {
+$tmp_articleBarcodes = new TextList($this->articleBarcodes);
+$tmp_articleBarcodes->write($gen, 'articleBarcodes');
+}
+		if ($this->activityId !== null) $gen->out->writeElementNs(self::TNS, 'activityId', null, $this->activityId);
+		foreach ($this->packingSlipIds as $elem) $gen->out->writeElementNs(self::TNS, 'packingSlipIds', null, $elem);
+		foreach ($this->packingSlipNumbers as $elem) $elem->write($gen, 'packingSlipNumbers');
+		if ($this->ownerFilter !== null) {
+$tmp_ownerFilter = new OwnerLabelFilter($this->ownerFilter);
+$tmp_ownerFilter->write($gen, 'ownerFilter');
+}
+		if ($this->branchGroupFilter !== null) {
+$tmp_branchGroupFilter = new BranchGroupFilter($this->branchGroupFilter);
+$tmp_branchGroupFilter->write($gen, 'branchGroupFilter');
+}
+		if ($this->includeLineList !== null) $gen->writeBool('includeLineList', $this->includeLineList);
+		foreach ($this->typeFilter as $elem) $gen->out->writeElementNs(self::TNS, 'typeFilter', null, $elem);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetPackingSlipsByOrderRequest extends SoapObject {
+	public string $orderId;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'orderId', null, $this->orderId);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class ProcessPackingSlipRequest extends IdempotentReq {
+	public PackingSlipInput $packingSlip;
+	public SalesProcessorContext $processorContext;
+	public function __construct() {
+		$this->packingSlip = new PackingSlipInput();
+		$this->processorContext = new SalesProcessorContext();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+	    parent::writeProps($gen);
+		$this->packingSlip->write($gen, 'packingSlip');
+		$this->processorContext->write($gen, 'processorContext');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class CancelPackingSlipRequest extends IdempotentReq {
+	public string $packingSlipId;
+	public WorkplaceIdentifier $workplaceKey;
+	public function __construct() {
+		$this->workplaceKey = new WorkplaceIdentifier();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+	    parent::writeProps($gen);
+		$gen->out->writeElementNs(self::TNS, 'packingSlipId', null, $this->packingSlipId);
+		$this->workplaceKey->write($gen, 'workplaceKey');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class SalesQueueFilter extends SoapObject {
+	/** @var string[] */
+	public $ids = null;
+	/** @var string[] */
+	public $salesObjectIds = null;
+	/** @var string[] */
+	public $types = null;
+	public ?bool $pendingOnly = null;
+	public function writeProps(SoapGenerator $gen): void {
+		if ($this->ids !== null) {
+$tmp_ids = new IdList($this->ids);
+$tmp_ids->write($gen, 'ids');
+}
+		if ($this->salesObjectIds !== null) {
+$tmp_salesObjectIds = new IdList($this->salesObjectIds);
+$tmp_salesObjectIds->write($gen, 'salesObjectIds');
+}
+		if ($this->types !== null) {
+$tmp_types = new SalesQueueTypeList($this->types);
+$tmp_types->write($gen, 'types');
+}
+		if ($this->pendingOnly !== null) $gen->writeBool('pendingOnly', $this->pendingOnly);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetPackingSlipQueueRequest extends SoapObject {
+	public SalesQueueFilter $filter;
+	public ?bool $loadPackingSlip = null;
+	public ?bool $latestOnly = null;
+	public function __construct() {
+		$this->filter = new SalesQueueFilter();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->filter->write($gen, 'filter');
+		if ($this->loadPackingSlip !== null) $gen->writeBool('loadPackingSlip', $this->loadPackingSlip);
+		if ($this->latestOnly !== null) $gen->writeBool('latestOnly', $this->latestOnly);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -25581,6 +25769,86 @@ class CreditInvoiceResponse extends SoapObject {
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
 		$gen->out->writeElementNs(self::TNS, 'message', null, $this->message);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetPackingSlipsResponse extends SoapObject {
+	/** @var PackingSlip[] */
+	public $packingSlipList = array();
+	public function __construct($list = array()) { $this->packingSlipList = $list; }
+	public function writeProps(SoapGenerator $gen): void {
+		$tmp_packingSlipList = new PackingSlipList($this->packingSlipList);
+$tmp_packingSlipList->write($gen, 'packingSlipList');
+
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetPackingSlipsByOrderResponse extends SoapObject {
+	/** @var PackingSlip[] */
+	public $packingSlipList = array();
+	public function __construct($list = array()) { $this->packingSlipList = $list; }
+	public function writeProps(SoapGenerator $gen): void {
+		$tmp_packingSlipList = new PackingSlipList($this->packingSlipList);
+$tmp_packingSlipList->write($gen, 'packingSlipList');
+
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class ProcessPackingSlipResponse extends IdempotentResp {
+	public ?PackingSlip $packingSlip = null;
+	public ?SalesProcessorResult $processorResult = null;
+	public string $resultCode;
+	public function writeProps(SoapGenerator $gen): void {
+	    parent::writeProps($gen);
+		if ($this->packingSlip !== null) $this->packingSlip->write($gen, 'packingSlip');
+		if ($this->processorResult !== null) $this->processorResult->write($gen, 'processorResult');
+		$gen->out->writeElementNs(self::TNS, 'resultCode', null, $this->resultCode);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class CancelPackingSlipResponse extends IdempotentResp {
+	public string $resultCode;
+	public function writeProps(SoapGenerator $gen): void {
+	    parent::writeProps($gen);
+		$gen->out->writeElementNs(self::TNS, 'resultCode', null, $this->resultCode);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetPackingSlipQueueResponse extends SoapObject {
+	/** @var SalesQueueEntry[] */
+	public $packingSlipQueueEntryList = null;
+	public ?PackingSlip $lastPackingSlip = null;
+	public function writeProps(SoapGenerator $gen): void {
+		if ($this->packingSlipQueueEntryList !== null) {
+$tmp_packingSlipQueueEntryList = new SalesQueueEntryList($this->packingSlipQueueEntryList);
+$tmp_packingSlipQueueEntryList->write($gen, 'packingSlipQueueEntryList');
+}
+		if ($this->lastPackingSlip !== null) $this->lastPackingSlip->write($gen, 'lastPackingSlip');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -28509,36 +28777,6 @@ class getOrder extends SoapObject {
 	public string $orderId;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'orderId', null, $this->orderId);
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class getPackingSlips extends SoapObject {
-	public GetPackingSlipsRequest $request;
-	public function __construct() {
-		$this->request = new GetPackingSlipsRequest();
-	}
-	public function writeProps(SoapGenerator $gen): void {
-		$this->request->write($gen, 'request');
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
-class getPackingSlipsByOrder extends SoapObject {
-	public GetPackingSlipsByOrderRequest $request;
-	public function __construct() {
-		$this->request = new GetPackingSlipsByOrderRequest();
-	}
-	public function writeProps(SoapGenerator $gen): void {
-		$this->request->write($gen, 'request');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -32768,6 +33006,81 @@ class creditInvoice extends SoapObject {
 	public string $invoiceId;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'invoiceId', null, $this->invoiceId);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class getPackingSlips extends SoapObject {
+	public GetPackingSlipsRequest $request;
+	public function __construct() {
+		$this->request = new GetPackingSlipsRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class getPackingSlipsByOrder extends SoapObject {
+	public GetPackingSlipsByOrderRequest $request;
+	public function __construct() {
+		$this->request = new GetPackingSlipsByOrderRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class processPackingSlip extends SoapObject {
+	public ProcessPackingSlipRequest $request;
+	public function __construct() {
+		$this->request = new ProcessPackingSlipRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class cancelPackingSlip extends SoapObject {
+	public CancelPackingSlipRequest $request;
+	public function __construct() {
+		$this->request = new CancelPackingSlipRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class getPackingSlipQueue extends SoapObject {
+	public GetPackingSlipQueueRequest $request;
+	public function __construct() {
+		$this->request = new GetPackingSlipQueueRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);

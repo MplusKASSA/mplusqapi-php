@@ -171,10 +171,6 @@ class SoapParser extends BaseSoapParser {
 			case 'UpdateOrderInfo': return $this->load_UpdateOrderInfo($in);
 			case 'UpdateOrderV2Request': return $this->load_UpdateOrderV2Request($in);
 			case 'SaveOrderInfo': return $this->load_SaveOrderInfo($in);
-			case 'PackingSlip': return $this->load_PackingSlip($in);
-			case 'PackingSlipList': return $this->load_PackingSlipList($in);
-			case 'GetPackingSlipsRequest': return $this->load_GetPackingSlipsRequest($in);
-			case 'GetPackingSlipsByOrderRequest': return $this->load_GetPackingSlipsByOrderRequest($in);
 			case 'LineChangeList': return $this->load_LineChangeList($in);
 			case 'LineChangeData': return $this->load_LineChangeData($in);
 			case 'LineChange': return $this->load_LineChange($in);
@@ -520,8 +516,6 @@ class SoapParser extends BaseSoapParser {
 			case 'UpdateOrderV2Response': return $this->load_UpdateOrderV2Response($in);
 			case 'SaveOrderResponse': return $this->load_SaveOrderResponse($in);
 			case 'GetOrderResponse': return $this->load_GetOrderResponse($in);
-			case 'GetPackingSlipsResponse': return $this->load_GetPackingSlipsResponse($in);
-			case 'GetPackingSlipsByOrderResponse': return $this->load_GetPackingSlipsByOrderResponse($in);
 			case 'GetOrderChangesResponse': return $this->load_GetOrderChangesResponse($in);
 			case 'GetOrderHistoryResponse': return $this->load_GetOrderHistoryResponse($in);
 			case 'CancelOrderResponse': return $this->load_CancelOrderResponse($in);
@@ -1149,6 +1143,10 @@ class SoapParser extends BaseSoapParser {
 			case 'CashCountInfoCountedPaymentMethodAmountList': return $this->load_CashCountInfoCountedPaymentMethodAmountList($in);
 			case 'SaveCashCountRequest': return $this->load_SaveCashCountRequest($in);
 			case 'SalesProcessorContext': return $this->load_SalesProcessorContext($in);
+			case 'SalesQueueTypeList': return $this->load_SalesQueueTypeList($in);
+			case 'SalesQueueEntry': return $this->load_SalesQueueEntry($in);
+			case 'SalesQueueEntryList': return $this->load_SalesQueueEntryList($in);
+			case 'SalesQueueResult': return $this->load_SalesQueueResult($in);
 			case 'SalesProcessorResult': return $this->load_SalesProcessorResult($in);
 			case 'ProcessInvoiceRequest': return $this->load_ProcessInvoiceRequest($in);
 			case 'ProposalInput': return $this->load_ProposalInput($in);
@@ -1160,6 +1158,15 @@ class SoapParser extends BaseSoapParser {
 			case 'GetInvoicesRequest': return $this->load_GetInvoicesRequest($in);
 			case 'CreditInvoiceV2Request': return $this->load_CreditInvoiceV2Request($in);
 			case 'SaveInvoiceInfo': return $this->load_SaveInvoiceInfo($in);
+			case 'PackingSlip': return $this->load_PackingSlip($in);
+			case 'PackingSlipInput': return $this->load_PackingSlipInput($in);
+			case 'PackingSlipList': return $this->load_PackingSlipList($in);
+			case 'GetPackingSlipsRequest': return $this->load_GetPackingSlipsRequest($in);
+			case 'GetPackingSlipsByOrderRequest': return $this->load_GetPackingSlipsByOrderRequest($in);
+			case 'ProcessPackingSlipRequest': return $this->load_ProcessPackingSlipRequest($in);
+			case 'CancelPackingSlipRequest': return $this->load_CancelPackingSlipRequest($in);
+			case 'SalesQueueFilter': return $this->load_SalesQueueFilter($in);
+			case 'GetPackingSlipQueueRequest': return $this->load_GetPackingSlipQueueRequest($in);
 			case 'GetSalesRepeatTemplatesResponse': return $this->load_GetSalesRepeatTemplatesResponse($in);
 			case 'SaveSalesRepeatTemplateResponse': return $this->load_SaveSalesRepeatTemplateResponse($in);
 			case 'PauseSalesRepeatTemplatesResponse': return $this->load_PauseSalesRepeatTemplatesResponse($in);
@@ -1200,6 +1207,11 @@ class SoapParser extends BaseSoapParser {
 			case 'SaveInvoiceResponse': return $this->load_SaveInvoiceResponse($in);
 			case 'GetInvoiceResponse': return $this->load_GetInvoiceResponse($in);
 			case 'CreditInvoiceResponse': return $this->load_CreditInvoiceResponse($in);
+			case 'GetPackingSlipsResponse': return $this->load_GetPackingSlipsResponse($in);
+			case 'GetPackingSlipsByOrderResponse': return $this->load_GetPackingSlipsByOrderResponse($in);
+			case 'ProcessPackingSlipResponse': return $this->load_ProcessPackingSlipResponse($in);
+			case 'CancelPackingSlipResponse': return $this->load_CancelPackingSlipResponse($in);
+			case 'GetPackingSlipQueueResponse': return $this->load_GetPackingSlipQueueResponse($in);
 			case 'WebhookConsumerEvent': return $this->load_WebhookConsumerEvent($in);
 			case 'WebhookConsumerEventList': return $this->load_WebhookConsumerEventList($in);
 			case 'WebhookConsumerTriggerPattern': return $this->load_WebhookConsumerTriggerPattern($in);
@@ -1362,8 +1374,6 @@ class SoapParser extends BaseSoapParser {
 			case 'updateOrderV2': return $this->load_updateOrderV2($in);
 			case 'saveOrder': return $this->load_saveOrder($in);
 			case 'getOrder': return $this->load_getOrder($in);
-			case 'getPackingSlips': return $this->load_getPackingSlips($in);
-			case 'getPackingSlipsByOrder': return $this->load_getPackingSlipsByOrder($in);
 			case 'getOrderChanges': return $this->load_getOrderChanges($in);
 			case 'getOrderHistory': return $this->load_getOrderHistory($in);
 			case 'findOrder': return $this->load_findOrder($in);
@@ -1651,6 +1661,11 @@ class SoapParser extends BaseSoapParser {
 			case 'getInvoice': return $this->load_getInvoice($in);
 			case 'findInvoice': return $this->load_findInvoice($in);
 			case 'creditInvoice': return $this->load_creditInvoice($in);
+			case 'getPackingSlips': return $this->load_getPackingSlips($in);
+			case 'getPackingSlipsByOrder': return $this->load_getPackingSlipsByOrder($in);
+			case 'processPackingSlip': return $this->load_processPackingSlip($in);
+			case 'cancelPackingSlip': return $this->load_cancelPackingSlip($in);
+			case 'getPackingSlipQueue': return $this->load_getPackingSlipQueue($in);
 			case 'getWebhookConsumers': return $this->load_getWebhookConsumers($in);
 			case 'startExternalPayment': return $this->load_startExternalPayment($in);
 			case 'pollExternalPayment': return $this->load_pollExternalPayment($in);
@@ -5579,149 +5594,6 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
-	private function load_PackingSlip(\XMLReader $in) : PackingSlip {
-		$n = $in->name;
-		$o = new PackingSlip();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'packingSlipId': $o->packingSlipId = $this->load_string_property($in); break;
-						case 'packingSlipNumber': $o->packingSlipNumber = $this->load_YearNumber($in); break;
-						case 'packingSlipBarcode': $o->packingSlipBarcode = $this->load_string_property($in); break;
-						case 'orderId': $o->orderId = $this->load_string_property($in); break;
-						case 'extOrderId': $o->extOrderId = $this->load_string_property($in); break;
-						case 'orderNumber': $o->orderNumber = $this->load_YearNumber($in); break;
-						case 'orderBarcode': $o->orderBarcode = $this->load_string_property($in); break;
-						case 'invoiceId': $o->invoiceId = $this->load_string_property($in); break;
-						case 'extInvoiceId': $o->extInvoiceId = $this->load_string_property($in); break;
-						case 'invoiceNumber': $o->invoiceNumber = $this->load_YearNumber($in); break;
-						case 'invoiceBarcode': $o->invoiceBarcode = $this->load_string_property($in); break;
-						case 'transactionString': $o->transactionString = $this->load_string_property($in); break;
-						case 'syncMarker': $o->syncMarker = $this->load_int_property($in); break;
-						case 'employeeNumber': $o->employeeNumber = $this->load_int_property($in); break;
-						case 'employeeName': $o->employeeName = $this->load_string_property($in); break;
-						case 'entryTimestamp': $o->entryTimestamp = $this->load_SoapMplusDateTime($in)->toDateTime(); break;
-						case 'relationNumber': $o->relationNumber = $this->load_int_property($in); break;
-						case 'relationName': $o->relationName = $this->load_string_property($in); break;
-						case 'relationCategoryId': $o->relationCategoryId = $this->load_int_property($in); break;
-						case 'relationBankAccountNumber': $o->relationBankAccountNumber = $this->load_string_property($in); break;
-						case 'relationVatNumber': $o->relationVatNumber = $this->load_string_property($in); break;
-						case 'deliveryAddress': $o->deliveryAddress = $this->load_Address($in); break;
-						case 'invoiceAddress': $o->invoiceAddress = $this->load_Address($in); break;
-						case 'financialDate': $o->financialDate = $this->load_SoapMplusDate($in)->toDateTime(); break;
-						case 'financialBranchNumber': $o->financialBranchNumber = $this->load_int_property($in); break;
-						case 'financialExtBranchId': $o->financialExtBranchId = $this->load_string_property($in); break;
-						case 'workplaceNumber': $o->workplaceNumber = $this->load_int_property($in); break;
-						case 'entryBranchNumber': $o->entryBranchNumber = $this->load_int_property($in); break;
-						case 'entryExtBranchId': $o->entryExtBranchId = $this->load_string_property($in); break;
-						case 'reference': $o->reference = $this->load_string_property($in); break;
-						case 'activityId': $o->activityId = $this->load_string_property($in); break;
-						case 'totalInclAmount': $totalInclAmount = $this->load_int_property($in); break;
-						case 'totalExclAmount': $totalExclAmount = $this->load_int_property($in); break;
-						case 'changeCounter': $o->changeCounter = $this->load_int_property($in); break;
-						case 'state': $o->state = $this->load_string_property($in); break;
-						case 'onInvoiceUrl': $o->onInvoiceUrl = $this->load_string_property($in); break;
-						case 'lineList': $o->lineList = ($this->load_LineList($in))->line; break;
-						case 'costCenter': $o->costCenter = $this->load_string_property($in); break;
-						case 'orderCategoryNumber': $o->orderCategoryNumber = $this->load_int_property($in); break;
-						case 'packingSlipType': $o->packingSlipType = $this->load_string_property($in); break;
-						case 'vatMethod': $o->vatMethod = $this->load_string_property($in); break;
-						case 'sessionId': $o->sessionId = $this->load_string_property($in); break;
-						case 'proposalId': $o->proposalId = $this->load_string_property($in); break;
-						case 'extProposalId': $o->extProposalId = $this->load_string_property($in); break;
-						case 'proposalNumber': $o->proposalNumber = $this->load_YearNumber($in); break;
-						case 'branchGroupNumber': $o->branchGroupNumber = $this->load_int_property($in); break;
-						case 'ownerId': $o->ownerId = $this->load_string_property($in); break;
-						case 'branchInvoiceNumber': $o->branchInvoiceNumber = $this->load_TransactionNumber($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		$o->totalInclAmount = isset($totalInclAmount) ? BigDecimal::ofUnscaledValue($totalInclAmount, 2) : null;
-		$o->totalExclAmount = isset($totalExclAmount) ? BigDecimal::ofUnscaledValue($totalExclAmount, 2) : null;
-		return $o;
-	}
-	private function load_PackingSlipList(\XMLReader $in) : PackingSlipList {
-		$n = $in->name;
-		$o = new PackingSlipList();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'packingSlip': $o->packingSlip[] = $this->load_PackingSlip($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_GetPackingSlipsRequest(\XMLReader $in) : GetPackingSlipsRequest {
-		$n = $in->name;
-		$o = new GetPackingSlipsRequest();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'syncMarker': $o->syncMarker = $this->load_int_property($in); break;
-						case 'syncMarkerLimit': $o->syncMarkerLimit = $this->load_int_property($in); break;
-						case 'fromFinancialDate': $o->fromFinancialDate = $this->load_SoapMplusDate($in)->toDateTime(); break;
-						case 'throughFinancialDate': $o->throughFinancialDate = $this->load_SoapMplusDate($in)->toDateTime(); break;
-						case 'branchNumbers': $o->branchNumbers[] = $this->load_int_property($in); break;
-						case 'employeeNumbers': $o->employeeNumbers[] = $this->load_int_property($in); break;
-						case 'relationNumbers': $o->relationNumbers[] = $this->load_int_property($in); break;
-						case 'supplierRelationNumbers': $o->supplierRelationNumbers[] = $this->load_int_property($in); break;
-						case 'articleNumbers': $o->articleNumbers[] = $this->load_int_property($in); break;
-						case 'articleTurnoverGroups': $o->articleTurnoverGroups[] = $this->load_int_property($in); break;
-						case 'articlePluNumbers': $o->articlePluNumbers = ($this->load_TextList($in))->text; break;
-						case 'articleBarcodes': $o->articleBarcodes = ($this->load_TextList($in))->text; break;
-						case 'activityId': $o->activityId = $this->load_string_property($in); break;
-						case 'packingSlipIds': $o->packingSlipIds[] = $this->load_string_property($in); break;
-						case 'packingSlipNumbers': $o->packingSlipNumbers[] = $this->load_YearNumber($in); break;
-						case 'ownerFilter': $o->ownerFilter = ($this->load_OwnerLabelFilter($in))->ownerLabels; break;
-						case 'branchGroupFilter': $o->branchGroupFilter = ($this->load_BranchGroupFilter($in))->branchGroups; break;
-						case 'includeLineList': $o->includeLineList = $this->load_bool_property($in); break;
-						case 'typeFilter': $o->typeFilter[] = $this->load_string_property($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_GetPackingSlipsByOrderRequest(\XMLReader $in) : GetPackingSlipsByOrderRequest {
-		$n = $in->name;
-		$o = new GetPackingSlipsByOrderRequest();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'orderId': $o->orderId = $this->load_string_property($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
 	private function load_LineChangeList(\XMLReader $in) : LineChangeList {
 		$n = $in->name;
 		$o = new LineChangeList();
@@ -6866,6 +6738,8 @@ class SoapParser extends BaseSoapParser {
 						case 'orderCategoryNumber': $o->orderCategoryNumber = $this->load_int_property($in); break;
 						case 'orderCategoryDescription': $o->orderCategoryDescription = $this->load_string_property($in); break;
 						case 'orderCategoryDependencyNumbers': $o->orderCategoryDependencyNumbers[] = $this->load_int_property($in); break;
+						case 'allowCancel': $o->allowCancel = $this->load_bool_property($in); break;
+						case 'allowProcess': $o->allowProcess = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -7134,6 +7008,8 @@ class SoapParser extends BaseSoapParser {
 						case 'purchaseCostCenterNumber': $o->purchaseCostCenterNumber = $this->load_string_property($in); break;
 						case 'defaultStockCostCenterNumber': $o->defaultStockCostCenterNumber = $this->load_string_property($in); break;
 						case 'stockCostCenterNumber': $o->stockCostCenterNumber = $this->load_string_property($in); break;
+						case 'topupPaymentId': $o->topupPaymentId = $this->load_string_property($in); break;
+						case 'quantityPerLabel': $o->quantityPerLabel = $this->load_int_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -8163,6 +8039,7 @@ class SoapParser extends BaseSoapParser {
 						case 'shelfLifeInHours': $o->shelfLifeInHours = $this->load_int_property($in); break;
 						case 'priceDeviationMin': $o->priceDeviationMin = $this->load_BigDecimal_property($in); break;
 						case 'priceDeviationMax': $o->priceDeviationMax = $this->load_BigDecimal_property($in); break;
+						case 'availableForInterbranchOrdering': $o->availableForInterbranchOrdering = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -12437,6 +12314,7 @@ class SoapParser extends BaseSoapParser {
 						case 'orderId': $o->orderId = $this->load_string_property($in); break;
 						case 'table': $o->table = $this->load_TableNumber($in); break;
 						case 'scannedVoucherIssuanceCodes': $o->scannedVoucherIssuanceCodes[] = $this->load_string_property($in); break;
+						case 'automaticNewMenus': $o->automaticNewMenus = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -14039,44 +13917,6 @@ class SoapParser extends BaseSoapParser {
 					switch ($in->localName) {
 						case 'result': $o->result = $this->load_string_property($in); break;
 						case 'order': $o->order = $this->load_Order($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_GetPackingSlipsResponse(\XMLReader $in) : GetPackingSlipsResponse {
-		$n = $in->name;
-		$o = new GetPackingSlipsResponse();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'packingSlipList': $o->packingSlipList = ($this->load_PackingSlipList($in))->packingSlip; break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_GetPackingSlipsByOrderResponse(\XMLReader $in) : GetPackingSlipsByOrderResponse {
-		$n = $in->name;
-		$o = new GetPackingSlipsByOrderResponse();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'packingSlipList': $o->packingSlipList = ($this->load_PackingSlipList($in))->packingSlip; break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -16776,6 +16616,8 @@ class SoapParser extends BaseSoapParser {
 						case 'showAvailableStock': $o->showAvailableStock = $this->load_bool_property($in); break;
 						case 'isDayStockArticle': $o->isDayStockArticle = $this->load_bool_property($in); break;
 						case 'showSalesPrice': $o->showSalesPrice = $this->load_bool_property($in); break;
+						case 'isKitchenTicketPrioButton': $o->isKitchenTicketPrioButton = $this->load_bool_property($in); break;
+						case 'isTitleButton': $o->isTitleButton = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -16967,6 +16809,7 @@ class SoapParser extends BaseSoapParser {
 						case 'kind': $o->kind = $this->load_string_property($in); break;
 						case 'layoutId': $o->layoutId = $this->load_int_property($in); break;
 						case 'branches': $o->branches[] = $this->load_ButtonLayoutTabBranchLayout($in); break;
+						case 'sequenceNumber': $o->sequenceNumber = $this->load_int_property($in); break;
 						case 'effectiveLayout': $o->effectiveLayout = $this->load_ButtonLayout($in); break;
 					}
 					break;
@@ -16990,6 +16833,7 @@ class SoapParser extends BaseSoapParser {
 						case 'name': $o->name = $this->load_string_property($in); break;
 						case 'tabs': $o->tabs[] = $this->load_ButtonLayoutTab($in); break;
 						case 'ownerId': $o->ownerId = $this->load_string_property($in); break;
+						case 'targetsAllBranches': $o->targetsAllBranches = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -25831,6 +25675,7 @@ class SoapParser extends BaseSoapParser {
 						case 'vatCountryIso3': $o->vatCountryIso3 = $this->load_string_property($in); break;
 						case 'lineList': $o->lineList = ($this->load_LineInputList($in))->line; break;
 						case 'directDebit': $o->directDebit = $this->load_bool_property($in); break;
+						case 'orderCategoryNumber': $o->orderCategoryNumber = $this->load_int_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -27634,6 +27479,90 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_SalesQueueTypeList(\XMLReader $in) : SalesQueueTypeList {
+		$n = $in->name;
+		$o = new SalesQueueTypeList();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'type': $o->type[] = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_SalesQueueEntry(\XMLReader $in) : SalesQueueEntry {
+		$n = $in->name;
+		$o = new SalesQueueEntry();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'id': $o->id = $this->load_string_property($in); break;
+						case 'salesObjectId': $o->salesObjectId = $this->load_string_property($in); break;
+						case 'type': $o->type = $this->load_string_property($in); break;
+						case 'createdTs': $o->createdTs = $this->load_DateTime_property($in); break;
+						case 'processedTs': $o->processedTs = $this->load_DateTime_property($in); break;
+						case 'cancelledTs': $o->cancelledTs = $this->load_DateTime_property($in); break;
+						case 'failedTs': $o->failedTs = $this->load_DateTime_property($in); break;
+						case 'failureReason': $o->failureReason = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_SalesQueueEntryList(\XMLReader $in) : SalesQueueEntryList {
+		$n = $in->name;
+		$o = new SalesQueueEntryList();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'entry': $o->entry[] = $this->load_SalesQueueEntry($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_SalesQueueResult(\XMLReader $in) : SalesQueueResult {
+		$n = $in->name;
+		$o = new SalesQueueResult();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'entry': $o->entry = $this->load_SalesQueueEntry($in); break;
+						case 'type': $o->type = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_SalesProcessorResult(\XMLReader $in) : SalesProcessorResult {
 		$n = $in->name;
 		$o = new SalesProcessorResult();
@@ -27649,6 +27578,7 @@ class SoapParser extends BaseSoapParser {
 						case 'unappliedVoucherIssuances': $o->unappliedVoucherIssuances = ($this->load_UnappliedVoucherIssuanceList($in))->unappliedVoucherIssuance; break;
 						case 'scannedVoucherIssuances': $o->scannedVoucherIssuances = ($this->load_VoucherIssuanceRedeemableList($in))->voucherIssuanceRedeemable; break;
 						case 'errorMessages': $o->errorMessages[] = $this->load_string_property($in); break;
+						case 'queueResult': $o->queueResult = $this->load_SalesQueueResult($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -27890,6 +27820,266 @@ class SoapParser extends BaseSoapParser {
 						case 'invoiceString': $o->invoiceString = $this->load_string_property($in); break;
 						case 'invoiceNumber': $o->invoiceNumber = $this->load_YearNumber($in); break;
 						case 'invoiceBarcode': $o->invoiceBarcode = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_PackingSlip(\XMLReader $in) : PackingSlip {
+		$n = $in->name;
+		$o = new PackingSlip();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'packingSlipId': $o->packingSlipId = $this->load_string_property($in); break;
+						case 'packingSlipNumber': $o->packingSlipNumber = $this->load_YearNumber($in); break;
+						case 'packingSlipBarcode': $o->packingSlipBarcode = $this->load_string_property($in); break;
+						case 'orderId': $o->orderId = $this->load_string_property($in); break;
+						case 'extOrderId': $o->extOrderId = $this->load_string_property($in); break;
+						case 'orderNumber': $o->orderNumber = $this->load_YearNumber($in); break;
+						case 'orderBarcode': $o->orderBarcode = $this->load_string_property($in); break;
+						case 'invoiceId': $o->invoiceId = $this->load_string_property($in); break;
+						case 'extInvoiceId': $o->extInvoiceId = $this->load_string_property($in); break;
+						case 'invoiceNumber': $o->invoiceNumber = $this->load_YearNumber($in); break;
+						case 'invoiceBarcode': $o->invoiceBarcode = $this->load_string_property($in); break;
+						case 'transactionString': $o->transactionString = $this->load_string_property($in); break;
+						case 'syncMarker': $o->syncMarker = $this->load_int_property($in); break;
+						case 'employeeNumber': $o->employeeNumber = $this->load_int_property($in); break;
+						case 'employeeName': $o->employeeName = $this->load_string_property($in); break;
+						case 'entryTimestamp': $o->entryTimestamp = $this->load_SoapMplusDateTime($in)->toDateTime(); break;
+						case 'relationNumber': $o->relationNumber = $this->load_int_property($in); break;
+						case 'relationName': $o->relationName = $this->load_string_property($in); break;
+						case 'relationCategoryId': $o->relationCategoryId = $this->load_int_property($in); break;
+						case 'relationBankAccountNumber': $o->relationBankAccountNumber = $this->load_string_property($in); break;
+						case 'relationVatNumber': $o->relationVatNumber = $this->load_string_property($in); break;
+						case 'deliveryAddress': $o->deliveryAddress = $this->load_Address($in); break;
+						case 'invoiceAddress': $o->invoiceAddress = $this->load_Address($in); break;
+						case 'financialDate': $o->financialDate = $this->load_SoapMplusDate($in)->toDateTime(); break;
+						case 'financialBranchNumber': $o->financialBranchNumber = $this->load_int_property($in); break;
+						case 'financialExtBranchId': $o->financialExtBranchId = $this->load_string_property($in); break;
+						case 'workplaceNumber': $o->workplaceNumber = $this->load_int_property($in); break;
+						case 'entryBranchNumber': $o->entryBranchNumber = $this->load_int_property($in); break;
+						case 'entryExtBranchId': $o->entryExtBranchId = $this->load_string_property($in); break;
+						case 'reference': $o->reference = $this->load_string_property($in); break;
+						case 'activityId': $o->activityId = $this->load_string_property($in); break;
+						case 'totalInclAmount': $totalInclAmount = $this->load_int_property($in); break;
+						case 'totalExclAmount': $totalExclAmount = $this->load_int_property($in); break;
+						case 'changeCounter': $o->changeCounter = $this->load_int_property($in); break;
+						case 'state': $o->state = $this->load_string_property($in); break;
+						case 'onInvoiceUrl': $o->onInvoiceUrl = $this->load_string_property($in); break;
+						case 'lineList': $o->lineList = ($this->load_LineList($in))->line; break;
+						case 'costCenter': $o->costCenter = $this->load_string_property($in); break;
+						case 'orderCategoryNumber': $o->orderCategoryNumber = $this->load_int_property($in); break;
+						case 'packingSlipType': $o->packingSlipType = $this->load_string_property($in); break;
+						case 'vatMethod': $o->vatMethod = $this->load_string_property($in); break;
+						case 'sessionId': $o->sessionId = $this->load_string_property($in); break;
+						case 'proposalId': $o->proposalId = $this->load_string_property($in); break;
+						case 'extProposalId': $o->extProposalId = $this->load_string_property($in); break;
+						case 'proposalNumber': $o->proposalNumber = $this->load_YearNumber($in); break;
+						case 'branchGroupNumber': $o->branchGroupNumber = $this->load_int_property($in); break;
+						case 'ownerId': $o->ownerId = $this->load_string_property($in); break;
+						case 'branchInvoiceNumber': $o->branchInvoiceNumber = $this->load_TransactionNumber($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		$o->totalInclAmount = isset($totalInclAmount) ? BigDecimal::ofUnscaledValue($totalInclAmount, 2) : null;
+		$o->totalExclAmount = isset($totalExclAmount) ? BigDecimal::ofUnscaledValue($totalExclAmount, 2) : null;
+		return $o;
+	}
+	private function load_PackingSlipInput(\XMLReader $in) : PackingSlipInput {
+		$n = $in->name;
+		$o = new PackingSlipInput();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'packingSlipId': $o->packingSlipId = $this->load_string_property($in); break;
+						case 'employeeNumber': $o->employeeNumber = $this->load_int_property($in); break;
+						case 'relationNumber': $o->relationNumber = $this->load_int_property($in); break;
+						case 'financialDate': $o->financialDate = $this->load_Date_property($in); break;
+						case 'financialBranchNumber': $o->financialBranchNumber = $this->load_int_property($in); break;
+						case 'entryBranchNumber': $o->entryBranchNumber = $this->load_int_property($in); break;
+						case 'workplaceNumber': $o->workplaceNumber = $this->load_int_property($in); break;
+						case 'reference': $o->reference = $this->load_string_property($in); break;
+						case 'vatMethod': $o->vatMethod = $this->load_string_property($in); break;
+						case 'changeCounter': $o->changeCounter = $this->load_int_property($in); break;
+						case 'vatChange': $o->vatChange = $this->load_string_property($in); break;
+						case 'vatCountryCode': $o->vatCountryCode = $this->load_int_property($in); break;
+						case 'vatCountryIso3': $o->vatCountryIso3 = $this->load_string_property($in); break;
+						case 'lineList': $o->lineList = ($this->load_LineInputList($in))->line; break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_PackingSlipList(\XMLReader $in) : PackingSlipList {
+		$n = $in->name;
+		$o = new PackingSlipList();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'packingSlip': $o->packingSlip[] = $this->load_PackingSlip($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetPackingSlipsRequest(\XMLReader $in) : GetPackingSlipsRequest {
+		$n = $in->name;
+		$o = new GetPackingSlipsRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'syncMarker': $o->syncMarker = $this->load_int_property($in); break;
+						case 'syncMarkerLimit': $o->syncMarkerLimit = $this->load_int_property($in); break;
+						case 'fromFinancialDate': $o->fromFinancialDate = $this->load_SoapMplusDate($in)->toDateTime(); break;
+						case 'throughFinancialDate': $o->throughFinancialDate = $this->load_SoapMplusDate($in)->toDateTime(); break;
+						case 'branchNumbers': $o->branchNumbers[] = $this->load_int_property($in); break;
+						case 'employeeNumbers': $o->employeeNumbers[] = $this->load_int_property($in); break;
+						case 'relationNumbers': $o->relationNumbers[] = $this->load_int_property($in); break;
+						case 'supplierRelationNumbers': $o->supplierRelationNumbers[] = $this->load_int_property($in); break;
+						case 'articleNumbers': $o->articleNumbers[] = $this->load_int_property($in); break;
+						case 'articleTurnoverGroups': $o->articleTurnoverGroups[] = $this->load_int_property($in); break;
+						case 'articlePluNumbers': $o->articlePluNumbers = ($this->load_TextList($in))->text; break;
+						case 'articleBarcodes': $o->articleBarcodes = ($this->load_TextList($in))->text; break;
+						case 'activityId': $o->activityId = $this->load_string_property($in); break;
+						case 'packingSlipIds': $o->packingSlipIds[] = $this->load_string_property($in); break;
+						case 'packingSlipNumbers': $o->packingSlipNumbers[] = $this->load_YearNumber($in); break;
+						case 'ownerFilter': $o->ownerFilter = ($this->load_OwnerLabelFilter($in))->ownerLabels; break;
+						case 'branchGroupFilter': $o->branchGroupFilter = ($this->load_BranchGroupFilter($in))->branchGroups; break;
+						case 'includeLineList': $o->includeLineList = $this->load_bool_property($in); break;
+						case 'typeFilter': $o->typeFilter[] = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetPackingSlipsByOrderRequest(\XMLReader $in) : GetPackingSlipsByOrderRequest {
+		$n = $in->name;
+		$o = new GetPackingSlipsByOrderRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'orderId': $o->orderId = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_ProcessPackingSlipRequest(\XMLReader $in) : ProcessPackingSlipRequest {
+		$n = $in->name;
+		$o = new ProcessPackingSlipRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'idempotencyKey': $o->idempotencyKey = $this->load_string_property($in); break;
+						case 'packingSlip': $o->packingSlip = $this->load_PackingSlipInput($in); break;
+						case 'processorContext': $o->processorContext = $this->load_SalesProcessorContext($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_CancelPackingSlipRequest(\XMLReader $in) : CancelPackingSlipRequest {
+		$n = $in->name;
+		$o = new CancelPackingSlipRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'idempotencyKey': $o->idempotencyKey = $this->load_string_property($in); break;
+						case 'packingSlipId': $o->packingSlipId = $this->load_string_property($in); break;
+						case 'workplaceKey': $o->workplaceKey = $this->load_WorkplaceIdentifier($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_SalesQueueFilter(\XMLReader $in) : SalesQueueFilter {
+		$n = $in->name;
+		$o = new SalesQueueFilter();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'ids': $o->ids = ($this->load_IdList($in))->id; break;
+						case 'salesObjectIds': $o->salesObjectIds = ($this->load_IdList($in))->id; break;
+						case 'types': $o->types = ($this->load_SalesQueueTypeList($in))->type; break;
+						case 'pendingOnly': $o->pendingOnly = $this->load_bool_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetPackingSlipQueueRequest(\XMLReader $in) : GetPackingSlipQueueRequest {
+		$n = $in->name;
+		$o = new GetPackingSlipQueueRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'filter': $o->filter = $this->load_SalesQueueFilter($in); break;
+						case 'loadPackingSlip': $o->loadPackingSlip = $this->load_bool_property($in); break;
+						case 'latestOnly': $o->latestOnly = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -28722,6 +28912,106 @@ class SoapParser extends BaseSoapParser {
 					switch ($in->localName) {
 						case 'result': $o->result = $this->load_string_property($in); break;
 						case 'message': $o->message = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetPackingSlipsResponse(\XMLReader $in) : GetPackingSlipsResponse {
+		$n = $in->name;
+		$o = new GetPackingSlipsResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'packingSlipList': $o->packingSlipList = ($this->load_PackingSlipList($in))->packingSlip; break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetPackingSlipsByOrderResponse(\XMLReader $in) : GetPackingSlipsByOrderResponse {
+		$n = $in->name;
+		$o = new GetPackingSlipsByOrderResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'packingSlipList': $o->packingSlipList = ($this->load_PackingSlipList($in))->packingSlip; break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_ProcessPackingSlipResponse(\XMLReader $in) : ProcessPackingSlipResponse {
+		$n = $in->name;
+		$o = new ProcessPackingSlipResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'idempotencyResult': $o->idempotencyResult = $this->load_string_property($in); break;
+						case 'packingSlip': $o->packingSlip = $this->load_PackingSlip($in); break;
+						case 'processorResult': $o->processorResult = $this->load_SalesProcessorResult($in); break;
+						case 'resultCode': $o->resultCode = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_CancelPackingSlipResponse(\XMLReader $in) : CancelPackingSlipResponse {
+		$n = $in->name;
+		$o = new CancelPackingSlipResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'idempotencyResult': $o->idempotencyResult = $this->load_string_property($in); break;
+						case 'resultCode': $o->resultCode = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetPackingSlipQueueResponse(\XMLReader $in) : GetPackingSlipQueueResponse {
+		$n = $in->name;
+		$o = new GetPackingSlipQueueResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'packingSlipQueueEntryList': $o->packingSlipQueueEntryList = ($this->load_SalesQueueEntryList($in))->entry; break;
+						case 'lastPackingSlip': $o->lastPackingSlip = $this->load_PackingSlip($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -32203,44 +32493,6 @@ class SoapParser extends BaseSoapParser {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
 						case 'orderId': $o->orderId = $this->load_string_property($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_getPackingSlips(\XMLReader $in) : getPackingSlips {
-		$n = $in->name;
-		$o = new getPackingSlips();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'request': $o->request = $this->load_GetPackingSlipsRequest($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_getPackingSlipsByOrder(\XMLReader $in) : getPackingSlipsByOrder {
-		$n = $in->name;
-		$o = new getPackingSlipsByOrder();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'request': $o->request = $this->load_GetPackingSlipsByOrderRequest($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -37700,6 +37952,101 @@ class SoapParser extends BaseSoapParser {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
 						case 'invoiceId': $o->invoiceId = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_getPackingSlips(\XMLReader $in) : getPackingSlips {
+		$n = $in->name;
+		$o = new getPackingSlips();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_GetPackingSlipsRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_getPackingSlipsByOrder(\XMLReader $in) : getPackingSlipsByOrder {
+		$n = $in->name;
+		$o = new getPackingSlipsByOrder();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_GetPackingSlipsByOrderRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_processPackingSlip(\XMLReader $in) : processPackingSlip {
+		$n = $in->name;
+		$o = new processPackingSlip();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_ProcessPackingSlipRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_cancelPackingSlip(\XMLReader $in) : cancelPackingSlip {
+		$n = $in->name;
+		$o = new cancelPackingSlip();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_CancelPackingSlipRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_getPackingSlipQueue(\XMLReader $in) : getPackingSlipQueue {
+		$n = $in->name;
+		$o = new getPackingSlipQueue();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_GetPackingSlipQueueRequest($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
