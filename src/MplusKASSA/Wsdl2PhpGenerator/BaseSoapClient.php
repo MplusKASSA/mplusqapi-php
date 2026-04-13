@@ -2,6 +2,7 @@
 namespace MplusKASSA\Wsdl2PhpGenerator;
 use Exception;
 use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\HandlerStack;
 
@@ -14,6 +15,8 @@ abstract class BaseSoapClient
     protected const TNS = 'ns1';
 
     protected HttpClient $client;
+    protected string $endpoint;
+    protected ?HandlerStack $handler;
     protected array $additionalRequestHeaders = [];
     protected ?string $lastRequest = null;
     protected ?string $lastResponse = null;
@@ -42,8 +45,10 @@ abstract class BaseSoapClient
         if (0 !== stripos($apiServer, 'http')) {
             $apiServer = 'https://' . $apiServer;
         }
+        $this->endpoint = sprintf("%s:%u", $apiServer, $apiPort);
+        $this->handler = $handlerStack;
         $this->client = new HttpClient([
-            'base_uri' => sprintf("%s:%u", $apiServer, $apiPort),
+            'base_uri' => $this->endpoint,
             'query' => [
                 'ident' => $ident,
                 'secret' => $secret,
@@ -53,7 +58,6 @@ abstract class BaseSoapClient
                 'Content-Type' => 'text/xml; charset=utf-8',
             ],
             'verify' => $verify,
-            'handler' => $handlerStack,
         ]);
         $this->connectTimeout = $connectTimeout ?? self::DEFAULT_CONNECT_TIMEOUT_SECS;
         $this->timeout = $timeout ?? self::DEFAULT_TIMEOUT_SECS;
@@ -117,44 +121,72 @@ abstract class BaseSoapClient
         // inherit to process these values
     }
 
+    protected function processResponseHeaders(array $responseHeaders): void
+    {
+        // inherit to process these values
+    }
+
+    protected function shouldRetryOnConnectException(ConnectException $e, string $method, string $request, ?string $requestId = null): bool
+    {
+        // inherit to decide whether a connect exception should be retried
+        return false;
+    }
+
+    private function dispatchResponseHeaders(array $responseHeaders): void
+    {
+        $this->processResponseHeaders($responseHeaders);
+        $this->processServerTimingHeader($responseHeaders['Server-Timing'] ?? []);
+        $this->processServiceVersionHeader($responseHeaders['Mplus-Service-Version'] ?? []);
+    }
+
     protected function communicate(string $method, string $request, ?string $requestId = null): string
     {
         $this->lastRequest = $request;
-        $this->beforeCallTs = hrtime(true);
-        try {
-            $response = $this->client->post("/", [
-                'body' => $request,
-                'headers' => $this->buildRequestHeaders($method, $requestId),
-                'connect_timeout' => $this->connectTimeout,
-                'timeout' => $this->timeout,
-            ]);
-            $this->afterCallTs = hrtime(true);
-            $this->processServerTimingHeader($response->getHeader('Server-Timing'));
-            $this->processServiceVersionHeader($response->getHeader('Mplus-Service-Version'));
-            if ($response->getStatusCode() === 200) {
-                $this->lastResponse = $response->getBody()->getContents();
-                return $this->lastResponse;
-            } else {
-                throw new SoapCommunicationException("Received unexpected HTTP status code: " . $response->getStatusCode());
+        while (true) {
+            $this->beforeCallTs = hrtime(true);
+            try {
+                $response = $this->client->post($this->endpoint, [
+                    'body' => $request,
+                    'headers' => $this->buildRequestHeaders($method, $requestId),
+                    'connect_timeout' => $this->connectTimeout,
+                    'timeout' => $this->timeout,
+                    'handler' => $this->handler,
+                ]);
+                $this->afterCallTs = hrtime(true);
+                $this->dispatchResponseHeaders($response->getHeaders());
+                if ($response->getStatusCode() === 200) {
+                    $this->lastResponse = $response->getBody()->getContents();
+                    return $this->lastResponse;
+                } else {
+                    throw new SoapCommunicationException("Received unexpected HTTP status code: " . $response->getStatusCode());
+                }
             }
-        }
-        catch (ServerException $e) {
-            $this->afterCallTs = hrtime(true);
-            $this->processServiceVersionHeader($e->getResponse()->getHeader('Mplus-Service-Version'));
-            // A ServerException (HTTP 500) can potentially contain a SOAP Body which
-            // we will try to parse here so that we may rethrow it as a SoapFaultException
-            $res = $this->parser->parse($e->getResponse()->getBody()->getContents());
-            if ($res instanceof SoapFault) {
-                throw $this->createSoapFaultException($e, $res);
+            catch (ServerException $e) {
+                $this->afterCallTs = hrtime(true);
+                $this->dispatchResponseHeaders($e->getResponse()->getHeaders());
+                // A ServerException (HTTP 500) can potentially contain a SOAP Body which
+                // we will try to parse here so that we may rethrow it as a SoapFaultException
+                $res = $this->parser->parse($e->getResponse()->getBody()->getContents());
+                if ($res instanceof SoapFault) {
+                    throw $this->createSoapFaultException($e, $res);
+                }
+                else {
+                    $errorMessage = sprintf('ServerException : %s', $e->getMessage());
+                    throw new SoapCommunicationException($errorMessage, $e->getCode(), $e, $this->getLastRequestId());
+                }
             }
-            else {
-                $errorMessage = sprintf('ServerException : %s', $e->getMessage());
+            catch (ConnectException $e) {
+                $this->afterCallTs = hrtime(true);
+                if ($this->shouldRetryOnConnectException($e, $method, $request, $requestId)) {
+                    continue;
+                }
+                $errorMessage = sprintf('%s : %s', get_class($e), $e->getMessage());
                 throw new SoapCommunicationException($errorMessage, $e->getCode(), $e, $this->getLastRequestId());
             }
-        }
-        catch (\Exception $e) {
-            $errorMessage = sprintf('%s : %s', get_class($e), $e->getMessage());
-            throw new SoapCommunicationException($errorMessage, $e->getCode(), $e, $this->getLastRequestId());
+            catch (Exception $e) {
+                $errorMessage = sprintf('%s : %s', get_class($e), $e->getMessage());
+                throw new SoapCommunicationException($errorMessage, $e->getCode(), $e, $this->getLastRequestId());
+            }
         }
     }
 
