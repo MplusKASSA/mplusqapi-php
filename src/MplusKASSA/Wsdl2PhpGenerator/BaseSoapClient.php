@@ -145,13 +145,13 @@ abstract class BaseSoapClient
         while (true) {
             $this->beforeCallTs = hrtime(true);
             try {
-                $response = $this->client->post($this->endpoint, [
+                $response = $this->client->post($this->endpoint, array_filter([
                     'body' => $request,
                     'headers' => $this->buildRequestHeaders($method, $requestId),
                     'connect_timeout' => $this->connectTimeout,
                     'timeout' => $this->timeout,
                     'handler' => $this->handler,
-                ]);
+                ]));
                 $this->afterCallTs = hrtime(true);
                 $this->dispatchResponseHeaders($response->getHeaders());
                 if ($response->getStatusCode() === 200) {
