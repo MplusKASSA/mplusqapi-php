@@ -63,6 +63,10 @@ class SoapParser extends BaseSoapParser {
 			case 'TimelineEventTypeList': return $this->load_TimelineEventTypeList($in);
 			case 'TimelineEvent': return $this->load_TimelineEvent($in);
 			case 'TimelineEventList': return $this->load_TimelineEventList($in);
+			case 'ContractPeriod': return $this->load_ContractPeriod($in);
+			case 'ContractFrequencyList': return $this->load_ContractFrequencyList($in);
+			case 'SalesLineContractLine': return $this->load_SalesLineContractLine($in);
+			case 'SalesLineContractLineList': return $this->load_SalesLineContractLineList($in);
 			case 'Order': return $this->load_Order($in);
 			case 'OrderList': return $this->load_OrderList($in);
 			case 'OrderInput': return $this->load_OrderInput($in);
@@ -72,9 +76,6 @@ class SoapParser extends BaseSoapParser {
 			case 'YearNumberList': return $this->load_YearNumberList($in);
 			case 'YearNumberPart': return $this->load_YearNumberPart($in);
 			case 'WebhookExternalDiscount': return $this->load_WebhookExternalDiscount($in);
-			case 'ContractFrequencyList': return $this->load_ContractFrequencyList($in);
-			case 'SalesLineContractLine': return $this->load_SalesLineContractLine($in);
-			case 'SalesLineContractLineList': return $this->load_SalesLineContractLineList($in);
 			case 'WebhookLineData': return $this->load_WebhookLineData($in);
 			case 'LineList': return $this->load_LineList($in);
 			case 'LineData': return $this->load_LineData($in);
@@ -3033,6 +3034,94 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_ContractPeriod(\XMLReader $in) : ContractPeriod {
+		$n = $in->name;
+		$o = new ContractPeriod();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'startDate': $o->startDate = $this->load_Date_property($in); break;
+						case 'endDate': $o->endDate = $this->load_Date_property($in); break;
+						case 'frequency': $o->frequency = $this->load_string_property($in); break;
+						case 'contractPeriodCalculationMethod': $o->contractPeriodCalculationMethod = $this->load_string_property($in); break;
+						case 'description': $o->description = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_ContractFrequencyList(\XMLReader $in) : ContractFrequencyList {
+		$n = $in->name;
+		$o = new ContractFrequencyList();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'contractFrequency': $o->contractFrequency[] = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_SalesLineContractLine(\XMLReader $in) : SalesLineContractLine {
+		$n = $in->name;
+		$o = new SalesLineContractLine();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'lineNumber': $o->lineNumber = $this->load_int_property($in); break;
+						case 'articleNumber': $o->articleNumber = $this->load_int_property($in); break;
+						case 'quantity': $o->quantity = $this->load_BigDecimal_property($in); break;
+						case 'priceIncl': $o->priceIncl = $this->load_BigDecimal_property($in); break;
+						case 'priceExcl': $o->priceExcl = $this->load_BigDecimal_property($in); break;
+						case 'amountIncl': $o->amountIncl = $this->load_BigDecimal_property($in); break;
+						case 'amountExcl': $o->amountExcl = $this->load_BigDecimal_property($in); break;
+						case 'frequency': $o->frequency = $this->load_string_property($in); break;
+						case 'startDate': $o->startDate = $this->load_Date_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_SalesLineContractLineList(\XMLReader $in) : SalesLineContractLineList {
+		$n = $in->name;
+		$o = new SalesLineContractLineList();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'contractLine': $o->contractLine[] = $this->load_SalesLineContractLine($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_Order(\XMLReader $in) : Order {
 		$n = $in->name;
 		$o = new Order();
@@ -3111,6 +3200,7 @@ class SoapParser extends BaseSoapParser {
 						case 'ownerId': $o->ownerId = $this->load_string_property($in); break;
 						case 'branchInvoiceNumbers': $o->branchInvoiceNumbers = ($this->load_TransactionNumberList($in))->transactionNumber; break;
 						case 'timelineEvents': $o->timelineEvents = ($this->load_TimelineEventList($in))->event; break;
+						case 'contractPeriod': $o->contractPeriod = $this->load_ContractPeriod($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -3308,71 +3398,6 @@ class SoapParser extends BaseSoapParser {
 						case 'discountPercentage': $o->discountPercentage = $this->load_int_property($in); break;
 						case 'discountAmount': $o->discountAmount = $this->load_int_property($in); break;
 						case 'discountType': $o->discountType = $this->load_string_property($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_ContractFrequencyList(\XMLReader $in) : ContractFrequencyList {
-		$n = $in->name;
-		$o = new ContractFrequencyList();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'contractFrequency': $o->contractFrequency[] = $this->load_string_property($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_SalesLineContractLine(\XMLReader $in) : SalesLineContractLine {
-		$n = $in->name;
-		$o = new SalesLineContractLine();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'lineNumber': $o->lineNumber = $this->load_int_property($in); break;
-						case 'articleNumber': $o->articleNumber = $this->load_int_property($in); break;
-						case 'quantity': $o->quantity = $this->load_BigDecimal_property($in); break;
-						case 'priceIncl': $o->priceIncl = $this->load_BigDecimal_property($in); break;
-						case 'priceExcl': $o->priceExcl = $this->load_BigDecimal_property($in); break;
-						case 'amountIncl': $o->amountIncl = $this->load_BigDecimal_property($in); break;
-						case 'amountExcl': $o->amountExcl = $this->load_BigDecimal_property($in); break;
-						case 'frequency': $o->frequency = $this->load_string_property($in); break;
-						case 'startDate': $o->startDate = $this->load_Date_property($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_SalesLineContractLineList(\XMLReader $in) : SalesLineContractLineList {
-		$n = $in->name;
-		$o = new SalesLineContractLineList();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'contractLine': $o->contractLine[] = $this->load_SalesLineContractLine($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -6308,6 +6333,8 @@ class SoapParser extends BaseSoapParser {
 						case 'priceInCredits': $o->priceInCredits = $this->load_Decimal_DataChange($in); break;
 						case 'totalInclAmount': $o->totalInclAmount = $this->load_Decimal_DataChange($in); break;
 						case 'totalExclAmount': $o->totalExclAmount = $this->load_Decimal_DataChange($in); break;
+						case 'salePromotionLineId': $o->salePromotionLineId = $this->load_String_DataChange($in); break;
+						case 'salePromotionSetNumber': $o->salePromotionSetNumber = $this->load_Int_DataChange($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -6347,6 +6374,8 @@ class SoapParser extends BaseSoapParser {
 						case 'menuDescription': $o->menuDescription = $this->load_String_DataChange($in); break;
 						case 'menuAmount': $o->menuAmount = $this->load_Decimal_DataChange($in); break;
 						case 'menuSequenceNumber': $o->menuSequenceNumber = $this->load_Int_DataChange($in); break;
+						case 'menuId': $o->menuId = $this->load_String_DataChange($in); break;
+						case 'menuLinesId': $o->menuLinesId = $this->load_String_DataChange($in); break;
 						case 'preparationList': $o->preparationList = ($this->load_LineChangeEventList($in))->lineChangeEvent; break;
 					}
 					break;
@@ -6428,6 +6457,9 @@ class SoapParser extends BaseSoapParser {
 						case 'vatChange': $o->vatChange = $this->load_VatChange_DataChange($in); break;
 						case 'tableSplitTo': $o->tableSplitTo = $this->load_TableSplitEvent($in); break;
 						case 'tableSplitFrom': $o->tableSplitFrom = $this->load_TableSplitEvent($in); break;
+						case 'financialBranchNumber': $o->financialBranchNumber = $this->load_Int_DataChange($in); break;
+						case 'entryBranchNumber': $o->entryBranchNumber = $this->load_Int_DataChange($in); break;
+						case 'workplaceNumber': $o->workplaceNumber = $this->load_Int_DataChange($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -11965,6 +11997,7 @@ class SoapParser extends BaseSoapParser {
 						case 'articleNumber': $o->articleNumber = $this->load_int_property($in); break;
 						case 'variantId': $o->variantId = $this->load_int_property($in); break;
 						case 'quantity': $o->quantity = $this->load_BigDecimal_property($in); break;
+						case 'sequenceNumber': $o->sequenceNumber = $this->load_int_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -15511,6 +15544,9 @@ class SoapParser extends BaseSoapParser {
 						case 'name': $o->name = $this->load_string_property($in); break;
 						case 'entriesCount': $o->entriesCount = $this->load_int_property($in); break;
 						case 'entries': $o->entries[] = $this->load_TodoListEntry($in); break;
+						case 'sortedOnColumnName': $o->sortedOnColumnName = $this->load_string_property($in); break;
+						case 'sortedOnColumnLabel': $o->sortedOnColumnLabel = $this->load_string_property($in); break;
+						case 'sortOrder': $o->sortOrder = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -25617,6 +25653,7 @@ class SoapParser extends BaseSoapParser {
 						case 'directDebit': $o->directDebit = $this->load_bool_property($in); break;
 						case 'mailedTimestamp': $o->mailedTimestamp = $this->load_SoapMplusDateTime($in)->toDateTime(); break;
 						case 'timelineEvents': $o->timelineEvents = ($this->load_TimelineEventList($in))->event; break;
+						case 'contractPeriod': $o->contractPeriod = $this->load_ContractPeriod($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:

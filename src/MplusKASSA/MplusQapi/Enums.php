@@ -153,6 +153,22 @@ class TimelineEventType {
 	const TRANSFORMED = 'TRANSFORMED';
 	const GENERATED = 'GENERATED';
 }
+class ContractFrequency {
+	const WEEKLY = 'WEEKLY';
+	const MONTHLY = 'MONTHLY';
+	const QUARTERLY = 'QUARTERLY';
+	const YEARLY = 'YEARLY';
+	const CUSTOMPERIOD = 'CUSTOMPERIOD';
+	const ONCE = 'ONCE';
+}
+class ContractPeriodCalculationMethod {
+	const INADVANCE = 'INADVANCE';
+	const AFTERWARDS = 'AFTERWARDS';
+	const QUARTERLY = 'QUARTERLY';
+	const CURRENT = 'CURRENT';
+	const PREV = 'PREV';
+	const NEXT = 'NEXT';
+}
 class OrderType {
 	const SALES_ORDER = 'ORDER-TYPE-SALES-ORDER';
 	const REPEAT_SALES_ORDER = 'ORDER-TYPE-REPEAT-SALES-ORDER';
@@ -175,12 +191,6 @@ class OrderCompleteState {
 	const PARTIAL = 'ORDER-COMPLETE-STATE-PARTIAL';
 	const PARTIAL_DELIVERY_PENDING = 'ORDER-COMPLETE-STATE-PARTIAL-DELIVERY-PENDING';
 	const COMPLETE = 'ORDER-COMPLETE-STATE-COMPLETE';
-}
-class ContractFrequency {
-	const WEEKLY = 'WEEKLY';
-	const MONTHLY = 'MONTHLY';
-	const QUARTERLY = 'QUARTERLY';
-	const YEARLY = 'YEARLY';
 }
 class LineType {
 	const NONE = 'LINE-TYPE-NONE';
@@ -444,6 +454,7 @@ class ReceiptState {
 	const PARTLY_PAID = 'RECEIPT-STATE-PARTLY-PAID';
 	const PAID = 'RECEIPT-STATE-PAID';
 	const HANDLED = 'RECEIPT-STATE-HANDLED';
+	const OUTSTANDING_CREDIT = 'RECEIPT-STATE-OUTSTANDING-CREDIT';
 }
 class GetReceiptResult {
 	const OK = 'GET-RECEIPT-RESULT-OK';
@@ -811,6 +822,11 @@ class TodoListCategory {
 	const TODO_LIST_CATEGORY_SALES = 'TODO-LIST-CATEGORY-SALES';
 	const TODO_LIST_CATEGORY_STOCK = 'TODO-LIST-CATEGORY-STOCK';
 	const TODO_LIST_CYCLE_COUNT = 'TODO-LIST-CYCLE-COUNT';
+}
+class SortOrder {
+	const NONE = 'NONE';
+	const ASCENDING = 'ASCENDING';
+	const DESCENDING = 'DESCENDING';
 }
 class SaveTodoListResult {
 	const SAVE_TODOLIST_RESULT_OK = 'SAVE-TODOLIST-RESULT-OK';
@@ -1345,6 +1361,7 @@ class InvoiceState {
 	const PARTLY_PAID = 'INVOICE-STATE-PARTLY-PAID';
 	const PAID = 'INVOICE-STATE-PAID';
 	const HANDLED = 'INVOICE-STATE-HANDLED';
+	const OUTSTANDING_CREDIT = 'INVOICE-STATE-OUTSTANDING-CREDIT';
 }
 class SalesRepeatTemplateType {
 	const ORDER = 'SALES-REPEAT-TEMPLATE-TYPE-ORDER';
