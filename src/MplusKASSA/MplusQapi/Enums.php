@@ -152,6 +152,7 @@ class TimelineEventType {
 	const PRINTED = 'PRINTED';
 	const TRANSFORMED = 'TRANSFORMED';
 	const GENERATED = 'GENERATED';
+	const INVOICE_REMINDER_CREATED = 'INVOICE-REMINDER-CREATED';
 }
 class ContractFrequency {
 	const WEEKLY = 'WEEKLY';

@@ -798,7 +798,6 @@ class SoapParser extends BaseSoapParser {
 			case 'CostCenter': return $this->load_CostCenter($in);
 			case 'CostCenterList': return $this->load_CostCenterList($in);
 			case 'GetCostCentersRequest': return $this->load_GetCostCentersRequest($in);
-			case 'SaveCostCentersRequest': return $this->load_SaveCostCentersRequest($in);
 			case 'GetConfigurationResponse': return $this->load_GetConfigurationResponse($in);
 			case 'UpdateConfigurationResponse': return $this->load_UpdateConfigurationResponse($in);
 			case 'GetConfigurationTreeResponse': return $this->load_GetConfigurationTreeResponse($in);
@@ -873,7 +872,6 @@ class SoapParser extends BaseSoapParser {
 			case 'GetAppConfigurationResponse': return $this->load_GetAppConfigurationResponse($in);
 			case 'SetWorkplaceActiveActivityResponse': return $this->load_SetWorkplaceActiveActivityResponse($in);
 			case 'GetCostCentersResponse': return $this->load_GetCostCentersResponse($in);
-			case 'SaveCostCentersResponse': return $this->load_SaveCostCentersResponse($in);
 			case 'ImageLabel': return $this->load_ImageLabel($in);
 			case 'ImageCardLabelIds': return $this->load_ImageCardLabelIds($in);
 			case 'ImageData': return $this->load_ImageData($in);
@@ -1563,7 +1561,6 @@ class SoapParser extends BaseSoapParser {
 			case 'getAppConfiguration': return $this->load_getAppConfiguration($in);
 			case 'setWorkplaceActiveActivity': return $this->load_setWorkplaceActiveActivity($in);
 			case 'getCostCenters': return $this->load_getCostCenters($in);
-			case 'saveCostCenters': return $this->load_saveCostCenters($in);
 			case 'createImage': return $this->load_createImage($in);
 			case 'createImageFromUrl': return $this->load_createImageFromUrl($in);
 			case 'getCardImageLabels': return $this->load_getCardImageLabels($in);
@@ -3561,6 +3558,7 @@ class SoapParser extends BaseSoapParser {
 						case 'subLineType': $o->subLineType = $this->load_string_property($in); break;
 						case 'articleAlterationId': $o->articleAlterationId = $this->load_int_property($in); break;
 						case 'lineKind': $o->lineKind = $this->load_string_property($in); break;
+						case 'salesOrderLineId': $o->salesOrderLineId = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -6897,6 +6895,8 @@ class SoapParser extends BaseSoapParser {
 						case 'lastMailTimelineEventsFilter': $o->lastMailTimelineEventsFilter = $this->load_TimelineEventSubFilter($in); break;
 						case 'includeSigningTimelineEvents': $o->includeSigningTimelineEvents = $this->load_bool_property($in); break;
 						case 'signingTimelineEventsFilter': $o->signingTimelineEventsFilter = $this->load_TimelineEventSubFilter($in); break;
+						case 'includeOtherTimelineEvents': $o->includeOtherTimelineEvents = $this->load_bool_property($in); break;
+						case 'otherTimelineEventsFilter': $o->otherTimelineEventsFilter = $this->load_TimelineEventSubFilter($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -11742,6 +11742,7 @@ class SoapParser extends BaseSoapParser {
 						case 'priceType': $o->priceType = $this->load_string_property($in); break;
 						case 'redeemedVoucherIssuanceId': $o->redeemedVoucherIssuanceId = $this->load_string_property($in); break;
 						case 'pendingVoucherIssuanceStartTs': $o->pendingVoucherIssuanceStartTs = $this->load_DateTime_property($in); break;
+						case 'discountType': $o->discountType = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -11769,6 +11770,7 @@ class SoapParser extends BaseSoapParser {
 						case 'lineType': $o->lineType = $this->load_string_property($in); break;
 						case 'tempId': $o->tempId = $this->load_string_property($in); break;
 						case 'articleAlterationId': $o->articleAlterationId = $this->load_int_property($in); break;
+						case 'salePromotionData': $o->salePromotionData = $this->load_SalePromotionLineData($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -12391,6 +12393,10 @@ class SoapParser extends BaseSoapParser {
 						case 'discountAmountExcl': $o->discountAmountExcl = $this->load_BigDecimal_property($in); break;
 						case 'amountExcl': $o->amountExcl = $this->load_BigDecimal_property($in); break;
 						case 'articleAlterationId': $o->articleAlterationId = $this->load_int_property($in); break;
+						case 'menuHash': $o->menuHash = $this->load_string_property($in); break;
+						case 'menuDescription': $o->menuDescription = $this->load_string_property($in); break;
+						case 'menuAmount': $menuAmount = $this->load_int_property($in); break;
+						case 'discountType': $o->discountType = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -12398,6 +12404,7 @@ class SoapParser extends BaseSoapParser {
 					break;
 			}
 		}
+		$o->menuAmount = isset($menuAmount) ? BigDecimal::ofUnscaledValue($menuAmount, 2) : null;
 		return $o;
 	}
 	private function load_RelationPresence(\XMLReader $in) : RelationPresence {
@@ -16332,6 +16339,7 @@ class SoapParser extends BaseSoapParser {
 						case 'createdTs': $o->createdTs = $this->load_DateTime_property($in); break;
 						case 'updatedTs': $o->updatedTs = $this->load_DateTime_property($in); break;
 						case 'deletedTs': $o->deletedTs = $this->load_DateTime_property($in); break;
+						case 'ownerId': $o->ownerId = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -16697,6 +16705,7 @@ class SoapParser extends BaseSoapParser {
 						case 'row': $o->row = $this->load_int_property($in); break;
 						case 'showSalesPrice': $o->showSalesPrice = $this->load_bool_property($in); break;
 						case 'buttonList': $o->buttonList = ($this->load_ButtonLayout_ButtonList($in))->button; break;
+						case 'isManagedPerBranch': $o->isManagedPerBranch = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -17876,6 +17885,7 @@ class SoapParser extends BaseSoapParser {
 						case 'groupType': $o->groupType = $this->load_string_property($in); break;
 						case 'selectionRangeMin': $o->selectionRangeMin = $this->load_int_property($in); break;
 						case 'selectionRangeMax': $o->selectionRangeMax = $this->load_int_property($in); break;
+						case 'deferUntilCheckout': $o->deferUntilCheckout = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -17968,6 +17978,7 @@ class SoapParser extends BaseSoapParser {
 						case 'groupType': $o->groupType = $this->load_string_property($in); break;
 						case 'selectionRangeMin': $o->selectionRangeMin = $this->load_int_property($in); break;
 						case 'selectionRangeMax': $o->selectionRangeMax = $this->load_int_property($in); break;
+						case 'deferUntilCheckout': $o->deferUntilCheckout = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -19799,6 +19810,7 @@ class SoapParser extends BaseSoapParser {
 					switch ($in->localName) {
 						case 'costCenterNumber': $o->costCenterNumber = $this->load_string_property($in); break;
 						case 'description': $o->description = $this->load_string_property($in); break;
+						case 'sequenceNumber': $o->sequenceNumber = $this->load_int_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -19836,25 +19848,6 @@ class SoapParser extends BaseSoapParser {
 			switch ($in->nodeType) {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_SaveCostCentersRequest(\XMLReader $in) : SaveCostCentersRequest {
-		$n = $in->name;
-		$o = new SaveCostCentersRequest();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'costCenters': $o->costCenters[] = $this->load_CostCenter($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -20566,6 +20559,7 @@ class SoapParser extends BaseSoapParser {
 						case 'slaveApiType': $o->slaveApiType = $this->load_string_property($in); break;
 						case 'slaveBranchNumber': $o->slaveBranchNumber = $this->load_int_property($in); break;
 						case 'slaveWorkplaceNumber': $o->slaveWorkplaceNumber = $this->load_int_property($in); break;
+						case 'serviceVersionDisplayString': $o->serviceVersionDisplayString = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -21420,24 +21414,6 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
-	private function load_SaveCostCentersResponse(\XMLReader $in) : SaveCostCentersResponse {
-		$n = $in->name;
-		$o = new SaveCostCentersResponse();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
 	private function load_ImageLabel(\XMLReader $in) : ImageLabel {
 		$n = $in->name;
 		$o = new ImageLabel();
@@ -22233,6 +22209,7 @@ class SoapParser extends BaseSoapParser {
 						case 'hasArticleChoice': $o->hasArticleChoice = $this->load_bool_property($in); break;
 						case 'redeemOnNewArticle': $o->redeemOnNewArticle = $this->load_bool_property($in); break;
 						case 'applyOnPreparationMethods': $o->applyOnPreparationMethods = $this->load_bool_property($in); break;
+						case 'applyOnComponents': $o->applyOnComponents = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -25094,6 +25071,8 @@ class SoapParser extends BaseSoapParser {
 						case 'bpeCount': $o->bpeCount = $this->load_BigDecimal_property($in); break;
 						case 'profit': $o->profit = $this->load_BigDecimal_property($in); break;
 						case 'margin': $o->margin = $this->load_BigDecimal_property($in); break;
+						case 'regularProfit': $o->regularProfit = $this->load_BigDecimal_property($in); break;
+						case 'regularMargin': $o->regularMargin = $this->load_BigDecimal_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -25148,6 +25127,12 @@ class SoapParser extends BaseSoapParser {
 						case 'packingSlipCount': $o->packingSlipCount = $this->load_BigDecimal_property($in); break;
 						case 'packingSlipTotalInclAmount': $o->packingSlipTotalInclAmount = $this->load_BigDecimal_property($in); break;
 						case 'branchList': $o->branchList = ($this->load_ReportArticlePerformanceBranchList($in))->branch; break;
+						case 'bpeVoucherTotalPurchasePrice': $o->bpeVoucherTotalPurchasePrice = $this->load_BigDecimal_property($in); break;
+						case 'regularPurchasePrice': $o->regularPurchasePrice = $this->load_BigDecimal_property($in); break;
+						case 'totalRegularPurchasePrice': $o->totalRegularPurchasePrice = $this->load_BigDecimal_property($in); break;
+						case 'bpeRegularTotalPurchasePrice': $o->bpeRegularTotalPurchasePrice = $this->load_BigDecimal_property($in); break;
+						case 'regularProfit': $o->regularProfit = $this->load_BigDecimal_property($in); break;
+						case 'regularMargin': $o->regularMargin = $this->load_BigDecimal_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -27048,6 +27033,8 @@ class SoapParser extends BaseSoapParser {
 						case 'lastMailTimelineEventsFilter': $o->lastMailTimelineEventsFilter = $this->load_TimelineEventSubFilter($in); break;
 						case 'includeSigningTimelineEvents': $o->includeSigningTimelineEvents = $this->load_bool_property($in); break;
 						case 'signingTimelineEventsFilter': $o->signingTimelineEventsFilter = $this->load_TimelineEventSubFilter($in); break;
+						case 'includeOtherTimelineEvents': $o->includeOtherTimelineEvents = $this->load_bool_property($in); break;
+						case 'otherTimelineEventsFilter': $o->otherTimelineEventsFilter = $this->load_TimelineEventSubFilter($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -27195,6 +27182,8 @@ class SoapParser extends BaseSoapParser {
 						case 'lastMailTimelineEventsFilter': $o->lastMailTimelineEventsFilter = $this->load_TimelineEventSubFilter($in); break;
 						case 'includeSigningTimelineEvents': $o->includeSigningTimelineEvents = $this->load_bool_property($in); break;
 						case 'signingTimelineEventsFilter': $o->signingTimelineEventsFilter = $this->load_TimelineEventSubFilter($in); break;
+						case 'includeOtherTimelineEvents': $o->includeOtherTimelineEvents = $this->load_bool_property($in); break;
+						case 'otherTimelineEventsFilter': $o->otherTimelineEventsFilter = $this->load_TimelineEventSubFilter($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -27814,6 +27803,8 @@ class SoapParser extends BaseSoapParser {
 						case 'signingTimelineEventsFilter': $o->signingTimelineEventsFilter = $this->load_TimelineEventSubFilter($in); break;
 						case 'includeDirectDebitTimelineEvents': $o->includeDirectDebitTimelineEvents = $this->load_bool_property($in); break;
 						case 'directDebitTimelineEventsFilter': $o->directDebitTimelineEventsFilter = $this->load_TimelineEventSubFilter($in); break;
+						case 'includeOtherTimelineEvents': $o->includeOtherTimelineEvents = $this->load_bool_property($in); break;
+						case 'otherTimelineEventsFilter': $o->otherTimelineEventsFilter = $this->load_TimelineEventSubFilter($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -36101,25 +36092,6 @@ class SoapParser extends BaseSoapParser {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
 						case 'request': $o->request = $this->load_GetCostCentersRequest($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
-	private function load_saveCostCenters(\XMLReader $in) : saveCostCenters {
-		$n = $in->name;
-		$o = new saveCostCenters();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'request': $o->request = $this->load_SaveCostCentersRequest($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:

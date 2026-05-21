@@ -595,7 +595,6 @@ class MplusApiClient extends BaseSoapClient {
  GetEmailTemplatesRequest::class . ':idsFilter' => 'string',
  GetEmailTemplatesRequest::class . ':layoutCodesFilter' => 'string',
  CostCenterList::class . ':costCenter' => 'MplusKASSA\MplusQapi\CostCenter',
- SaveCostCentersRequest::class . ':costCenters' => 'MplusKASSA\MplusQapi\CostCenter',
  GetConfigurationResponse::class . ':configurationList' => 'MplusKASSA\MplusQapi\Configuration',
  GetConfigurationTreeResponse::class . ':configurations' => 'MplusKASSA\MplusQapi\ConfigurationGroup',
  GetConfigurationValuesResponse::class . ':configurationKeyValues' => 'MplusKASSA\MplusQapi\ConfigurationKeyValues',
@@ -3968,18 +3967,6 @@ class MplusApiClient extends BaseSoapClient {
         $opname = 'getCostCenters';
         $this->startRequest($opname);
         $reqobj = new getCostCenters();
-        $reqobj->request = $request;
-        $gen = new SoapGenerator();
-        $rq = $gen->write($reqobj, $opname);
-        $resp = $this->communicate($opname, $rq, $requestId);
-        $res = $this->parser->parse($resp);
-        $this->endRequest();
-        return $res;
-    }
-    public function saveCostCenters(SaveCostCentersRequest $request, ?string $requestId = null) : SaveCostCentersResponse {
-        $opname = 'saveCostCenters';
-        $this->startRequest($opname);
-        $reqobj = new saveCostCenters();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);
