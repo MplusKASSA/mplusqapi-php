@@ -63,11 +63,12 @@ abstract class BaseSoapParser {
     protected function load_DateTime_property(\XMLReader $in) : \DateTime
     {
         $v = $this->load_string_property($in);
-        $s = \DateTime::createFromFormat('Y-m-d?H:i:s', $v);
-        if ($s === false) {
+        try {
+            return new \DateTime($v);
+        }
+        catch (\Exception $e) {
             throw new \Exception("Failed to parse $v as a datetime");
         }
-        return $s;
     }
 
     abstract protected function loadSoapObjectByName(\XMLReader $in);
