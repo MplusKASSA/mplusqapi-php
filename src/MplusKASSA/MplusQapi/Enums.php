@@ -129,6 +129,7 @@ class TimelineEventCategory {
 	const MAIL = 'MAIL';
 	const SIGNING = 'SIGNING';
 	const DIRECT_DEBIT = 'DIRECT-DEBIT';
+	const LIFE_CYCLE = 'LIFE-CYCLE';
 	const OTHER = 'OTHER';
 }
 class TimelineEventType {
@@ -149,9 +150,17 @@ class TimelineEventType {
 	const DIRECT_DEBIT_PAID = 'DIRECT-DEBIT-PAID';
 	const DIRECT_DEBIT_REFUNDED = 'DIRECT-DEBIT-REFUNDED';
 	const DIRECT_DEBIT_FAILED = 'DIRECT-DEBIT-FAILED';
+	const SALES_CREATED = 'SALES-CREATED';
+	const SALES_UPDATED = 'SALES-UPDATED';
+	const SALES_TRANSFORMED = 'SALES-TRANSFORMED';
+	const SALES_GENERATED = 'SALES-GENERATED';
+	const PURCHASE_CREATED = 'PURCHASE-CREATED';
+	const PURCHASE_UPDATED = 'PURCHASE-UPDATED';
+	const PURCHASE_TRANSFORMED = 'PURCHASE-TRANSFORMED';
+	const INTERBRANCH_CREATED = 'INTERBRANCH-CREATED';
+	const INTERBRANCH_UPDATED = 'INTERBRANCH-UPDATED';
+	const INTERBRANCH_TRANSFORMED = 'INTERBRANCH-TRANSFORMED';
 	const PRINTED = 'PRINTED';
-	const TRANSFORMED = 'TRANSFORMED';
-	const GENERATED = 'GENERATED';
 	const INVOICE_REMINDER_CREATED = 'INVOICE-REMINDER-CREATED';
 }
 class ContractFrequency {
@@ -169,6 +178,7 @@ class ContractPeriodCalculationMethod {
 	const CURRENT = 'CURRENT';
 	const PREV = 'PREV';
 	const NEXT = 'NEXT';
+	const UNKNOWN = 'UNKNOWN';
 }
 class OrderType {
 	const SALES_ORDER = 'ORDER-TYPE-SALES-ORDER';
@@ -205,6 +215,7 @@ class SubLineTypeV2 {
 	const PERSON_ARTICLE = 'SUB-LINE-TYPE-V2-PERSON-ARTICLE';
 	const MEASUREMENT = 'SUB-LINE-TYPE-V2-MEASUREMENT';
 	const PREPARATION_COMPONENT = 'SUB-LINE-TYPE-V2-PREPARATION-COMPONENT';
+	const ADDRESS_TEXT_LINE = 'SUB-LINE-TYPE-V2-ADDRESS-TEXT-LINE';
 }
 class DiscountType {
 	const NONE = 'DISCOUNT-TYPE-NONE';
@@ -252,6 +263,10 @@ class VoucherRedeemPeriod {
 class UpdateBehavior {
 	const APPEND = 'UPDATE-BEHAVIOR-APPEND';
 	const REPLACE = 'UPDATE-BEHAVIOR-REPLACE';
+}
+class ArticleContractLineType {
+	const ORDER = 'ORDER';
+	const INVOICE = 'INVOICE';
 }
 class LogMistakeResult {
 	const LOG_MISTAKE_OK = 'LOG-MISTAKE-OK';
@@ -784,6 +799,7 @@ class SubLineType {
 	const COMPONENT_LINE = 'SUB-LINE-TYPE-COMPONENT-LINE';
 	const PERSONAL_ARTICLE = 'SUB-LINE-TYPE-PERSONAL-ARTICLE';
 	const DIMENSION_CALCULATION_ARTICLE = 'SUB-LINE-TYPE-DIMENSION-CALCULATION-ARTICLE';
+	const ADDRESS_TEXT_LINE = 'SUB-LINE-TYPE-ADDRESS-TEXT-LINE';
 }
 class GetPreparationMethodGroupsResult {
 	const OK = 'GET-PREPARATION-METHOD-GROUPS-RESULT-OK';
@@ -867,6 +883,11 @@ class SaveArticleBranchDeviationsResponseResult {
 class UpdateArticleNutrientsResponseResult {
 	const UPDATE_ARTICLE_NUTRIENTS_RESULT_OK = 'UPDATE-ARTICLE-NUTRIENTS-RESULT-OK';
 	const UPDATE_ARTICLE_NUTRIENTS_RESULT_ERROR = 'UPDATE-ARTICLE-NUTRIENTS-RESULT-ERROR';
+}
+class UpdateArticleContractLinesResponseResult {
+	const OK = 'OK';
+	const FAILED = 'FAILED';
+	const FAILED_ARTICLE_NOT_FOUND = 'FAILED-ARTICLE-NOT-FOUND';
 }
 class CardFilterOptionType {
 	const VALUE = 'CARD-FILTER-OPTION-TYPE-VALUE';
@@ -1163,6 +1184,8 @@ class RenderedPrintLayoutType {
 	const PDF = 'PDF';
 	const PNG = 'PNG';
 	const JPEG = 'JPEG';
+	const XPS = 'XPS';
+	const WEBP = 'WEBP';
 }
 class GetRenderedPrintLayoutResponseResult {
 	const OK = 'OK';

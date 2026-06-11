@@ -392,6 +392,8 @@ class MplusApiClient extends BaseSoapClient {
  GetArticleBranchDeviationsRequest::class . ':branchFilter' => 'int',
  SaveArticleBranchDeviationsRequest::class . ':articleBranchDeviationLines' => 'MplusKASSA\MplusQapi\ArticleBranchDeviationLine',
  UpdateArticleNutrientsRequest::class . ':nutrients' => 'MplusKASSA\MplusQapi\ArticleNutrient',
+ ArticleContractLineInputList::class . ':line' => 'MplusKASSA\MplusQapi\ArticleContractLineInput',
+ UpdateArticleContractLinesRequest::class . ':lines' => 'MplusKASSA\MplusQapi\ArticleContractLineInput',
  ArticleDynamicMinMaxStockList::class . ':articleDynamicMinMaxStock' => 'MplusKASSA\MplusQapi\ArticleDynamicMinMaxStock',
  UpdateArticleDynamicMinMaxStockRequest::class . ':articleDynamicMinMaxStocks' => 'MplusKASSA\MplusQapi\ArticleDynamicMinMaxStock',
  GetArticleDynamicMinMaxStockRequest::class . ':articleNumberFilters' => 'int',
@@ -595,6 +597,9 @@ class MplusApiClient extends BaseSoapClient {
  GetEmailTemplatesRequest::class . ':idsFilter' => 'string',
  GetEmailTemplatesRequest::class . ':layoutCodesFilter' => 'string',
  CostCenterList::class . ':costCenter' => 'MplusKASSA\MplusQapi\CostCenter',
+ SaveCostCentersRequest::class . ':costCenters' => 'MplusKASSA\MplusQapi\CostCenter',
+ BpeEmployeeBudgetList::class . ':bpeEmployeeBudget' => 'MplusKASSA\MplusQapi\BpeEmployeeBudget',
+ SaveBpeBudgetsRequest::class . ':bpeEmployeeBudget' => 'MplusKASSA\MplusQapi\BpeEmployeeBudget',
  GetConfigurationResponse::class . ':configurationList' => 'MplusKASSA\MplusQapi\Configuration',
  GetConfigurationTreeResponse::class . ':configurations' => 'MplusKASSA\MplusQapi\ConfigurationGroup',
  GetConfigurationValuesResponse::class . ':configurationKeyValues' => 'MplusKASSA\MplusQapi\ConfigurationKeyValues',
@@ -636,6 +641,7 @@ class MplusApiClient extends BaseSoapClient {
  GetEmployeeWorkplaceLoginStatesResponse::class . ':workplaceLoginStateInfo' => 'MplusKASSA\MplusQapi\WorkplaceLoginStateInfo',
  GetEmailTemplatesResponse::class . ':emailTemplates' => 'MplusKASSA\MplusQapi\EmailTemplate',
  GetCostCentersResponse::class . ':costCenterList' => 'MplusKASSA\MplusQapi\CostCenter',
+ GetBpeBudgetsResponse::class . ':bpeEmployeeBudgetList' => 'MplusKASSA\MplusQapi\BpeEmployeeBudget',
  ImageCardLabelIds::class . ':labelId' => 'int',
  ImageData::class . ':labels' => 'int',
  CardImageData::class . ':images' => 'MplusKASSA\MplusQapi\ImageData',
@@ -851,6 +857,15 @@ class MplusApiClient extends BaseSoapClient {
  PauseSalesRepeatTemplatesRequest::class . ':templateIds' => 'string',
  RestartSalesRepeatTemplatesRequest::class . ':templateIds' => 'string',
  StopSalesRepeatTemplatesRequest::class . ':templateIds' => 'string',
+ GetSalesObjectsBySalesRepeatTemplatesRequest::class . ':templateIds' => 'string',
+ SalesRepeatTemplateGeneratedSalesObjectList::class . ':generatedSalesObject' => 'MplusKASSA\MplusQapi\SalesRepeatTemplateGeneratedSalesObject',
+ SalesRepeatTemplatePlannedSalesObjectList::class . ':plannedSalesObject' => 'MplusKASSA\MplusQapi\SalesRepeatTemplatePlannedSalesObject',
+ RepeatTemplateSalesObject::class . ':generated' => 'MplusKASSA\MplusQapi\SalesRepeatTemplateGeneratedSalesObject',
+ RepeatTemplateSalesObject::class . ':planned' => 'MplusKASSA\MplusQapi\SalesRepeatTemplatePlannedSalesObject',
+ RepeatTemplateSalesObjectList::class . ':repeatTemplate' => 'MplusKASSA\MplusQapi\RepeatTemplateSalesObject',
+ SalesObjectPlanList::class . ':salesObject' => 'MplusKASSA\MplusQapi\SalesObjectPlan',
+ CreateSalesObjectsBySalesRepeatTemplateRequest::class . ':salesObjects' => 'MplusKASSA\MplusQapi\SalesObjectPlan',
+ GeneratedSalesObjectList::class . ':salesObject' => 'MplusKASSA\MplusQapi\GeneratedSalesObject',
  BpeBudgetCheckList::class . ':item' => 'MplusKASSA\MplusQapi\BpeBudgetCheck',
  PerformBpeBudgetChecksRequest::class . ':bpeList' => 'MplusKASSA\MplusQapi\BpeBudgetCheck',
  BpeBudgetCheckResponseList::class . ':result' => 'MplusKASSA\MplusQapi\BpeBudgetCheckResponse',
@@ -980,6 +995,8 @@ class MplusApiClient extends BaseSoapClient {
  SalesQueueFilter::class . ':salesObjectIds' => 'string',
  SalesQueueFilter::class . ':types' => 'string',
  GetSalesRepeatTemplatesResponse::class . ':salesRepeatTemplateList' => 'MplusKASSA\MplusQapi\SalesRepeatTemplate',
+ GetSalesObjectsBySalesRepeatTemplatesResponse::class . ':repeatTemplateList' => 'MplusKASSA\MplusQapi\RepeatTemplateSalesObject',
+ CreateSalesObjectsBySalesRepeatTemplateResponse::class . ':salesObjects' => 'MplusKASSA\MplusQapi\GeneratedSalesObject',
  PerformBpeBudgetChecksResponse::class . ':bpeResults' => 'MplusKASSA\MplusQapi\BpeBudgetCheckResponse',
  GetTicketCounterSalesResponse::class . ':ticketCounterSaleList' => 'MplusKASSA\MplusQapi\TicketCounterSale',
  GetSalePromotionsResponse::class . ':salePromotionsList' => 'MplusKASSA\MplusQapi\SalePromotions',
@@ -2997,6 +3014,18 @@ class MplusApiClient extends BaseSoapClient {
         $this->endRequest();
         return $res;
     }
+    public function updateArticleContractLines(UpdateArticleContractLinesRequest $request, ?string $requestId = null) : UpdateArticleContractLinesResponse {
+        $opname = 'updateArticleContractLines';
+        $this->startRequest($opname);
+        $reqobj = new updateArticleContractLines();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
     public function updateArticleDynamicMinMaxStock(UpdateArticleDynamicMinMaxStockRequest $request, ?string $requestId = null) : UpdateArticleDynamicMinMaxStockResponse {
         $opname = 'updateArticleDynamicMinMaxStock';
         $this->startRequest($opname);
@@ -3975,6 +4004,42 @@ class MplusApiClient extends BaseSoapClient {
         $this->endRequest();
         return $res;
     }
+    public function saveCostCenters(SaveCostCentersRequest $request, ?string $requestId = null) : SaveCostCentersResponse {
+        $opname = 'saveCostCenters';
+        $this->startRequest($opname);
+        $reqobj = new saveCostCenters();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getBpeBudgets(GetBpeBudgetsRequest $request, ?string $requestId = null) : GetBpeBudgetsResponse {
+        $opname = 'getBpeBudgets';
+        $this->startRequest($opname);
+        $reqobj = new getBpeBudgets();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function saveBpeBudgets(SaveBpeBudgetsRequest $request, ?string $requestId = null) : SaveBpeBudgetsResponse {
+        $opname = 'saveBpeBudgets';
+        $this->startRequest($opname);
+        $reqobj = new saveBpeBudgets();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
     public function createImage(CreateImageRequest $request, ?string $requestId = null) : CreateImageResponse {
         $opname = 'createImage';
         $this->startRequest($opname);
@@ -4663,6 +4728,30 @@ class MplusApiClient extends BaseSoapClient {
         $opname = 'stopSalesRepeatTemplates';
         $this->startRequest($opname);
         $reqobj = new stopSalesRepeatTemplates();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getSalesObjectsBySalesRepeatTemplates(GetSalesObjectsBySalesRepeatTemplatesRequest $request, ?string $requestId = null) : GetSalesObjectsBySalesRepeatTemplatesResponse {
+        $opname = 'getSalesObjectsBySalesRepeatTemplates';
+        $this->startRequest($opname);
+        $reqobj = new getSalesObjectsBySalesRepeatTemplates();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function createSalesObjectsBySalesRepeatTemplate(CreateSalesObjectsBySalesRepeatTemplateRequest $request, ?string $requestId = null) : CreateSalesObjectsBySalesRepeatTemplateResponse {
+        $opname = 'createSalesObjectsBySalesRepeatTemplate';
+        $this->startRequest($opname);
+        $reqobj = new createSalesObjectsBySalesRepeatTemplate();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);
