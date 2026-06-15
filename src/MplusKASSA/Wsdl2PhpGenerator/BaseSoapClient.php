@@ -134,6 +134,8 @@ abstract class BaseSoapClient
 
     private function dispatchResponseHeaders(array $responseHeaders): void
     {
+        $responseHeaders = array_change_key_case($responseHeaders, CASE_LOWER);
+
         $this->processResponseHeaders($responseHeaders);
         $this->processServerTimingHeader($responseHeaders['server-timing'] ?? []);
         $this->processServiceVersionHeader($responseHeaders['mplus-service-version'] ?? []);
