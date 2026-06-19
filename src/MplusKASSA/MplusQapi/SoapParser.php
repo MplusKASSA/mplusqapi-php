@@ -2174,7 +2174,6 @@ class SoapParser extends BaseSoapParser {
 						case 'alwaysPrintLargeFormatReceipt': $o->alwaysPrintLargeFormatReceipt = $this->load_bool_property($in); break;
 						case 'alwaysEmailReceipt': $o->alwaysEmailReceipt = $this->load_bool_property($in); break;
 						case 'condenseCombinedInvoice': $o->condenseCombinedInvoice = $this->load_bool_property($in); break;
-						case 'reminderEmail': $o->reminderEmail = $this->load_string_property($in); break;
 						case 'imageList': $o->imageList = ($this->load_ImageList($in))->image; break;
 						case 'customFieldList': $o->customFieldList = ($this->load_CustomFieldList($in))->customField; break;
 						case 'contactList': $o->contactList = ($this->load_RelationList($in))->relation; break;
@@ -2186,6 +2185,10 @@ class SoapParser extends BaseSoapParser {
 						case 'accountBalance': $o->accountBalance = $this->load_BigDecimal_property($in); break;
 						case 'salePromotionIds': $o->salePromotionIds = ($this->load_IdList($in))->id; break;
 						case 'directDebit': $o->directDebit = $this->load_bool_property($in); break;
+						case 'reminderEmail': $o->reminderEmail = $this->load_string_property($in); break;
+						case 'canEarnPoints': $o->canEarnPoints = $this->load_bool_property($in); break;
+						case 'canRedeemPoints': $o->canRedeemPoints = $this->load_bool_property($in); break;
+						case 'cantRedeemPointsReason': $o->cantRedeemPointsReason = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -4104,6 +4107,7 @@ class SoapParser extends BaseSoapParser {
 						case 'recentlyRedeemed': $o->recentlyRedeemed = $this->load_bool_property($in); break;
 						case 'upcoming': $o->upcoming = $this->load_bool_property($in); break;
 						case 'upcomingTs': $o->upcomingTs = $this->load_DateTime_property($in); break;
+						case 'articleNotInButtonLayout': $o->articleNotInButtonLayout = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -16286,6 +16290,7 @@ class SoapParser extends BaseSoapParser {
 						case 'authorization': $o->authorization = $this->load_string_property($in); break;
 						case 'id': $o->id = $this->load_string_property($in); break;
 						case 'subAuthorizations': $o->subAuthorizations = ($this->load_AuthorizationsList($in))->authorizations; break;
+						case 'modules': $o->modules = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -22544,6 +22549,7 @@ class SoapParser extends BaseSoapParser {
 						case 'type': $o->type = $this->load_string_property($in); break;
 						case 'articleNumber': $o->articleNumber = $this->load_int_property($in); break;
 						case 'turnoverGroupId': $o->turnoverGroupId = $this->load_int_property($in); break;
+						case 'salesPromotionId': $o->salesPromotionId = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:

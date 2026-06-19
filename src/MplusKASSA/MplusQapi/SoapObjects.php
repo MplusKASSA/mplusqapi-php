@@ -476,7 +476,6 @@ class Relation extends SoapObject {
 	public ?bool $alwaysPrintLargeFormatReceipt = null;
 	public ?bool $alwaysEmailReceipt = null;
 	public ?bool $condenseCombinedInvoice = null;
-	public ?string $reminderEmail = null;
 	/** @var Image[] */
 	public $imageList = null;
 	/** @var CustomField[] */
@@ -495,6 +494,10 @@ class Relation extends SoapObject {
 	/** @var string[] */
 	public $salePromotionIds = null;
 	public ?bool $directDebit = null;
+	public ?string $reminderEmail = null;
+	public ?bool $canEarnPoints = null;
+	public ?bool $canRedeemPoints = null;
+	public ?string $cantRedeemPointsReason = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->relationNumber !== null) $gen->writeInt('relationNumber', $this->relationNumber);
 		if ($this->extRelationId !== null) $gen->out->writeElementNs(self::TNS, 'extRelationId', null, $this->extRelationId);
@@ -540,7 +543,6 @@ $tmp_categoryIds->write($gen, 'categoryIds');
 		if ($this->alwaysPrintLargeFormatReceipt !== null) $gen->writeBool('alwaysPrintLargeFormatReceipt', $this->alwaysPrintLargeFormatReceipt);
 		if ($this->alwaysEmailReceipt !== null) $gen->writeBool('alwaysEmailReceipt', $this->alwaysEmailReceipt);
 		if ($this->condenseCombinedInvoice !== null) $gen->writeBool('condenseCombinedInvoice', $this->condenseCombinedInvoice);
-		if ($this->reminderEmail !== null) $gen->out->writeElementNs(self::TNS, 'reminderEmail', null, $this->reminderEmail);
 		if ($this->imageList !== null) {
 $tmp_imageList = new ImageList($this->imageList);
 $tmp_imageList->write($gen, 'imageList');
@@ -567,6 +569,10 @@ $tmp_salePromotionIds = new IdList($this->salePromotionIds);
 $tmp_salePromotionIds->write($gen, 'salePromotionIds');
 }
 		if ($this->directDebit !== null) $gen->writeBool('directDebit', $this->directDebit);
+		if ($this->reminderEmail !== null) $gen->out->writeElementNs(self::TNS, 'reminderEmail', null, $this->reminderEmail);
+		if ($this->canEarnPoints !== null) $gen->writeBool('canEarnPoints', $this->canEarnPoints);
+		if ($this->canRedeemPoints !== null) $gen->writeBool('canRedeemPoints', $this->canRedeemPoints);
+		if ($this->cantRedeemPointsReason !== null) $gen->out->writeElementNs(self::TNS, 'cantRedeemPointsReason', null, $this->cantRedeemPointsReason);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -2447,6 +2453,7 @@ class VoucherCanApplyResult extends SoapObject {
 	public ?bool $recentlyRedeemed = null;
 	public ?bool $upcoming = null;
 	public ?\DateTime $upcomingTs = null;
+	public ?bool $articleNotInButtonLayout = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->recentRedeemCounts !== null) {
 $tmp_recentRedeemCounts = new VoucherRedeemCountList($this->recentRedeemCounts);
@@ -2461,6 +2468,7 @@ $tmp_recentRedeemCounts->write($gen, 'recentRedeemCounts');
 		if ($this->recentlyRedeemed !== null) $gen->writeBool('recentlyRedeemed', $this->recentlyRedeemed);
 		if ($this->upcoming !== null) $gen->writeBool('upcoming', $this->upcoming);
 		if ($this->upcomingTs !== null) $gen->writeDateTime('upcomingTs', $this->upcomingTs);
+		if ($this->articleNotInButtonLayout !== null) $gen->writeBool('articleNotInButtonLayout', $this->articleNotInButtonLayout);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -13860,6 +13868,7 @@ class Authorization extends SoapObject {
 	public string $id;
 	/** @var Authorization[] */
 	public $subAuthorizations = null;
+	public ?string $modules = null;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'authorization', null, $this->authorization);
 		$gen->out->writeElementNs(self::TNS, 'id', null, $this->id);
@@ -13867,6 +13876,7 @@ class Authorization extends SoapObject {
 $tmp_subAuthorizations = new AuthorizationsList($this->subAuthorizations);
 $tmp_subAuthorizations->write($gen, 'subAuthorizations');
 }
+		if ($this->modules !== null) $gen->out->writeElementNs(self::TNS, 'modules', null, $this->modules);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -19219,6 +19229,7 @@ class VoucherLine extends SoapObject {
 	public string $type;
 	public ?int $articleNumber = null;
 	public ?int $turnoverGroupId = null;
+	public ?string $salesPromotionId = null;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'id', null, $this->id);
 		$gen->out->writeElementNs(self::TNS, 'bpeId', null, $this->bpeId);
@@ -19227,6 +19238,7 @@ class VoucherLine extends SoapObject {
 		$gen->out->writeElementNs(self::TNS, 'type', null, $this->type);
 		if ($this->articleNumber !== null) $gen->writeInt('articleNumber', $this->articleNumber);
 		if ($this->turnoverGroupId !== null) $gen->writeInt('turnoverGroupId', $this->turnoverGroupId);
+		if ($this->salesPromotionId !== null) $gen->out->writeElementNs(self::TNS, 'salesPromotionId', null, $this->salesPromotionId);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);

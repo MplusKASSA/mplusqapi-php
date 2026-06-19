@@ -16,6 +16,7 @@ class ArticleSpecialPrice {
 	const PRICE_NOT_FOR_SALE = 'PRICE-NOT-FOR-SALE';
 	const PRICE_BARCODE_PRICE = 'PRICE-BARCODE-PRICE';
 	const PRICE_NOT_SET = 'PRICE-NOT-SET';
+	const PRICE_NOT_FOR_SALE_VISIBLE = 'PRICE-NOT-FOR-SALE-VISIBLE';
 }
 class CardType {
 	const EMPLOYEE = 'EMPLOYEE';
@@ -1241,6 +1242,7 @@ class VoucherUseRelation {
 class VoucherLineType {
 	const ARTICLE = 'ARTICLE';
 	const TURNOVER_GROUP = 'TURNOVER-GROUP';
+	const SALES_PROMOTIONS = 'SALES-PROMOTIONS';
 }
 class GiftcardResult {
 	const RESULT_OK = 'RESULT-OK';
@@ -1463,6 +1465,7 @@ class DiscountPercentageType {
 class SalePromotionType {
 	const DEFAULT = 'SALE-PROMOTION-TYPE-DEFAULT';
 	const RELATION = 'SALE-PROMOTION-TYPE-RELATION';
+	const VOUCHER = 'SALE-PROMOTION-TYPE-VOUCHER';
 }
 class CreateOrderResult {
 	const OK = 'CREATE-ORDER-RESULT-OK';
