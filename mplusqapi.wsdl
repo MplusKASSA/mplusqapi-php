@@ -78,6 +78,7 @@
           <enumeration value="PAYMENT-METHOD-TYPE-DEPOSIT" />
           <enumeration value="PAYMENT-METHOD-TYPE-AUTO-DEPOSIT" />
           <enumeration value="PAYMENT-METHOD-TYPE-BPE" />
+          <enumeration value="PAYMENT-METHOD-TYPE-BPE-NO-STOCK" />
           <enumeration value="PAYMENT-METHOD-TYPE-VOUCHER-BPE" />
           <enumeration value="PAYMENT-METHOD-TYPE-VOUCHER-BOOK-BPE" />
         </restriction>
@@ -11355,11 +11356,18 @@
           <element name="kind" type="tns:PrintLayoutKind" />
         </sequence>
       </complexType>
+      <complexType name="ns-PrintLayoutLocationId">
+        <sequence>
+          <element name="locationId" type="xsd:int" />
+        </sequence>
+      </complexType>
       <complexType name="PrintLayoutAssignment">
         <sequence>
           <element name="workplace" type="tns:WorkplaceIdentifier" />
           <element name="printLayout" type="tns:PrintLayoutAssignmentPrintLayoutView" />
           <element name="useOnlinePrinter" type="xsd:boolean" />
+          <element name="baseLocationId" type="xsd:int" />
+          <element name="extraLocationIds" type="tns:ns-PrintLayoutLocationId" minOccurs="0" maxOccurs="unbounded" />
         </sequence>
       </complexType>
       <complexType name="PrintParam">

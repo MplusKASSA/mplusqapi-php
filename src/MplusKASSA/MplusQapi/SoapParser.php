@@ -906,6 +906,7 @@ class SoapParser extends BaseSoapParser {
 			case 'PrintLayoutView': return $this->load_PrintLayoutView($in);
 			case 'GetPrintLayoutAssignmentsRequest': return $this->load_GetPrintLayoutAssignmentsRequest($in);
 			case 'PrintLayoutAssignmentPrintLayoutView': return $this->load_PrintLayoutAssignmentPrintLayoutView($in);
+			case 'ns-PrintLayoutLocationId': return $this->load_ns_PrintLayoutLocationId($in);
 			case 'PrintLayoutAssignment': return $this->load_PrintLayoutAssignment($in);
 			case 'PrintParam': return $this->load_PrintParam($in);
 			case 'PrintParams': return $this->load_PrintParams($in);
@@ -22150,6 +22151,25 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_ns_PrintLayoutLocationId(\XMLReader $in) : ns_PrintLayoutLocationId {
+		$n = $in->name;
+		$o = new ns_PrintLayoutLocationId();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'locationId': $o->locationId = $this->load_int_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_PrintLayoutAssignment(\XMLReader $in) : PrintLayoutAssignment {
 		$n = $in->name;
 		$o = new PrintLayoutAssignment();
@@ -22162,6 +22182,8 @@ class SoapParser extends BaseSoapParser {
 						case 'workplace': $o->workplace = $this->load_WorkplaceIdentifier($in); break;
 						case 'printLayout': $o->printLayout = $this->load_PrintLayoutAssignmentPrintLayoutView($in); break;
 						case 'useOnlinePrinter': $o->useOnlinePrinter = $this->load_bool_property($in); break;
+						case 'baseLocationId': $o->baseLocationId = $this->load_int_property($in); break;
+						case 'extraLocationIds': $o->extraLocationIds[] = $this->load_ns_PrintLayoutLocationId($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:

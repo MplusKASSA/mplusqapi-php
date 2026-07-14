@@ -18892,10 +18892,25 @@ class PrintLayoutAssignmentPrintLayoutView extends SoapObject {
 	}
 }
 
+class ns_PrintLayoutLocationId extends SoapObject {
+	public int $locationId;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->writeInt('locationId', $this->locationId);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
 class PrintLayoutAssignment extends SoapObject {
 	public WorkplaceIdentifier $workplace;
 	public PrintLayoutAssignmentPrintLayoutView $printLayout;
 	public bool $useOnlinePrinter;
+	public int $baseLocationId;
+	/** @var ns_PrintLayoutLocationId[] */
+	public $extraLocationIds = array();
 	public function __construct() {
 		$this->workplace = new WorkplaceIdentifier();
 		$this->printLayout = new PrintLayoutAssignmentPrintLayoutView();
@@ -18904,6 +18919,8 @@ class PrintLayoutAssignment extends SoapObject {
 		$this->workplace->write($gen, 'workplace');
 		$this->printLayout->write($gen, 'printLayout');
 		$gen->writeBool('useOnlinePrinter', $this->useOnlinePrinter);
+		$gen->writeInt('baseLocationId', $this->baseLocationId);
+		foreach ($this->extraLocationIds as $elem) $elem->write($gen, 'extraLocationIds');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);

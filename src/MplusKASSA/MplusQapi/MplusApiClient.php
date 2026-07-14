@@ -655,6 +655,7 @@ class MplusApiClient extends BaseSoapClient {
  GetCardImageLabelsResponse::class . ':labels' => 'MplusKASSA\MplusQapi\ImageLabel',
  GetCardImagesResponse::class . ':items' => 'MplusKASSA\MplusQapi\CardImageData',
  GetImagesResponse::class . ':imageList' => 'MplusKASSA\MplusQapi\Image',
+ PrintLayoutAssignment::class . ':extraLocationIds' => 'MplusKASSA\MplusQapi\ns_PrintLayoutLocationId',
  PrintParams::class . ':params' => 'MplusKASSA\MplusQapi\PrintParam',
  PrintInfo::class . ':paramsList' => 'MplusKASSA\MplusQapi\PrintParams',
  PrintTemplateList::class . ':printTemplate' => 'string',
