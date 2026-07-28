@@ -2756,6 +2756,8 @@
           <element name="endTs" type="xsd:dateTime" minOccurs="0" />
           <element name="voucherIssuanceRedeems" type="tns:VoucherIssuanceRedeemList" minOccurs="0" />
           <element name="groupScanCode" type="xsd:string" minOccurs="0" />
+          <element name="resolvedScanCode" type="xsd:string" minOccurs="0" />
+          <element name="resolvedGroupScanCode" type="xsd:string" minOccurs="0" />
         </sequence>
       </complexType>
       <complexType name="VoucherIssuanceList">
@@ -6389,6 +6391,7 @@
           <element name="cardRow" type="xsd:int" minOccurs="0" />
           <element name="showInInfoPopup" type="xsd:boolean" />
           <element name="containsPersonalData" type="xsd:boolean" />
+          <element name="sortable" type="xsd:boolean" />
         </sequence>
       </complexType>
       <complexType name="OverviewFieldsList">
@@ -7509,6 +7512,7 @@
           <element name="categoryId" type="xsd:int" minOccurs="0" />
           <element name="filters" type="tns:OverviewFilterList" minOccurs="0" />
           <element name="fields" type="tns:CardFieldInfoList" />
+          <element name="search" type="tns:OverviewSearch" minOccurs="0" />
         </sequence>
       </complexType>
       <complexType name="PlannedCycleCount">
@@ -8832,6 +8836,12 @@
           <enumeration value="GET-BRANCH-INFORMATION-RESULT-FAILED" />
         </restriction>
       </simpleType>
+      <simpleType name="SaveBranchInformationResult">
+        <restriction base="xsd:string">
+          <enumeration value="SAVE-BRANCH-INFORMATION-RESULT-OK" />
+          <enumeration value="SAVE-BRANCH-INFORMATION-RESULT-FAILED" />
+        </restriction>
+      </simpleType>
       <simpleType name="CreateDeliveryMethodResult">
         <restriction base="xsd:string">
           <enumeration value="CREATE-DELIVERY-METHOD-RESULT-OK" />
@@ -9129,6 +9139,7 @@
           <element name="branchNumber" type="xsd:int" minOccurs="0" />
           <element name="workplaceNumber" type="xsd:int" minOccurs="0" />
           <element name="configurationKeys" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+          <element name="changedSinceTimestamp" type="xsd:dateTime" minOccurs="0" />
         </sequence>
       </complexType>
       <complexType name="ConfigurationValue">
@@ -9142,6 +9153,8 @@
         <sequence>
           <element name="configurationKey" type="xsd:string" />
           <element name="configurationValues" type="tns:ConfigurationValue" minOccurs="0" maxOccurs="unbounded" />
+          <element name="defaultValue" type="xsd:string" minOccurs="0" />
+          <element name="lastChangedTimestamp" type="xsd:dateTime" minOccurs="0" />
         </sequence>
       </complexType>
       <complexType name="UpdateConfigurationValuesRequest">
@@ -9886,6 +9899,8 @@
       <complexType name="GetBranchInformationRequest">
         <sequence>
           <element name="branchNumber" type="xsd:int" />
+          <element name="includeImageData" type="xsd:boolean" minOccurs="0" />
+          <element name="includeThumbData" type="xsd:boolean" minOccurs="0" />
         </sequence>
       </complexType>
       <complexType name="DeliveryAddressSupplier">
@@ -9913,6 +9928,40 @@
           <element name="deliveryAddress" type="tns:DeliveryAddress" minOccurs="0" maxOccurs="unbounded" />
         </sequence>
       </complexType>
+      <complexType name="PrintLayoutLine">
+        <sequence>
+          <element name="sequenceNumber" type="xsd:int" />
+          <element name="line" type="xsd:string" />
+        </sequence>
+      </complexType>
+      <complexType name="PrintLayoutHeaderLines">
+        <sequence>
+          <element name="printLayoutHeaderLine" type="tns:PrintLayoutLine" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+      </complexType>
+      <complexType name="PrintLayoutFooterLines">
+        <sequence>
+          <element name="printLayoutFooterLine" type="tns:PrintLayoutLine" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+      </complexType>
+      <complexType name="OpeningHours">
+        <sequence>
+          <element name="mondayFrom" type="tns:SoapMplusDateTime" minOccurs="0" />
+          <element name="mondayTill" type="tns:SoapMplusDateTime" minOccurs="0" />
+          <element name="tuesdayFrom" type="tns:SoapMplusDateTime" minOccurs="0" />
+          <element name="tuesdayTill" type="tns:SoapMplusDateTime" minOccurs="0" />
+          <element name="wednesdayFrom" type="tns:SoapMplusDateTime" minOccurs="0" />
+          <element name="wednesdayTill" type="tns:SoapMplusDateTime" minOccurs="0" />
+          <element name="thursdayFrom" type="tns:SoapMplusDateTime" minOccurs="0" />
+          <element name="thursdayTill" type="tns:SoapMplusDateTime" minOccurs="0" />
+          <element name="fridayFrom" type="tns:SoapMplusDateTime" minOccurs="0" />
+          <element name="fridayTill" type="tns:SoapMplusDateTime" minOccurs="0" />
+          <element name="saturdayFrom" type="tns:SoapMplusDateTime" minOccurs="0" />
+          <element name="saturdayTill" type="tns:SoapMplusDateTime" minOccurs="0" />
+          <element name="sundayFrom" type="tns:SoapMplusDateTime" minOccurs="0" />
+          <element name="sundayTill" type="tns:SoapMplusDateTime" minOccurs="0" />
+        </sequence>
+      </complexType>
       <complexType name="BranchInformation">
         <sequence>
           <element name="branchNumber" type="xsd:int" />
@@ -9932,7 +9981,18 @@
           <element name="bankAccountNumber" type="xsd:string" />
           <element name="vatNumber" type="xsd:string" />
           <element name="termsAndConditions" type="xsd:string" />
+          <element name="receiptPrinterLogo" type="tns:Image" minOccurs="0" />
+          <element name="printLayoutHeaderLines" type="tns:PrintLayoutHeaderLines" minOccurs="0" />
+          <element name="printLayoutFooterLines" type="tns:PrintLayoutFooterLines" minOccurs="0" />
+          <element name="openingHours" type="tns:OpeningHours" minOccurs="0" />
+          <element name="eoriNumber" type="xsd:string" />
+          <element name="establishmentUnitNumber" type="xsd:string" />
           <element name="deliveryAddresses" type="tns:DeliveryAddressList" minOccurs="0" />
+        </sequence>
+      </complexType>
+      <complexType name="saveBranchInformationRequest">
+        <sequence>
+          <element name="branchInformation" type="tns:BranchInformation" />
         </sequence>
       </complexType>
       <complexType name="GetBranchGroupsRequest">
@@ -10740,6 +10800,12 @@
           <element name="errorMessage" type="xsd:string" minOccurs="0" />
         </sequence>
       </complexType>
+      <complexType name="saveBranchInformationResponse">
+        <sequence>
+          <element name="result" type="tns:SaveBranchInformationResult" />
+          <element name="errorMessage" type="xsd:string" minOccurs="0" />
+        </sequence>
+      </complexType>
       <complexType name="GetBranchGroupsResponse">
         <sequence>
           <element name="branchGroupsList" type="tns:BranchGroupsList" />
@@ -11237,6 +11303,8 @@
           <enumeration value="ORDER-SLIP" />
           <enumeration value="WEBHOOK-RECEIPT-FOOTER" />
           <enumeration value="VOUCHER-ISSUANCE" />
+          <enumeration value="RETURN-SLIP" />
+          <enumeration value="ARTICLE-PRICE-BARCODE" />
         </restriction>
       </simpleType>
       <simpleType name="PrintLayoutFieldType">
@@ -11269,6 +11337,12 @@
         <restriction base="xsd:string">
           <enumeration value="OK" />
           <enumeration value="NO-PRINT-LAYOUTS-FOUND" />
+        </restriction>
+      </simpleType>
+      <simpleType name="SavePrintLayoutAssignmentsResponseResult">
+        <restriction base="xsd:string">
+          <enumeration value="UNKNOWN" />
+          <enumeration value="OK" />
         </restriction>
       </simpleType>
       <simpleType name="RenderedPrintLayoutType">
@@ -11363,11 +11437,19 @@
       </complexType>
       <complexType name="PrintLayoutAssignment">
         <sequence>
+          <element name="id" type="xsd:int" minOccurs="0" />
           <element name="workplace" type="tns:WorkplaceIdentifier" />
           <element name="printLayout" type="tns:PrintLayoutAssignmentPrintLayoutView" />
           <element name="useOnlinePrinter" type="xsd:boolean" />
           <element name="baseLocationId" type="xsd:int" />
+          <element name="asLocationId" type="xsd:int" minOccurs="0" />
           <element name="extraLocationIds" type="tns:ns-PrintLayoutLocationId" minOccurs="0" maxOccurs="unbounded" />
+          <element name="kind" type="tns:PrintLayoutKind" />
+        </sequence>
+      </complexType>
+      <complexType name="SavePrintLayoutAssignmentsRequest">
+        <sequence>
+          <element name="printLayoutAssignments" type="tns:PrintLayoutAssignment" minOccurs="0" maxOccurs="unbounded" />
         </sequence>
       </complexType>
       <complexType name="PrintParam">
@@ -11448,6 +11530,11 @@
       <complexType name="GetPrintLayoutAssignmentsResponse">
         <sequence>
           <element name="printLayoutAssignments" type="tns:PrintLayoutAssignment" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+      </complexType>
+      <complexType name="SavePrintLayoutAssignmentsResponse">
+        <sequence>
+          <element name="result" type="tns:SavePrintLayoutAssignmentsResponseResult" />
         </sequence>
       </complexType>
       <complexType name="GetRenderedPrintLayoutResponse">
@@ -18323,6 +18410,14 @@
         </complexType>
       </element>
       <element name="GetBranchInformationResponse" type="tns:GetBranchInformationResponse" />
+      <element name="saveBranchInformation">
+        <complexType>
+          <sequence>
+            <element name="request" type="tns:saveBranchInformationRequest" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="saveBranchInformationResponse" type="tns:saveBranchInformationResponse" />
       <element name="getBranchGroups">
         <complexType>
           <sequence>
@@ -18668,6 +18763,14 @@
         </complexType>
       </element>
       <element name="GetPrintLayoutAssignmentsResponse" type="tns:GetPrintLayoutAssignmentsResponse" />
+      <element name="savePrintLayoutAssignments">
+        <complexType>
+          <sequence>
+            <element name="request" type="tns:SavePrintLayoutAssignmentsRequest" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="SavePrintLayoutAssignmentsResponse" type="tns:SavePrintLayoutAssignmentsResponse" />
       <element name="getRenderedPrintLayout">
         <complexType>
           <sequence>
@@ -20831,6 +20934,12 @@
   <message name="GetBranchInformationResponse">
     <part name="Body" element="tns:GetBranchInformationResponse" />
   </message>
+  <message name="saveBranchInformation">
+    <part name="Body" element="tns:saveBranchInformation" />
+  </message>
+  <message name="saveBranchInformationResponse">
+    <part name="Body" element="tns:saveBranchInformationResponse" />
+  </message>
   <message name="getBranchGroups">
     <part name="Body" element="tns:getBranchGroups" />
   </message>
@@ -21091,6 +21200,12 @@
   </message>
   <message name="GetPrintLayoutAssignmentsResponse">
     <part name="Body" element="tns:GetPrintLayoutAssignmentsResponse" />
+  </message>
+  <message name="savePrintLayoutAssignments">
+    <part name="Body" element="tns:savePrintLayoutAssignments" />
+  </message>
+  <message name="SavePrintLayoutAssignmentsResponse">
+    <part name="Body" element="tns:SavePrintLayoutAssignmentsResponse" />
   </message>
   <message name="getRenderedPrintLayout">
     <part name="Body" element="tns:getRenderedPrintLayout" />
@@ -22816,6 +22931,10 @@
       <input message="tns:getBranchInformation" />
       <output message="tns:GetBranchInformationResponse" />
     </operation>
+    <operation name="saveBranchInformation">
+      <input message="tns:saveBranchInformation" />
+      <output message="tns:saveBranchInformationResponse" />
+    </operation>
     <operation name="getBranchGroups">
       <input message="tns:getBranchGroups" />
       <output message="tns:GetBranchGroupsResponse" />
@@ -23009,6 +23128,10 @@
     <operation name="getPrintLayoutAssignments">
       <input message="tns:getPrintLayoutAssignments" />
       <output message="tns:GetPrintLayoutAssignmentsResponse" />
+    </operation>
+    <operation name="savePrintLayoutAssignments">
+      <input message="tns:savePrintLayoutAssignments" />
+      <output message="tns:SavePrintLayoutAssignmentsResponse" />
     </operation>
     <operation name="getRenderedPrintLayout">
       <input message="tns:getRenderedPrintLayout" />
@@ -25365,6 +25488,15 @@
         <SOAP:body use="literal" parts="Body" />
       </output>
     </operation>
+    <operation name="saveBranchInformation">
+      <SOAP:operation soapAction="" />
+      <input>
+        <SOAP:body use="literal" parts="Body" />
+      </input>
+      <output>
+        <SOAP:body use="literal" parts="Body" />
+      </output>
+    </operation>
     <operation name="getBranchGroups">
       <SOAP:operation soapAction="" />
       <input>
@@ -25753,6 +25885,15 @@
       </output>
     </operation>
     <operation name="getPrintLayoutAssignments">
+      <SOAP:operation soapAction="" />
+      <input>
+        <SOAP:body use="literal" parts="Body" />
+      </input>
+      <output>
+        <SOAP:body use="literal" parts="Body" />
+      </output>
+    </operation>
+    <operation name="savePrintLayoutAssignments">
       <SOAP:operation soapAction="" />
       <input>
         <SOAP:body use="literal" parts="Body" />

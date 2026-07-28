@@ -1055,6 +1055,10 @@ class GetBranchInformationResult {
 	const OK = 'GET-BRANCH-INFORMATION-RESULT-OK';
 	const FAILED = 'GET-BRANCH-INFORMATION-RESULT-FAILED';
 }
+class SaveBranchInformationResult {
+	const OK = 'SAVE-BRANCH-INFORMATION-RESULT-OK';
+	const FAILED = 'SAVE-BRANCH-INFORMATION-RESULT-FAILED';
+}
 class CreateDeliveryMethodResult {
 	const OK = 'CREATE-DELIVERY-METHOD-RESULT-OK';
 	const FAILED = 'CREATE-DELIVERY-METHOD-RESULT-FAILED';
@@ -1153,6 +1157,8 @@ class PrintLayoutKind {
 	const ORDER_SLIP = 'ORDER-SLIP';
 	const WEBHOOK_RECEIPT_FOOTER = 'WEBHOOK-RECEIPT-FOOTER';
 	const VOUCHER_ISSUANCE = 'VOUCHER-ISSUANCE';
+	const RETURN_SLIP = 'RETURN-SLIP';
+	const ARTICLE_PRICE_BARCODE = 'ARTICLE-PRICE-BARCODE';
 }
 class PrintLayoutFieldType {
 	const ALL = 'ALL';
@@ -1181,6 +1187,10 @@ class PrintLayoutFieldType {
 class GetPrintLayoutsResponseResult {
 	const OK = 'OK';
 	const NO_PRINT_LAYOUTS_FOUND = 'NO-PRINT-LAYOUTS-FOUND';
+}
+class SavePrintLayoutAssignmentsResponseResult {
+	const UNKNOWN = 'UNKNOWN';
+	const OK = 'OK';
 }
 class RenderedPrintLayoutType {
 	const PDF = 'PDF';
