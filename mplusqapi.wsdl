@@ -257,7 +257,6 @@
           <enumeration value="INTERBRANCH-TRANSFORMED" />
           <enumeration value="PRINTED" />
           <enumeration value="INVOICE-REMINDER-CREATED" />
-          <enumeration value="CONTACTED" />
         </restriction>
       </simpleType>
       <simpleType name="ContractFrequency">
@@ -387,24 +386,6 @@
         <restriction base="xsd:string">
           <enumeration value="UPDATE-BEHAVIOR-APPEND" />
           <enumeration value="UPDATE-BEHAVIOR-REPLACE" />
-        </restriction>
-      </simpleType>
-      <simpleType name="TimelineEventDataPredicateOperator">
-        <restriction base="xsd:string">
-          <enumeration value="EXISTS" />
-          <enumeration value="NOT-EXISTS" />
-          <enumeration value="EQUAL" />
-          <enumeration value="NOT-EQUAL" />
-          <enumeration value="LESS-THAN" />
-          <enumeration value="LESS-THAN-OR-EQUAL" />
-          <enumeration value="GREATER-THAN" />
-          <enumeration value="GREATER-THAN-OR-EQUAL" />
-        </restriction>
-      </simpleType>
-      <simpleType name="TimelineEventConditionMatch">
-        <restriction base="xsd:string">
-          <enumeration value="EXISTS" />
-          <enumeration value="NOT-EXISTS" />
         </restriction>
       </simpleType>
       <simpleType name="ArticleContractLineType">
@@ -1012,6 +993,7 @@
           </enumeration>
           <enumeration value="OVERLAPORNONE" />
           <enumeration value="INCOLLECTION" />
+          <enumeration value="NOT-INCOLLECTION" />
           <enumeration value="BIGGER-OR-EQUAL" />
           <enumeration value="SMALLER-OR-EQUAL" />
           <enumeration value="EMPTY">
@@ -2923,21 +2905,6 @@
           <element name="data" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
         </sequence>
       </complexType>
-      <complexType name="TimelineEventDataPredicate">
-        <sequence>
-          <element name="path" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
-          <element name="predicateOperator" type="tns:TimelineEventDataPredicateOperator" />
-          <element name="stringValue" type="xsd:string" minOccurs="0" />
-          <element name="numberValue" type="xsd:decimal" minOccurs="0" />
-          <element name="booleanValue" type="xsd:boolean" minOccurs="0" />
-          <element name="dateTimeValue" type="xsd:dateTime" minOccurs="0" />
-        </sequence>
-      </complexType>
-      <complexType name="TimelineEventDataPredicateList">
-        <sequence>
-          <element name="predicate" type="tns:TimelineEventDataPredicate" minOccurs="0" maxOccurs="unbounded" />
-        </sequence>
-      </complexType>
       <complexType name="TimelineEventSubFilter">
         <sequence>
           <element name="ids" type="tns:IdList" minOccurs="0" />
@@ -2946,7 +2913,6 @@
           <element name="apiIdents" type="tns:ApiIdentList" minOccurs="0" />
           <element name="types" type="tns:TimelineEventTypeList" minOccurs="0" />
           <element name="data" type="tns:JsonValueList" minOccurs="0" />
-          <element name="dataPredicates" type="tns:TimelineEventDataPredicateList" minOccurs="0" />
           <element name="from" type="xsd:dateTime" minOccurs="0" />
           <element name="through" type="xsd:dateTime" minOccurs="0" />
         </sequence>
@@ -2960,17 +2926,6 @@
             </sequence>
           </extension>
         </complexContent>
-      </complexType>
-      <complexType name="TimelineEventCondition">
-        <sequence>
-          <element name="match" type="tns:TimelineEventConditionMatch" />
-          <element name="eventFilter" type="tns:TimelineEventSubFilter" />
-        </sequence>
-      </complexType>
-      <complexType name="TimelineEventConditionList">
-        <sequence>
-          <element name="condition" type="tns:TimelineEventCondition" minOccurs="0" maxOccurs="unbounded" />
-        </sequence>
       </complexType>
       <complexType name="YearNumberVersion">
         <sequence>
@@ -4367,7 +4322,6 @@
           <element name="signingTimelineEventsFilter" type="tns:TimelineEventSubFilter" minOccurs="0" />
           <element name="includeOtherTimelineEvents" type="xsd:boolean" minOccurs="0" />
           <element name="otherTimelineEventsFilter" type="tns:TimelineEventSubFilter" minOccurs="0" />
-          <element name="timelineEventConditions" type="tns:TimelineEventConditionList" minOccurs="0" />
         </sequence>
       </complexType>
       <complexType name="GetReceiptsByCashCountRequest">
@@ -10037,7 +9991,7 @@
           <element name="deliveryAddresses" type="tns:DeliveryAddressList" minOccurs="0" />
         </sequence>
       </complexType>
-      <complexType name="saveBranchInformationRequest">
+      <complexType name="SaveBranchInformationRequest">
         <sequence>
           <element name="branchInformation" type="tns:BranchInformation" />
         </sequence>
@@ -10847,7 +10801,7 @@
           <element name="errorMessage" type="xsd:string" minOccurs="0" />
         </sequence>
       </complexType>
-      <complexType name="saveBranchInformationResponse">
+      <complexType name="SaveBranchInformationResponse">
         <sequence>
           <element name="result" type="tns:SaveBranchInformationResult" />
           <element name="errorMessage" type="xsd:string" minOccurs="0" />
@@ -14536,7 +14490,6 @@
           <element name="signingTimelineEventsFilter" type="tns:TimelineEventSubFilter" minOccurs="0" />
           <element name="includeOtherTimelineEvents" type="xsd:boolean" minOccurs="0" />
           <element name="otherTimelineEventsFilter" type="tns:TimelineEventSubFilter" minOccurs="0" />
-          <element name="timelineEventConditions" type="tns:TimelineEventConditionList" minOccurs="0" />
         </sequence>
       </complexType>
       <complexType name="SaveProposalInfo">
@@ -14620,7 +14573,6 @@
           <element name="signingTimelineEventsFilter" type="tns:TimelineEventSubFilter" minOccurs="0" />
           <element name="includeOtherTimelineEvents" type="xsd:boolean" minOccurs="0" />
           <element name="otherTimelineEventsFilter" type="tns:TimelineEventSubFilter" minOccurs="0" />
-          <element name="timelineEventConditions" type="tns:TimelineEventConditionList" minOccurs="0" />
         </sequence>
       </complexType>
       <complexType name="DetermineContractLinesRequest">
@@ -15070,7 +15022,6 @@
           <element name="directDebitTimelineEventsFilter" type="tns:TimelineEventSubFilter" minOccurs="0" />
           <element name="includeOtherTimelineEvents" type="xsd:boolean" minOccurs="0" />
           <element name="otherTimelineEventsFilter" type="tns:TimelineEventSubFilter" minOccurs="0" />
-          <element name="timelineEventConditions" type="tns:TimelineEventConditionList" minOccurs="0" />
         </sequence>
       </complexType>
       <complexType name="CreditInvoiceV2Request">
@@ -18463,11 +18414,11 @@
       <element name="saveBranchInformation">
         <complexType>
           <sequence>
-            <element name="request" type="tns:saveBranchInformationRequest" />
+            <element name="request" type="tns:SaveBranchInformationRequest" />
           </sequence>
         </complexType>
       </element>
-      <element name="saveBranchInformationResponse" type="tns:saveBranchInformationResponse" />
+      <element name="SaveBranchInformationResponse" type="tns:SaveBranchInformationResponse" />
       <element name="getBranchGroups">
         <complexType>
           <sequence>
@@ -20987,8 +20938,8 @@
   <message name="saveBranchInformation">
     <part name="Body" element="tns:saveBranchInformation" />
   </message>
-  <message name="saveBranchInformationResponse">
-    <part name="Body" element="tns:saveBranchInformationResponse" />
+  <message name="SaveBranchInformationResponse">
+    <part name="Body" element="tns:SaveBranchInformationResponse" />
   </message>
   <message name="getBranchGroups">
     <part name="Body" element="tns:getBranchGroups" />
@@ -22983,7 +22934,7 @@
     </operation>
     <operation name="saveBranchInformation">
       <input message="tns:saveBranchInformation" />
-      <output message="tns:saveBranchInformationResponse" />
+      <output message="tns:SaveBranchInformationResponse" />
     </operation>
     <operation name="getBranchGroups">
       <input message="tns:getBranchGroups" />

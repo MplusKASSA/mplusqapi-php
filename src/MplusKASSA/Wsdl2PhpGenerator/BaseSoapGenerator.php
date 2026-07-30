@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace MplusKASSA\Wsdl2PhpGenerator;
+namespace Wsdl2PhpGenerator;
 
 use XMLWriter;
 use Brick\Math\BigDecimal;
