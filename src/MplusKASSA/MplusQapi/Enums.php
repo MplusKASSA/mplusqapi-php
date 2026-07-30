@@ -164,6 +164,7 @@ class TimelineEventType {
 	const INTERBRANCH_TRANSFORMED = 'INTERBRANCH-TRANSFORMED';
 	const PRINTED = 'PRINTED';
 	const INVOICE_REMINDER_CREATED = 'INVOICE-REMINDER-CREATED';
+	const CONTACTED = 'CONTACTED';
 }
 class ContractFrequency {
 	const WEEKLY = 'WEEKLY';
@@ -265,6 +266,20 @@ class VoucherRedeemPeriod {
 class UpdateBehavior {
 	const APPEND = 'UPDATE-BEHAVIOR-APPEND';
 	const REPLACE = 'UPDATE-BEHAVIOR-REPLACE';
+}
+class TimelineEventDataPredicateOperator {
+	const EXISTS = 'EXISTS';
+	const NOT_EXISTS = 'NOT-EXISTS';
+	const EQUAL = 'EQUAL';
+	const NOT_EQUAL = 'NOT-EQUAL';
+	const LESS_THAN = 'LESS-THAN';
+	const LESS_THAN_OR_EQUAL = 'LESS-THAN-OR-EQUAL';
+	const GREATER_THAN = 'GREATER-THAN';
+	const GREATER_THAN_OR_EQUAL = 'GREATER-THAN-OR-EQUAL';
+}
+class TimelineEventConditionMatch {
+	const EXISTS = 'EXISTS';
+	const NOT_EXISTS = 'NOT-EXISTS';
 }
 class ArticleContractLineType {
 	const ORDER = 'ORDER';
