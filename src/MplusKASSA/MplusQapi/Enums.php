@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 // Generated code
-namespace MplusQapi;
+namespace MplusKASSA\MplusQapi;
 class MessageType {
 	const INFO = 'MESSAGE-TYPE-INFO';
 	const OK = 'MESSAGE-TYPE-OK';

@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 // Generated code
-namespace MplusQapi;
-use Wsdl2PhpGenerator\BaseSoapGenerator;
-use Wsdl2PhpGenerator\SoapSerializationException;
+namespace MplusKASSA\MplusQapi;
+use MplusKASSA\Wsdl2PhpGenerator\BaseSoapGenerator;
+use MplusKASSA\Wsdl2PhpGenerator\SoapSerializationException;
 class SoapGenerator extends BaseSoapGenerator {
 	public function __construct(bool $pretty = false) {
 		parent::__construct('urn:mplusqapi', $pretty);

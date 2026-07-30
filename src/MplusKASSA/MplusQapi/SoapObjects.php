@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 // Generated code
-namespace MplusQapi;
+namespace MplusKASSA\MplusQapi;
 use Brick\Math\BigDecimal;
 abstract class SoapObject {
 	const TNS = 'ns1';
@@ -33,6 +33,30 @@ class SoapMplusDateTime extends SoapObject {
 		$this->writeProps($gen);
 		$gen->out->endElement();
 	}
+    static public function fromDateTime(\DateTime $d): SoapMplusDateTime
+    {
+        $d->setTimezone(new \DateTimeZone('Europe/Amsterdam')); // Niet per definitie goed maar wel in de meeste gevallen
+        $d = date_parse($d->format('Y-M-d H:i:s O'));
+        
+        $r = new SoapMplusDateTime();
+        $r->year = $d['year'];
+        $r->mon = $d['month'];
+        $r->day = $d['day'];
+        $r->hour = $d['hour'];
+        $r->min = $d['minute'];
+        $r->sec = $d['second'];
+        $r->isdst = false;
+        $r->timezone = $d['zone'] / 60; // api heeft deze gedefinieerd als minuten date_parse retourneerd seconden
+        return $r;
+    }
+
+    public function toDateTime(): \DateTime
+    {
+        $r = new \DateTime();
+        $r->setTime($this->hour, $this->min, $this->sec);
+        $r->setDate($this->year, $this->mon, $this->day);
+        return $r;
+    }
 }
 
 class SoapMplusDate extends SoapObject {
@@ -49,6 +73,25 @@ class SoapMplusDate extends SoapObject {
 		$this->writeProps($gen);
 		$gen->out->endElement();
 	}
+    static public function fromDateTime(\DateTime $d): SoapMplusDate
+    {
+        $d->setTimezone(new \DateTimeZone('Europe/Amsterdam')); // Niet per definitie goed maar wel in de meeste gevallen
+        $d = date_parse($d->format('Y-M-d'));
+        
+        $r = new SoapMplusDate();
+        $r->year = $d['year'];
+        $r->mon = $d['month'];
+        $r->day = $d['day'];
+        return $r;
+    }
+
+    public function toDateTime(): \DateTime
+    {
+        $r = new \DateTime();
+        $r->setTime(0, 0);
+        $r->setDate($this->year, $this->mon, $this->day);
+        return $r;
+    }
 }
 
 class NumberList extends SoapObject {
@@ -87,8 +130,8 @@ class CustomField extends SoapObject {
 	public ?int $intValue = null;
 	public ?int $decimalPlaces = null;
 	public ?bool $boolValue = null;
-	public ?SoapMplusDate $dateValue = null;
-	public ?SoapMplusDateTime $dateTimeValue = null;
+	public ?\DateTime $dateValue = null;
+	public ?\DateTime $dateTimeValue = null;
 	/** @var int[] */
 	public $multiSelectInt = array();
 	public function writeProps(SoapGenerator $gen): void {
@@ -99,8 +142,8 @@ class CustomField extends SoapObject {
 		if ($this->intValue !== null) $gen->writeInt('intValue', $this->intValue);
 		if ($this->decimalPlaces !== null) $gen->writeInt('decimalPlaces', $this->decimalPlaces);
 		if ($this->boolValue !== null) $gen->writeBool('boolValue', $this->boolValue);
-		if ($this->dateValue !== null) $this->dateValue->write($gen, 'dateValue');
-		if ($this->dateTimeValue !== null) $this->dateTimeValue->write($gen, 'dateTimeValue');
+		if ($this->dateValue !== null) (SoapMplusDate::fromDateTime($this->dateValue))->write($gen, 'dateValue');
+		if ($this->dateTimeValue !== null) (SoapMplusDateTime::fromDateTime($this->dateTimeValue))->write($gen, 'dateTimeValue');
 		foreach ($this->multiSelectInt as $elem) $gen->writeInt('multiSelectInt', $elem);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
@@ -128,12 +171,12 @@ class Employee extends SoapObject {
 	public ?int $employeeNumber = null;
 	public ?string $extEmployeeId = null;
 	public ?int $syncMarker = null;
-	public ?SoapMplusDateTime $createTimestamp = null;
-	public ?SoapMplusDateTime $changeTimestamp = null;
+	public ?\DateTime $createTimestamp = null;
+	public ?\DateTime $changeTimestamp = null;
 	public ?string $name = null;
 	public ?string $username = null;
 	public ?string $password = null;
-	public ?SoapMplusDate $birthDate = null;
+	public ?\DateTime $birthDate = null;
 	public ?string $phoneWork = null;
 	public ?string $phoneHome = null;
 	public ?string $phoneMobile = null;
@@ -154,12 +197,12 @@ class Employee extends SoapObject {
 		if ($this->employeeNumber !== null) $gen->writeInt('employeeNumber', $this->employeeNumber);
 		if ($this->extEmployeeId !== null) $gen->out->writeElementNs(self::TNS, 'extEmployeeId', null, $this->extEmployeeId);
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
-		if ($this->createTimestamp !== null) $this->createTimestamp->write($gen, 'createTimestamp');
-		if ($this->changeTimestamp !== null) $this->changeTimestamp->write($gen, 'changeTimestamp');
+		if ($this->createTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->createTimestamp))->write($gen, 'createTimestamp');
+		if ($this->changeTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->changeTimestamp))->write($gen, 'changeTimestamp');
 		if ($this->name !== null) $gen->out->writeElementNs(self::TNS, 'name', null, $this->name);
 		if ($this->username !== null) $gen->out->writeElementNs(self::TNS, 'username', null, $this->username);
 		if ($this->password !== null) $gen->out->writeElementNs(self::TNS, 'password', null, $this->password);
-		if ($this->birthDate !== null) $this->birthDate->write($gen, 'birthDate');
+		if ($this->birthDate !== null) (SoapMplusDate::fromDateTime($this->birthDate))->write($gen, 'birthDate');
 		if ($this->phoneWork !== null) $gen->out->writeElementNs(self::TNS, 'phoneWork', null, $this->phoneWork);
 		if ($this->phoneHome !== null) $gen->out->writeElementNs(self::TNS, 'phoneHome', null, $this->phoneHome);
 		if ($this->phoneMobile !== null) $gen->out->writeElementNs(self::TNS, 'phoneMobile', null, $this->phoneMobile);
@@ -219,11 +262,11 @@ class Image extends SoapObject {
 	public int $imageHeight;
 	public int $thumbWidth;
 	public int $thumbHeight;
-	public SoapMplusDateTime $createdTimestamp;
-	public SoapMplusDateTime $changedTimestamp;
+	public \DateTime $createdTimestamp;
+	public \DateTime $changedTimestamp;
 	public function __construct() {
-		$this->createdTimestamp = new SoapMplusDateTime();
-		$this->changedTimestamp = new SoapMplusDateTime();
+		$this->createdTimestamp = new \DateTime();
+		$this->changedTimestamp = new \DateTime();
 	}
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->writeInt('imageId', $this->imageId);
@@ -242,8 +285,8 @@ class Image extends SoapObject {
 		$gen->writeInt('imageHeight', $this->imageHeight);
 		$gen->writeInt('thumbWidth', $this->thumbWidth);
 		$gen->writeInt('thumbHeight', $this->thumbHeight);
-		$this->createdTimestamp->write($gen, 'createdTimestamp');
-		$this->changedTimestamp->write($gen, 'changedTimestamp');
+		(SoapMplusDateTime::fromDateTime($this->createdTimestamp))->write($gen, 'createdTimestamp');
+		(SoapMplusDateTime::fromDateTime($this->changedTimestamp))->write($gen, 'changedTimestamp');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -394,8 +437,8 @@ class Relation extends SoapObject {
 	public ?int $relationNumber = null;
 	public ?string $extRelationId = null;
 	public ?int $syncMarker = null;
-	public ?SoapMplusDateTime $createTimestamp = null;
-	public ?SoapMplusDateTime $changeTimestamp = null;
+	public ?\DateTime $createTimestamp = null;
+	public ?\DateTime $changeTimestamp = null;
 	public ?bool $active = null;
 	public ?string $name = null;
 	public ?string $address = null;
@@ -411,7 +454,7 @@ class Relation extends SoapObject {
 	public ?string $mobile = null;
 	public ?string $email = null;
 	public ?string $website = null;
-	public ?SoapMplusDate $birthDate = null;
+	public ?\DateTime $birthDate = null;
 	public ?string $relationCode = null;
 	public ?int $points = null;
 	public ?int $balance = null;
@@ -459,8 +502,8 @@ class Relation extends SoapObject {
 		if ($this->relationNumber !== null) $gen->writeInt('relationNumber', $this->relationNumber);
 		if ($this->extRelationId !== null) $gen->out->writeElementNs(self::TNS, 'extRelationId', null, $this->extRelationId);
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
-		if ($this->createTimestamp !== null) $this->createTimestamp->write($gen, 'createTimestamp');
-		if ($this->changeTimestamp !== null) $this->changeTimestamp->write($gen, 'changeTimestamp');
+		if ($this->createTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->createTimestamp))->write($gen, 'createTimestamp');
+		if ($this->changeTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->changeTimestamp))->write($gen, 'changeTimestamp');
 		if ($this->active !== null) $gen->writeBool('active', $this->active);
 		if ($this->name !== null) $gen->out->writeElementNs(self::TNS, 'name', null, $this->name);
 		if ($this->address !== null) $gen->out->writeElementNs(self::TNS, 'address', null, $this->address);
@@ -476,7 +519,7 @@ class Relation extends SoapObject {
 		if ($this->mobile !== null) $gen->out->writeElementNs(self::TNS, 'mobile', null, $this->mobile);
 		if ($this->email !== null) $gen->out->writeElementNs(self::TNS, 'email', null, $this->email);
 		if ($this->website !== null) $gen->out->writeElementNs(self::TNS, 'website', null, $this->website);
-		if ($this->birthDate !== null) $this->birthDate->write($gen, 'birthDate');
+		if ($this->birthDate !== null) (SoapMplusDate::fromDateTime($this->birthDate))->write($gen, 'birthDate');
 		if ($this->relationCode !== null) $gen->out->writeElementNs(self::TNS, 'relationCode', null, $this->relationCode);
 		if ($this->points !== null) $gen->writeInt('points', $this->points);
 		if ($this->balance !== null) $gen->writeInt('balance', $this->balance);
@@ -802,8 +845,8 @@ class EftTransactionDetails extends SoapObject {
 	public string $eftTransactionId;
 	public int $txid;
 	public BigDecimal $amountCents;
-	public SoapMplusDateTime $timestampPos;
-	public SoapMplusDateTime $timestampTerminal;
+	public \DateTime $timestampPos;
+	public \DateTime $timestampTerminal;
 	public string $terminalId;
 	public string $transactionId;
 	public string $cardNumber;
@@ -822,15 +865,15 @@ class EftTransactionDetails extends SoapObject {
 	public int $employeeNumber;
 	public int $authorizingEmployeeNumber;
 	public function __construct() {
-		$this->timestampPos = new SoapMplusDateTime();
-		$this->timestampTerminal = new SoapMplusDateTime();
+		$this->timestampPos = new \DateTime();
+		$this->timestampTerminal = new \DateTime();
 	}
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'eftTransactionId', null, $this->eftTransactionId);
 		$gen->writeInt('txid', $this->txid);
 		$gen->writeValueAndScale('amountCents', '', $this->amountCents, 2);
-		$this->timestampPos->write($gen, 'timestampPos');
-		$this->timestampTerminal->write($gen, 'timestampTerminal');
+		(SoapMplusDateTime::fromDateTime($this->timestampPos))->write($gen, 'timestampPos');
+		(SoapMplusDateTime::fromDateTime($this->timestampTerminal))->write($gen, 'timestampTerminal');
 		$gen->out->writeElementNs(self::TNS, 'terminalId', null, $this->terminalId);
 		$gen->out->writeElementNs(self::TNS, 'transactionId', null, $this->transactionId);
 		$gen->out->writeElementNs(self::TNS, 'cardNumber', null, $this->cardNumber);
@@ -939,8 +982,8 @@ class ExternalPaymentTransactionDetails extends SoapObject {
 
 class Payment extends SoapObject {
 	public ?string $paymentId = null;
-	public ?SoapMplusDate $financialDate = null;
-	public ?SoapMplusDateTime $entryTimestamp = null;
+	public ?\DateTime $financialDate = null;
+	public ?\DateTime $entryTimestamp = null;
 	public ?int $branchNumber = null;
 	public ?string $extBranchId = null;
 	public ?int $workplaceNumber = null;
@@ -960,8 +1003,8 @@ class Payment extends SoapObject {
 	public ?string $externalReference = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->paymentId !== null) $gen->out->writeElementNs(self::TNS, 'paymentId', null, $this->paymentId);
-		if ($this->financialDate !== null) $this->financialDate->write($gen, 'financialDate');
-		if ($this->entryTimestamp !== null) $this->entryTimestamp->write($gen, 'entryTimestamp');
+		if ($this->financialDate !== null) (SoapMplusDate::fromDateTime($this->financialDate))->write($gen, 'financialDate');
+		if ($this->entryTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->entryTimestamp))->write($gen, 'entryTimestamp');
 		if ($this->branchNumber !== null) $gen->writeInt('branchNumber', $this->branchNumber);
 		if ($this->extBranchId !== null) $gen->out->writeElementNs(self::TNS, 'extBranchId', null, $this->extBranchId);
 		if ($this->workplaceNumber !== null) $gen->writeInt('workplaceNumber', $this->workplaceNumber);
@@ -1406,7 +1449,7 @@ class Order extends SoapObject {
 	public ?string $entryExtBranchId = null;
 	public ?int $employeeNumber = null;
 	public ?string $employeeName = null;
-	public ?SoapMplusDateTime $entryTimestamp = null;
+	public ?\DateTime $entryTimestamp = null;
 	public ?int $relationNumber = null;
 	public ?string $relationName = null;
 	public ?int $relationCategoryId = null;
@@ -1414,7 +1457,7 @@ class Order extends SoapObject {
 	public ?string $relationVatNumber = null;
 	public ?Address $deliveryAddress = null;
 	public ?Address $invoiceAddress = null;
-	public ?SoapMplusDate $financialDate = null;
+	public ?\DateTime $financialDate = null;
 	public ?int $financialBranchNumber = null;
 	public ?string $financialExtBranchId = null;
 	public ?int $workplaceNumber = null;
@@ -1426,9 +1469,9 @@ class Order extends SoapObject {
 	/** @var VatGroup[] */
 	public $vatGroupList = null;
 	public ?string $deliveryMethod = null;
-	public ?SoapMplusDate $deliveryDate = null;
-	public ?SoapMplusDateTime $deliveryPeriodBegin = null;
-	public ?SoapMplusDateTime $deliveryPeriodEnd = null;
+	public ?\DateTime $deliveryDate = null;
+	public ?\DateTime $deliveryPeriodBegin = null;
+	public ?\DateTime $deliveryPeriodEnd = null;
 	public ?string $paymentMethod = null;
 	public ?int $changeCounter = null;
 	public ?int $versionNumber = null;
@@ -1491,7 +1534,7 @@ $tmp_extInvoiceIds->write($gen, 'extInvoiceIds');
 		if ($this->entryExtBranchId !== null) $gen->out->writeElementNs(self::TNS, 'entryExtBranchId', null, $this->entryExtBranchId);
 		if ($this->employeeNumber !== null) $gen->writeInt('employeeNumber', $this->employeeNumber);
 		if ($this->employeeName !== null) $gen->out->writeElementNs(self::TNS, 'employeeName', null, $this->employeeName);
-		if ($this->entryTimestamp !== null) $this->entryTimestamp->write($gen, 'entryTimestamp');
+		if ($this->entryTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->entryTimestamp))->write($gen, 'entryTimestamp');
 		if ($this->relationNumber !== null) $gen->writeInt('relationNumber', $this->relationNumber);
 		if ($this->relationName !== null) $gen->out->writeElementNs(self::TNS, 'relationName', null, $this->relationName);
 		if ($this->relationCategoryId !== null) $gen->writeInt('relationCategoryId', $this->relationCategoryId);
@@ -1499,7 +1542,7 @@ $tmp_extInvoiceIds->write($gen, 'extInvoiceIds');
 		if ($this->relationVatNumber !== null) $gen->out->writeElementNs(self::TNS, 'relationVatNumber', null, $this->relationVatNumber);
 		if ($this->deliveryAddress !== null) $this->deliveryAddress->write($gen, 'deliveryAddress');
 		if ($this->invoiceAddress !== null) $this->invoiceAddress->write($gen, 'invoiceAddress');
-		if ($this->financialDate !== null) $this->financialDate->write($gen, 'financialDate');
+		if ($this->financialDate !== null) (SoapMplusDate::fromDateTime($this->financialDate))->write($gen, 'financialDate');
 		if ($this->financialBranchNumber !== null) $gen->writeInt('financialBranchNumber', $this->financialBranchNumber);
 		if ($this->financialExtBranchId !== null) $gen->out->writeElementNs(self::TNS, 'financialExtBranchId', null, $this->financialExtBranchId);
 		if ($this->workplaceNumber !== null) $gen->writeInt('workplaceNumber', $this->workplaceNumber);
@@ -1513,9 +1556,9 @@ $tmp_vatGroupList = new VatGroupList($this->vatGroupList);
 $tmp_vatGroupList->write($gen, 'vatGroupList');
 }
 		if ($this->deliveryMethod !== null) $gen->out->writeElementNs(self::TNS, 'deliveryMethod', null, $this->deliveryMethod);
-		if ($this->deliveryDate !== null) $this->deliveryDate->write($gen, 'deliveryDate');
-		if ($this->deliveryPeriodBegin !== null) $this->deliveryPeriodBegin->write($gen, 'deliveryPeriodBegin');
-		if ($this->deliveryPeriodEnd !== null) $this->deliveryPeriodEnd->write($gen, 'deliveryPeriodEnd');
+		if ($this->deliveryDate !== null) (SoapMplusDate::fromDateTime($this->deliveryDate))->write($gen, 'deliveryDate');
+		if ($this->deliveryPeriodBegin !== null) (SoapMplusDateTime::fromDateTime($this->deliveryPeriodBegin))->write($gen, 'deliveryPeriodBegin');
+		if ($this->deliveryPeriodEnd !== null) (SoapMplusDateTime::fromDateTime($this->deliveryPeriodEnd))->write($gen, 'deliveryPeriodEnd');
 		if ($this->paymentMethod !== null) $gen->out->writeElementNs(self::TNS, 'paymentMethod', null, $this->paymentMethod);
 		if ($this->changeCounter !== null) $gen->writeInt('changeCounter', $this->changeCounter);
 		if ($this->versionNumber !== null) $gen->writeInt('versionNumber', $this->versionNumber);
@@ -1611,9 +1654,9 @@ class OrderInput extends SoapObject {
 	public ?string $reference = null;
 	public ?string $vatMethod = null;
 	public ?string $deliveryMethod = null;
-	public ?SoapMplusDate $deliveryDate = null;
-	public ?SoapMplusDateTime $deliveryPeriodBegin = null;
-	public ?SoapMplusDateTime $deliveryPeriodEnd = null;
+	public ?\DateTime $deliveryDate = null;
+	public ?\DateTime $deliveryPeriodBegin = null;
+	public ?\DateTime $deliveryPeriodEnd = null;
 	public ?int $changeCounter = null;
 	public ?int $versionNumber = null;
 	public ?int $orderCategoryNumber = null;
@@ -1639,9 +1682,9 @@ class OrderInput extends SoapObject {
 		if ($this->reference !== null) $gen->out->writeElementNs(self::TNS, 'reference', null, $this->reference);
 		if ($this->vatMethod !== null) $gen->out->writeElementNs(self::TNS, 'vatMethod', null, $this->vatMethod);
 		if ($this->deliveryMethod !== null) $gen->out->writeElementNs(self::TNS, 'deliveryMethod', null, $this->deliveryMethod);
-		if ($this->deliveryDate !== null) $this->deliveryDate->write($gen, 'deliveryDate');
-		if ($this->deliveryPeriodBegin !== null) $this->deliveryPeriodBegin->write($gen, 'deliveryPeriodBegin');
-		if ($this->deliveryPeriodEnd !== null) $this->deliveryPeriodEnd->write($gen, 'deliveryPeriodEnd');
+		if ($this->deliveryDate !== null) (SoapMplusDate::fromDateTime($this->deliveryDate))->write($gen, 'deliveryDate');
+		if ($this->deliveryPeriodBegin !== null) (SoapMplusDateTime::fromDateTime($this->deliveryPeriodBegin))->write($gen, 'deliveryPeriodBegin');
+		if ($this->deliveryPeriodEnd !== null) (SoapMplusDateTime::fromDateTime($this->deliveryPeriodEnd))->write($gen, 'deliveryPeriodEnd');
 		if ($this->changeCounter !== null) $gen->writeInt('changeCounter', $this->changeCounter);
 		if ($this->versionNumber !== null) $gen->writeInt('versionNumber', $this->versionNumber);
 		if ($this->orderCategoryNumber !== null) $gen->writeInt('orderCategoryNumber', $this->orderCategoryNumber);
@@ -2745,8 +2788,8 @@ class NumberSet extends SoapObject {
 class SalesPrice extends SoapObject {
 	public int $salesPriceNumber;
 	public ?string $description = null;
-	public ?SoapMplusDate $startDate = null;
-	public ?SoapMplusDate $endDate = null;
+	public ?\DateTime $startDate = null;
+	public ?\DateTime $endDate = null;
 	public ?BigDecimal $priceIncl = null;
 	public ?BigDecimal $priceExcl = null;
 	public ?int $discountPercentage = null;
@@ -2754,8 +2797,8 @@ class SalesPrice extends SoapObject {
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->writeInt('salesPriceNumber', $this->salesPriceNumber);
 		if ($this->description !== null) $gen->out->writeElementNs(self::TNS, 'description', null, $this->description);
-		if ($this->startDate !== null) $this->startDate->write($gen, 'startDate');
-		if ($this->endDate !== null) $this->endDate->write($gen, 'endDate');
+		if ($this->startDate !== null) (SoapMplusDate::fromDateTime($this->startDate))->write($gen, 'startDate');
+		if ($this->endDate !== null) (SoapMplusDate::fromDateTime($this->endDate))->write($gen, 'endDate');
 		if ($this->priceIncl !== null) $gen->writeValueAndScale('priceIncl', '', $this->priceIncl, 2);
 		if ($this->priceExcl !== null) $gen->writeValueAndScale('priceExcl', '', $this->priceExcl, 2);
 		if ($this->discountPercentage !== null) $gen->writeInt('discountPercentage', $this->discountPercentage);
@@ -3082,8 +3125,8 @@ class Table extends SoapObject {
 	public ?int $courseNumber = null;
 	public ?string $courseName = null;
 	public ?string $courseAbbreviation = null;
-	public ?SoapMplusDateTime $createTimestamp = null;
-	public ?SoapMplusDateTime $changeTimestamp = null;
+	public ?\DateTime $createTimestamp = null;
+	public ?\DateTime $changeTimestamp = null;
 	public ?BigDecimal $totalInclAmount = null;
 	public ?BigDecimal $totalExclAmount = null;
 	public ?BigDecimal $prepaidAmount = null;
@@ -3100,8 +3143,8 @@ class Table extends SoapObject {
 		if ($this->courseNumber !== null) $gen->writeInt('courseNumber', $this->courseNumber);
 		if ($this->courseName !== null) $gen->out->writeElementNs(self::TNS, 'courseName', null, $this->courseName);
 		if ($this->courseAbbreviation !== null) $gen->out->writeElementNs(self::TNS, 'courseAbbreviation', null, $this->courseAbbreviation);
-		if ($this->createTimestamp !== null) $this->createTimestamp->write($gen, 'createTimestamp');
-		if ($this->changeTimestamp !== null) $this->changeTimestamp->write($gen, 'changeTimestamp');
+		if ($this->createTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->createTimestamp))->write($gen, 'createTimestamp');
+		if ($this->changeTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->changeTimestamp))->write($gen, 'changeTimestamp');
 		if ($this->totalInclAmount !== null) $gen->writeValueAndScale('totalInclAmount', '', $this->totalInclAmount, 2);
 		if ($this->totalExclAmount !== null) $gen->writeValueAndScale('totalExclAmount', '', $this->totalExclAmount, 2);
 		if ($this->prepaidAmount !== null) $gen->writeValueAndScale('prepaidAmount', '', $this->prepaidAmount, 2);
@@ -3161,8 +3204,8 @@ class TableCourse extends SoapObject {
 }
 
 class OccupiedTableDetails extends SoapObject {
-	public SoapMplusDateTime $createTimestamp;
-	public SoapMplusDateTime $changeTimestamp;
+	public \DateTime $createTimestamp;
+	public \DateTime $changeTimestamp;
 	public BigDecimal $totalInclAmount;
 	public BigDecimal $totalExclAmount;
 	public BigDecimal $prepaidAmount;
@@ -3175,12 +3218,12 @@ class OccupiedTableDetails extends SoapObject {
 	public ?WorkplaceIdentifier $claimedBy = null;
 	public ?TableEmployee $employee = null;
 	public function __construct() {
-		$this->createTimestamp = new SoapMplusDateTime();
-		$this->changeTimestamp = new SoapMplusDateTime();
+		$this->createTimestamp = new \DateTime();
+		$this->changeTimestamp = new \DateTime();
 	}
 	public function writeProps(SoapGenerator $gen): void {
-		$this->createTimestamp->write($gen, 'createTimestamp');
-		$this->changeTimestamp->write($gen, 'changeTimestamp');
+		(SoapMplusDateTime::fromDateTime($this->createTimestamp))->write($gen, 'createTimestamp');
+		(SoapMplusDateTime::fromDateTime($this->changeTimestamp))->write($gen, 'changeTimestamp');
 		$gen->writeValueAndScale('totalInclAmount', '', $this->totalInclAmount, 2);
 		$gen->writeValueAndScale('totalExclAmount', '', $this->totalExclAmount, 2);
 		$gen->writeValueAndScale('prepaidAmount', '', $this->prepaidAmount, 2);
@@ -3770,8 +3813,6 @@ class LineChangeList extends SoapObject {
 class LineChangeData extends SoapObject {
 	public ?BigDecimal $quantityOld = null;
 	public ?BigDecimal $quantityNew = null;
-	public ?int $decimalPlacesOld = null;
-	public ?int $decimalPlacesNew = null;
 	public ?BigDecimal $priceOld = null;
 	public ?BigDecimal $priceNew = null;
 	public ?BigDecimal $priceExclOld = null;
@@ -3804,12 +3845,12 @@ class LineChangeData extends SoapObject {
 	public ?BigDecimal $discountAmountNew = null;
 	public ?BigDecimal $discountAmountExclOld = null;
 	public ?BigDecimal $discountAmountExclNew = null;
-	public ?SoapMplusDate $deliveryDateOld = null;
-	public ?SoapMplusDate $deliveryDateNew = null;
-	public ?SoapMplusDateTime $deliveryPeriodBeginOld = null;
-	public ?SoapMplusDateTime $deliveryPeriodBeginNew = null;
-	public ?SoapMplusDateTime $deliveryPeriodEndOld = null;
-	public ?SoapMplusDateTime $deliveryPeriodEndNew = null;
+	public ?\DateTime $deliveryDateOld = null;
+	public ?\DateTime $deliveryDateNew = null;
+	public ?\DateTime $deliveryPeriodBeginOld = null;
+	public ?\DateTime $deliveryPeriodBeginNew = null;
+	public ?\DateTime $deliveryPeriodEndOld = null;
+	public ?\DateTime $deliveryPeriodEndNew = null;
 	public ?BigDecimal $pointsAmountOld = null;
 	public ?BigDecimal $pointsAmountNew = null;
 	public ?BigDecimal $pointsAmountExclOld = null;
@@ -3829,10 +3870,8 @@ class LineChangeData extends SoapObject {
 	public ?BigDecimal $totalExclAmountOld = null;
 	public ?BigDecimal $totalExclAmountNew = null;
 	public function writeProps(SoapGenerator $gen): void {
-		if ($this->quantityOld !== null) $gen->writeValueAndScale('quantityOld', '', $this->quantityOld, 2);
-		if ($this->quantityNew !== null) $gen->writeValueAndScale('quantityNew', '', $this->quantityNew, 2);
-		if ($this->decimalPlacesOld !== null) $gen->writeInt('decimalPlacesOld', $this->decimalPlacesOld);
-		if ($this->decimalPlacesNew !== null) $gen->writeInt('decimalPlacesNew', $this->decimalPlacesNew);
+		if ($this->quantityOld !== null) $gen->writeValueAndScale('quantityOld', 'decimalPlacesOld', $this->quantityOld, 2);
+		if ($this->quantityNew !== null) $gen->writeValueAndScale('quantityNew', 'decimalPlacesNew', $this->quantityNew, 2);
 		if ($this->priceOld !== null) $gen->writeValueAndScale('priceOld', '', $this->priceOld, 2);
 		if ($this->priceNew !== null) $gen->writeValueAndScale('priceNew', '', $this->priceNew, 2);
 		if ($this->priceExclOld !== null) $gen->writeValueAndScale('priceExclOld', '', $this->priceExclOld, 2);
@@ -3865,12 +3904,12 @@ class LineChangeData extends SoapObject {
 		if ($this->discountAmountNew !== null) $gen->writeValueAndScale('discountAmountNew', '', $this->discountAmountNew, 2);
 		if ($this->discountAmountExclOld !== null) $gen->writeValueAndScale('discountAmountExclOld', '', $this->discountAmountExclOld, 2);
 		if ($this->discountAmountExclNew !== null) $gen->writeValueAndScale('discountAmountExclNew', '', $this->discountAmountExclNew, 2);
-		if ($this->deliveryDateOld !== null) $this->deliveryDateOld->write($gen, 'deliveryDateOld');
-		if ($this->deliveryDateNew !== null) $this->deliveryDateNew->write($gen, 'deliveryDateNew');
-		if ($this->deliveryPeriodBeginOld !== null) $this->deliveryPeriodBeginOld->write($gen, 'deliveryPeriodBeginOld');
-		if ($this->deliveryPeriodBeginNew !== null) $this->deliveryPeriodBeginNew->write($gen, 'deliveryPeriodBeginNew');
-		if ($this->deliveryPeriodEndOld !== null) $this->deliveryPeriodEndOld->write($gen, 'deliveryPeriodEndOld');
-		if ($this->deliveryPeriodEndNew !== null) $this->deliveryPeriodEndNew->write($gen, 'deliveryPeriodEndNew');
+		if ($this->deliveryDateOld !== null) (SoapMplusDate::fromDateTime($this->deliveryDateOld))->write($gen, 'deliveryDateOld');
+		if ($this->deliveryDateNew !== null) (SoapMplusDate::fromDateTime($this->deliveryDateNew))->write($gen, 'deliveryDateNew');
+		if ($this->deliveryPeriodBeginOld !== null) (SoapMplusDateTime::fromDateTime($this->deliveryPeriodBeginOld))->write($gen, 'deliveryPeriodBeginOld');
+		if ($this->deliveryPeriodBeginNew !== null) (SoapMplusDateTime::fromDateTime($this->deliveryPeriodBeginNew))->write($gen, 'deliveryPeriodBeginNew');
+		if ($this->deliveryPeriodEndOld !== null) (SoapMplusDateTime::fromDateTime($this->deliveryPeriodEndOld))->write($gen, 'deliveryPeriodEndOld');
+		if ($this->deliveryPeriodEndNew !== null) (SoapMplusDateTime::fromDateTime($this->deliveryPeriodEndNew))->write($gen, 'deliveryPeriodEndNew');
 		if ($this->pointsAmountOld !== null) $gen->writeValueAndScale('pointsAmountOld', '', $this->pointsAmountOld, 2);
 		if ($this->pointsAmountNew !== null) $gen->writeValueAndScale('pointsAmountNew', '', $this->pointsAmountNew, 2);
 		if ($this->pointsAmountExclOld !== null) $gen->writeValueAndScale('pointsAmountExclOld', '', $this->pointsAmountExclOld, 2);
@@ -3968,7 +4007,7 @@ $tmp_preparationList->write($gen, 'preparationList');
 class OrderChange extends SoapObject {
 	public string $orderId;
 	public ?string $extOrderId = null;
-	public ?SoapMplusDateTime $entryTimestamp = null;
+	public ?\DateTime $entryTimestamp = null;
 	public ?int $entryBranchNumber = null;
 	public ?int $workplaceNumber = null;
 	public ?string $entryExtBranchId = null;
@@ -3994,8 +4033,8 @@ class OrderChange extends SoapObject {
 	public ?Address $deliveryAddressNew = null;
 	public ?Address $invoiceAddressOld = null;
 	public ?Address $invoiceAddressNew = null;
-	public ?SoapMplusDate $financialDateOld = null;
-	public ?SoapMplusDate $financialDateNew = null;
+	public ?\DateTime $financialDateOld = null;
+	public ?\DateTime $financialDateNew = null;
 	public ?BigDecimal $totalInclAmountOld = null;
 	public ?BigDecimal $totalInclAmountNew = null;
 	public ?BigDecimal $totalExclAmountOld = null;
@@ -4004,12 +4043,12 @@ class OrderChange extends SoapObject {
 	public ?string $vatMethodNew = null;
 	public ?string $deliveryMethodOld = null;
 	public ?string $deliveryMethodNew = null;
-	public ?SoapMplusDate $deliveryDateOld = null;
-	public ?SoapMplusDate $deliveryDateNew = null;
-	public ?SoapMplusDateTime $deliveryPeriodBeginOld = null;
-	public ?SoapMplusDateTime $deliveryPeriodBeginNew = null;
-	public ?SoapMplusDateTime $deliveryPeriodEndOld = null;
-	public ?SoapMplusDateTime $deliveryPeriodEndNew = null;
+	public ?\DateTime $deliveryDateOld = null;
+	public ?\DateTime $deliveryDateNew = null;
+	public ?\DateTime $deliveryPeriodBeginOld = null;
+	public ?\DateTime $deliveryPeriodBeginNew = null;
+	public ?\DateTime $deliveryPeriodEndOld = null;
+	public ?\DateTime $deliveryPeriodEndNew = null;
 	public ?string $paymentMethodOld = null;
 	public ?string $paymentMethodNew = null;
 	public ?BigDecimal $prepaidAmountOld = null;
@@ -4035,7 +4074,7 @@ class OrderChange extends SoapObject {
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'orderId', null, $this->orderId);
 		if ($this->extOrderId !== null) $gen->out->writeElementNs(self::TNS, 'extOrderId', null, $this->extOrderId);
-		if ($this->entryTimestamp !== null) $this->entryTimestamp->write($gen, 'entryTimestamp');
+		if ($this->entryTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->entryTimestamp))->write($gen, 'entryTimestamp');
 		if ($this->entryBranchNumber !== null) $gen->writeInt('entryBranchNumber', $this->entryBranchNumber);
 		if ($this->workplaceNumber !== null) $gen->writeInt('workplaceNumber', $this->workplaceNumber);
 		if ($this->entryExtBranchId !== null) $gen->out->writeElementNs(self::TNS, 'entryExtBranchId', null, $this->entryExtBranchId);
@@ -4061,8 +4100,8 @@ class OrderChange extends SoapObject {
 		if ($this->deliveryAddressNew !== null) $this->deliveryAddressNew->write($gen, 'deliveryAddressNew');
 		if ($this->invoiceAddressOld !== null) $this->invoiceAddressOld->write($gen, 'invoiceAddressOld');
 		if ($this->invoiceAddressNew !== null) $this->invoiceAddressNew->write($gen, 'invoiceAddressNew');
-		if ($this->financialDateOld !== null) $this->financialDateOld->write($gen, 'financialDateOld');
-		if ($this->financialDateNew !== null) $this->financialDateNew->write($gen, 'financialDateNew');
+		if ($this->financialDateOld !== null) (SoapMplusDate::fromDateTime($this->financialDateOld))->write($gen, 'financialDateOld');
+		if ($this->financialDateNew !== null) (SoapMplusDate::fromDateTime($this->financialDateNew))->write($gen, 'financialDateNew');
 		if ($this->totalInclAmountOld !== null) $gen->writeValueAndScale('totalInclAmountOld', '', $this->totalInclAmountOld, 2);
 		if ($this->totalInclAmountNew !== null) $gen->writeValueAndScale('totalInclAmountNew', '', $this->totalInclAmountNew, 2);
 		if ($this->totalExclAmountOld !== null) $gen->writeValueAndScale('totalExclAmountOld', '', $this->totalExclAmountOld, 2);
@@ -4071,12 +4110,12 @@ class OrderChange extends SoapObject {
 		if ($this->vatMethodNew !== null) $gen->out->writeElementNs(self::TNS, 'vatMethodNew', null, $this->vatMethodNew);
 		if ($this->deliveryMethodOld !== null) $gen->out->writeElementNs(self::TNS, 'deliveryMethodOld', null, $this->deliveryMethodOld);
 		if ($this->deliveryMethodNew !== null) $gen->out->writeElementNs(self::TNS, 'deliveryMethodNew', null, $this->deliveryMethodNew);
-		if ($this->deliveryDateOld !== null) $this->deliveryDateOld->write($gen, 'deliveryDateOld');
-		if ($this->deliveryDateNew !== null) $this->deliveryDateNew->write($gen, 'deliveryDateNew');
-		if ($this->deliveryPeriodBeginOld !== null) $this->deliveryPeriodBeginOld->write($gen, 'deliveryPeriodBeginOld');
-		if ($this->deliveryPeriodBeginNew !== null) $this->deliveryPeriodBeginNew->write($gen, 'deliveryPeriodBeginNew');
-		if ($this->deliveryPeriodEndOld !== null) $this->deliveryPeriodEndOld->write($gen, 'deliveryPeriodEndOld');
-		if ($this->deliveryPeriodEndNew !== null) $this->deliveryPeriodEndNew->write($gen, 'deliveryPeriodEndNew');
+		if ($this->deliveryDateOld !== null) (SoapMplusDate::fromDateTime($this->deliveryDateOld))->write($gen, 'deliveryDateOld');
+		if ($this->deliveryDateNew !== null) (SoapMplusDate::fromDateTime($this->deliveryDateNew))->write($gen, 'deliveryDateNew');
+		if ($this->deliveryPeriodBeginOld !== null) (SoapMplusDateTime::fromDateTime($this->deliveryPeriodBeginOld))->write($gen, 'deliveryPeriodBeginOld');
+		if ($this->deliveryPeriodBeginNew !== null) (SoapMplusDateTime::fromDateTime($this->deliveryPeriodBeginNew))->write($gen, 'deliveryPeriodBeginNew');
+		if ($this->deliveryPeriodEndOld !== null) (SoapMplusDateTime::fromDateTime($this->deliveryPeriodEndOld))->write($gen, 'deliveryPeriodEndOld');
+		if ($this->deliveryPeriodEndNew !== null) (SoapMplusDateTime::fromDateTime($this->deliveryPeriodEndNew))->write($gen, 'deliveryPeriodEndNew');
 		if ($this->paymentMethodOld !== null) $gen->out->writeElementNs(self::TNS, 'paymentMethodOld', null, $this->paymentMethodOld);
 		if ($this->paymentMethodNew !== null) $gen->out->writeElementNs(self::TNS, 'paymentMethodNew', null, $this->paymentMethodNew);
 		if ($this->prepaidAmountOld !== null) $gen->writeValueAndScale('prepaidAmountOld', '', $this->prepaidAmountOld, 2);
@@ -4126,8 +4165,8 @@ class OrderChangeList extends SoapObject {
 class GetOrderChangesRequest extends SoapObject {
 	public ?int $syncMarker = null;
 	public ?int $syncMarkerLimit = null;
-	public ?SoapMplusDate $fromFinancialDate = null;
-	public ?SoapMplusDate $throughFinancialDate = null;
+	public ?\DateTime $fromFinancialDate = null;
+	public ?\DateTime $throughFinancialDate = null;
 	/** @var int[] */
 	public $branchNumbers = array();
 	/** @var int[] */
@@ -4147,8 +4186,8 @@ class GetOrderChangesRequest extends SoapObject {
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
 		if ($this->syncMarkerLimit !== null) $gen->writeInt('syncMarkerLimit', $this->syncMarkerLimit);
-		if ($this->fromFinancialDate !== null) $this->fromFinancialDate->write($gen, 'fromFinancialDate');
-		if ($this->throughFinancialDate !== null) $this->throughFinancialDate->write($gen, 'throughFinancialDate');
+		if ($this->fromFinancialDate !== null) (SoapMplusDate::fromDateTime($this->fromFinancialDate))->write($gen, 'fromFinancialDate');
+		if ($this->throughFinancialDate !== null) (SoapMplusDate::fromDateTime($this->throughFinancialDate))->write($gen, 'throughFinancialDate');
 		foreach ($this->branchNumbers as $elem) $gen->writeInt('branchNumbers', $elem);
 		foreach ($this->employeeNumbers as $elem) $gen->writeInt('employeeNumbers', $elem);
 		foreach ($this->relationNumbers as $elem) $gen->writeInt('relationNumbers', $elem);
@@ -5002,12 +5041,12 @@ class Receipt extends SoapObject {
 	public string $receiptType;
 	public int $employeeNumber;
 	public string $employeeName;
-	public SoapMplusDateTime $entryTimestamp;
+	public \DateTime $entryTimestamp;
 	public ?int $relationNumber = null;
 	public ?string $relationName = null;
 	public ?int $relationCategoryId = null;
 	public ?string $relationBankAccountNumber = null;
-	public SoapMplusDate $financialDate;
+	public \DateTime $financialDate;
 	public int $financialBranchNumber;
 	public ?string $financialExtBranchId = null;
 	public int $workplaceNumber;
@@ -5042,8 +5081,8 @@ class Receipt extends SoapObject {
 	/** @var TimelineEvent[] */
 	public $timelineEvents = null;
 	public function __construct() {
-		$this->entryTimestamp = new SoapMplusDateTime();
-		$this->financialDate = new SoapMplusDate();
+		$this->entryTimestamp = new \DateTime();
+		$this->financialDate = new \DateTime();
 	}
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'receiptId', null, $this->receiptId);
@@ -5063,12 +5102,12 @@ $tmp_extOrderIds->write($gen, 'extOrderIds');
 		$gen->out->writeElementNs(self::TNS, 'receiptType', null, $this->receiptType);
 		$gen->writeInt('employeeNumber', $this->employeeNumber);
 		$gen->out->writeElementNs(self::TNS, 'employeeName', null, $this->employeeName);
-		$this->entryTimestamp->write($gen, 'entryTimestamp');
+		(SoapMplusDateTime::fromDateTime($this->entryTimestamp))->write($gen, 'entryTimestamp');
 		if ($this->relationNumber !== null) $gen->writeInt('relationNumber', $this->relationNumber);
 		if ($this->relationName !== null) $gen->out->writeElementNs(self::TNS, 'relationName', null, $this->relationName);
 		if ($this->relationCategoryId !== null) $gen->writeInt('relationCategoryId', $this->relationCategoryId);
 		if ($this->relationBankAccountNumber !== null) $gen->out->writeElementNs(self::TNS, 'relationBankAccountNumber', null, $this->relationBankAccountNumber);
-		$this->financialDate->write($gen, 'financialDate');
+		(SoapMplusDate::fromDateTime($this->financialDate))->write($gen, 'financialDate');
 		$gen->writeInt('financialBranchNumber', $this->financialBranchNumber);
 		if ($this->financialExtBranchId !== null) $gen->out->writeElementNs(self::TNS, 'financialExtBranchId', null, $this->financialExtBranchId);
 		$gen->writeInt('workplaceNumber', $this->workplaceNumber);
@@ -5137,8 +5176,8 @@ class ReceiptList extends SoapObject {
 class GetReceiptsRequest extends SoapObject {
 	public ?int $syncMarker = null;
 	public ?int $syncMarkerLimit = null;
-	public ?SoapMplusDate $fromFinancialDate = null;
-	public ?SoapMplusDate $throughFinancialDate = null;
+	public ?\DateTime $fromFinancialDate = null;
+	public ?\DateTime $throughFinancialDate = null;
 	/** @var int[] */
 	public $branchNumbers = array();
 	/** @var int[] */
@@ -5173,8 +5212,8 @@ class GetReceiptsRequest extends SoapObject {
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
 		if ($this->syncMarkerLimit !== null) $gen->writeInt('syncMarkerLimit', $this->syncMarkerLimit);
-		if ($this->fromFinancialDate !== null) $this->fromFinancialDate->write($gen, 'fromFinancialDate');
-		if ($this->throughFinancialDate !== null) $this->throughFinancialDate->write($gen, 'throughFinancialDate');
+		if ($this->fromFinancialDate !== null) (SoapMplusDate::fromDateTime($this->fromFinancialDate))->write($gen, 'fromFinancialDate');
+		if ($this->throughFinancialDate !== null) (SoapMplusDate::fromDateTime($this->throughFinancialDate))->write($gen, 'throughFinancialDate');
 		foreach ($this->branchNumbers as $elem) $gen->writeInt('branchNumbers', $elem);
 		foreach ($this->employeeNumbers as $elem) $gen->writeInt('employeeNumbers', $elem);
 		foreach ($this->relationNumbers as $elem) $gen->writeInt('relationNumbers', $elem);
@@ -5429,29 +5468,29 @@ class CashCountLineList extends SoapObject {
 class Transaction extends SoapObject {
 	public string $transactionId;
 	public ?string $transactionString = null;
-	public SoapMplusDate $financialDate;
+	public \DateTime $financialDate;
 	public int $branchNumber;
 	public ?string $extBranchId = null;
 	public int $workplaceNumber;
 	public YearNumber $transactionNumber;
 	public int $employeeNumber;
-	public SoapMplusDateTime $entryTimestamp;
+	public \DateTime $entryTimestamp;
 	public ?int $relationNumber = null;
 	public function __construct() {
-		$this->financialDate = new SoapMplusDate();
+		$this->financialDate = new \DateTime();
 		$this->transactionNumber = new YearNumber();
-		$this->entryTimestamp = new SoapMplusDateTime();
+		$this->entryTimestamp = new \DateTime();
 	}
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'transactionId', null, $this->transactionId);
 		if ($this->transactionString !== null) $gen->out->writeElementNs(self::TNS, 'transactionString', null, $this->transactionString);
-		$this->financialDate->write($gen, 'financialDate');
+		(SoapMplusDate::fromDateTime($this->financialDate))->write($gen, 'financialDate');
 		$gen->writeInt('branchNumber', $this->branchNumber);
 		if ($this->extBranchId !== null) $gen->out->writeElementNs(self::TNS, 'extBranchId', null, $this->extBranchId);
 		$gen->writeInt('workplaceNumber', $this->workplaceNumber);
 		$this->transactionNumber->write($gen, 'transactionNumber');
 		$gen->writeInt('employeeNumber', $this->employeeNumber);
-		$this->entryTimestamp->write($gen, 'entryTimestamp');
+		(SoapMplusDateTime::fromDateTime($this->entryTimestamp))->write($gen, 'entryTimestamp');
 		if ($this->relationNumber !== null) $gen->writeInt('relationNumber', $this->relationNumber);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
@@ -5498,8 +5537,8 @@ class CashCountExtraWorkplaceList extends SoapObject {
 class CashCount extends SoapObject {
 	public string $cashCountId;
 	public ?string $cashCountString = null;
-	public SoapMplusDate $financialDate;
-	public SoapMplusDateTime $entryTimestamp;
+	public \DateTime $financialDate;
+	public \DateTime $entryTimestamp;
 	public int $branchNumber;
 	public ?string $extBranchId = null;
 	public int $workplaceNumber;
@@ -5519,8 +5558,8 @@ class CashCount extends SoapObject {
 	/** @var CashCountLine[] */
 	public $cashCountLineList = array();
 	public function __construct() {
-		$this->financialDate = new SoapMplusDate();
-		$this->entryTimestamp = new SoapMplusDateTime();
+		$this->financialDate = new \DateTime();
+		$this->entryTimestamp = new \DateTime();
 		$this->cashCountNumber = new YearNumber();
 		$this->shiftFirstTransaction = new Transaction();
 		$this->shiftLastTransaction = new Transaction();
@@ -5528,8 +5567,8 @@ class CashCount extends SoapObject {
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'cashCountId', null, $this->cashCountId);
 		if ($this->cashCountString !== null) $gen->out->writeElementNs(self::TNS, 'cashCountString', null, $this->cashCountString);
-		$this->financialDate->write($gen, 'financialDate');
-		$this->entryTimestamp->write($gen, 'entryTimestamp');
+		(SoapMplusDate::fromDateTime($this->financialDate))->write($gen, 'financialDate');
+		(SoapMplusDateTime::fromDateTime($this->entryTimestamp))->write($gen, 'entryTimestamp');
 		$gen->writeInt('branchNumber', $this->branchNumber);
 		if ($this->extBranchId !== null) $gen->out->writeElementNs(self::TNS, 'extBranchId', null, $this->extBranchId);
 		$gen->writeInt('workplaceNumber', $this->workplaceNumber);
@@ -5573,7 +5612,7 @@ class CashCountList extends SoapObject {
 }
 
 class Journal extends SoapObject {
-	public SoapMplusDate $financialDate;
+	public \DateTime $financialDate;
 	/** @var string[] */
 	public $journalFilterList = null;
 	public int $branchNumber;
@@ -5585,10 +5624,10 @@ class Journal extends SoapObject {
 	/** @var VatGroup[] */
 	public $vatGroupList = null;
 	public function __construct() {
-		$this->financialDate = new SoapMplusDate();
+		$this->financialDate = new \DateTime();
 	}
 	public function writeProps(SoapGenerator $gen): void {
-		$this->financialDate->write($gen, 'financialDate');
+		(SoapMplusDate::fromDateTime($this->financialDate))->write($gen, 'financialDate');
 		if ($this->journalFilterList !== null) {
 $tmp_journalFilterList = new JournalFilterList($this->journalFilterList);
 $tmp_journalFilterList->write($gen, 'journalFilterList');
@@ -5630,20 +5669,20 @@ class JournalList extends SoapObject {
 }
 
 class GetJournalsRequest extends SoapObject {
-	public SoapMplusDate $fromFinancialDate;
-	public SoapMplusDate $throughFinancialDate;
+	public \DateTime $fromFinancialDate;
+	public \DateTime $throughFinancialDate;
 	/** @var int[] */
 	public $branchNumbers = array();
 	/** @var string[] */
 	public $journalFilterList = null;
 	public ?string $reference = null;
 	public function __construct() {
-		$this->fromFinancialDate = new SoapMplusDate();
-		$this->throughFinancialDate = new SoapMplusDate();
+		$this->fromFinancialDate = new \DateTime();
+		$this->throughFinancialDate = new \DateTime();
 	}
 	public function writeProps(SoapGenerator $gen): void {
-		$this->fromFinancialDate->write($gen, 'fromFinancialDate');
-		$this->throughFinancialDate->write($gen, 'throughFinancialDate');
+		(SoapMplusDate::fromDateTime($this->fromFinancialDate))->write($gen, 'fromFinancialDate');
+		(SoapMplusDate::fromDateTime($this->throughFinancialDate))->write($gen, 'throughFinancialDate');
 		foreach ($this->branchNumbers as $elem) $gen->writeInt('branchNumbers', $elem);
 		if ($this->journalFilterList !== null) {
 $tmp_journalFilterList = new JournalFilterList($this->journalFilterList);
@@ -5669,10 +5708,10 @@ class FinancialGroup extends SoapObject {
 	public ?string $extBranchId = null;
 	/** @var int[] */
 	public $workplaceNumbers = array();
-	public ?SoapMplusDate $fromFinancialDate = null;
-	public ?SoapMplusDate $throughFinancialDate = null;
-	public ?SoapMplusDateTime $fromFinancialDateTime = null;
-	public ?SoapMplusDateTime $throughFinancialDateTime = null;
+	public ?\DateTime $fromFinancialDate = null;
+	public ?\DateTime $throughFinancialDate = null;
+	public ?\DateTime $fromFinancialDateTime = null;
+	public ?\DateTime $throughFinancialDateTime = null;
 	public ?bool $financialPeriodClosed = null;
 	public ?BigDecimal $quantity = null;
 	public ?BigDecimal $inclAmount = null;
@@ -5693,10 +5732,10 @@ class FinancialGroup extends SoapObject {
 		if ($this->branchNumber !== null) $gen->writeInt('branchNumber', $this->branchNumber);
 		if ($this->extBranchId !== null) $gen->out->writeElementNs(self::TNS, 'extBranchId', null, $this->extBranchId);
 		foreach ($this->workplaceNumbers as $elem) $gen->writeInt('workplaceNumbers', $elem);
-		if ($this->fromFinancialDate !== null) $this->fromFinancialDate->write($gen, 'fromFinancialDate');
-		if ($this->throughFinancialDate !== null) $this->throughFinancialDate->write($gen, 'throughFinancialDate');
-		if ($this->fromFinancialDateTime !== null) $this->fromFinancialDateTime->write($gen, 'fromFinancialDateTime');
-		if ($this->throughFinancialDateTime !== null) $this->throughFinancialDateTime->write($gen, 'throughFinancialDateTime');
+		if ($this->fromFinancialDate !== null) (SoapMplusDate::fromDateTime($this->fromFinancialDate))->write($gen, 'fromFinancialDate');
+		if ($this->throughFinancialDate !== null) (SoapMplusDate::fromDateTime($this->throughFinancialDate))->write($gen, 'throughFinancialDate');
+		if ($this->fromFinancialDateTime !== null) (SoapMplusDateTime::fromDateTime($this->fromFinancialDateTime))->write($gen, 'fromFinancialDateTime');
+		if ($this->throughFinancialDateTime !== null) (SoapMplusDateTime::fromDateTime($this->throughFinancialDateTime))->write($gen, 'throughFinancialDateTime');
 		if ($this->financialPeriodClosed !== null) $gen->writeBool('financialPeriodClosed', $this->financialPeriodClosed);
 		if ($this->quantity !== null) $gen->writeValueAndScale('quantity', 'decimalPlaces', $this->quantity, 2);
 		if ($this->inclAmount !== null) $gen->writeValueAndScale('inclAmount', '', $this->inclAmount, 2);
@@ -5732,16 +5771,16 @@ class FinancialGroupList extends SoapObject {
 }
 
 class GetFinancialJournalRequest extends SoapObject {
-	public SoapMplusDate $fromFinancialDate;
-	public SoapMplusDate $throughFinancialDate;
+	public \DateTime $fromFinancialDate;
+	public \DateTime $throughFinancialDate;
 	public ?string $reference = null;
 	public function __construct() {
-		$this->fromFinancialDate = new SoapMplusDate();
-		$this->throughFinancialDate = new SoapMplusDate();
+		$this->fromFinancialDate = new \DateTime();
+		$this->throughFinancialDate = new \DateTime();
 	}
 	public function writeProps(SoapGenerator $gen): void {
-		$this->fromFinancialDate->write($gen, 'fromFinancialDate');
-		$this->throughFinancialDate->write($gen, 'throughFinancialDate');
+		(SoapMplusDate::fromDateTime($this->fromFinancialDate))->write($gen, 'fromFinancialDate');
+		(SoapMplusDate::fromDateTime($this->throughFinancialDate))->write($gen, 'throughFinancialDate');
 		if ($this->reference !== null) $gen->out->writeElementNs(self::TNS, 'reference', null, $this->reference);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
@@ -5766,12 +5805,12 @@ class GetFinancialJournalByCashCountRequest extends SoapObject {
 }
 
 class GetCashCountListRequest extends SoapObject {
-	public ?SoapMplusDate $fromFinancialDate = null;
-	public ?SoapMplusDate $throughFinancialDate = null;
+	public ?\DateTime $fromFinancialDate = null;
+	public ?\DateTime $throughFinancialDate = null;
 	public ?WorkplaceYearNumber $sinceCashCount = null;
 	public function writeProps(SoapGenerator $gen): void {
-		if ($this->fromFinancialDate !== null) $this->fromFinancialDate->write($gen, 'fromFinancialDate');
-		if ($this->throughFinancialDate !== null) $this->throughFinancialDate->write($gen, 'throughFinancialDate');
+		if ($this->fromFinancialDate !== null) (SoapMplusDate::fromDateTime($this->fromFinancialDate))->write($gen, 'fromFinancialDate');
+		if ($this->throughFinancialDate !== null) (SoapMplusDate::fromDateTime($this->throughFinancialDate))->write($gen, 'throughFinancialDate');
 		if ($this->sinceCashCount !== null) $this->sinceCashCount->write($gen, 'sinceCashCount');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
@@ -5857,20 +5896,20 @@ class CashDrawerCount extends SoapObject {
 	public string $cashDrawerCountId;
 	public bool $isCheckingCount;
 	public int $countingEmployeeNumber;
-	public SoapMplusDateTime $timestamp;
+	public \DateTime $timestamp;
 	public ?string $comment = null;
 	public ?YearNumber $correctionNumber = null;
 	public bool $isApproved;
 	/** @var CashDrawerCountLine[] */
 	public $cashDrawerCountLineList = array();
 	public function __construct() {
-		$this->timestamp = new SoapMplusDateTime();
+		$this->timestamp = new \DateTime();
 	}
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'cashDrawerCountId', null, $this->cashDrawerCountId);
 		$gen->writeBool('isCheckingCount', $this->isCheckingCount);
 		$gen->writeInt('countingEmployeeNumber', $this->countingEmployeeNumber);
-		$this->timestamp->write($gen, 'timestamp');
+		(SoapMplusDateTime::fromDateTime($this->timestamp))->write($gen, 'timestamp');
 		if ($this->comment !== null) $gen->out->writeElementNs(self::TNS, 'comment', null, $this->comment);
 		if ($this->correctionNumber !== null) $this->correctionNumber->write($gen, 'correctionNumber');
 		$gen->writeBool('isApproved', $this->isApproved);
@@ -5903,25 +5942,25 @@ class CashDrawerBalancing extends SoapObject {
 	public string $cashDrawerBalancingId;
 	public string $cashDrawerBalancingString;
 	public int $syncMarker;
-	public SoapMplusDate $financialDate;
+	public \DateTime $financialDate;
 	public int $financialDateSequenceNumber;
-	public SoapMplusDateTime $timestamp;
+	public \DateTime $timestamp;
 	public int $cashDrawerBranchNumber;
 	public int $cashDrawerEmployeeNumber;
 	public bool $isApproved;
 	/** @var CashDrawerCount[] */
 	public $cashDrawerCountList = array();
 	public function __construct() {
-		$this->financialDate = new SoapMplusDate();
-		$this->timestamp = new SoapMplusDateTime();
+		$this->financialDate = new \DateTime();
+		$this->timestamp = new \DateTime();
 	}
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'cashDrawerBalancingId', null, $this->cashDrawerBalancingId);
 		$gen->out->writeElementNs(self::TNS, 'cashDrawerBalancingString', null, $this->cashDrawerBalancingString);
 		$gen->writeInt('syncMarker', $this->syncMarker);
-		$this->financialDate->write($gen, 'financialDate');
+		(SoapMplusDate::fromDateTime($this->financialDate))->write($gen, 'financialDate');
 		$gen->writeInt('financialDateSequenceNumber', $this->financialDateSequenceNumber);
-		$this->timestamp->write($gen, 'timestamp');
+		(SoapMplusDateTime::fromDateTime($this->timestamp))->write($gen, 'timestamp');
 		$gen->writeInt('cashDrawerBranchNumber', $this->cashDrawerBranchNumber);
 		$gen->writeInt('cashDrawerEmployeeNumber', $this->cashDrawerEmployeeNumber);
 		$gen->writeBool('isApproved', $this->isApproved);
@@ -5951,13 +5990,13 @@ class CashDrawerBalancingList extends SoapObject {
 }
 
 class GetCashDrawerBalancingListRequest extends SoapObject {
-	public ?SoapMplusDate $fromFinancialDate = null;
-	public ?SoapMplusDate $throughFinancialDate = null;
+	public ?\DateTime $fromFinancialDate = null;
+	public ?\DateTime $throughFinancialDate = null;
 	public ?int $syncMarker = null;
 	public ?int $syncMarkerLimit = null;
 	public function writeProps(SoapGenerator $gen): void {
-		if ($this->fromFinancialDate !== null) $this->fromFinancialDate->write($gen, 'fromFinancialDate');
-		if ($this->throughFinancialDate !== null) $this->throughFinancialDate->write($gen, 'throughFinancialDate');
+		if ($this->fromFinancialDate !== null) (SoapMplusDate::fromDateTime($this->fromFinancialDate))->write($gen, 'fromFinancialDate');
+		if ($this->throughFinancialDate !== null) (SoapMplusDate::fromDateTime($this->throughFinancialDate))->write($gen, 'throughFinancialDate');
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
 		if ($this->syncMarkerLimit !== null) $gen->writeInt('syncMarkerLimit', $this->syncMarkerLimit);
 	}
@@ -6102,7 +6141,7 @@ class Barcode extends SoapObject {
 	public ?int $barcodeId = null;
 	public ?string $description = null;
 	public ?string $barcode = null;
-	public ?SoapMplusDate $barcodeDate = null;
+	public ?\DateTime $barcodeDate = null;
 	public ?BigDecimal $quantity = null;
 	public ?string $contentUnit = null;
 	public ?BigDecimal $contentQuantity = null;
@@ -6114,7 +6153,7 @@ class Barcode extends SoapObject {
 		if ($this->barcodeId !== null) $gen->writeInt('barcodeId', $this->barcodeId);
 		if ($this->description !== null) $gen->out->writeElementNs(self::TNS, 'description', null, $this->description);
 		if ($this->barcode !== null) $gen->out->writeElementNs(self::TNS, 'barcode', null, $this->barcode);
-		if ($this->barcodeDate !== null) $this->barcodeDate->write($gen, 'barcodeDate');
+		if ($this->barcodeDate !== null) (SoapMplusDate::fromDateTime($this->barcodeDate))->write($gen, 'barcodeDate');
 		if ($this->quantity !== null) $gen->writeValueAndScale('quantity', 'decimalPlaces', $this->quantity, 2);
 		if ($this->contentUnit !== null) $gen->out->writeElementNs(self::TNS, 'contentUnit', null, $this->contentUnit);
 		if ($this->contentQuantity !== null) $gen->writeValueAndScale('contentQuantity', 'contentQuantityDecimalPlaces', $this->contentQuantity, 2);
@@ -6210,7 +6249,7 @@ class ComponentArticle extends SoapObject {
 	public ?string $receiptText = null;
 	public ?string $displayText = null;
 	public ?string $barcode = null;
-	public ?SoapMplusDate $barcodeDate = null;
+	public ?\DateTime $barcodeDate = null;
 	public ?string $contentUnit = null;
 	public ?BigDecimal $contentQuantity = null;
 	public ?int $turnoverGroup = null;
@@ -6231,7 +6270,7 @@ class ComponentArticle extends SoapObject {
 		if ($this->receiptText !== null) $gen->out->writeElementNs(self::TNS, 'receiptText', null, $this->receiptText);
 		if ($this->displayText !== null) $gen->out->writeElementNs(self::TNS, 'displayText', null, $this->displayText);
 		if ($this->barcode !== null) $gen->out->writeElementNs(self::TNS, 'barcode', null, $this->barcode);
-		if ($this->barcodeDate !== null) $this->barcodeDate->write($gen, 'barcodeDate');
+		if ($this->barcodeDate !== null) (SoapMplusDate::fromDateTime($this->barcodeDate))->write($gen, 'barcodeDate');
 		if ($this->contentUnit !== null) $gen->out->writeElementNs(self::TNS, 'contentUnit', null, $this->contentUnit);
 		if ($this->contentQuantity !== null) $gen->writeValueAndScale('contentQuantity', 'contentQuantityDecimalPlaces', $this->contentQuantity, 2);
 		if ($this->turnoverGroup !== null) $gen->writeInt('turnoverGroup', $this->turnoverGroup);
@@ -6273,8 +6312,8 @@ class Article extends SoapObject {
 	public ?string $extArticleId = null;
 	public ?string $pluNumber = null;
 	public ?int $syncMarker = null;
-	public ?SoapMplusDateTime $changeTimestamp = null;
-	public ?SoapMplusDateTime $createTimestamp = null;
+	public ?\DateTime $changeTimestamp = null;
+	public ?\DateTime $createTimestamp = null;
 	public ?bool $active = null;
 	public ?string $description = null;
 	public ?string $colour = null;
@@ -6285,7 +6324,7 @@ class Article extends SoapObject {
 	public ?string $receiptText = null;
 	public ?string $displayText = null;
 	public ?string $barcode = null;
-	public ?SoapMplusDate $barcodeDate = null;
+	public ?\DateTime $barcodeDate = null;
 	public ?string $contentUnit = null;
 	public ?BigDecimal $contentQuantity = null;
 	public ?string $brandName = null;
@@ -6354,8 +6393,8 @@ class Article extends SoapObject {
 		if ($this->extArticleId !== null) $gen->out->writeElementNs(self::TNS, 'extArticleId', null, $this->extArticleId);
 		if ($this->pluNumber !== null) $gen->out->writeElementNs(self::TNS, 'pluNumber', null, $this->pluNumber);
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
-		if ($this->changeTimestamp !== null) $this->changeTimestamp->write($gen, 'changeTimestamp');
-		if ($this->createTimestamp !== null) $this->createTimestamp->write($gen, 'createTimestamp');
+		if ($this->changeTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->changeTimestamp))->write($gen, 'changeTimestamp');
+		if ($this->createTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->createTimestamp))->write($gen, 'createTimestamp');
 		if ($this->active !== null) $gen->writeBool('active', $this->active);
 		if ($this->description !== null) $gen->out->writeElementNs(self::TNS, 'description', null, $this->description);
 		if ($this->colour !== null) $gen->out->writeElementNs(self::TNS, 'colour', null, $this->colour);
@@ -6366,7 +6405,7 @@ class Article extends SoapObject {
 		if ($this->receiptText !== null) $gen->out->writeElementNs(self::TNS, 'receiptText', null, $this->receiptText);
 		if ($this->displayText !== null) $gen->out->writeElementNs(self::TNS, 'displayText', null, $this->displayText);
 		if ($this->barcode !== null) $gen->out->writeElementNs(self::TNS, 'barcode', null, $this->barcode);
-		if ($this->barcodeDate !== null) $this->barcodeDate->write($gen, 'barcodeDate');
+		if ($this->barcodeDate !== null) (SoapMplusDate::fromDateTime($this->barcodeDate))->write($gen, 'barcodeDate');
 		if ($this->contentUnit !== null) $gen->out->writeElementNs(self::TNS, 'contentUnit', null, $this->contentUnit);
 		if ($this->contentQuantity !== null) $gen->writeValueAndScale('contentQuantity', 'contentQuantityDecimalPlaces', $this->contentQuantity, 2);
 		if ($this->brandName !== null) $gen->out->writeElementNs(self::TNS, 'brandName', null, $this->brandName);
@@ -6559,7 +6598,7 @@ class GetProductsRequest extends SoapObject {
 	public ?int $syncMarker = null;
 	public ?int $syncMarkerLimit = null;
 	public ?bool $syncMarkerExcludePreparationMethods = null;
-	public ?SoapMplusDateTime $changedSinceTimestamp = null;
+	public ?\DateTime $changedSinceTimestamp = null;
 	public ?int $changedSinceBranchNumber = null;
 	public ?bool $includeAllArticlesOfSelectedProducts = null;
 	/** @var int[] */
@@ -6575,7 +6614,7 @@ $tmp_pluNumbers->write($gen, 'pluNumbers');
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
 		if ($this->syncMarkerLimit !== null) $gen->writeInt('syncMarkerLimit', $this->syncMarkerLimit);
 		if ($this->syncMarkerExcludePreparationMethods !== null) $gen->writeBool('syncMarkerExcludePreparationMethods', $this->syncMarkerExcludePreparationMethods);
-		if ($this->changedSinceTimestamp !== null) $this->changedSinceTimestamp->write($gen, 'changedSinceTimestamp');
+		if ($this->changedSinceTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->changedSinceTimestamp))->write($gen, 'changedSinceTimestamp');
 		if ($this->changedSinceBranchNumber !== null) $gen->writeInt('changedSinceBranchNumber', $this->changedSinceBranchNumber);
 		if ($this->includeAllArticlesOfSelectedProducts !== null) $gen->writeBool('includeAllArticlesOfSelectedProducts', $this->includeAllArticlesOfSelectedProducts);
 		foreach ($this->productNumbers as $elem) $gen->writeInt('productNumbers', $elem);
@@ -6788,7 +6827,7 @@ $tmp_articleVariantIds->write($gen, 'articleVariantIds');
 class ArticleStock extends SoapObject {
 	public ?int $branchNumber = null;
 	public int $articleNumber;
-	public ?SoapMplusDateTime $changeTimestamp = null;
+	public ?\DateTime $changeTimestamp = null;
 	public int $stockId;
 	public BigDecimal $amountFree;
 	public BigDecimal $amountReserved;
@@ -6802,7 +6841,7 @@ class ArticleStock extends SoapObject {
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->branchNumber !== null) $gen->writeInt('branchNumber', $this->branchNumber);
 		$gen->writeInt('articleNumber', $this->articleNumber);
-		if ($this->changeTimestamp !== null) $this->changeTimestamp->write($gen, 'changeTimestamp');
+		if ($this->changeTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->changeTimestamp))->write($gen, 'changeTimestamp');
 		$gen->writeInt('stockId', $this->stockId);
 		$gen->writeValueAndScale('amountFree', 'decimalPlacesFree', $this->amountFree, 2);
 		$gen->writeValueAndScale('amountReserved', 'decimalPlacesReserved', $this->amountReserved, 2);
@@ -6877,7 +6916,7 @@ $tmp_branchNumbers->write($gen, 'branchNumbers');
 
 class ArticleStockHistory extends SoapObject {
 	public int $stockId;
-	public SoapMplusDateTime $timestamp;
+	public \DateTime $timestamp;
 	public ?int $branchNumber = null;
 	public int $articleNumber;
 	public BigDecimal $amountChanged;
@@ -6898,11 +6937,11 @@ class ArticleStockHistory extends SoapObject {
 	public ?YearNumberPart $internalDeliveryNumber = null;
 	public ?TransactionNumber $branchInvoiceNumber = null;
 	public function __construct() {
-		$this->timestamp = new SoapMplusDateTime();
+		$this->timestamp = new \DateTime();
 	}
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->writeInt('stockId', $this->stockId);
-		$this->timestamp->write($gen, 'timestamp');
+		(SoapMplusDateTime::fromDateTime($this->timestamp))->write($gen, 'timestamp');
 		if ($this->branchNumber !== null) $gen->writeInt('branchNumber', $this->branchNumber);
 		$gen->writeInt('articleNumber', $this->articleNumber);
 		$gen->writeValueAndScale('amountChanged', 'decimalPlaces', $this->amountChanged, 2);
@@ -6934,8 +6973,8 @@ class GetStockHistoryRequest extends SoapObject {
 	public int $branchNumber;
 	/** @var int[] */
 	public $articleNumbers = null;
-	public ?SoapMplusDateTime $fromFinancialDateTime = null;
-	public ?SoapMplusDateTime $throughFinancialDateTime = null;
+	public ?\DateTime $fromFinancialDateTime = null;
+	public ?\DateTime $throughFinancialDateTime = null;
 	public ?int $sinceStockId = null;
 	public ?int $sinceStockIdLimit = null;
 	public function writeProps(SoapGenerator $gen): void {
@@ -6944,8 +6983,8 @@ class GetStockHistoryRequest extends SoapObject {
 $tmp_articleNumbers = new ArticleNumberList($this->articleNumbers);
 $tmp_articleNumbers->write($gen, 'articleNumbers');
 }
-		if ($this->fromFinancialDateTime !== null) $this->fromFinancialDateTime->write($gen, 'fromFinancialDateTime');
-		if ($this->throughFinancialDateTime !== null) $this->throughFinancialDateTime->write($gen, 'throughFinancialDateTime');
+		if ($this->fromFinancialDateTime !== null) (SoapMplusDateTime::fromDateTime($this->fromFinancialDateTime))->write($gen, 'fromFinancialDateTime');
+		if ($this->throughFinancialDateTime !== null) (SoapMplusDateTime::fromDateTime($this->throughFinancialDateTime))->write($gen, 'throughFinancialDateTime');
 		if ($this->sinceStockId !== null) $gen->writeInt('sinceStockId', $this->sinceStockId);
 		if ($this->sinceStockIdLimit !== null) $gen->writeInt('sinceStockIdLimit', $this->sinceStockIdLimit);
 	}
@@ -6961,8 +7000,8 @@ class GetStockHistoryV2Request extends SoapObject {
 	public $branchNumbers = array();
 	/** @var int[] */
 	public $articleNumbers = null;
-	public ?SoapMplusDateTime $fromFinancialDateTime = null;
-	public ?SoapMplusDateTime $throughFinancialDateTime = null;
+	public ?\DateTime $fromFinancialDateTime = null;
+	public ?\DateTime $throughFinancialDateTime = null;
 	public ?int $sinceStockId = null;
 	public ?int $sinceStockIdLimit = null;
 	public function writeProps(SoapGenerator $gen): void {
@@ -6971,8 +7010,8 @@ class GetStockHistoryV2Request extends SoapObject {
 $tmp_articleNumbers = new ArticleNumberList($this->articleNumbers);
 $tmp_articleNumbers->write($gen, 'articleNumbers');
 }
-		if ($this->fromFinancialDateTime !== null) $this->fromFinancialDateTime->write($gen, 'fromFinancialDateTime');
-		if ($this->throughFinancialDateTime !== null) $this->throughFinancialDateTime->write($gen, 'throughFinancialDateTime');
+		if ($this->fromFinancialDateTime !== null) (SoapMplusDateTime::fromDateTime($this->fromFinancialDateTime))->write($gen, 'fromFinancialDateTime');
+		if ($this->throughFinancialDateTime !== null) (SoapMplusDateTime::fromDateTime($this->throughFinancialDateTime))->write($gen, 'throughFinancialDateTime');
 		if ($this->sinceStockId !== null) $gen->writeInt('sinceStockId', $this->sinceStockId);
 		if ($this->sinceStockIdLimit !== null) $gen->writeInt('sinceStockIdLimit', $this->sinceStockIdLimit);
 	}
@@ -7321,8 +7360,8 @@ class Message extends SoapObject {
 	public ?string $apiIdent = null;
 	public ?string $sender = null;
 	public ?string $text = null;
-	public ?SoapMplusDateTime $createTimestamp = null;
-	public ?SoapMplusDateTime $deliverTimestamp = null;
+	public ?\DateTime $createTimestamp = null;
+	public ?\DateTime $deliverTimestamp = null;
 	public ?int $branchNumber = null;
 	public ?int $terminalNumber = null;
 	public ?string $messageType = null;
@@ -7331,8 +7370,8 @@ class Message extends SoapObject {
 		if ($this->apiIdent !== null) $gen->out->writeElementNs(self::TNS, 'apiIdent', null, $this->apiIdent);
 		if ($this->sender !== null) $gen->out->writeElementNs(self::TNS, 'sender', null, $this->sender);
 		if ($this->text !== null) $gen->out->writeElementNs(self::TNS, 'text', null, $this->text);
-		if ($this->createTimestamp !== null) $this->createTimestamp->write($gen, 'createTimestamp');
-		if ($this->deliverTimestamp !== null) $this->deliverTimestamp->write($gen, 'deliverTimestamp');
+		if ($this->createTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->createTimestamp))->write($gen, 'createTimestamp');
+		if ($this->deliverTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->deliverTimestamp))->write($gen, 'deliverTimestamp');
 		if ($this->branchNumber !== null) $gen->writeInt('branchNumber', $this->branchNumber);
 		if ($this->terminalNumber !== null) $gen->writeInt('terminalNumber', $this->terminalNumber);
 		if ($this->messageType !== null) $gen->out->writeElementNs(self::TNS, 'messageType', null, $this->messageType);
@@ -7362,27 +7401,27 @@ class Shift extends SoapObject {
 	public YearNumber $shiftNumber;
 	public int $branchNumber;
 	public ?string $extBranchId = null;
-	public SoapMplusDate $financialDate;
+	public \DateTime $financialDate;
 	public int $employeeNumber;
-	public SoapMplusDateTime $startTimestamp;
-	public SoapMplusDateTime $endTimestamp;
+	public \DateTime $startTimestamp;
+	public \DateTime $endTimestamp;
 	public bool $ended;
 	public bool $manuallyModified;
 	public ?string $reference = null;
 	public function __construct() {
 		$this->shiftNumber = new YearNumber();
-		$this->financialDate = new SoapMplusDate();
-		$this->startTimestamp = new SoapMplusDateTime();
-		$this->endTimestamp = new SoapMplusDateTime();
+		$this->financialDate = new \DateTime();
+		$this->startTimestamp = new \DateTime();
+		$this->endTimestamp = new \DateTime();
 	}
 	public function writeProps(SoapGenerator $gen): void {
 		$this->shiftNumber->write($gen, 'shiftNumber');
 		$gen->writeInt('branchNumber', $this->branchNumber);
 		if ($this->extBranchId !== null) $gen->out->writeElementNs(self::TNS, 'extBranchId', null, $this->extBranchId);
-		$this->financialDate->write($gen, 'financialDate');
+		(SoapMplusDate::fromDateTime($this->financialDate))->write($gen, 'financialDate');
 		$gen->writeInt('employeeNumber', $this->employeeNumber);
-		$this->startTimestamp->write($gen, 'startTimestamp');
-		$this->endTimestamp->write($gen, 'endTimestamp');
+		(SoapMplusDateTime::fromDateTime($this->startTimestamp))->write($gen, 'startTimestamp');
+		(SoapMplusDateTime::fromDateTime($this->endTimestamp))->write($gen, 'endTimestamp');
 		$gen->writeBool('ended', $this->ended);
 		$gen->writeBool('manuallyModified', $this->manuallyModified);
 		if ($this->reference !== null) $gen->out->writeElementNs(self::TNS, 'reference', null, $this->reference);
@@ -7413,17 +7452,17 @@ class GetShiftsRequest extends SoapObject {
 	public $branchNumbers = array();
 	/** @var int[] */
 	public $employeeNumbers = array();
-	public SoapMplusDate $fromFinancialDate;
-	public SoapMplusDate $throughFinancialDate;
+	public \DateTime $fromFinancialDate;
+	public \DateTime $throughFinancialDate;
 	public function __construct() {
-		$this->fromFinancialDate = new SoapMplusDate();
-		$this->throughFinancialDate = new SoapMplusDate();
+		$this->fromFinancialDate = new \DateTime();
+		$this->throughFinancialDate = new \DateTime();
 	}
 	public function writeProps(SoapGenerator $gen): void {
 		foreach ($this->branchNumbers as $elem) $gen->writeInt('branchNumbers', $elem);
 		foreach ($this->employeeNumbers as $elem) $gen->writeInt('employeeNumbers', $elem);
-		$this->fromFinancialDate->write($gen, 'fromFinancialDate');
-		$this->throughFinancialDate->write($gen, 'throughFinancialDate');
+		(SoapMplusDate::fromDateTime($this->fromFinancialDate))->write($gen, 'fromFinancialDate');
+		(SoapMplusDate::fromDateTime($this->throughFinancialDate))->write($gen, 'throughFinancialDate');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -7497,8 +7536,8 @@ class PurchaseOrderLine extends SoapObject {
 	public ?string $supplierArticleNumber = null;
 	public ?int $branchNumber = null;
 	public ?string $extBranchId = null;
-	public ?SoapMplusDate $deliveryDate = null;
-	public ?SoapMplusDate $deliveryDateEnd = null;
+	public ?\DateTime $deliveryDate = null;
+	public ?\DateTime $deliveryDateEnd = null;
 	public ?int $relationNumber = null;
 	public ?string $relationName = null;
 	public ?int $relationCategoryId = null;
@@ -7514,8 +7553,8 @@ class PurchaseOrderLine extends SoapObject {
 		if ($this->supplierArticleNumber !== null) $gen->out->writeElementNs(self::TNS, 'supplierArticleNumber', null, $this->supplierArticleNumber);
 		if ($this->branchNumber !== null) $gen->writeInt('branchNumber', $this->branchNumber);
 		if ($this->extBranchId !== null) $gen->out->writeElementNs(self::TNS, 'extBranchId', null, $this->extBranchId);
-		if ($this->deliveryDate !== null) $this->deliveryDate->write($gen, 'deliveryDate');
-		if ($this->deliveryDateEnd !== null) $this->deliveryDateEnd->write($gen, 'deliveryDateEnd');
+		if ($this->deliveryDate !== null) (SoapMplusDate::fromDateTime($this->deliveryDate))->write($gen, 'deliveryDate');
+		if ($this->deliveryDateEnd !== null) (SoapMplusDate::fromDateTime($this->deliveryDateEnd))->write($gen, 'deliveryDateEnd');
 		if ($this->relationNumber !== null) $gen->writeInt('relationNumber', $this->relationNumber);
 		if ($this->relationName !== null) $gen->out->writeElementNs(self::TNS, 'relationName', null, $this->relationName);
 		if ($this->relationCategoryId !== null) $gen->writeInt('relationCategoryId', $this->relationCategoryId);
@@ -7533,9 +7572,9 @@ class PurchaseOrderLine extends SoapObject {
 class PurchaseOrder extends SoapObject {
 	public ?YearNumber $purchaseOrderNumber = null;
 	public ?string $extPurchaseOrderId = null;
-	public ?SoapMplusDate $orderDate = null;
-	public ?SoapMplusDate $deliveryDate = null;
-	public ?SoapMplusDateTime $entryTimestamp = null;
+	public ?\DateTime $orderDate = null;
+	public ?\DateTime $deliveryDate = null;
+	public ?\DateTime $entryTimestamp = null;
 	public ?int $relationNumber = null;
 	public ?string $relationName = null;
 	public ?int $relationCategoryId = null;
@@ -7563,9 +7602,9 @@ class PurchaseOrder extends SoapObject {
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->purchaseOrderNumber !== null) $this->purchaseOrderNumber->write($gen, 'purchaseOrderNumber');
 		if ($this->extPurchaseOrderId !== null) $gen->out->writeElementNs(self::TNS, 'extPurchaseOrderId', null, $this->extPurchaseOrderId);
-		if ($this->orderDate !== null) $this->orderDate->write($gen, 'orderDate');
-		if ($this->deliveryDate !== null) $this->deliveryDate->write($gen, 'deliveryDate');
-		if ($this->entryTimestamp !== null) $this->entryTimestamp->write($gen, 'entryTimestamp');
+		if ($this->orderDate !== null) (SoapMplusDate::fromDateTime($this->orderDate))->write($gen, 'orderDate');
+		if ($this->deliveryDate !== null) (SoapMplusDate::fromDateTime($this->deliveryDate))->write($gen, 'deliveryDate');
+		if ($this->entryTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->entryTimestamp))->write($gen, 'entryTimestamp');
 		if ($this->relationNumber !== null) $gen->writeInt('relationNumber', $this->relationNumber);
 		if ($this->relationName !== null) $gen->out->writeElementNs(self::TNS, 'relationName', null, $this->relationName);
 		if ($this->relationCategoryId !== null) $gen->writeInt('relationCategoryId', $this->relationCategoryId);
@@ -7623,10 +7662,10 @@ class GetPurchaseOrdersRequest extends SoapObject {
 	public ?string $extPurchaseOrderId = null;
 	public ?int $syncMarker = null;
 	public ?int $syncMarkerLimit = null;
-	public ?SoapMplusDate $fromOrderDate = null;
-	public ?SoapMplusDate $throughOrderDate = null;
-	public ?SoapMplusDate $fromDeliveryDate = null;
-	public ?SoapMplusDate $throughDeliveryDate = null;
+	public ?\DateTime $fromOrderDate = null;
+	public ?\DateTime $throughOrderDate = null;
+	public ?\DateTime $fromDeliveryDate = null;
+	public ?\DateTime $throughDeliveryDate = null;
 	/** @var int[] */
 	public $branchNumbers = array();
 	/** @var int[] */
@@ -7649,10 +7688,10 @@ class GetPurchaseOrdersRequest extends SoapObject {
 		if ($this->extPurchaseOrderId !== null) $gen->out->writeElementNs(self::TNS, 'extPurchaseOrderId', null, $this->extPurchaseOrderId);
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
 		if ($this->syncMarkerLimit !== null) $gen->writeInt('syncMarkerLimit', $this->syncMarkerLimit);
-		if ($this->fromOrderDate !== null) $this->fromOrderDate->write($gen, 'fromOrderDate');
-		if ($this->throughOrderDate !== null) $this->throughOrderDate->write($gen, 'throughOrderDate');
-		if ($this->fromDeliveryDate !== null) $this->fromDeliveryDate->write($gen, 'fromDeliveryDate');
-		if ($this->throughDeliveryDate !== null) $this->throughDeliveryDate->write($gen, 'throughDeliveryDate');
+		if ($this->fromOrderDate !== null) (SoapMplusDate::fromDateTime($this->fromOrderDate))->write($gen, 'fromOrderDate');
+		if ($this->throughOrderDate !== null) (SoapMplusDate::fromDateTime($this->throughOrderDate))->write($gen, 'throughOrderDate');
+		if ($this->fromDeliveryDate !== null) (SoapMplusDate::fromDateTime($this->fromDeliveryDate))->write($gen, 'fromDeliveryDate');
+		if ($this->throughDeliveryDate !== null) (SoapMplusDate::fromDateTime($this->throughDeliveryDate))->write($gen, 'throughDeliveryDate');
 		foreach ($this->branchNumbers as $elem) $gen->writeInt('branchNumbers', $elem);
 		foreach ($this->employeeNumbers as $elem) $gen->writeInt('employeeNumbers', $elem);
 		foreach ($this->relationNumbers as $elem) $gen->writeInt('relationNumbers', $elem);
@@ -7765,8 +7804,8 @@ class PurchaseOrderV2Line extends SoapObject {
 	public ?string $supplierArticleNumber = null;
 	public ?int $branchNumber = null;
 	public ?string $extBranchId = null;
-	public ?SoapMplusDate $deliveryDate = null;
-	public ?SoapMplusDate $deliveryDateEnd = null;
+	public ?\DateTime $deliveryDate = null;
+	public ?\DateTime $deliveryDateEnd = null;
 	public ?int $relationNumber = null;
 	public ?string $relationName = null;
 	public ?int $relationCategoryId = null;
@@ -7783,8 +7822,8 @@ class PurchaseOrderV2Line extends SoapObject {
 		if ($this->supplierArticleNumber !== null) $gen->out->writeElementNs(self::TNS, 'supplierArticleNumber', null, $this->supplierArticleNumber);
 		if ($this->branchNumber !== null) $gen->writeInt('branchNumber', $this->branchNumber);
 		if ($this->extBranchId !== null) $gen->out->writeElementNs(self::TNS, 'extBranchId', null, $this->extBranchId);
-		if ($this->deliveryDate !== null) $this->deliveryDate->write($gen, 'deliveryDate');
-		if ($this->deliveryDateEnd !== null) $this->deliveryDateEnd->write($gen, 'deliveryDateEnd');
+		if ($this->deliveryDate !== null) (SoapMplusDate::fromDateTime($this->deliveryDate))->write($gen, 'deliveryDate');
+		if ($this->deliveryDateEnd !== null) (SoapMplusDate::fromDateTime($this->deliveryDateEnd))->write($gen, 'deliveryDateEnd');
 		if ($this->relationNumber !== null) $gen->writeInt('relationNumber', $this->relationNumber);
 		if ($this->relationName !== null) $gen->out->writeElementNs(self::TNS, 'relationName', null, $this->relationName);
 		if ($this->relationCategoryId !== null) $gen->writeInt('relationCategoryId', $this->relationCategoryId);
@@ -7802,9 +7841,9 @@ class PurchaseOrderV2Line extends SoapObject {
 class PurchaseOrderV2 extends SoapObject {
 	public ?YearNumber $purchaseOrderNumber = null;
 	public ?string $extPurchaseOrderId = null;
-	public ?SoapMplusDate $orderDate = null;
-	public ?SoapMplusDate $deliveryDate = null;
-	public ?SoapMplusDateTime $entryTimestamp = null;
+	public ?\DateTime $orderDate = null;
+	public ?\DateTime $deliveryDate = null;
+	public ?\DateTime $entryTimestamp = null;
 	public ?int $relationNumber = null;
 	public ?string $relationName = null;
 	public ?int $relationCategoryId = null;
@@ -7832,9 +7871,9 @@ class PurchaseOrderV2 extends SoapObject {
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->purchaseOrderNumber !== null) $this->purchaseOrderNumber->write($gen, 'purchaseOrderNumber');
 		if ($this->extPurchaseOrderId !== null) $gen->out->writeElementNs(self::TNS, 'extPurchaseOrderId', null, $this->extPurchaseOrderId);
-		if ($this->orderDate !== null) $this->orderDate->write($gen, 'orderDate');
-		if ($this->deliveryDate !== null) $this->deliveryDate->write($gen, 'deliveryDate');
-		if ($this->entryTimestamp !== null) $this->entryTimestamp->write($gen, 'entryTimestamp');
+		if ($this->orderDate !== null) (SoapMplusDate::fromDateTime($this->orderDate))->write($gen, 'orderDate');
+		if ($this->deliveryDate !== null) (SoapMplusDate::fromDateTime($this->deliveryDate))->write($gen, 'deliveryDate');
+		if ($this->entryTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->entryTimestamp))->write($gen, 'entryTimestamp');
 		if ($this->relationNumber !== null) $gen->writeInt('relationNumber', $this->relationNumber);
 		if ($this->relationName !== null) $gen->out->writeElementNs(self::TNS, 'relationName', null, $this->relationName);
 		if ($this->relationCategoryId !== null) $gen->writeInt('relationCategoryId', $this->relationCategoryId);
@@ -7892,10 +7931,10 @@ class GetPurchaseOrdersV2Request extends SoapObject {
 	public ?string $extPurchaseOrderId = null;
 	public ?int $syncMarker = null;
 	public ?int $syncMarkerLimit = null;
-	public ?SoapMplusDate $fromOrderDate = null;
-	public ?SoapMplusDate $throughOrderDate = null;
-	public ?SoapMplusDate $fromDeliveryDate = null;
-	public ?SoapMplusDate $throughDeliveryDate = null;
+	public ?\DateTime $fromOrderDate = null;
+	public ?\DateTime $throughOrderDate = null;
+	public ?\DateTime $fromDeliveryDate = null;
+	public ?\DateTime $throughDeliveryDate = null;
 	/** @var int[] */
 	public $branchNumbers = array();
 	/** @var int[] */
@@ -7918,10 +7957,10 @@ class GetPurchaseOrdersV2Request extends SoapObject {
 		if ($this->extPurchaseOrderId !== null) $gen->out->writeElementNs(self::TNS, 'extPurchaseOrderId', null, $this->extPurchaseOrderId);
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
 		if ($this->syncMarkerLimit !== null) $gen->writeInt('syncMarkerLimit', $this->syncMarkerLimit);
-		if ($this->fromOrderDate !== null) $this->fromOrderDate->write($gen, 'fromOrderDate');
-		if ($this->throughOrderDate !== null) $this->throughOrderDate->write($gen, 'throughOrderDate');
-		if ($this->fromDeliveryDate !== null) $this->fromDeliveryDate->write($gen, 'fromDeliveryDate');
-		if ($this->throughDeliveryDate !== null) $this->throughDeliveryDate->write($gen, 'throughDeliveryDate');
+		if ($this->fromOrderDate !== null) (SoapMplusDate::fromDateTime($this->fromOrderDate))->write($gen, 'fromOrderDate');
+		if ($this->throughOrderDate !== null) (SoapMplusDate::fromDateTime($this->throughOrderDate))->write($gen, 'throughOrderDate');
+		if ($this->fromDeliveryDate !== null) (SoapMplusDate::fromDateTime($this->fromDeliveryDate))->write($gen, 'fromDeliveryDate');
+		if ($this->throughDeliveryDate !== null) (SoapMplusDate::fromDateTime($this->throughDeliveryDate))->write($gen, 'throughDeliveryDate');
 		foreach ($this->branchNumbers as $elem) $gen->writeInt('branchNumbers', $elem);
 		foreach ($this->employeeNumbers as $elem) $gen->writeInt('employeeNumbers', $elem);
 		foreach ($this->relationNumbers as $elem) $gen->writeInt('relationNumbers', $elem);
@@ -7994,8 +8033,8 @@ class SavePurchaseOrderV2Line extends SoapObject {
 	public ?string $pluNumber = null;
 	public ?string $text = null;
 	public ?int $branchNumber = null;
-	public ?SoapMplusDate $deliveryDate = null;
-	public ?SoapMplusDate $deliveryDateEnd = null;
+	public ?\DateTime $deliveryDate = null;
+	public ?\DateTime $deliveryDateEnd = null;
 	public ?int $relationNumber = null;
 	public ?string $orderText = null;
 	public ?SavePurchaseOrderV2LineData $data = null;
@@ -8006,8 +8045,8 @@ class SavePurchaseOrderV2Line extends SoapObject {
 		if ($this->pluNumber !== null) $gen->out->writeElementNs(self::TNS, 'pluNumber', null, $this->pluNumber);
 		if ($this->text !== null) $gen->out->writeElementNs(self::TNS, 'text', null, $this->text);
 		if ($this->branchNumber !== null) $gen->writeInt('branchNumber', $this->branchNumber);
-		if ($this->deliveryDate !== null) $this->deliveryDate->write($gen, 'deliveryDate');
-		if ($this->deliveryDateEnd !== null) $this->deliveryDateEnd->write($gen, 'deliveryDateEnd');
+		if ($this->deliveryDate !== null) (SoapMplusDate::fromDateTime($this->deliveryDate))->write($gen, 'deliveryDate');
+		if ($this->deliveryDateEnd !== null) (SoapMplusDate::fromDateTime($this->deliveryDateEnd))->write($gen, 'deliveryDateEnd');
 		if ($this->relationNumber !== null) $gen->writeInt('relationNumber', $this->relationNumber);
 		if ($this->orderText !== null) $gen->out->writeElementNs(self::TNS, 'orderText', null, $this->orderText);
 		if ($this->data !== null) $this->data->write($gen, 'data');
@@ -8024,8 +8063,8 @@ class SavePurchaseOrderV2Line extends SoapObject {
 class SavePurchaseOrderV2 extends SoapObject {
 	public ?YearNumber $purchaseOrderNumber = null;
 	public ?string $extPurchaseOrderId = null;
-	public ?SoapMplusDate $orderDate = null;
-	public ?SoapMplusDate $deliveryDate = null;
+	public ?\DateTime $orderDate = null;
+	public ?\DateTime $deliveryDate = null;
 	public ?int $relationNumber = null;
 	public ?int $branchNumber = null;
 	public ?int $employeeNumber = null;
@@ -8039,8 +8078,8 @@ class SavePurchaseOrderV2 extends SoapObject {
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->purchaseOrderNumber !== null) $this->purchaseOrderNumber->write($gen, 'purchaseOrderNumber');
 		if ($this->extPurchaseOrderId !== null) $gen->out->writeElementNs(self::TNS, 'extPurchaseOrderId', null, $this->extPurchaseOrderId);
-		if ($this->orderDate !== null) $this->orderDate->write($gen, 'orderDate');
-		if ($this->deliveryDate !== null) $this->deliveryDate->write($gen, 'deliveryDate');
+		if ($this->orderDate !== null) (SoapMplusDate::fromDateTime($this->orderDate))->write($gen, 'orderDate');
+		if ($this->deliveryDate !== null) (SoapMplusDate::fromDateTime($this->deliveryDate))->write($gen, 'deliveryDate');
 		if ($this->relationNumber !== null) $gen->writeInt('relationNumber', $this->relationNumber);
 		if ($this->branchNumber !== null) $gen->writeInt('branchNumber', $this->branchNumber);
 		if ($this->employeeNumber !== null) $gen->writeInt('employeeNumber', $this->employeeNumber);
@@ -8193,8 +8232,8 @@ class PurchaseDeliveryLine extends SoapObject {
 class PurchaseDelivery extends SoapObject {
 	public ?YearNumber $purchaseDeliveryNumber = null;
 	public ?string $extPurchaseDeliveryId = null;
-	public ?SoapMplusDate $deliveryDate = null;
-	public ?SoapMplusDateTime $entryTimestamp = null;
+	public ?\DateTime $deliveryDate = null;
+	public ?\DateTime $entryTimestamp = null;
 	public ?int $relationNumber = null;
 	public ?string $relationName = null;
 	public ?int $relationCategoryId = null;
@@ -8219,8 +8258,8 @@ class PurchaseDelivery extends SoapObject {
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->purchaseDeliveryNumber !== null) $this->purchaseDeliveryNumber->write($gen, 'purchaseDeliveryNumber');
 		if ($this->extPurchaseDeliveryId !== null) $gen->out->writeElementNs(self::TNS, 'extPurchaseDeliveryId', null, $this->extPurchaseDeliveryId);
-		if ($this->deliveryDate !== null) $this->deliveryDate->write($gen, 'deliveryDate');
-		if ($this->entryTimestamp !== null) $this->entryTimestamp->write($gen, 'entryTimestamp');
+		if ($this->deliveryDate !== null) (SoapMplusDate::fromDateTime($this->deliveryDate))->write($gen, 'deliveryDate');
+		if ($this->entryTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->entryTimestamp))->write($gen, 'entryTimestamp');
 		if ($this->relationNumber !== null) $gen->writeInt('relationNumber', $this->relationNumber);
 		if ($this->relationName !== null) $gen->out->writeElementNs(self::TNS, 'relationName', null, $this->relationName);
 		if ($this->relationCategoryId !== null) $gen->writeInt('relationCategoryId', $this->relationCategoryId);
@@ -8271,8 +8310,8 @@ class PurchaseDeliveryList extends SoapObject {
 class GetPurchaseDeliveriesRequest extends SoapObject {
 	public ?int $syncMarker = null;
 	public ?int $syncMarkerLimit = null;
-	public ?SoapMplusDate $fromDeliveryDate = null;
-	public ?SoapMplusDate $throughDeliveryDate = null;
+	public ?\DateTime $fromDeliveryDate = null;
+	public ?\DateTime $throughDeliveryDate = null;
 	/** @var int[] */
 	public $branchNumbers = array();
 	/** @var int[] */
@@ -8291,8 +8330,8 @@ class GetPurchaseDeliveriesRequest extends SoapObject {
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
 		if ($this->syncMarkerLimit !== null) $gen->writeInt('syncMarkerLimit', $this->syncMarkerLimit);
-		if ($this->fromDeliveryDate !== null) $this->fromDeliveryDate->write($gen, 'fromDeliveryDate');
-		if ($this->throughDeliveryDate !== null) $this->throughDeliveryDate->write($gen, 'throughDeliveryDate');
+		if ($this->fromDeliveryDate !== null) (SoapMplusDate::fromDateTime($this->fromDeliveryDate))->write($gen, 'fromDeliveryDate');
+		if ($this->throughDeliveryDate !== null) (SoapMplusDate::fromDateTime($this->throughDeliveryDate))->write($gen, 'throughDeliveryDate');
 		foreach ($this->branchNumbers as $elem) $gen->writeInt('branchNumbers', $elem);
 		foreach ($this->employeeNumbers as $elem) $gen->writeInt('employeeNumbers', $elem);
 		foreach ($this->relationNumbers as $elem) $gen->writeInt('relationNumbers', $elem);
@@ -8435,8 +8474,8 @@ class PurchaseDeliveryV2Line extends SoapObject {
 class PurchaseDeliveryV2 extends SoapObject {
 	public ?YearNumber $purchaseDeliveryNumber = null;
 	public ?string $extPurchaseDeliveryId = null;
-	public ?SoapMplusDate $deliveryDate = null;
-	public ?SoapMplusDateTime $entryTimestamp = null;
+	public ?\DateTime $deliveryDate = null;
+	public ?\DateTime $entryTimestamp = null;
 	public ?int $relationNumber = null;
 	public ?string $relationName = null;
 	public ?int $relationCategoryId = null;
@@ -8461,8 +8500,8 @@ class PurchaseDeliveryV2 extends SoapObject {
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->purchaseDeliveryNumber !== null) $this->purchaseDeliveryNumber->write($gen, 'purchaseDeliveryNumber');
 		if ($this->extPurchaseDeliveryId !== null) $gen->out->writeElementNs(self::TNS, 'extPurchaseDeliveryId', null, $this->extPurchaseDeliveryId);
-		if ($this->deliveryDate !== null) $this->deliveryDate->write($gen, 'deliveryDate');
-		if ($this->entryTimestamp !== null) $this->entryTimestamp->write($gen, 'entryTimestamp');
+		if ($this->deliveryDate !== null) (SoapMplusDate::fromDateTime($this->deliveryDate))->write($gen, 'deliveryDate');
+		if ($this->entryTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->entryTimestamp))->write($gen, 'entryTimestamp');
 		if ($this->relationNumber !== null) $gen->writeInt('relationNumber', $this->relationNumber);
 		if ($this->relationName !== null) $gen->out->writeElementNs(self::TNS, 'relationName', null, $this->relationName);
 		if ($this->relationCategoryId !== null) $gen->writeInt('relationCategoryId', $this->relationCategoryId);
@@ -8501,8 +8540,8 @@ class GetPurchaseDeliveriesV2Request extends SoapObject {
 	public ?string $extPurchaseDeliveryId = null;
 	public ?int $syncMarker = null;
 	public ?int $syncMarkerLimit = null;
-	public ?SoapMplusDate $fromDeliveryDate = null;
-	public ?SoapMplusDate $throughDeliveryDate = null;
+	public ?\DateTime $fromDeliveryDate = null;
+	public ?\DateTime $throughDeliveryDate = null;
 	/** @var int[] */
 	public $branchNumbers = array();
 	/** @var int[] */
@@ -8523,8 +8562,8 @@ class GetPurchaseDeliveriesV2Request extends SoapObject {
 		if ($this->extPurchaseDeliveryId !== null) $gen->out->writeElementNs(self::TNS, 'extPurchaseDeliveryId', null, $this->extPurchaseDeliveryId);
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
 		if ($this->syncMarkerLimit !== null) $gen->writeInt('syncMarkerLimit', $this->syncMarkerLimit);
-		if ($this->fromDeliveryDate !== null) $this->fromDeliveryDate->write($gen, 'fromDeliveryDate');
-		if ($this->throughDeliveryDate !== null) $this->throughDeliveryDate->write($gen, 'throughDeliveryDate');
+		if ($this->fromDeliveryDate !== null) (SoapMplusDate::fromDateTime($this->fromDeliveryDate))->write($gen, 'fromDeliveryDate');
+		if ($this->throughDeliveryDate !== null) (SoapMplusDate::fromDateTime($this->throughDeliveryDate))->write($gen, 'throughDeliveryDate');
 		foreach ($this->branchNumbers as $elem) $gen->writeInt('branchNumbers', $elem);
 		foreach ($this->employeeNumbers as $elem) $gen->writeInt('employeeNumbers', $elem);
 		foreach ($this->relationNumbers as $elem) $gen->writeInt('relationNumbers', $elem);
@@ -8613,8 +8652,8 @@ class SavePurchaseDeliveryV2Line extends SoapObject {
 	public ?string $pluNumber = null;
 	public ?string $text = null;
 	public ?int $branchNumber = null;
-	public ?SoapMplusDate $deliveryDate = null;
-	public ?SoapMplusDate $deliveryDateEnd = null;
+	public ?\DateTime $deliveryDate = null;
+	public ?\DateTime $deliveryDateEnd = null;
 	public ?int $relationNumber = null;
 	public ?string $orderText = null;
 	public ?SavePurchaseDeliveryV2LineData $data = null;
@@ -8626,8 +8665,8 @@ class SavePurchaseDeliveryV2Line extends SoapObject {
 		if ($this->pluNumber !== null) $gen->out->writeElementNs(self::TNS, 'pluNumber', null, $this->pluNumber);
 		if ($this->text !== null) $gen->out->writeElementNs(self::TNS, 'text', null, $this->text);
 		if ($this->branchNumber !== null) $gen->writeInt('branchNumber', $this->branchNumber);
-		if ($this->deliveryDate !== null) $this->deliveryDate->write($gen, 'deliveryDate');
-		if ($this->deliveryDateEnd !== null) $this->deliveryDateEnd->write($gen, 'deliveryDateEnd');
+		if ($this->deliveryDate !== null) (SoapMplusDate::fromDateTime($this->deliveryDate))->write($gen, 'deliveryDate');
+		if ($this->deliveryDateEnd !== null) (SoapMplusDate::fromDateTime($this->deliveryDateEnd))->write($gen, 'deliveryDateEnd');
 		if ($this->relationNumber !== null) $gen->writeInt('relationNumber', $this->relationNumber);
 		if ($this->orderText !== null) $gen->out->writeElementNs(self::TNS, 'orderText', null, $this->orderText);
 		if ($this->data !== null) $this->data->write($gen, 'data');
@@ -8644,7 +8683,7 @@ class SavePurchaseDeliveryV2Line extends SoapObject {
 class SavePurchaseDeliveryV2 extends SoapObject {
 	public ?YearNumber $purchaseDeliveryNumber = null;
 	public ?string $extPurchaseDeliveryId = null;
-	public ?SoapMplusDate $deliveryDate = null;
+	public ?\DateTime $deliveryDate = null;
 	public ?int $relationNumber = null;
 	public ?int $branchNumber = null;
 	public ?int $employeeNumber = null;
@@ -8658,7 +8697,7 @@ class SavePurchaseDeliveryV2 extends SoapObject {
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->purchaseDeliveryNumber !== null) $this->purchaseDeliveryNumber->write($gen, 'purchaseDeliveryNumber');
 		if ($this->extPurchaseDeliveryId !== null) $gen->out->writeElementNs(self::TNS, 'extPurchaseDeliveryId', null, $this->extPurchaseDeliveryId);
-		if ($this->deliveryDate !== null) $this->deliveryDate->write($gen, 'deliveryDate');
+		if ($this->deliveryDate !== null) (SoapMplusDate::fromDateTime($this->deliveryDate))->write($gen, 'deliveryDate');
 		if ($this->relationNumber !== null) $gen->writeInt('relationNumber', $this->relationNumber);
 		if ($this->branchNumber !== null) $gen->writeInt('branchNumber', $this->branchNumber);
 		if ($this->employeeNumber !== null) $gen->writeInt('employeeNumber', $this->employeeNumber);
@@ -8826,8 +8865,8 @@ class RetailSpaceRental extends SoapObject {
 	public ?string $retailSpaceRentalBankAccountNumber = null;
 	public ?string $retailSpaceRentalPhoneNumber = null;
 	public ?string $retailSpaceRentalEmailAddress = null;
-	public ?SoapMplusDate $retailSpaceRentalStartDate = null;
-	public ?SoapMplusDate $retailSpaceRentalEndDate = null;
+	public ?\DateTime $retailSpaceRentalStartDate = null;
+	public ?\DateTime $retailSpaceRentalEndDate = null;
 	public int $retailSpaceRentalTotalSales;
 	public int $retailSpaceRentalTotalPaidOut;
 	public int $retailSpaceRentalBalance;
@@ -8843,8 +8882,8 @@ class RetailSpaceRental extends SoapObject {
 		if ($this->retailSpaceRentalBankAccountNumber !== null) $gen->out->writeElementNs(self::TNS, 'retailSpaceRentalBankAccountNumber', null, $this->retailSpaceRentalBankAccountNumber);
 		if ($this->retailSpaceRentalPhoneNumber !== null) $gen->out->writeElementNs(self::TNS, 'retailSpaceRentalPhoneNumber', null, $this->retailSpaceRentalPhoneNumber);
 		if ($this->retailSpaceRentalEmailAddress !== null) $gen->out->writeElementNs(self::TNS, 'retailSpaceRentalEmailAddress', null, $this->retailSpaceRentalEmailAddress);
-		if ($this->retailSpaceRentalStartDate !== null) $this->retailSpaceRentalStartDate->write($gen, 'retailSpaceRentalStartDate');
-		if ($this->retailSpaceRentalEndDate !== null) $this->retailSpaceRentalEndDate->write($gen, 'retailSpaceRentalEndDate');
+		if ($this->retailSpaceRentalStartDate !== null) (SoapMplusDate::fromDateTime($this->retailSpaceRentalStartDate))->write($gen, 'retailSpaceRentalStartDate');
+		if ($this->retailSpaceRentalEndDate !== null) (SoapMplusDate::fromDateTime($this->retailSpaceRentalEndDate))->write($gen, 'retailSpaceRentalEndDate');
 		$gen->writeInt('retailSpaceRentalTotalSales', $this->retailSpaceRentalTotalSales);
 		$gen->writeInt('retailSpaceRentalTotalPaidOut', $this->retailSpaceRentalTotalPaidOut);
 		$gen->writeInt('retailSpaceRentalBalance', $this->retailSpaceRentalBalance);
@@ -9456,7 +9495,7 @@ class KitchenTicketCourse extends SoapObject {
 	public bool $isStarted;
 	public bool $isCompletelyReady;
 	public bool $isCompletelyServed;
-	public ?SoapMplusDateTime $startTimestamp = null;
+	public ?\DateTime $startTimestamp = null;
 	public ?int $startVersionNumber = null;
 	public ?bool $startedThroughLine = null;
 	/** @var KitchenTicketLine[] */
@@ -9470,7 +9509,7 @@ class KitchenTicketCourse extends SoapObject {
 		$gen->writeBool('isStarted', $this->isStarted);
 		$gen->writeBool('isCompletelyReady', $this->isCompletelyReady);
 		$gen->writeBool('isCompletelyServed', $this->isCompletelyServed);
-		if ($this->startTimestamp !== null) $this->startTimestamp->write($gen, 'startTimestamp');
+		if ($this->startTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->startTimestamp))->write($gen, 'startTimestamp');
 		if ($this->startVersionNumber !== null) $gen->writeInt('startVersionNumber', $this->startVersionNumber);
 		if ($this->startedThroughLine !== null) $gen->writeBool('startedThroughLine', $this->startedThroughLine);
 		$tmp_kitchenTicketLineList = new KitchenTicketLineList($this->kitchenTicketLineList);
@@ -9501,8 +9540,8 @@ class KitchenTicketCourseList extends SoapObject {
 class KitchenTicket extends SoapObject {
 	public string $kitchenTicketId;
 	public int $versionNumber;
-	public SoapMplusDateTime $entryTimestamp;
-	public SoapMplusDateTime $changeTimestamp;
+	public \DateTime $entryTimestamp;
+	public \DateTime $changeTimestamp;
 	public string $state;
 	public string $orderId;
 	public int $branchNumber;
@@ -9516,20 +9555,20 @@ class KitchenTicket extends SoapObject {
 	public int $employeeNumber;
 	public ?int $relationNumber = null;
 	public bool $isVip;
-	public ?SoapMplusDateTime $plannedDeliveryTimestamp = null;
-	public ?SoapMplusDateTime $snoozeTimestamp = null;
+	public ?\DateTime $plannedDeliveryTimestamp = null;
+	public ?\DateTime $snoozeTimestamp = null;
 	public ?int $snoozeDuration = null;
 	/** @var KitchenTicketCourse[] */
 	public $kitchenTicketCourseList = array();
 	public function __construct() {
-		$this->entryTimestamp = new SoapMplusDateTime();
-		$this->changeTimestamp = new SoapMplusDateTime();
+		$this->entryTimestamp = new \DateTime();
+		$this->changeTimestamp = new \DateTime();
 	}
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'kitchenTicketId', null, $this->kitchenTicketId);
 		$gen->writeInt('versionNumber', $this->versionNumber);
-		$this->entryTimestamp->write($gen, 'entryTimestamp');
-		$this->changeTimestamp->write($gen, 'changeTimestamp');
+		(SoapMplusDateTime::fromDateTime($this->entryTimestamp))->write($gen, 'entryTimestamp');
+		(SoapMplusDateTime::fromDateTime($this->changeTimestamp))->write($gen, 'changeTimestamp');
 		$gen->out->writeElementNs(self::TNS, 'state', null, $this->state);
 		$gen->out->writeElementNs(self::TNS, 'orderId', null, $this->orderId);
 		$gen->writeInt('branchNumber', $this->branchNumber);
@@ -9543,8 +9582,8 @@ class KitchenTicket extends SoapObject {
 		$gen->writeInt('employeeNumber', $this->employeeNumber);
 		if ($this->relationNumber !== null) $gen->writeInt('relationNumber', $this->relationNumber);
 		$gen->writeBool('isVip', $this->isVip);
-		if ($this->plannedDeliveryTimestamp !== null) $this->plannedDeliveryTimestamp->write($gen, 'plannedDeliveryTimestamp');
-		if ($this->snoozeTimestamp !== null) $this->snoozeTimestamp->write($gen, 'snoozeTimestamp');
+		if ($this->plannedDeliveryTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->plannedDeliveryTimestamp))->write($gen, 'plannedDeliveryTimestamp');
+		if ($this->snoozeTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->snoozeTimestamp))->write($gen, 'snoozeTimestamp');
 		if ($this->snoozeDuration !== null) $gen->writeInt('snoozeDuration', $this->snoozeDuration);
 		$tmp_kitchenTicketCourseList = new KitchenTicketCourseList($this->kitchenTicketCourseList);
 $tmp_kitchenTicketCourseList->write($gen, 'kitchenTicketCourseList');
@@ -11329,13 +11368,13 @@ class LogMistakeResponse extends SoapObject {
 class CreateRelationResponse extends SoapObject {
 	public string $result;
 	public int $relationNumber;
-	public ?SoapMplusDateTime $changeTimestamp = null;
+	public ?\DateTime $changeTimestamp = null;
 	public ?int $syncMarker = null;
 	public string $errorMessage;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
 		$gen->writeInt('relationNumber', $this->relationNumber);
-		if ($this->changeTimestamp !== null) $this->changeTimestamp->write($gen, 'changeTimestamp');
+		if ($this->changeTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->changeTimestamp))->write($gen, 'changeTimestamp');
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
 		$gen->out->writeElementNs(self::TNS, 'errorMessage', null, $this->errorMessage);
 	}
@@ -11349,12 +11388,12 @@ class CreateRelationResponse extends SoapObject {
 class UpdateRelationResponse extends SoapObject {
 	public string $result;
 	public string $errorMessage;
-	public ?SoapMplusDateTime $changeTimestamp = null;
+	public ?\DateTime $changeTimestamp = null;
 	public ?int $syncMarker = null;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
 		$gen->out->writeElementNs(self::TNS, 'errorMessage', null, $this->errorMessage);
-		if ($this->changeTimestamp !== null) $this->changeTimestamp->write($gen, 'changeTimestamp');
+		if ($this->changeTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->changeTimestamp))->write($gen, 'changeTimestamp');
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
@@ -11567,13 +11606,13 @@ class FindEmployeeResponse extends SoapObject {
 class CreateEmployeeResponse extends SoapObject {
 	public string $result;
 	public int $employeeNumber;
-	public ?SoapMplusDateTime $changeTimestamp = null;
+	public ?\DateTime $changeTimestamp = null;
 	public ?int $syncMarker = null;
 	public string $errorMessage;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
 		$gen->writeInt('employeeNumber', $this->employeeNumber);
-		if ($this->changeTimestamp !== null) $this->changeTimestamp->write($gen, 'changeTimestamp');
+		if ($this->changeTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->changeTimestamp))->write($gen, 'changeTimestamp');
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
 		$gen->out->writeElementNs(self::TNS, 'errorMessage', null, $this->errorMessage);
 	}
@@ -11587,12 +11626,12 @@ class CreateEmployeeResponse extends SoapObject {
 class UpdateEmployeeResponse extends SoapObject {
 	public string $result;
 	public string $errorMessage;
-	public ?SoapMplusDateTime $changeTimestamp = null;
+	public ?\DateTime $changeTimestamp = null;
 	public ?int $syncMarker = null;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
 		$gen->out->writeElementNs(self::TNS, 'errorMessage', null, $this->errorMessage);
-		if ($this->changeTimestamp !== null) $this->changeTimestamp->write($gen, 'changeTimestamp');
+		if ($this->changeTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->changeTimestamp))->write($gen, 'changeTimestamp');
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
@@ -12424,14 +12463,14 @@ class CreateProductResponse extends SoapObject {
 	public int $productNumber;
 	/** @var int[] */
 	public $articleNumbers = array();
-	public ?SoapMplusDateTime $changeTimestamp = null;
+	public ?\DateTime $changeTimestamp = null;
 	public ?int $syncMarker = null;
 	public string $errorMessage;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
 		$gen->writeInt('productNumber', $this->productNumber);
 		foreach ($this->articleNumbers as $elem) $gen->writeInt('articleNumbers', $elem);
-		if ($this->changeTimestamp !== null) $this->changeTimestamp->write($gen, 'changeTimestamp');
+		if ($this->changeTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->changeTimestamp))->write($gen, 'changeTimestamp');
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
 		$gen->out->writeElementNs(self::TNS, 'errorMessage', null, $this->errorMessage);
 	}
@@ -12448,14 +12487,14 @@ class UpdateProductResponse extends SoapObject {
 	public $existingArticleNumbers = array();
 	/** @var int[] */
 	public $newArticleNumbers = array();
-	public ?SoapMplusDateTime $changeTimestamp = null;
+	public ?\DateTime $changeTimestamp = null;
 	public ?int $syncMarker = null;
 	public string $errorMessage;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
 		foreach ($this->existingArticleNumbers as $elem) $gen->writeInt('existingArticleNumbers', $elem);
 		foreach ($this->newArticleNumbers as $elem) $gen->writeInt('newArticleNumbers', $elem);
-		if ($this->changeTimestamp !== null) $this->changeTimestamp->write($gen, 'changeTimestamp');
+		if ($this->changeTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->changeTimestamp))->write($gen, 'changeTimestamp');
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
 		$gen->out->writeElementNs(self::TNS, 'errorMessage', null, $this->errorMessage);
 	}
@@ -14052,7 +14091,7 @@ class Configuration extends SoapObject {
 	public ?string $defaultValue = null;
 	public ?string $value = null;
 	public ?int $mediaFileId = null;
-	public ?SoapMplusDateTime $changedTimestamp = null;
+	public ?\DateTime $changedTimestamp = null;
 	/** @var Configuration[] */
 	public $configurationList = null;
 	public string $per;
@@ -14069,7 +14108,7 @@ class Configuration extends SoapObject {
 		if ($this->defaultValue !== null) $gen->out->writeElementNs(self::TNS, 'defaultValue', null, $this->defaultValue);
 		if ($this->value !== null) $gen->out->writeElementNs(self::TNS, 'value', null, $this->value);
 		if ($this->mediaFileId !== null) $gen->writeInt('mediaFileId', $this->mediaFileId);
-		if ($this->changedTimestamp !== null) $this->changedTimestamp->write($gen, 'changedTimestamp');
+		if ($this->changedTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->changedTimestamp))->write($gen, 'changedTimestamp');
 		if ($this->configurationList !== null) {
 $tmp_configurationList = new ConfigurationList($this->configurationList);
 $tmp_configurationList->write($gen, 'configurationList');
@@ -14867,44 +14906,44 @@ $tmp_saveDayStockConfigurationList->write($gen, 'saveDayStockConfigurationList')
 class Activity extends SoapObject {
 	public string $activityId;
 	public int $syncMarker;
-	public SoapMplusDateTime $createTimestamp;
-	public SoapMplusDateTime $changeTimestamp;
+	public \DateTime $createTimestamp;
+	public \DateTime $changeTimestamp;
 	public ?string $activityNumber = null;
 	public ?string $description = null;
 	public ?int $interfaceLayoutId = null;
 	public ?int $articleLayoutId = null;
 	public ?string $location = null;
 	public ?int $priceGroupNumber = null;
-	public SoapMplusDateTime $employeeStartTimestamp;
-	public SoapMplusDateTime $employeeEndTimestamp;
-	public SoapMplusDateTime $managerStartTimestamp;
-	public SoapMplusDateTime $managerEndTimestamp;
+	public \DateTime $employeeStartTimestamp;
+	public \DateTime $employeeEndTimestamp;
+	public \DateTime $managerStartTimestamp;
+	public \DateTime $managerEndTimestamp;
 	public bool $isDeleted;
 	public ?int $activityTypeId = null;
 	public ?string $activityTypeDescription = null;
 	public function __construct() {
-		$this->createTimestamp = new SoapMplusDateTime();
-		$this->changeTimestamp = new SoapMplusDateTime();
-		$this->employeeStartTimestamp = new SoapMplusDateTime();
-		$this->employeeEndTimestamp = new SoapMplusDateTime();
-		$this->managerStartTimestamp = new SoapMplusDateTime();
-		$this->managerEndTimestamp = new SoapMplusDateTime();
+		$this->createTimestamp = new \DateTime();
+		$this->changeTimestamp = new \DateTime();
+		$this->employeeStartTimestamp = new \DateTime();
+		$this->employeeEndTimestamp = new \DateTime();
+		$this->managerStartTimestamp = new \DateTime();
+		$this->managerEndTimestamp = new \DateTime();
 	}
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'activityId', null, $this->activityId);
 		$gen->writeInt('syncMarker', $this->syncMarker);
-		$this->createTimestamp->write($gen, 'createTimestamp');
-		$this->changeTimestamp->write($gen, 'changeTimestamp');
+		(SoapMplusDateTime::fromDateTime($this->createTimestamp))->write($gen, 'createTimestamp');
+		(SoapMplusDateTime::fromDateTime($this->changeTimestamp))->write($gen, 'changeTimestamp');
 		if ($this->activityNumber !== null) $gen->out->writeElementNs(self::TNS, 'activityNumber', null, $this->activityNumber);
 		if ($this->description !== null) $gen->out->writeElementNs(self::TNS, 'description', null, $this->description);
 		if ($this->interfaceLayoutId !== null) $gen->writeInt('interfaceLayoutId', $this->interfaceLayoutId);
 		if ($this->articleLayoutId !== null) $gen->writeInt('articleLayoutId', $this->articleLayoutId);
 		if ($this->location !== null) $gen->out->writeElementNs(self::TNS, 'location', null, $this->location);
 		if ($this->priceGroupNumber !== null) $gen->writeInt('priceGroupNumber', $this->priceGroupNumber);
-		$this->employeeStartTimestamp->write($gen, 'employeeStartTimestamp');
-		$this->employeeEndTimestamp->write($gen, 'employeeEndTimestamp');
-		$this->managerStartTimestamp->write($gen, 'managerStartTimestamp');
-		$this->managerEndTimestamp->write($gen, 'managerEndTimestamp');
+		(SoapMplusDateTime::fromDateTime($this->employeeStartTimestamp))->write($gen, 'employeeStartTimestamp');
+		(SoapMplusDateTime::fromDateTime($this->employeeEndTimestamp))->write($gen, 'employeeEndTimestamp');
+		(SoapMplusDateTime::fromDateTime($this->managerStartTimestamp))->write($gen, 'managerStartTimestamp');
+		(SoapMplusDateTime::fromDateTime($this->managerEndTimestamp))->write($gen, 'managerEndTimestamp');
 		$gen->writeBool('isDeleted', $this->isDeleted);
 		if ($this->activityTypeId !== null) $gen->writeInt('activityTypeId', $this->activityTypeId);
 		if ($this->activityTypeDescription !== null) $gen->out->writeElementNs(self::TNS, 'activityTypeDescription', null, $this->activityTypeDescription);
@@ -15039,16 +15078,16 @@ class CreateActivity extends SoapObject {
 	public ?int $articleLayoutId = null;
 	public ?string $location = null;
 	public ?int $priceGroupNumber = null;
-	public SoapMplusDateTime $employeeStartTimestamp;
-	public SoapMplusDateTime $employeeEndTimestamp;
-	public SoapMplusDateTime $managerStartTimestamp;
-	public SoapMplusDateTime $managerEndTimestamp;
+	public \DateTime $employeeStartTimestamp;
+	public \DateTime $employeeEndTimestamp;
+	public \DateTime $managerStartTimestamp;
+	public \DateTime $managerEndTimestamp;
 	public ?int $activityTypeId = null;
 	public function __construct() {
-		$this->employeeStartTimestamp = new SoapMplusDateTime();
-		$this->employeeEndTimestamp = new SoapMplusDateTime();
-		$this->managerStartTimestamp = new SoapMplusDateTime();
-		$this->managerEndTimestamp = new SoapMplusDateTime();
+		$this->employeeStartTimestamp = new \DateTime();
+		$this->employeeEndTimestamp = new \DateTime();
+		$this->managerStartTimestamp = new \DateTime();
+		$this->managerEndTimestamp = new \DateTime();
 	}
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'activityNumber', null, $this->activityNumber);
@@ -15057,10 +15096,10 @@ class CreateActivity extends SoapObject {
 		if ($this->articleLayoutId !== null) $gen->writeInt('articleLayoutId', $this->articleLayoutId);
 		if ($this->location !== null) $gen->out->writeElementNs(self::TNS, 'location', null, $this->location);
 		if ($this->priceGroupNumber !== null) $gen->writeInt('priceGroupNumber', $this->priceGroupNumber);
-		$this->employeeStartTimestamp->write($gen, 'employeeStartTimestamp');
-		$this->employeeEndTimestamp->write($gen, 'employeeEndTimestamp');
-		$this->managerStartTimestamp->write($gen, 'managerStartTimestamp');
-		$this->managerEndTimestamp->write($gen, 'managerEndTimestamp');
+		(SoapMplusDateTime::fromDateTime($this->employeeStartTimestamp))->write($gen, 'employeeStartTimestamp');
+		(SoapMplusDateTime::fromDateTime($this->employeeEndTimestamp))->write($gen, 'employeeEndTimestamp');
+		(SoapMplusDateTime::fromDateTime($this->managerStartTimestamp))->write($gen, 'managerStartTimestamp');
+		(SoapMplusDateTime::fromDateTime($this->managerEndTimestamp))->write($gen, 'managerEndTimestamp');
 		if ($this->activityTypeId !== null) $gen->writeInt('activityTypeId', $this->activityTypeId);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
@@ -15093,10 +15132,10 @@ class UpdateActivity extends SoapObject {
 	public ?int $articleLayoutId = null;
 	public ?string $location = null;
 	public ?int $priceGroupNumber = null;
-	public ?SoapMplusDateTime $employeeStartTimestamp = null;
-	public ?SoapMplusDateTime $employeeEndTimestamp = null;
-	public ?SoapMplusDateTime $managerStartTimestamp = null;
-	public ?SoapMplusDateTime $managerEndTimestamp = null;
+	public ?\DateTime $employeeStartTimestamp = null;
+	public ?\DateTime $employeeEndTimestamp = null;
+	public ?\DateTime $managerStartTimestamp = null;
+	public ?\DateTime $managerEndTimestamp = null;
 	public ?int $activityTypeId = null;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'activityId', null, $this->activityId);
@@ -15106,10 +15145,10 @@ class UpdateActivity extends SoapObject {
 		if ($this->articleLayoutId !== null) $gen->writeInt('articleLayoutId', $this->articleLayoutId);
 		if ($this->location !== null) $gen->out->writeElementNs(self::TNS, 'location', null, $this->location);
 		if ($this->priceGroupNumber !== null) $gen->writeInt('priceGroupNumber', $this->priceGroupNumber);
-		if ($this->employeeStartTimestamp !== null) $this->employeeStartTimestamp->write($gen, 'employeeStartTimestamp');
-		if ($this->employeeEndTimestamp !== null) $this->employeeEndTimestamp->write($gen, 'employeeEndTimestamp');
-		if ($this->managerStartTimestamp !== null) $this->managerStartTimestamp->write($gen, 'managerStartTimestamp');
-		if ($this->managerEndTimestamp !== null) $this->managerEndTimestamp->write($gen, 'managerEndTimestamp');
+		if ($this->employeeStartTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->employeeStartTimestamp))->write($gen, 'employeeStartTimestamp');
+		if ($this->employeeEndTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->employeeEndTimestamp))->write($gen, 'employeeEndTimestamp');
+		if ($this->managerStartTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->managerStartTimestamp))->write($gen, 'managerStartTimestamp');
+		if ($this->managerEndTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->managerEndTimestamp))->write($gen, 'managerEndTimestamp');
 		if ($this->activityTypeId !== null) $gen->writeInt('activityTypeId', $this->activityTypeId);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
@@ -15142,10 +15181,10 @@ class SaveActivity extends SoapObject {
 	public ?int $articleLayoutId = null;
 	public ?string $location = null;
 	public ?int $priceGroupNumber = null;
-	public ?SoapMplusDateTime $employeeStartTimestamp = null;
-	public ?SoapMplusDateTime $employeeEndTimestamp = null;
-	public ?SoapMplusDateTime $managerStartTimestamp = null;
-	public ?SoapMplusDateTime $managerEndTimestamp = null;
+	public ?\DateTime $employeeStartTimestamp = null;
+	public ?\DateTime $employeeEndTimestamp = null;
+	public ?\DateTime $managerStartTimestamp = null;
+	public ?\DateTime $managerEndTimestamp = null;
 	public ?int $activityTypeId = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->activityId !== null) $gen->out->writeElementNs(self::TNS, 'activityId', null, $this->activityId);
@@ -15155,10 +15194,10 @@ class SaveActivity extends SoapObject {
 		if ($this->articleLayoutId !== null) $gen->writeInt('articleLayoutId', $this->articleLayoutId);
 		if ($this->location !== null) $gen->out->writeElementNs(self::TNS, 'location', null, $this->location);
 		if ($this->priceGroupNumber !== null) $gen->writeInt('priceGroupNumber', $this->priceGroupNumber);
-		if ($this->employeeStartTimestamp !== null) $this->employeeStartTimestamp->write($gen, 'employeeStartTimestamp');
-		if ($this->employeeEndTimestamp !== null) $this->employeeEndTimestamp->write($gen, 'employeeEndTimestamp');
-		if ($this->managerStartTimestamp !== null) $this->managerStartTimestamp->write($gen, 'managerStartTimestamp');
-		if ($this->managerEndTimestamp !== null) $this->managerEndTimestamp->write($gen, 'managerEndTimestamp');
+		if ($this->employeeStartTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->employeeStartTimestamp))->write($gen, 'employeeStartTimestamp');
+		if ($this->employeeEndTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->employeeEndTimestamp))->write($gen, 'employeeEndTimestamp');
+		if ($this->managerStartTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->managerStartTimestamp))->write($gen, 'managerStartTimestamp');
+		if ($this->managerEndTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->managerEndTimestamp))->write($gen, 'managerEndTimestamp');
 		if ($this->activityTypeId !== null) $gen->writeInt('activityTypeId', $this->activityTypeId);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
@@ -15966,35 +16005,35 @@ class PrintLayoutFooterLines extends SoapObject {
 }
 
 class OpeningHours extends SoapObject {
-	public ?SoapMplusDateTime $mondayFrom = null;
-	public ?SoapMplusDateTime $mondayTill = null;
-	public ?SoapMplusDateTime $tuesdayFrom = null;
-	public ?SoapMplusDateTime $tuesdayTill = null;
-	public ?SoapMplusDateTime $wednesdayFrom = null;
-	public ?SoapMplusDateTime $wednesdayTill = null;
-	public ?SoapMplusDateTime $thursdayFrom = null;
-	public ?SoapMplusDateTime $thursdayTill = null;
-	public ?SoapMplusDateTime $fridayFrom = null;
-	public ?SoapMplusDateTime $fridayTill = null;
-	public ?SoapMplusDateTime $saturdayFrom = null;
-	public ?SoapMplusDateTime $saturdayTill = null;
-	public ?SoapMplusDateTime $sundayFrom = null;
-	public ?SoapMplusDateTime $sundayTill = null;
+	public ?\DateTime $mondayFrom = null;
+	public ?\DateTime $mondayTill = null;
+	public ?\DateTime $tuesdayFrom = null;
+	public ?\DateTime $tuesdayTill = null;
+	public ?\DateTime $wednesdayFrom = null;
+	public ?\DateTime $wednesdayTill = null;
+	public ?\DateTime $thursdayFrom = null;
+	public ?\DateTime $thursdayTill = null;
+	public ?\DateTime $fridayFrom = null;
+	public ?\DateTime $fridayTill = null;
+	public ?\DateTime $saturdayFrom = null;
+	public ?\DateTime $saturdayTill = null;
+	public ?\DateTime $sundayFrom = null;
+	public ?\DateTime $sundayTill = null;
 	public function writeProps(SoapGenerator $gen): void {
-		if ($this->mondayFrom !== null) $this->mondayFrom->write($gen, 'mondayFrom');
-		if ($this->mondayTill !== null) $this->mondayTill->write($gen, 'mondayTill');
-		if ($this->tuesdayFrom !== null) $this->tuesdayFrom->write($gen, 'tuesdayFrom');
-		if ($this->tuesdayTill !== null) $this->tuesdayTill->write($gen, 'tuesdayTill');
-		if ($this->wednesdayFrom !== null) $this->wednesdayFrom->write($gen, 'wednesdayFrom');
-		if ($this->wednesdayTill !== null) $this->wednesdayTill->write($gen, 'wednesdayTill');
-		if ($this->thursdayFrom !== null) $this->thursdayFrom->write($gen, 'thursdayFrom');
-		if ($this->thursdayTill !== null) $this->thursdayTill->write($gen, 'thursdayTill');
-		if ($this->fridayFrom !== null) $this->fridayFrom->write($gen, 'fridayFrom');
-		if ($this->fridayTill !== null) $this->fridayTill->write($gen, 'fridayTill');
-		if ($this->saturdayFrom !== null) $this->saturdayFrom->write($gen, 'saturdayFrom');
-		if ($this->saturdayTill !== null) $this->saturdayTill->write($gen, 'saturdayTill');
-		if ($this->sundayFrom !== null) $this->sundayFrom->write($gen, 'sundayFrom');
-		if ($this->sundayTill !== null) $this->sundayTill->write($gen, 'sundayTill');
+		if ($this->mondayFrom !== null) (SoapMplusDateTime::fromDateTime($this->mondayFrom))->write($gen, 'mondayFrom');
+		if ($this->mondayTill !== null) (SoapMplusDateTime::fromDateTime($this->mondayTill))->write($gen, 'mondayTill');
+		if ($this->tuesdayFrom !== null) (SoapMplusDateTime::fromDateTime($this->tuesdayFrom))->write($gen, 'tuesdayFrom');
+		if ($this->tuesdayTill !== null) (SoapMplusDateTime::fromDateTime($this->tuesdayTill))->write($gen, 'tuesdayTill');
+		if ($this->wednesdayFrom !== null) (SoapMplusDateTime::fromDateTime($this->wednesdayFrom))->write($gen, 'wednesdayFrom');
+		if ($this->wednesdayTill !== null) (SoapMplusDateTime::fromDateTime($this->wednesdayTill))->write($gen, 'wednesdayTill');
+		if ($this->thursdayFrom !== null) (SoapMplusDateTime::fromDateTime($this->thursdayFrom))->write($gen, 'thursdayFrom');
+		if ($this->thursdayTill !== null) (SoapMplusDateTime::fromDateTime($this->thursdayTill))->write($gen, 'thursdayTill');
+		if ($this->fridayFrom !== null) (SoapMplusDateTime::fromDateTime($this->fridayFrom))->write($gen, 'fridayFrom');
+		if ($this->fridayTill !== null) (SoapMplusDateTime::fromDateTime($this->fridayTill))->write($gen, 'fridayTill');
+		if ($this->saturdayFrom !== null) (SoapMplusDateTime::fromDateTime($this->saturdayFrom))->write($gen, 'saturdayFrom');
+		if ($this->saturdayTill !== null) (SoapMplusDateTime::fromDateTime($this->saturdayTill))->write($gen, 'saturdayTill');
+		if ($this->sundayFrom !== null) (SoapMplusDateTime::fromDateTime($this->sundayFrom))->write($gen, 'sundayFrom');
+		if ($this->sundayTill !== null) (SoapMplusDateTime::fromDateTime($this->sundayTill))->write($gen, 'sundayTill');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -16233,7 +16272,7 @@ class Workplace extends SoapObject {
 	public bool $isMobile;
 	public ?string $workplaceType = null;
 	public ?bool $isSlave = null;
-	public ?SoapMplusDateTime $lastSlaveSync = null;
+	public ?\DateTime $lastSlaveSync = null;
 	public ?int $priceGroupNumber = null;
 	public ?string $extWorkplaceId = null;
 	public function writeProps(SoapGenerator $gen): void {
@@ -16242,7 +16281,7 @@ class Workplace extends SoapObject {
 		$gen->writeBool('isMobile', $this->isMobile);
 		if ($this->workplaceType !== null) $gen->out->writeElementNs(self::TNS, 'workplaceType', null, $this->workplaceType);
 		if ($this->isSlave !== null) $gen->writeBool('isSlave', $this->isSlave);
-		if ($this->lastSlaveSync !== null) $this->lastSlaveSync->write($gen, 'lastSlaveSync');
+		if ($this->lastSlaveSync !== null) (SoapMplusDateTime::fromDateTime($this->lastSlaveSync))->write($gen, 'lastSlaveSync');
 		if ($this->priceGroupNumber !== null) $gen->writeInt('priceGroupNumber', $this->priceGroupNumber);
 		if ($this->extWorkplaceId !== null) $gen->out->writeElementNs(self::TNS, 'extWorkplaceId', null, $this->extWorkplaceId);
 	}
@@ -17750,8 +17789,8 @@ class getApiVersionResponse extends SoapObject {
 	public ?int $serviceMinorNumber = null;
 	public ?int $serviceRevisionNumber = null;
 	public ?int $serviceBuildNumber = null;
-	public ?SoapMplusDate $serviceDate = null;
-	public ?SoapMplusDateTime $serviceDateTime = null;
+	public ?\DateTime $serviceDate = null;
+	public ?\DateTime $serviceDateTime = null;
 	public ?int $serviceProcessId = null;
 	public ?string $serviceHostname = null;
 	/** @var string[] */
@@ -17761,8 +17800,8 @@ class getApiVersionResponse extends SoapObject {
 	public ?int $serverMajorNumber = null;
 	public ?int $serverMinorNumber = null;
 	public ?int $serverRevisionNumber = null;
-	public ?SoapMplusDate $serverDate = null;
-	public ?SoapMplusDateTime $serverDateTime = null;
+	public ?\DateTime $serverDate = null;
+	public ?\DateTime $serverDateTime = null;
 	public bool $inDebugMode;
 	public ?bool $isSlaveApi = null;
 	public ?string $slaveApiType = null;
@@ -17780,8 +17819,8 @@ class getApiVersionResponse extends SoapObject {
 		if ($this->serviceMinorNumber !== null) $gen->writeInt('serviceMinorNumber', $this->serviceMinorNumber);
 		if ($this->serviceRevisionNumber !== null) $gen->writeInt('serviceRevisionNumber', $this->serviceRevisionNumber);
 		if ($this->serviceBuildNumber !== null) $gen->writeInt('serviceBuildNumber', $this->serviceBuildNumber);
-		if ($this->serviceDate !== null) $this->serviceDate->write($gen, 'serviceDate');
-		if ($this->serviceDateTime !== null) $this->serviceDateTime->write($gen, 'serviceDateTime');
+		if ($this->serviceDate !== null) (SoapMplusDate::fromDateTime($this->serviceDate))->write($gen, 'serviceDate');
+		if ($this->serviceDateTime !== null) (SoapMplusDateTime::fromDateTime($this->serviceDateTime))->write($gen, 'serviceDateTime');
 		if ($this->serviceProcessId !== null) $gen->writeInt('serviceProcessId', $this->serviceProcessId);
 		if ($this->serviceHostname !== null) $gen->out->writeElementNs(self::TNS, 'serviceHostname', null, $this->serviceHostname);
 		foreach ($this->serviceIpAddresses as $elem) $gen->out->writeElementNs(self::TNS, 'serviceIpAddresses', null, $elem);
@@ -17790,8 +17829,8 @@ class getApiVersionResponse extends SoapObject {
 		if ($this->serverMajorNumber !== null) $gen->writeInt('serverMajorNumber', $this->serverMajorNumber);
 		if ($this->serverMinorNumber !== null) $gen->writeInt('serverMinorNumber', $this->serverMinorNumber);
 		if ($this->serverRevisionNumber !== null) $gen->writeInt('serverRevisionNumber', $this->serverRevisionNumber);
-		if ($this->serverDate !== null) $this->serverDate->write($gen, 'serverDate');
-		if ($this->serverDateTime !== null) $this->serverDateTime->write($gen, 'serverDateTime');
+		if ($this->serverDate !== null) (SoapMplusDate::fromDateTime($this->serverDate))->write($gen, 'serverDate');
+		if ($this->serverDateTime !== null) (SoapMplusDateTime::fromDateTime($this->serverDateTime))->write($gen, 'serverDateTime');
 		$gen->writeBool('inDebugMode', $this->inDebugMode);
 		if ($this->isSlaveApi !== null) $gen->writeBool('isSlaveApi', $this->isSlaveApi);
 		if ($this->slaveApiType !== null) $gen->out->writeElementNs(self::TNS, 'slaveApiType', null, $this->slaveApiType);
@@ -17813,8 +17852,8 @@ class getDatabaseVersionResponse extends SoapObject {
 	public ?int $serverMajorNumber = null;
 	public ?int $serverMinorNumber = null;
 	public ?int $serverRevisionNumber = null;
-	public ?SoapMplusDate $serverDate = null;
-	public ?SoapMplusDateTime $serverDateTime = null;
+	public ?\DateTime $serverDate = null;
+	public ?\DateTime $serverDateTime = null;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->writeInt('majorNumber', $this->majorNumber);
 		$gen->writeInt('minorNumber', $this->minorNumber);
@@ -17822,8 +17861,8 @@ class getDatabaseVersionResponse extends SoapObject {
 		if ($this->serverMajorNumber !== null) $gen->writeInt('serverMajorNumber', $this->serverMajorNumber);
 		if ($this->serverMinorNumber !== null) $gen->writeInt('serverMinorNumber', $this->serverMinorNumber);
 		if ($this->serverRevisionNumber !== null) $gen->writeInt('serverRevisionNumber', $this->serverRevisionNumber);
-		if ($this->serverDate !== null) $this->serverDate->write($gen, 'serverDate');
-		if ($this->serverDateTime !== null) $this->serverDateTime->write($gen, 'serverDateTime');
+		if ($this->serverDate !== null) (SoapMplusDate::fromDateTime($this->serverDate))->write($gen, 'serverDate');
+		if ($this->serverDateTime !== null) (SoapMplusDateTime::fromDateTime($this->serverDateTime))->write($gen, 'serverDateTime');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -20879,7 +20918,7 @@ class ReportHoursByEmployee extends SoapObject {
 	public \DateTime $financialDate;
 	public int $totalMinutes;
 	public int $pauzeMinutes;
-	public ?int $hourlyRate = null;
+	public ?BigDecimal $hourlyRate = null;
 	public int $employeeNumber;
 	/** @var int[] */
 	public $branchNumbers = array();
@@ -20889,7 +20928,7 @@ class ReportHoursByEmployee extends SoapObject {
 		$gen->writeDate('financialDate', $this->financialDate);
 		$gen->writeInt('totalMinutes', $this->totalMinutes);
 		$gen->writeInt('pauzeMinutes', $this->pauzeMinutes);
-		if ($this->hourlyRate !== null) $gen->writeInt('hourlyRate', $this->hourlyRate);
+		if ($this->hourlyRate !== null) $gen->writeValueAndScale('hourlyRate', '', $this->hourlyRate, 2);
 		$gen->writeInt('employeeNumber', $this->employeeNumber);
 		foreach ($this->branchNumbers as $elem) $gen->writeInt('branchNumbers', $elem);
 		foreach ($this->references as $elem) $gen->out->writeElementNs(self::TNS, 'references', null, $elem);
@@ -22179,7 +22218,7 @@ class Invoice extends SoapObject {
 	public ?string $invoiceType = null;
 	public ?int $employeeNumber = null;
 	public ?string $employeeName = null;
-	public ?SoapMplusDateTime $entryTimestamp = null;
+	public ?\DateTime $entryTimestamp = null;
 	public ?int $relationNumber = null;
 	public ?string $relationName = null;
 	public ?int $relationCategoryId = null;
@@ -22187,7 +22226,7 @@ class Invoice extends SoapObject {
 	public ?string $relationVatNumber = null;
 	public ?Address $deliveryAddress = null;
 	public ?Address $invoiceAddress = null;
-	public ?SoapMplusDate $financialDate = null;
+	public ?\DateTime $financialDate = null;
 	public ?int $financialBranchNumber = null;
 	public ?string $financialExtBranchId = null;
 	public ?int $workplaceNumber = null;
@@ -22195,7 +22234,7 @@ class Invoice extends SoapObject {
 	public ?string $entryExtBranchId = null;
 	public ?string $reference = null;
 	public ?string $activityId = null;
-	public ?SoapMplusDate $dueDate = null;
+	public ?\DateTime $dueDate = null;
 	public ?BigDecimal $totalInclAmount = null;
 	public ?BigDecimal $totalExclAmount = null;
 	public ?string $vatMethod = null;
@@ -22206,7 +22245,7 @@ class Invoice extends SoapObject {
 	public ?BigDecimal $paidAmount = null;
 	public ?string $state = null;
 	public ?bool $finalized = null;
-	public ?SoapMplusDateTime $finalizedTimestamp = null;
+	public ?\DateTime $finalizedTimestamp = null;
 	/** @var Line[] */
 	public $lineList = null;
 	/** @var Payment[] */
@@ -22241,7 +22280,7 @@ class Invoice extends SoapObject {
 	public ?int $invoiceReminder = null;
 	public ?int $targetInvoiceReminder = null;
 	public ?bool $directDebit = null;
-	public ?SoapMplusDateTime $mailedTimestamp = null;
+	public ?\DateTime $mailedTimestamp = null;
 	/** @var TimelineEvent[] */
 	public $timelineEvents = null;
 	public ?ContractPeriod $contractPeriod = null;
@@ -22263,7 +22302,7 @@ $tmp_extOrderIds->write($gen, 'extOrderIds');
 		if ($this->invoiceType !== null) $gen->out->writeElementNs(self::TNS, 'invoiceType', null, $this->invoiceType);
 		if ($this->employeeNumber !== null) $gen->writeInt('employeeNumber', $this->employeeNumber);
 		if ($this->employeeName !== null) $gen->out->writeElementNs(self::TNS, 'employeeName', null, $this->employeeName);
-		if ($this->entryTimestamp !== null) $this->entryTimestamp->write($gen, 'entryTimestamp');
+		if ($this->entryTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->entryTimestamp))->write($gen, 'entryTimestamp');
 		if ($this->relationNumber !== null) $gen->writeInt('relationNumber', $this->relationNumber);
 		if ($this->relationName !== null) $gen->out->writeElementNs(self::TNS, 'relationName', null, $this->relationName);
 		if ($this->relationCategoryId !== null) $gen->writeInt('relationCategoryId', $this->relationCategoryId);
@@ -22271,7 +22310,7 @@ $tmp_extOrderIds->write($gen, 'extOrderIds');
 		if ($this->relationVatNumber !== null) $gen->out->writeElementNs(self::TNS, 'relationVatNumber', null, $this->relationVatNumber);
 		if ($this->deliveryAddress !== null) $this->deliveryAddress->write($gen, 'deliveryAddress');
 		if ($this->invoiceAddress !== null) $this->invoiceAddress->write($gen, 'invoiceAddress');
-		if ($this->financialDate !== null) $this->financialDate->write($gen, 'financialDate');
+		if ($this->financialDate !== null) (SoapMplusDate::fromDateTime($this->financialDate))->write($gen, 'financialDate');
 		if ($this->financialBranchNumber !== null) $gen->writeInt('financialBranchNumber', $this->financialBranchNumber);
 		if ($this->financialExtBranchId !== null) $gen->out->writeElementNs(self::TNS, 'financialExtBranchId', null, $this->financialExtBranchId);
 		if ($this->workplaceNumber !== null) $gen->writeInt('workplaceNumber', $this->workplaceNumber);
@@ -22279,7 +22318,7 @@ $tmp_extOrderIds->write($gen, 'extOrderIds');
 		if ($this->entryExtBranchId !== null) $gen->out->writeElementNs(self::TNS, 'entryExtBranchId', null, $this->entryExtBranchId);
 		if ($this->reference !== null) $gen->out->writeElementNs(self::TNS, 'reference', null, $this->reference);
 		if ($this->activityId !== null) $gen->out->writeElementNs(self::TNS, 'activityId', null, $this->activityId);
-		if ($this->dueDate !== null) $this->dueDate->write($gen, 'dueDate');
+		if ($this->dueDate !== null) (SoapMplusDate::fromDateTime($this->dueDate))->write($gen, 'dueDate');
 		if ($this->totalInclAmount !== null) $gen->writeValueAndScale('totalInclAmount', '', $this->totalInclAmount, 2);
 		if ($this->totalExclAmount !== null) $gen->writeValueAndScale('totalExclAmount', '', $this->totalExclAmount, 2);
 		if ($this->vatMethod !== null) $gen->out->writeElementNs(self::TNS, 'vatMethod', null, $this->vatMethod);
@@ -22292,7 +22331,7 @@ $tmp_vatGroupList->write($gen, 'vatGroupList');
 		if ($this->paidAmount !== null) $gen->writeValueAndScale('paidAmount', '', $this->paidAmount, 2);
 		if ($this->state !== null) $gen->out->writeElementNs(self::TNS, 'state', null, $this->state);
 		if ($this->finalized !== null) $gen->writeBool('finalized', $this->finalized);
-		if ($this->finalizedTimestamp !== null) $this->finalizedTimestamp->write($gen, 'finalizedTimestamp');
+		if ($this->finalizedTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->finalizedTimestamp))->write($gen, 'finalizedTimestamp');
 		if ($this->lineList !== null) {
 $tmp_lineList = new LineList($this->lineList);
 $tmp_lineList->write($gen, 'lineList');
@@ -22345,7 +22384,7 @@ $tmp_proposalNumbers->write($gen, 'proposalNumbers');
 		if ($this->invoiceReminder !== null) $gen->writeInt('invoiceReminder', $this->invoiceReminder);
 		if ($this->targetInvoiceReminder !== null) $gen->writeInt('targetInvoiceReminder', $this->targetInvoiceReminder);
 		if ($this->directDebit !== null) $gen->writeBool('directDebit', $this->directDebit);
-		if ($this->mailedTimestamp !== null) $this->mailedTimestamp->write($gen, 'mailedTimestamp');
+		if ($this->mailedTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->mailedTimestamp))->write($gen, 'mailedTimestamp');
 		if ($this->timelineEvents !== null) {
 $tmp_timelineEvents = new TimelineEventList($this->timelineEvents);
 $tmp_timelineEvents->write($gen, 'timelineEvents');
@@ -23271,8 +23310,8 @@ class TicketCounterSale extends SoapObject {
 	public ?string $orderId = null;
 	public ?string $invoiceId = null;
 	public ?string $receiptId = null;
-	public ?SoapMplusDateTime $entryTimestamp = null;
-	public ?SoapMplusDate $financialDate = null;
+	public ?\DateTime $entryTimestamp = null;
+	public ?\DateTime $financialDate = null;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->writeInt('syncMarker', $this->syncMarker);
 		$gen->writeInt('branchNumber', $this->branchNumber);
@@ -23282,8 +23321,8 @@ class TicketCounterSale extends SoapObject {
 		if ($this->orderId !== null) $gen->out->writeElementNs(self::TNS, 'orderId', null, $this->orderId);
 		if ($this->invoiceId !== null) $gen->out->writeElementNs(self::TNS, 'invoiceId', null, $this->invoiceId);
 		if ($this->receiptId !== null) $gen->out->writeElementNs(self::TNS, 'receiptId', null, $this->receiptId);
-		if ($this->entryTimestamp !== null) $this->entryTimestamp->write($gen, 'entryTimestamp');
-		if ($this->financialDate !== null) $this->financialDate->write($gen, 'financialDate');
+		if ($this->entryTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->entryTimestamp))->write($gen, 'entryTimestamp');
+		if ($this->financialDate !== null) (SoapMplusDate::fromDateTime($this->financialDate))->write($gen, 'financialDate');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -23914,14 +23953,14 @@ class Proposal extends SoapObject {
 	public ?string $proposalType = null;
 	public ?int $employeeNumber = null;
 	public ?string $employeeName = null;
-	public ?SoapMplusDateTime $entryTimestamp = null;
+	public ?\DateTime $entryTimestamp = null;
 	public ?int $relationNumber = null;
 	public ?string $relationName = null;
 	public ?int $relationCategoryId = null;
 	public ?string $relationBankAccountNumber = null;
 	public ?Address $deliveryAddress = null;
 	public ?Address $invoiceAddress = null;
-	public ?SoapMplusDate $financialDate = null;
+	public ?\DateTime $financialDate = null;
 	public ?int $financialBranchNumber = null;
 	public ?string $financialExtBranchId = null;
 	public ?int $workplaceNumber = null;
@@ -23970,14 +24009,14 @@ class Proposal extends SoapObject {
 		if ($this->proposalType !== null) $gen->out->writeElementNs(self::TNS, 'proposalType', null, $this->proposalType);
 		if ($this->employeeNumber !== null) $gen->writeInt('employeeNumber', $this->employeeNumber);
 		if ($this->employeeName !== null) $gen->out->writeElementNs(self::TNS, 'employeeName', null, $this->employeeName);
-		if ($this->entryTimestamp !== null) $this->entryTimestamp->write($gen, 'entryTimestamp');
+		if ($this->entryTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->entryTimestamp))->write($gen, 'entryTimestamp');
 		if ($this->relationNumber !== null) $gen->writeInt('relationNumber', $this->relationNumber);
 		if ($this->relationName !== null) $gen->out->writeElementNs(self::TNS, 'relationName', null, $this->relationName);
 		if ($this->relationCategoryId !== null) $gen->writeInt('relationCategoryId', $this->relationCategoryId);
 		if ($this->relationBankAccountNumber !== null) $gen->out->writeElementNs(self::TNS, 'relationBankAccountNumber', null, $this->relationBankAccountNumber);
 		if ($this->deliveryAddress !== null) $this->deliveryAddress->write($gen, 'deliveryAddress');
 		if ($this->invoiceAddress !== null) $this->invoiceAddress->write($gen, 'invoiceAddress');
-		if ($this->financialDate !== null) $this->financialDate->write($gen, 'financialDate');
+		if ($this->financialDate !== null) (SoapMplusDate::fromDateTime($this->financialDate))->write($gen, 'financialDate');
 		if ($this->financialBranchNumber !== null) $gen->writeInt('financialBranchNumber', $this->financialBranchNumber);
 		if ($this->financialExtBranchId !== null) $gen->out->writeElementNs(self::TNS, 'financialExtBranchId', null, $this->financialExtBranchId);
 		if ($this->workplaceNumber !== null) $gen->writeInt('workplaceNumber', $this->workplaceNumber);
@@ -24056,8 +24095,8 @@ class ProposalList extends SoapObject {
 class GetProposalsRequest extends SoapObject {
 	public ?int $syncMarker = null;
 	public ?int $syncMarkerLimit = null;
-	public ?SoapMplusDate $fromFinancialDate = null;
-	public ?SoapMplusDate $throughFinancialDate = null;
+	public ?\DateTime $fromFinancialDate = null;
+	public ?\DateTime $throughFinancialDate = null;
 	/** @var int[] */
 	public $branchNumbers = array();
 	/** @var int[] */
@@ -24093,8 +24132,8 @@ class GetProposalsRequest extends SoapObject {
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
 		if ($this->syncMarkerLimit !== null) $gen->writeInt('syncMarkerLimit', $this->syncMarkerLimit);
-		if ($this->fromFinancialDate !== null) $this->fromFinancialDate->write($gen, 'fromFinancialDate');
-		if ($this->throughFinancialDate !== null) $this->throughFinancialDate->write($gen, 'throughFinancialDate');
+		if ($this->fromFinancialDate !== null) (SoapMplusDate::fromDateTime($this->fromFinancialDate))->write($gen, 'fromFinancialDate');
+		if ($this->throughFinancialDate !== null) (SoapMplusDate::fromDateTime($this->throughFinancialDate))->write($gen, 'throughFinancialDate');
 		foreach ($this->branchNumbers as $elem) $gen->writeInt('branchNumbers', $elem);
 		foreach ($this->employeeNumbers as $elem) $gen->writeInt('employeeNumbers', $elem);
 		foreach ($this->relationNumbers as $elem) $gen->writeInt('relationNumbers', $elem);
@@ -24222,8 +24261,8 @@ class GetCurrentTableOrdersRequest extends SoapObject {
 class GetOrdersRequest extends SoapObject {
 	public ?int $syncMarker = null;
 	public ?int $syncMarkerLimit = null;
-	public ?SoapMplusDate $fromFinancialDate = null;
-	public ?SoapMplusDate $throughFinancialDate = null;
+	public ?\DateTime $fromFinancialDate = null;
+	public ?\DateTime $throughFinancialDate = null;
 	/** @var int[] */
 	public $branchNumbers = array();
 	/** @var int[] */
@@ -24263,8 +24302,8 @@ class GetOrdersRequest extends SoapObject {
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
 		if ($this->syncMarkerLimit !== null) $gen->writeInt('syncMarkerLimit', $this->syncMarkerLimit);
-		if ($this->fromFinancialDate !== null) $this->fromFinancialDate->write($gen, 'fromFinancialDate');
-		if ($this->throughFinancialDate !== null) $this->throughFinancialDate->write($gen, 'throughFinancialDate');
+		if ($this->fromFinancialDate !== null) (SoapMplusDate::fromDateTime($this->fromFinancialDate))->write($gen, 'fromFinancialDate');
+		if ($this->throughFinancialDate !== null) (SoapMplusDate::fromDateTime($this->throughFinancialDate))->write($gen, 'throughFinancialDate');
 		foreach ($this->branchNumbers as $elem) $gen->writeInt('branchNumbers', $elem);
 		foreach ($this->employeeNumbers as $elem) $gen->writeInt('employeeNumbers', $elem);
 		foreach ($this->relationNumbers as $elem) $gen->writeInt('relationNumbers', $elem);
@@ -24736,7 +24775,7 @@ class ProposalInput extends SoapObject {
 	public ?string $extProposalId = null;
 	public int $employeeNumber;
 	public int $relationNumber;
-	public ?SoapMplusDate $financialDate = null;
+	public ?\DateTime $financialDate = null;
 	public int $financialBranchNumber;
 	public int $entryBranchNumber;
 	public ?int $workplaceNumber = null;
@@ -24752,7 +24791,7 @@ class ProposalInput extends SoapObject {
 		if ($this->extProposalId !== null) $gen->out->writeElementNs(self::TNS, 'extProposalId', null, $this->extProposalId);
 		$gen->writeInt('employeeNumber', $this->employeeNumber);
 		$gen->writeInt('relationNumber', $this->relationNumber);
-		if ($this->financialDate !== null) $this->financialDate->write($gen, 'financialDate');
+		if ($this->financialDate !== null) (SoapMplusDate::fromDateTime($this->financialDate))->write($gen, 'financialDate');
 		$gen->writeInt('financialBranchNumber', $this->financialBranchNumber);
 		$gen->writeInt('entryBranchNumber', $this->entryBranchNumber);
 		if ($this->workplaceNumber !== null) $gen->writeInt('workplaceNumber', $this->workplaceNumber);
@@ -24858,8 +24897,8 @@ class CreatedInvoiceReminderList extends SoapObject {
 class GetInvoicesRequest extends SoapObject {
 	public ?int $syncMarker = null;
 	public ?int $syncMarkerLimit = null;
-	public ?SoapMplusDate $fromFinancialDate = null;
-	public ?SoapMplusDate $throughFinancialDate = null;
+	public ?\DateTime $fromFinancialDate = null;
+	public ?\DateTime $throughFinancialDate = null;
 	/** @var int[] */
 	public $branchNumbers = array();
 	/** @var int[] */
@@ -24903,8 +24942,8 @@ class GetInvoicesRequest extends SoapObject {
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
 		if ($this->syncMarkerLimit !== null) $gen->writeInt('syncMarkerLimit', $this->syncMarkerLimit);
-		if ($this->fromFinancialDate !== null) $this->fromFinancialDate->write($gen, 'fromFinancialDate');
-		if ($this->throughFinancialDate !== null) $this->throughFinancialDate->write($gen, 'throughFinancialDate');
+		if ($this->fromFinancialDate !== null) (SoapMplusDate::fromDateTime($this->fromFinancialDate))->write($gen, 'fromFinancialDate');
+		if ($this->throughFinancialDate !== null) (SoapMplusDate::fromDateTime($this->throughFinancialDate))->write($gen, 'throughFinancialDate');
 		foreach ($this->branchNumbers as $elem) $gen->writeInt('branchNumbers', $elem);
 		foreach ($this->employeeNumbers as $elem) $gen->writeInt('employeeNumbers', $elem);
 		foreach ($this->relationNumbers as $elem) $gen->writeInt('relationNumbers', $elem);
@@ -24957,11 +24996,11 @@ $tmp_contractFrequencyFilter->write($gen, 'contractFrequencyFilter');
 
 class CreditInvoiceV2Request extends SoapObject {
 	public ?string $invoiceId = null;
-	public ?SoapMplusDate $financialDate = null;
+	public ?\DateTime $financialDate = null;
 	public ?string $explanation = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->invoiceId !== null) $gen->out->writeElementNs(self::TNS, 'invoiceId', null, $this->invoiceId);
-		if ($this->financialDate !== null) $this->financialDate->write($gen, 'financialDate');
+		if ($this->financialDate !== null) (SoapMplusDate::fromDateTime($this->financialDate))->write($gen, 'financialDate');
 		if ($this->explanation !== null) $gen->out->writeElementNs(self::TNS, 'explanation', null, $this->explanation);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
@@ -25005,7 +25044,7 @@ class PackingSlip extends SoapObject {
 	public ?int $syncMarker = null;
 	public ?int $employeeNumber = null;
 	public ?string $employeeName = null;
-	public ?SoapMplusDateTime $entryTimestamp = null;
+	public ?\DateTime $entryTimestamp = null;
 	public ?int $relationNumber = null;
 	public ?string $relationName = null;
 	public ?int $relationCategoryId = null;
@@ -25013,7 +25052,7 @@ class PackingSlip extends SoapObject {
 	public ?string $relationVatNumber = null;
 	public ?Address $deliveryAddress = null;
 	public ?Address $invoiceAddress = null;
-	public ?SoapMplusDate $financialDate = null;
+	public ?\DateTime $financialDate = null;
 	public ?int $financialBranchNumber = null;
 	public ?string $financialExtBranchId = null;
 	public ?int $workplaceNumber = null;
@@ -25055,7 +25094,7 @@ class PackingSlip extends SoapObject {
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
 		if ($this->employeeNumber !== null) $gen->writeInt('employeeNumber', $this->employeeNumber);
 		if ($this->employeeName !== null) $gen->out->writeElementNs(self::TNS, 'employeeName', null, $this->employeeName);
-		if ($this->entryTimestamp !== null) $this->entryTimestamp->write($gen, 'entryTimestamp');
+		if ($this->entryTimestamp !== null) (SoapMplusDateTime::fromDateTime($this->entryTimestamp))->write($gen, 'entryTimestamp');
 		if ($this->relationNumber !== null) $gen->writeInt('relationNumber', $this->relationNumber);
 		if ($this->relationName !== null) $gen->out->writeElementNs(self::TNS, 'relationName', null, $this->relationName);
 		if ($this->relationCategoryId !== null) $gen->writeInt('relationCategoryId', $this->relationCategoryId);
@@ -25063,7 +25102,7 @@ class PackingSlip extends SoapObject {
 		if ($this->relationVatNumber !== null) $gen->out->writeElementNs(self::TNS, 'relationVatNumber', null, $this->relationVatNumber);
 		if ($this->deliveryAddress !== null) $this->deliveryAddress->write($gen, 'deliveryAddress');
 		if ($this->invoiceAddress !== null) $this->invoiceAddress->write($gen, 'invoiceAddress');
-		if ($this->financialDate !== null) $this->financialDate->write($gen, 'financialDate');
+		if ($this->financialDate !== null) (SoapMplusDate::fromDateTime($this->financialDate))->write($gen, 'financialDate');
 		if ($this->financialBranchNumber !== null) $gen->writeInt('financialBranchNumber', $this->financialBranchNumber);
 		if ($this->financialExtBranchId !== null) $gen->out->writeElementNs(self::TNS, 'financialExtBranchId', null, $this->financialExtBranchId);
 		if ($this->workplaceNumber !== null) $gen->writeInt('workplaceNumber', $this->workplaceNumber);
@@ -25160,8 +25199,8 @@ class PackingSlipList extends SoapObject {
 class GetPackingSlipsRequest extends SoapObject {
 	public ?int $syncMarker = null;
 	public ?int $syncMarkerLimit = null;
-	public ?SoapMplusDate $fromFinancialDate = null;
-	public ?SoapMplusDate $throughFinancialDate = null;
+	public ?\DateTime $fromFinancialDate = null;
+	public ?\DateTime $throughFinancialDate = null;
 	/** @var int[] */
 	public $branchNumbers = array();
 	/** @var int[] */
@@ -25193,8 +25232,8 @@ class GetPackingSlipsRequest extends SoapObject {
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
 		if ($this->syncMarkerLimit !== null) $gen->writeInt('syncMarkerLimit', $this->syncMarkerLimit);
-		if ($this->fromFinancialDate !== null) $this->fromFinancialDate->write($gen, 'fromFinancialDate');
-		if ($this->throughFinancialDate !== null) $this->throughFinancialDate->write($gen, 'throughFinancialDate');
+		if ($this->fromFinancialDate !== null) (SoapMplusDate::fromDateTime($this->fromFinancialDate))->write($gen, 'fromFinancialDate');
+		if ($this->throughFinancialDate !== null) (SoapMplusDate::fromDateTime($this->throughFinancialDate))->write($gen, 'throughFinancialDate');
 		foreach ($this->branchNumbers as $elem) $gen->writeInt('branchNumbers', $elem);
 		foreach ($this->employeeNumbers as $elem) $gen->writeInt('employeeNumbers', $elem);
 		foreach ($this->relationNumbers as $elem) $gen->writeInt('relationNumbers', $elem);
@@ -27849,7 +27888,7 @@ class InterbranchOrderLineList extends SoapObject {
 
 class InterbranchOrder extends SoapObject {
 	public YearNumber $interbranchOrderNumber;
-	public SoapMplusDateTime $entryTimestamp;
+	public \DateTime $entryTimestamp;
 	public int $syncMarker;
 	public int $fromBranchNumber;
 	public int $toBranchNumber;
@@ -27862,11 +27901,11 @@ class InterbranchOrder extends SoapObject {
 	public ?string $pickStatus = null;
 	public function __construct() {
 		$this->interbranchOrderNumber = new YearNumber();
-		$this->entryTimestamp = new SoapMplusDateTime();
+		$this->entryTimestamp = new \DateTime();
 	}
 	public function writeProps(SoapGenerator $gen): void {
 		$this->interbranchOrderNumber->write($gen, 'interbranchOrderNumber');
-		$this->entryTimestamp->write($gen, 'entryTimestamp');
+		(SoapMplusDateTime::fromDateTime($this->entryTimestamp))->write($gen, 'entryTimestamp');
 		$gen->writeInt('syncMarker', $this->syncMarker);
 		$gen->writeInt('fromBranchNumber', $this->fromBranchNumber);
 		$gen->writeInt('toBranchNumber', $this->toBranchNumber);
@@ -28084,7 +28123,7 @@ class InterbranchShipmentLineList extends SoapObject {
 class InterbranchShipment extends SoapObject {
 	public YearNumber $interbranchShipmentNumber;
 	public YearNumber $interbranchOrderNumber;
-	public SoapMplusDateTime $entryTimestamp;
+	public \DateTime $entryTimestamp;
 	public int $syncMarker;
 	public int $fromBranchNumber;
 	public int $toBranchNumber;
@@ -28097,12 +28136,12 @@ class InterbranchShipment extends SoapObject {
 	public function __construct() {
 		$this->interbranchShipmentNumber = new YearNumber();
 		$this->interbranchOrderNumber = new YearNumber();
-		$this->entryTimestamp = new SoapMplusDateTime();
+		$this->entryTimestamp = new \DateTime();
 	}
 	public function writeProps(SoapGenerator $gen): void {
 		$this->interbranchShipmentNumber->write($gen, 'interbranchShipmentNumber');
 		$this->interbranchOrderNumber->write($gen, 'interbranchOrderNumber');
-		$this->entryTimestamp->write($gen, 'entryTimestamp');
+		(SoapMplusDateTime::fromDateTime($this->entryTimestamp))->write($gen, 'entryTimestamp');
 		$gen->writeInt('syncMarker', $this->syncMarker);
 		$gen->writeInt('fromBranchNumber', $this->fromBranchNumber);
 		$gen->writeInt('toBranchNumber', $this->toBranchNumber);
@@ -28228,7 +28267,7 @@ class InterbranchDelivery extends SoapObject {
 	public YearNumberPart $interbranchDeliveryNumber;
 	public YearNumber $interbranchShipmentNumber;
 	public YearNumber $interbranchOrderNumber;
-	public SoapMplusDateTime $entryTimestamp;
+	public \DateTime $entryTimestamp;
 	public int $syncMarker;
 	public int $fromBranchNumber;
 	public int $toBranchNumber;
@@ -28241,13 +28280,13 @@ class InterbranchDelivery extends SoapObject {
 		$this->interbranchDeliveryNumber = new YearNumberPart();
 		$this->interbranchShipmentNumber = new YearNumber();
 		$this->interbranchOrderNumber = new YearNumber();
-		$this->entryTimestamp = new SoapMplusDateTime();
+		$this->entryTimestamp = new \DateTime();
 	}
 	public function writeProps(SoapGenerator $gen): void {
 		$this->interbranchDeliveryNumber->write($gen, 'interbranchDeliveryNumber');
 		$this->interbranchShipmentNumber->write($gen, 'interbranchShipmentNumber');
 		$this->interbranchOrderNumber->write($gen, 'interbranchOrderNumber');
-		$this->entryTimestamp->write($gen, 'entryTimestamp');
+		(SoapMplusDateTime::fromDateTime($this->entryTimestamp))->write($gen, 'entryTimestamp');
 		$gen->writeInt('syncMarker', $this->syncMarker);
 		$gen->writeInt('fromBranchNumber', $this->fromBranchNumber);
 		$gen->writeInt('toBranchNumber', $this->toBranchNumber);
@@ -28816,7 +28855,7 @@ class adjustPoints extends SoapObject {
 	}
 }
 
-class getRelationPoints extends SoapObject {
+class getRelationPoints_ extends SoapObject {
 	public GetRelationPointsRequest $request;
 	public function __construct() {
 		$this->request = new GetRelationPointsRequest();
@@ -30327,7 +30366,7 @@ class getPurchaseOrdersV2 extends SoapObject {
 	}
 }
 
-class savePurchaseOrderV2 extends SoapObject {
+class savePurchaseOrderV2_ extends SoapObject {
 	public SavePurchaseOrderV2Request $request;
 	public function __construct() {
 		$this->request = new SavePurchaseOrderV2Request();
@@ -30384,7 +30423,7 @@ class getPurchaseDeliveriesV2 extends SoapObject {
 	}
 }
 
-class savePurchaseDeliveryV2 extends SoapObject {
+class savePurchaseDeliveryV2_ extends SoapObject {
 	public SavePurchaseDeliveryV2Request $request;
 	public function __construct() {
 		$this->request = new SavePurchaseDeliveryV2Request();
@@ -30745,13 +30784,12 @@ class placeTableOrder extends SoapObject {
 }
 
 class getTapTickTotals extends SoapObject {
-	/** @var int[] */
-	public $request = array();
-	public function __construct($list = array()) { $this->request = $list; }
+	public TapTickTotalsRequest $request;
+	public function __construct() {
+		$this->request = new TapTickTotalsRequest();
+	}
 	public function writeProps(SoapGenerator $gen): void {
-		$tmp_request = new TapTickTotalsRequest($this->request);
-$tmp_request->write($gen, 'request');
-
+		($this->request)->write($gen, 'request');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -31046,13 +31084,12 @@ class getArticleBranchDeviations extends SoapObject {
 }
 
 class saveArticleBranchDeviations extends SoapObject {
-	/** @var ArticleBranchDeviationLine[] */
-	public $request = array();
-	public function __construct($list = array()) { $this->request = $list; }
+	public SaveArticleBranchDeviationsRequest $request;
+	public function __construct() {
+		$this->request = new SaveArticleBranchDeviationsRequest();
+	}
 	public function writeProps(SoapGenerator $gen): void {
-		$tmp_request = new SaveArticleBranchDeviationsRequest($this->request);
-$tmp_request->write($gen, 'request');
-
+		$this->request->write($gen, 'request');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -31272,13 +31309,12 @@ class getConfigurationValues extends SoapObject {
 }
 
 class updateConfigurationValues extends SoapObject {
-	/** @var ConfigurationKeyValues[] */
-	public $request = array();
-	public function __construct($list = array()) { $this->request = $list; }
+	public UpdateConfigurationValuesRequest $request;
+	public function __construct() {
+		$this->request = new UpdateConfigurationValuesRequest();
+	}
 	public function writeProps(SoapGenerator $gen): void {
-		$tmp_request = new UpdateConfigurationValuesRequest($this->request);
-$tmp_request->write($gen, 'request');
-
+		($this->request)->write($gen, 'request');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -31422,7 +31458,7 @@ class getDayStockConfiguration extends SoapObject {
 	}
 }
 
-class saveDayStockConfiguration extends SoapObject {
+class saveDayStockConfiguration_ extends SoapObject {
 	public SaveDayStockConfigurationRequest $request;
 	public function __construct() {
 		$this->request = new SaveDayStockConfigurationRequest();
@@ -31482,7 +31518,7 @@ class saveActivityTypes extends SoapObject {
 	}
 }
 
-class createActivity extends SoapObject {
+class createActivity_ extends SoapObject {
 	public CreateActivityRequest $request;
 	public function __construct() {
 		$this->request = new CreateActivityRequest();
@@ -31497,7 +31533,7 @@ class createActivity extends SoapObject {
 	}
 }
 
-class updateActivity extends SoapObject {
+class updateActivity_ extends SoapObject {
 	public UpdateActivityRequest $request;
 	public function __construct() {
 		$this->request = new UpdateActivityRequest();
@@ -31512,7 +31548,7 @@ class updateActivity extends SoapObject {
 	}
 }
 
-class saveActivity extends SoapObject {
+class saveActivity_ extends SoapObject {
 	public SaveActivityRequest $request;
 	public function __construct() {
 		$this->request = new SaveActivityRequest();
@@ -32302,13 +32338,12 @@ class getCostCenters extends SoapObject {
 }
 
 class saveCostCenters extends SoapObject {
-	/** @var CostCenter[] */
-	public $request = array();
-	public function __construct($list = array()) { $this->request = $list; }
+	public SaveCostCentersRequest $request;
+	public function __construct() {
+		$this->request = new SaveCostCentersRequest();
+	}
 	public function writeProps(SoapGenerator $gen): void {
-		$tmp_request = new SaveCostCentersRequest($this->request);
-$tmp_request->write($gen, 'request');
-
+		$this->request->write($gen, 'request');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -32333,13 +32368,12 @@ class getBpeBudgets extends SoapObject {
 }
 
 class saveBpeBudgets extends SoapObject {
-	/** @var BpeEmployeeBudget[] */
-	public $request = array();
-	public function __construct($list = array()) { $this->request = $list; }
+	public SaveBpeBudgetsRequest $request;
+	public function __construct() {
+		$this->request = new SaveBpeBudgetsRequest();
+	}
 	public function writeProps(SoapGenerator $gen): void {
-		$tmp_request = new SaveBpeBudgetsRequest($this->request);
-$tmp_request->write($gen, 'request');
-
+		$this->request->write($gen, 'request');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -32540,7 +32574,7 @@ class getRelationGiftcards extends SoapObject {
 	}
 }
 
-class getGiftcard extends SoapObject {
+class getGiftcard_ extends SoapObject {
 	public GetGiftcardRequest $request;
 	public function __construct() {
 		$this->request = new GetGiftcardRequest();
@@ -32780,7 +32814,7 @@ class redeemVoucherIssuance extends SoapObject {
 	}
 }
 
-class reportTurnoverByBranch extends SoapObject {
+class reportTurnoverByBranch_ extends SoapObject {
 	public ReportTurnoverByBranchRequest $request;
 	public function __construct() {
 		$this->request = new ReportTurnoverByBranchRequest();
@@ -32795,7 +32829,7 @@ class reportTurnoverByBranch extends SoapObject {
 	}
 }
 
-class reportTurnoverByEmployee extends SoapObject {
+class reportTurnoverByEmployee_ extends SoapObject {
 	public ReportTurnoverByEmployeeRequest $request;
 	public function __construct() {
 		$this->request = new ReportTurnoverByEmployeeRequest();
@@ -32810,7 +32844,7 @@ class reportTurnoverByEmployee extends SoapObject {
 	}
 }
 
-class reportTurnoverByActivity extends SoapObject {
+class reportTurnoverByActivity_ extends SoapObject {
 	public ReportTurnoverByActivityRequest $request;
 	public function __construct() {
 		$this->request = new ReportTurnoverByActivityRequest();
@@ -32825,7 +32859,7 @@ class reportTurnoverByActivity extends SoapObject {
 	}
 }
 
-class reportTurnoverByTurnoverGroup extends SoapObject {
+class reportTurnoverByTurnoverGroup_ extends SoapObject {
 	public ReportTurnoverByTurnoverGroupRequest $request;
 	public function __construct() {
 		$this->request = new ReportTurnoverByTurnoverGroupRequest();
@@ -32840,7 +32874,7 @@ class reportTurnoverByTurnoverGroup extends SoapObject {
 	}
 }
 
-class reportTurnoverByArticle extends SoapObject {
+class reportTurnoverByArticle_ extends SoapObject {
 	public ReportTurnoverByArticleRequest $request;
 	public function __construct() {
 		$this->request = new ReportTurnoverByArticleRequest();
@@ -32855,7 +32889,7 @@ class reportTurnoverByArticle extends SoapObject {
 	}
 }
 
-class reportHoursByEmployee extends SoapObject {
+class reportHoursByEmployee_ extends SoapObject {
 	public ReportHoursByEmployeeRequest $request;
 	public function __construct() {
 		$this->request = new ReportHoursByEmployeeRequest();
@@ -32870,7 +32904,7 @@ class reportHoursByEmployee extends SoapObject {
 	}
 }
 
-class reportPaymentMethods extends SoapObject {
+class reportPaymentMethods_ extends SoapObject {
 	public ReportPaymentMethodsRequest $request;
 	public function __construct() {
 		$this->request = new ReportPaymentMethodsRequest();
@@ -32885,7 +32919,7 @@ class reportPaymentMethods extends SoapObject {
 	}
 }
 
-class reportTables extends SoapObject {
+class reportTables_ extends SoapObject {
 	public ReportTablesRequest $request;
 	public function __construct() {
 		$this->request = new ReportTablesRequest();
@@ -32900,7 +32934,7 @@ class reportTables extends SoapObject {
 	}
 }
 
-class reportCancellations extends SoapObject {
+class reportCancellations_ extends SoapObject {
 	public ReportCancellationsRequest $request;
 	public function __construct() {
 		$this->request = new ReportCancellationsRequest();
@@ -32915,7 +32949,7 @@ class reportCancellations extends SoapObject {
 	}
 }
 
-class reportBPE extends SoapObject {
+class reportBPE_ extends SoapObject {
 	public ReportBPERequest $request;
 	public function __construct() {
 		$this->request = new ReportBPERequest();
@@ -32930,7 +32964,7 @@ class reportBPE extends SoapObject {
 	}
 }
 
-class reportBranchPerformance extends SoapObject {
+class reportBranchPerformance_ extends SoapObject {
 	public ReportBranchPerformanceRequest $request;
 	public function __construct() {
 		$this->request = new ReportBranchPerformanceRequest();
@@ -32945,7 +32979,7 @@ class reportBranchPerformance extends SoapObject {
 	}
 }
 
-class reportAverageSpending extends SoapObject {
+class reportAverageSpending_ extends SoapObject {
 	public ReportAverageSpendingRequest $request;
 	public function __construct() {
 		$this->request = new ReportAverageSpendingRequest();
@@ -32960,7 +32994,7 @@ class reportAverageSpending extends SoapObject {
 	}
 }
 
-class reportTurnover extends SoapObject {
+class reportTurnover_ extends SoapObject {
 	public ReportTurnoverRequest $request;
 	public function __construct() {
 		$this->request = new ReportTurnoverRequest();
@@ -33005,7 +33039,7 @@ class reportPrintableFinancialTotals extends SoapObject {
 	}
 }
 
-class reportArticlePerformance extends SoapObject {
+class reportArticlePerformance_ extends SoapObject {
 	public ReportArticlePerformanceRequest $request;
 	public function __construct() {
 		$this->request = new ReportArticlePerformanceRequest();
@@ -33065,7 +33099,7 @@ class getSalesRepeatTemplates extends SoapObject {
 	}
 }
 
-class saveSalesRepeatTemplate extends SoapObject {
+class saveSalesRepeatTemplate_ extends SoapObject {
 	public SaveSalesRepeatTemplateRequest $request;
 	public function __construct() {
 		$this->request = new SaveSalesRepeatTemplateRequest();
@@ -34013,13 +34047,12 @@ class getPrintLayoutAssignments extends SoapObject {
 }
 
 class savePrintLayoutAssignments extends SoapObject {
-	/** @var PrintLayoutAssignment[] */
-	public $request = array();
-	public function __construct($list = array()) { $this->request = $list; }
+	public SavePrintLayoutAssignmentsRequest $request;
+	public function __construct() {
+		$this->request = new SavePrintLayoutAssignmentsRequest();
+	}
 	public function writeProps(SoapGenerator $gen): void {
-		$tmp_request = new SavePrintLayoutAssignmentsRequest($this->request);
-$tmp_request->write($gen, 'request');
-
+		$this->request->write($gen, 'request');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
