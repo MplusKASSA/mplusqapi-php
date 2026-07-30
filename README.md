@@ -1,7 +1,4 @@
-# MplusAPI Client V2 EXPERIMENTAL
-
-**WARNING : This is an EXPERIMENTAL release, use at your own risk. All features, interfaces are
-subject to change!**
+# MplusAPI Client
 
 This client is generated with the [wsdl2htmldocs](https://gitlab.com/eelke/wsdl2htmldocs) tool.
 
