@@ -11273,299 +11273,6 @@
           <element name="imageList" type="tns:ImageList" />
         </sequence>
       </complexType>
-      <simpleType name="PrintLayoutType">
-        <restriction base="xsd:string">
-          <enumeration value="ALL" />
-          <enumeration value="RECEIPT" />
-          <enumeration value="GRAPHICS" />
-        </restriction>
-      </simpleType>
-      <simpleType name="PrintLayoutKind">
-        <restriction base="xsd:string">
-          <enumeration value="ALL" />
-          <enumeration value="ARTICLE" />
-          <enumeration value="RELATION" />
-          <enumeration value="EMPLOYEE" />
-          <enumeration value="REGISTER-RECEIPT" />
-          <enumeration value="INVOICE" />
-          <enumeration value="TABLE-ORDER-RECEIPT" />
-          <enumeration value="INTERMEDIATE-ORDER-RECEIPT" />
-          <enumeration value="SALE-ORDER" />
-          <enumeration value="SALE-PACKING-RECEIPT" />
-          <enumeration value="TICKET" />
-          <enumeration value="ORDER-TICKET" />
-          <enumeration value="TICKETCOUNTER-TICKET" />
-          <enumeration value="DEPOSIT-SLIP" />
-          <enumeration value="PURCHASE-DELIVERY" />
-          <enumeration value="PURCHASE-ORDER" />
-          <enumeration value="PARTIAL-PAYMENT" />
-          <enumeration value="QUOTATION" />
-          <enumeration value="MENU-PLANNING" />
-          <enumeration value="ORDER-SLIP" />
-          <enumeration value="WEBHOOK-RECEIPT-FOOTER" />
-          <enumeration value="VOUCHER-ISSUANCE" />
-          <enumeration value="RETURN-SLIP" />
-          <enumeration value="ARTICLE-PRICE-BARCODE" />
-        </restriction>
-      </simpleType>
-      <simpleType name="PrintLayoutFieldType">
-        <restriction base="xsd:string">
-          <enumeration value="ALL" />
-          <enumeration value="DIGITAL-SIGNATURE" />
-          <enumeration value="GRAPHICS-MENU-PLANNING-RULES" />
-          <enumeration value="GRAPHICS-PICTURE" />
-          <enumeration value="GRAPHICS-RICH-TEXT" />
-          <enumeration value="GRAPHICS-RULES" />
-          <enumeration value="GRAPHICS-TEMPLATE" />
-          <enumeration value="GRAPHICS-TEXT" />
-          <enumeration value="RECEIPT-PICTURE" />
-          <enumeration value="RECEIPT-RULES" />
-          <enumeration value="RECEIPT-TEXT" />
-          <enumeration value="RECTANGLE" />
-          <enumeration value="TABLE-ORDER-FORM-RECEIPT-RULES" />
-          <enumeration value="VARYING-GRAPHICS-BARCODE" />
-          <enumeration value="VARYING-GRAPHICS-DATE" />
-          <enumeration value="VARYING-GRAPHICS-PICTURE" />
-          <enumeration value="VARYING-GRAPHICS-TEXT" />
-          <enumeration value="VARYING-RECEIPT-BARCODE" />
-          <enumeration value="VARYING-RECEIPT-DATE" />
-          <enumeration value="VARYING-RECEIPT-PICTURE" />
-          <enumeration value="VARYING-RECEIPT-TEXT" />
-          <enumeration value="WHITESPACE" />
-        </restriction>
-      </simpleType>
-      <simpleType name="GetPrintLayoutsResponseResult">
-        <restriction base="xsd:string">
-          <enumeration value="OK" />
-          <enumeration value="NO-PRINT-LAYOUTS-FOUND" />
-        </restriction>
-      </simpleType>
-      <simpleType name="SavePrintLayoutAssignmentsResponseResult">
-        <restriction base="xsd:string">
-          <enumeration value="UNKNOWN" />
-          <enumeration value="OK" />
-        </restriction>
-      </simpleType>
-      <simpleType name="RenderedPrintLayoutType">
-        <restriction base="xsd:string">
-          <enumeration value="PDF" />
-          <enumeration value="PNG" />
-          <enumeration value="JPEG" />
-          <enumeration value="XPS" />
-          <enumeration value="WEBP" />
-        </restriction>
-      </simpleType>
-      <simpleType name="GetRenderedPrintLayoutResponseResult">
-        <restriction base="xsd:string">
-          <enumeration value="OK" />
-          <enumeration value="PRINT-LAYOUT-NOT-FOUND" />
-          <enumeration value="INVALID-PRINT-INFO" />
-          <enumeration value="RENDERING-FAILED" />
-          <enumeration value="COULDNT-OPEN-FILE" />
-          <enumeration value="THIS-LAYOUT-KIND-DOESNT-EXPECT-ANY-PRINT-INFO" />
-        </restriction>
-      </simpleType>
-      <simpleType name="PrintLayoutMarkupType">
-        <restriction base="xsd:string">
-          <enumeration value="STAR-DOCUMENT-MARKUP" />
-          <enumeration value="ESC-POS-MARKUP" />
-        </restriction>
-      </simpleType>
-      <simpleType name="GetPrintLayoutMarkupResult">
-        <restriction base="xsd:string">
-          <enumeration value="OK" />
-          <enumeration value="PRINT-LAYOUT-NOT-FOUND" />
-          <enumeration value="INVALID-PRINT-INFO" />
-          <enumeration value="MARKUP-FAILED" />
-          <enumeration value="THIS-LAYOUT-KIND-DOESNT-EXPECT-ANY-PRINT-INFO" />
-        </restriction>
-      </simpleType>
-      <simpleType name="PrintPrintLayoutResponseResult">
-        <restriction base="xsd:string">
-          <enumeration value="OK" />
-          <enumeration value="INVALID-PRINT-INFO" />
-          <enumeration value="NONE-PRINTED" />
-          <enumeration value="OTHER" />
-        </restriction>
-      </simpleType>
-      <simpleType name="GetResolvedPrintTemplatesResponseResult">
-        <restriction base="xsd:string">
-          <enumeration value="OK" />
-          <enumeration value="INVALID-PRINT-LAYOUT-KIND" />
-          <enumeration value="INVALID-PRINT-INFO" />
-          <enumeration value="THIS-LAYOUT-KIND-DOESNT-EXPECT-ANY-PRINT-INFO" />
-        </restriction>
-      </simpleType>
-      <complexType name="GetPrintLayoutsRequest">
-        <sequence>
-          <element name="type" type="tns:PrintLayoutType" minOccurs="0" />
-          <element name="kind" type="tns:PrintLayoutKind" minOccurs="0" />
-          <element name="fieldType" type="tns:PrintLayoutFieldType" minOccurs="0" />
-        </sequence>
-      </complexType>
-      <complexType name="PrintLayoutView">
-        <sequence>
-          <element name="id" type="xsd:string" />
-          <element name="name" type="xsd:string" />
-          <element name="type" type="tns:PrintLayoutType" />
-          <element name="kind" type="tns:PrintLayoutKind" />
-          <element name="createdTimestamp" type="xsd:dateTime" />
-          <element name="updatedTimestamp" type="xsd:dateTime" />
-          <element name="hasDigitalSignatureField" type="xsd:boolean" />
-        </sequence>
-      </complexType>
-      <complexType name="GetPrintLayoutAssignmentsRequest">
-        <sequence>
-          <element name="type" type="tns:PrintLayoutType" minOccurs="0" />
-          <element name="kind" type="tns:PrintLayoutKind" minOccurs="0" />
-          <element name="branchNumber" type="xsd:int" minOccurs="0" />
-          <element name="workplaceNumber" type="xsd:int" minOccurs="0" />
-          <element name="useOnlinePrinter" type="xsd:boolean" minOccurs="0" />
-        </sequence>
-      </complexType>
-      <complexType name="PrintLayoutAssignmentPrintLayoutView">
-        <sequence>
-          <element name="id" type="xsd:string" />
-          <element name="name" type="xsd:string" />
-          <element name="type" type="tns:PrintLayoutType" />
-          <element name="kind" type="tns:PrintLayoutKind" />
-        </sequence>
-      </complexType>
-      <complexType name="ns-PrintLayoutLocationId">
-        <sequence>
-          <element name="locationId" type="xsd:int" />
-        </sequence>
-      </complexType>
-      <complexType name="PrintLayoutAssignment">
-        <sequence>
-          <element name="id" type="xsd:int" minOccurs="0" />
-          <element name="workplace" type="tns:WorkplaceIdentifier" />
-          <element name="printLayout" type="tns:PrintLayoutAssignmentPrintLayoutView" />
-          <element name="useOnlinePrinter" type="xsd:boolean" />
-          <element name="baseLocationId" type="xsd:int" />
-          <element name="asLocationId" type="xsd:int" minOccurs="0" />
-          <element name="extraLocationIds" type="tns:ns-PrintLayoutLocationId" minOccurs="0" maxOccurs="unbounded" />
-          <element name="kind" type="tns:PrintLayoutKind" />
-        </sequence>
-      </complexType>
-      <complexType name="SavePrintLayoutAssignmentsRequest">
-        <sequence>
-          <element name="printLayoutAssignments" type="tns:PrintLayoutAssignment" minOccurs="0" maxOccurs="unbounded" />
-        </sequence>
-      </complexType>
-      <complexType name="PrintParam">
-        <sequence>
-          <element name="key" type="xsd:string" />
-          <element name="value" type="xsd:string" />
-        </sequence>
-      </complexType>
-      <complexType name="PrintParams">
-        <sequence>
-          <element name="uuid" type="xsd:string" minOccurs="0" />
-          <element name="yearNumber" type="tns:YearNumber" minOccurs="0" />
-          <element name="params" type="tns:PrintParam" minOccurs="0" maxOccurs="unbounded" />
-        </sequence>
-      </complexType>
-      <complexType name="PrintInfo">
-        <sequence>
-          <element name="paramsList" type="tns:PrintParams" minOccurs="0" maxOccurs="unbounded" />
-          <element name="globalParams" type="tns:PrintParams" minOccurs="0" />
-        </sequence>
-      </complexType>
-      <complexType name="GetRenderedPrintLayoutRequest">
-        <sequence>
-          <element name="printLayoutUuid" type="xsd:string" />
-          <element name="renderType" type="tns:RenderedPrintLayoutType" />
-          <element name="printInfo" type="tns:PrintInfo" minOccurs="0">
-            <annotation>
-              <documentation>
-                use to specify print information. If not used the layout will be rendered without data, which will render an example. If used, the layout will be supplied with the print information before being rendered. Call with invalid print information to see expected print information for the layout kind.
-              </documentation>
-            </annotation>
-          </element>
-          <element name="dpi" type="xsd:int" minOccurs="0">
-            <annotation>
-              <documentation>
-                use to specify the dots per inch for non-pdf render types. Must be equal to or higher than 26, and equal to or less than 300, default is 100.
-              </documentation>
-            </annotation>
-          </element>
-        </sequence>
-      </complexType>
-      <complexType name="GetPrintLayoutMarkupRequest">
-        <sequence>
-          <element name="printLayoutUuid" type="xsd:string" />
-          <element name="markupType" type="tns:PrintLayoutMarkupType" />
-          <element name="printInfo" type="tns:PrintInfo" minOccurs="0" />
-          <element name="responseAsBase64" type="xsd:boolean" minOccurs="0" />
-          <element name="normalWidthInCharacters" type="xsd:int" minOccurs="0" />
-          <element name="smallWidthInCharacters" type="xsd:int" minOccurs="0" />
-        </sequence>
-      </complexType>
-      <complexType name="PrintPrintLayoutRequest">
-        <sequence>
-          <element name="type" type="tns:PrintLayoutType" minOccurs="0" />
-          <element name="kind" type="tns:PrintLayoutKind" />
-          <element name="printInfo" type="tns:PrintInfo" />
-          <element name="workplaceIdentifier" type="tns:WorkplaceIdentifier" />
-        </sequence>
-      </complexType>
-      <complexType name="PrintTemplateList">
-        <sequence>
-          <element name="printTemplate" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
-        </sequence>
-      </complexType>
-      <complexType name="GetResolvedPrintTemplatesRequest">
-        <sequence>
-          <element name="kind" type="tns:PrintLayoutKind" />
-          <element name="printInfo" type="tns:PrintInfo" minOccurs="0" />
-          <element name="printTemplates" type="tns:PrintTemplateList" />
-        </sequence>
-      </complexType>
-      <complexType name="GetPrintLayoutsResponse">
-        <sequence>
-          <element name="result" type="tns:GetPrintLayoutsResponseResult" />
-          <element name="printLayouts" type="tns:PrintLayoutView" minOccurs="0" maxOccurs="unbounded" />
-        </sequence>
-      </complexType>
-      <complexType name="GetPrintLayoutAssignmentsResponse">
-        <sequence>
-          <element name="printLayoutAssignments" type="tns:PrintLayoutAssignment" minOccurs="0" maxOccurs="unbounded" />
-        </sequence>
-      </complexType>
-      <complexType name="SavePrintLayoutAssignmentsResponse">
-        <sequence>
-          <element name="result" type="tns:SavePrintLayoutAssignmentsResponseResult" />
-        </sequence>
-      </complexType>
-      <complexType name="GetRenderedPrintLayoutResponse">
-        <sequence>
-          <element name="result" type="tns:GetRenderedPrintLayoutResponseResult" />
-          <element name="errorMessage" type="xsd:string" />
-          <element name="renderedPrintLayouts" type="SOAP-ENC:base64" minOccurs="0" maxOccurs="unbounded" />
-          <element name="hasDigitalSignatureField" type="xsd:boolean" />
-        </sequence>
-      </complexType>
-      <complexType name="GetPrintLayoutMarkupResponse">
-        <sequence>
-          <element name="result" type="tns:GetPrintLayoutMarkupResult" />
-          <element name="errorMessage" type="xsd:string" />
-          <element name="printLayoutMarkup" type="xsd:string" />
-        </sequence>
-      </complexType>
-      <complexType name="PrintPrintLayoutResponse">
-        <sequence>
-          <element name="result" type="tns:PrintPrintLayoutResponseResult" />
-          <element name="errorMessage" type="xsd:string" minOccurs="0" />
-        </sequence>
-      </complexType>
-      <complexType name="GetResolvedPrintTemplatesResponse">
-        <sequence>
-          <element name="result" type="tns:GetResolvedPrintTemplatesResponseResult" />
-          <element name="errorMessage" type="xsd:string" minOccurs="0" />
-          <element name="resolvedPrintTemplates" type="tns:PrintTemplateList" minOccurs="0" />
-        </sequence>
-      </complexType>
       <simpleType name="VoucherActivationMoment">
         <restriction base="xsd:string">
           <enumeration value="ISSUE-DATE" />
@@ -16194,6 +15901,299 @@
           </extension>
         </complexContent>
       </complexType>
+      <simpleType name="PrintLayoutType">
+        <restriction base="xsd:string">
+          <enumeration value="ALL" />
+          <enumeration value="RECEIPT" />
+          <enumeration value="GRAPHICS" />
+        </restriction>
+      </simpleType>
+      <simpleType name="PrintLayoutKind">
+        <restriction base="xsd:string">
+          <enumeration value="ALL" />
+          <enumeration value="ARTICLE" />
+          <enumeration value="RELATION" />
+          <enumeration value="EMPLOYEE" />
+          <enumeration value="REGISTER-RECEIPT" />
+          <enumeration value="INVOICE" />
+          <enumeration value="TABLE-ORDER-RECEIPT" />
+          <enumeration value="INTERMEDIATE-ORDER-RECEIPT" />
+          <enumeration value="SALE-ORDER" />
+          <enumeration value="SALE-PACKING-RECEIPT" />
+          <enumeration value="TICKET" />
+          <enumeration value="ORDER-TICKET" />
+          <enumeration value="TICKETCOUNTER-TICKET" />
+          <enumeration value="DEPOSIT-SLIP" />
+          <enumeration value="PURCHASE-DELIVERY" />
+          <enumeration value="PURCHASE-ORDER" />
+          <enumeration value="PARTIAL-PAYMENT" />
+          <enumeration value="QUOTATION" />
+          <enumeration value="MENU-PLANNING" />
+          <enumeration value="ORDER-SLIP" />
+          <enumeration value="WEBHOOK-RECEIPT-FOOTER" />
+          <enumeration value="VOUCHER-ISSUANCE" />
+          <enumeration value="RETURN-SLIP" />
+          <enumeration value="ARTICLE-PRICE-BARCODE" />
+        </restriction>
+      </simpleType>
+      <simpleType name="PrintLayoutFieldType">
+        <restriction base="xsd:string">
+          <enumeration value="ALL" />
+          <enumeration value="DIGITAL-SIGNATURE" />
+          <enumeration value="GRAPHICS-MENU-PLANNING-RULES" />
+          <enumeration value="GRAPHICS-PICTURE" />
+          <enumeration value="GRAPHICS-RICH-TEXT" />
+          <enumeration value="GRAPHICS-RULES" />
+          <enumeration value="GRAPHICS-TEMPLATE" />
+          <enumeration value="GRAPHICS-TEXT" />
+          <enumeration value="RECEIPT-PICTURE" />
+          <enumeration value="RECEIPT-RULES" />
+          <enumeration value="RECEIPT-TEXT" />
+          <enumeration value="RECTANGLE" />
+          <enumeration value="TABLE-ORDER-FORM-RECEIPT-RULES" />
+          <enumeration value="VARYING-GRAPHICS-BARCODE" />
+          <enumeration value="VARYING-GRAPHICS-DATE" />
+          <enumeration value="VARYING-GRAPHICS-PICTURE" />
+          <enumeration value="VARYING-GRAPHICS-TEXT" />
+          <enumeration value="VARYING-RECEIPT-BARCODE" />
+          <enumeration value="VARYING-RECEIPT-DATE" />
+          <enumeration value="VARYING-RECEIPT-PICTURE" />
+          <enumeration value="VARYING-RECEIPT-TEXT" />
+          <enumeration value="WHITESPACE" />
+        </restriction>
+      </simpleType>
+      <simpleType name="GetPrintLayoutsResponseResult">
+        <restriction base="xsd:string">
+          <enumeration value="OK" />
+          <enumeration value="NO-PRINT-LAYOUTS-FOUND" />
+        </restriction>
+      </simpleType>
+      <simpleType name="SavePrintLayoutAssignmentsResponseResult">
+        <restriction base="xsd:string">
+          <enumeration value="UNKNOWN" />
+          <enumeration value="OK" />
+        </restriction>
+      </simpleType>
+      <simpleType name="RenderedPrintLayoutType">
+        <restriction base="xsd:string">
+          <enumeration value="PDF" />
+          <enumeration value="PNG" />
+          <enumeration value="JPEG" />
+          <enumeration value="XPS" />
+          <enumeration value="WEBP" />
+        </restriction>
+      </simpleType>
+      <simpleType name="GetRenderedPrintLayoutResponseResult">
+        <restriction base="xsd:string">
+          <enumeration value="OK" />
+          <enumeration value="PRINT-LAYOUT-NOT-FOUND" />
+          <enumeration value="INVALID-PRINT-INFO" />
+          <enumeration value="RENDERING-FAILED" />
+          <enumeration value="COULDNT-OPEN-FILE" />
+          <enumeration value="THIS-LAYOUT-KIND-DOESNT-EXPECT-ANY-PRINT-INFO" />
+        </restriction>
+      </simpleType>
+      <simpleType name="PrintLayoutMarkupType">
+        <restriction base="xsd:string">
+          <enumeration value="STAR-DOCUMENT-MARKUP" />
+          <enumeration value="ESC-POS-MARKUP" />
+        </restriction>
+      </simpleType>
+      <simpleType name="GetPrintLayoutMarkupResult">
+        <restriction base="xsd:string">
+          <enumeration value="OK" />
+          <enumeration value="PRINT-LAYOUT-NOT-FOUND" />
+          <enumeration value="INVALID-PRINT-INFO" />
+          <enumeration value="MARKUP-FAILED" />
+          <enumeration value="THIS-LAYOUT-KIND-DOESNT-EXPECT-ANY-PRINT-INFO" />
+        </restriction>
+      </simpleType>
+      <simpleType name="PrintPrintLayoutResponseResult">
+        <restriction base="xsd:string">
+          <enumeration value="OK" />
+          <enumeration value="INVALID-PRINT-INFO" />
+          <enumeration value="NONE-PRINTED" />
+          <enumeration value="OTHER" />
+        </restriction>
+      </simpleType>
+      <simpleType name="GetResolvedPrintTemplatesResponseResult">
+        <restriction base="xsd:string">
+          <enumeration value="OK" />
+          <enumeration value="INVALID-PRINT-LAYOUT-KIND" />
+          <enumeration value="INVALID-PRINT-INFO" />
+          <enumeration value="THIS-LAYOUT-KIND-DOESNT-EXPECT-ANY-PRINT-INFO" />
+        </restriction>
+      </simpleType>
+      <complexType name="GetPrintLayoutsRequest">
+        <sequence>
+          <element name="type" type="tns:PrintLayoutType" minOccurs="0" />
+          <element name="kind" type="tns:PrintLayoutKind" minOccurs="0" />
+          <element name="fieldType" type="tns:PrintLayoutFieldType" minOccurs="0" />
+        </sequence>
+      </complexType>
+      <complexType name="PrintLayoutView">
+        <sequence>
+          <element name="id" type="xsd:string" />
+          <element name="name" type="xsd:string" />
+          <element name="type" type="tns:PrintLayoutType" />
+          <element name="kind" type="tns:PrintLayoutKind" />
+          <element name="createdTimestamp" type="xsd:dateTime" />
+          <element name="updatedTimestamp" type="xsd:dateTime" />
+          <element name="hasDigitalSignatureField" type="xsd:boolean" />
+        </sequence>
+      </complexType>
+      <complexType name="GetPrintLayoutAssignmentsRequest">
+        <sequence>
+          <element name="type" type="tns:PrintLayoutType" minOccurs="0" />
+          <element name="kind" type="tns:PrintLayoutKind" minOccurs="0" />
+          <element name="branchNumber" type="xsd:int" minOccurs="0" />
+          <element name="workplaceNumber" type="xsd:int" minOccurs="0" />
+          <element name="useOnlinePrinter" type="xsd:boolean" minOccurs="0" />
+        </sequence>
+      </complexType>
+      <complexType name="PrintLayoutAssignmentPrintLayoutView">
+        <sequence>
+          <element name="id" type="xsd:string" />
+          <element name="name" type="xsd:string" />
+          <element name="type" type="tns:PrintLayoutType" />
+          <element name="kind" type="tns:PrintLayoutKind" />
+        </sequence>
+      </complexType>
+      <complexType name="ns-PrintLayoutLocationId">
+        <sequence>
+          <element name="locationId" type="xsd:int" />
+        </sequence>
+      </complexType>
+      <complexType name="PrintLayoutAssignment">
+        <sequence>
+          <element name="id" type="xsd:int" minOccurs="0" />
+          <element name="workplace" type="tns:WorkplaceIdentifier" />
+          <element name="printLayout" type="tns:PrintLayoutAssignmentPrintLayoutView" />
+          <element name="useOnlinePrinter" type="xsd:boolean" />
+          <element name="baseLocationId" type="xsd:int" />
+          <element name="asLocationId" type="xsd:int" minOccurs="0" />
+          <element name="extraLocationIds" type="tns:ns-PrintLayoutLocationId" minOccurs="0" maxOccurs="unbounded" />
+          <element name="kind" type="tns:PrintLayoutKind" />
+        </sequence>
+      </complexType>
+      <complexType name="SavePrintLayoutAssignmentsRequest">
+        <sequence>
+          <element name="printLayoutAssignments" type="tns:PrintLayoutAssignment" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+      </complexType>
+      <complexType name="PrintParam">
+        <sequence>
+          <element name="key" type="xsd:string" />
+          <element name="value" type="xsd:string" />
+        </sequence>
+      </complexType>
+      <complexType name="PrintParams">
+        <sequence>
+          <element name="uuid" type="xsd:string" minOccurs="0" />
+          <element name="yearNumber" type="tns:YearNumber" minOccurs="0" />
+          <element name="params" type="tns:PrintParam" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+      </complexType>
+      <complexType name="PrintInfo">
+        <sequence>
+          <element name="paramsList" type="tns:PrintParams" minOccurs="0" maxOccurs="unbounded" />
+          <element name="globalParams" type="tns:PrintParams" minOccurs="0" />
+        </sequence>
+      </complexType>
+      <complexType name="GetRenderedPrintLayoutRequest">
+        <sequence>
+          <element name="printLayoutUuid" type="xsd:string" />
+          <element name="renderType" type="tns:RenderedPrintLayoutType" />
+          <element name="printInfo" type="tns:PrintInfo" minOccurs="0">
+            <annotation>
+              <documentation>
+                use to specify print information. If not used the layout will be rendered without data, which will render an example. If used, the layout will be supplied with the print information before being rendered. Call with invalid print information to see expected print information for the layout kind.
+              </documentation>
+            </annotation>
+          </element>
+          <element name="dpi" type="xsd:int" minOccurs="0">
+            <annotation>
+              <documentation>
+                use to specify the dots per inch for non-pdf render types. Must be equal to or higher than 26, and equal to or less than 300, default is 100.
+              </documentation>
+            </annotation>
+          </element>
+        </sequence>
+      </complexType>
+      <complexType name="GetPrintLayoutMarkupRequest">
+        <sequence>
+          <element name="printLayoutUuid" type="xsd:string" />
+          <element name="markupType" type="tns:PrintLayoutMarkupType" />
+          <element name="printInfo" type="tns:PrintInfo" minOccurs="0" />
+          <element name="responseAsBase64" type="xsd:boolean" minOccurs="0" />
+          <element name="normalWidthInCharacters" type="xsd:int" minOccurs="0" />
+          <element name="smallWidthInCharacters" type="xsd:int" minOccurs="0" />
+        </sequence>
+      </complexType>
+      <complexType name="PrintPrintLayoutRequest">
+        <sequence>
+          <element name="type" type="tns:PrintLayoutType" minOccurs="0" />
+          <element name="kind" type="tns:PrintLayoutKind" />
+          <element name="printInfo" type="tns:PrintInfo" />
+          <element name="workplaceIdentifier" type="tns:WorkplaceIdentifier" />
+        </sequence>
+      </complexType>
+      <complexType name="PrintTemplateList">
+        <sequence>
+          <element name="printTemplate" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+      </complexType>
+      <complexType name="GetResolvedPrintTemplatesRequest">
+        <sequence>
+          <element name="kind" type="tns:PrintLayoutKind" />
+          <element name="printInfo" type="tns:PrintInfo" minOccurs="0" />
+          <element name="printTemplates" type="tns:PrintTemplateList" />
+        </sequence>
+      </complexType>
+      <complexType name="GetPrintLayoutsResponse">
+        <sequence>
+          <element name="result" type="tns:GetPrintLayoutsResponseResult" />
+          <element name="printLayouts" type="tns:PrintLayoutView" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+      </complexType>
+      <complexType name="GetPrintLayoutAssignmentsResponse">
+        <sequence>
+          <element name="printLayoutAssignments" type="tns:PrintLayoutAssignment" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+      </complexType>
+      <complexType name="SavePrintLayoutAssignmentsResponse">
+        <sequence>
+          <element name="result" type="tns:SavePrintLayoutAssignmentsResponseResult" />
+        </sequence>
+      </complexType>
+      <complexType name="GetRenderedPrintLayoutResponse">
+        <sequence>
+          <element name="result" type="tns:GetRenderedPrintLayoutResponseResult" />
+          <element name="errorMessage" type="xsd:string" />
+          <element name="renderedPrintLayouts" type="SOAP-ENC:base64" minOccurs="0" maxOccurs="unbounded" />
+          <element name="hasDigitalSignatureField" type="xsd:boolean" />
+        </sequence>
+      </complexType>
+      <complexType name="GetPrintLayoutMarkupResponse">
+        <sequence>
+          <element name="result" type="tns:GetPrintLayoutMarkupResult" />
+          <element name="errorMessage" type="xsd:string" />
+          <element name="printLayoutMarkup" type="xsd:string" />
+        </sequence>
+      </complexType>
+      <complexType name="PrintPrintLayoutResponse">
+        <sequence>
+          <element name="result" type="tns:PrintPrintLayoutResponseResult" />
+          <element name="errorMessage" type="xsd:string" minOccurs="0" />
+        </sequence>
+      </complexType>
+      <complexType name="GetResolvedPrintTemplatesResponse">
+        <sequence>
+          <element name="result" type="tns:GetResolvedPrintTemplatesResponseResult" />
+          <element name="errorMessage" type="xsd:string" minOccurs="0" />
+          <element name="resolvedPrintTemplates" type="tns:PrintTemplateList" minOccurs="0" />
+        </sequence>
+      </complexType>
       <simpleType name="InterbranchOrderState">
         <restriction base="xsd:string">
           <enumeration value="INTERBRANCH-ORDER-STATE-OPEN" />
@@ -18748,62 +18748,6 @@
         </complexType>
       </element>
       <element name="GetImagesResponse" type="tns:GetImagesResponse" />
-      <element name="getPrintLayouts">
-        <complexType>
-          <sequence>
-            <element name="request" type="tns:GetPrintLayoutsRequest" />
-          </sequence>
-        </complexType>
-      </element>
-      <element name="GetPrintLayoutsResponse" type="tns:GetPrintLayoutsResponse" />
-      <element name="getPrintLayoutAssignments">
-        <complexType>
-          <sequence>
-            <element name="request" type="tns:GetPrintLayoutAssignmentsRequest" />
-          </sequence>
-        </complexType>
-      </element>
-      <element name="GetPrintLayoutAssignmentsResponse" type="tns:GetPrintLayoutAssignmentsResponse" />
-      <element name="savePrintLayoutAssignments">
-        <complexType>
-          <sequence>
-            <element name="request" type="tns:SavePrintLayoutAssignmentsRequest" />
-          </sequence>
-        </complexType>
-      </element>
-      <element name="SavePrintLayoutAssignmentsResponse" type="tns:SavePrintLayoutAssignmentsResponse" />
-      <element name="getRenderedPrintLayout">
-        <complexType>
-          <sequence>
-            <element name="request" type="tns:GetRenderedPrintLayoutRequest" />
-          </sequence>
-        </complexType>
-      </element>
-      <element name="GetRenderedPrintLayoutResponse" type="tns:GetRenderedPrintLayoutResponse" />
-      <element name="getPrintLayoutMarkup">
-        <complexType>
-          <sequence>
-            <element name="request" type="tns:GetPrintLayoutMarkupRequest" />
-          </sequence>
-        </complexType>
-      </element>
-      <element name="GetPrintLayoutMarkupResponse" type="tns:GetPrintLayoutMarkupResponse" />
-      <element name="printPrintLayout">
-        <complexType>
-          <sequence>
-            <element name="request" type="tns:PrintPrintLayoutRequest" />
-          </sequence>
-        </complexType>
-      </element>
-      <element name="PrintPrintLayoutResponse" type="tns:PrintPrintLayoutResponse" />
-      <element name="getResolvedPrintTemplates">
-        <complexType>
-          <sequence>
-            <element name="request" type="tns:GetResolvedPrintTemplatesRequest" />
-          </sequence>
-        </complexType>
-      </element>
-      <element name="GetResolvedPrintTemplatesResponse" type="tns:GetResolvedPrintTemplatesResponse" />
       <element name="checkGiftcardPayment">
         <complexType>
           <sequence>
@@ -19629,6 +19573,62 @@
         </complexType>
       </element>
       <element name="WebhookResp" type="tns:WebhookResp" />
+      <element name="getPrintLayouts">
+        <complexType>
+          <sequence>
+            <element name="request" type="tns:GetPrintLayoutsRequest" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GetPrintLayoutsResponse" type="tns:GetPrintLayoutsResponse" />
+      <element name="getPrintLayoutAssignments">
+        <complexType>
+          <sequence>
+            <element name="request" type="tns:GetPrintLayoutAssignmentsRequest" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GetPrintLayoutAssignmentsResponse" type="tns:GetPrintLayoutAssignmentsResponse" />
+      <element name="savePrintLayoutAssignments">
+        <complexType>
+          <sequence>
+            <element name="request" type="tns:SavePrintLayoutAssignmentsRequest" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="SavePrintLayoutAssignmentsResponse" type="tns:SavePrintLayoutAssignmentsResponse" />
+      <element name="getRenderedPrintLayout">
+        <complexType>
+          <sequence>
+            <element name="request" type="tns:GetRenderedPrintLayoutRequest" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GetRenderedPrintLayoutResponse" type="tns:GetRenderedPrintLayoutResponse" />
+      <element name="getPrintLayoutMarkup">
+        <complexType>
+          <sequence>
+            <element name="request" type="tns:GetPrintLayoutMarkupRequest" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GetPrintLayoutMarkupResponse" type="tns:GetPrintLayoutMarkupResponse" />
+      <element name="printPrintLayout">
+        <complexType>
+          <sequence>
+            <element name="request" type="tns:PrintPrintLayoutRequest" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="PrintPrintLayoutResponse" type="tns:PrintPrintLayoutResponse" />
+      <element name="getResolvedPrintTemplates">
+        <complexType>
+          <sequence>
+            <element name="request" type="tns:GetResolvedPrintTemplatesRequest" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GetResolvedPrintTemplatesResponse" type="tns:GetResolvedPrintTemplatesResponse" />
       <element name="getInterbranchOrders">
         <complexType>
           <sequence>
@@ -21190,48 +21190,6 @@
   <message name="GetImagesResponse">
     <part name="Body" element="tns:GetImagesResponse" />
   </message>
-  <message name="getPrintLayouts">
-    <part name="Body" element="tns:getPrintLayouts" />
-  </message>
-  <message name="GetPrintLayoutsResponse">
-    <part name="Body" element="tns:GetPrintLayoutsResponse" />
-  </message>
-  <message name="getPrintLayoutAssignments">
-    <part name="Body" element="tns:getPrintLayoutAssignments" />
-  </message>
-  <message name="GetPrintLayoutAssignmentsResponse">
-    <part name="Body" element="tns:GetPrintLayoutAssignmentsResponse" />
-  </message>
-  <message name="savePrintLayoutAssignments">
-    <part name="Body" element="tns:savePrintLayoutAssignments" />
-  </message>
-  <message name="SavePrintLayoutAssignmentsResponse">
-    <part name="Body" element="tns:SavePrintLayoutAssignmentsResponse" />
-  </message>
-  <message name="getRenderedPrintLayout">
-    <part name="Body" element="tns:getRenderedPrintLayout" />
-  </message>
-  <message name="GetRenderedPrintLayoutResponse">
-    <part name="Body" element="tns:GetRenderedPrintLayoutResponse" />
-  </message>
-  <message name="getPrintLayoutMarkup">
-    <part name="Body" element="tns:getPrintLayoutMarkup" />
-  </message>
-  <message name="GetPrintLayoutMarkupResponse">
-    <part name="Body" element="tns:GetPrintLayoutMarkupResponse" />
-  </message>
-  <message name="printPrintLayout">
-    <part name="Body" element="tns:printPrintLayout" />
-  </message>
-  <message name="PrintPrintLayoutResponse">
-    <part name="Body" element="tns:PrintPrintLayoutResponse" />
-  </message>
-  <message name="getResolvedPrintTemplates">
-    <part name="Body" element="tns:getResolvedPrintTemplates" />
-  </message>
-  <message name="GetResolvedPrintTemplatesResponse">
-    <part name="Body" element="tns:GetResolvedPrintTemplatesResponse" />
-  </message>
   <message name="checkGiftcardPayment">
     <part name="Body" element="tns:checkGiftcardPayment" />
   </message>
@@ -21825,6 +21783,48 @@
   </message>
   <message name="WebhookResp">
     <part name="Body" element="tns:WebhookResp" />
+  </message>
+  <message name="getPrintLayouts">
+    <part name="Body" element="tns:getPrintLayouts" />
+  </message>
+  <message name="GetPrintLayoutsResponse">
+    <part name="Body" element="tns:GetPrintLayoutsResponse" />
+  </message>
+  <message name="getPrintLayoutAssignments">
+    <part name="Body" element="tns:getPrintLayoutAssignments" />
+  </message>
+  <message name="GetPrintLayoutAssignmentsResponse">
+    <part name="Body" element="tns:GetPrintLayoutAssignmentsResponse" />
+  </message>
+  <message name="savePrintLayoutAssignments">
+    <part name="Body" element="tns:savePrintLayoutAssignments" />
+  </message>
+  <message name="SavePrintLayoutAssignmentsResponse">
+    <part name="Body" element="tns:SavePrintLayoutAssignmentsResponse" />
+  </message>
+  <message name="getRenderedPrintLayout">
+    <part name="Body" element="tns:getRenderedPrintLayout" />
+  </message>
+  <message name="GetRenderedPrintLayoutResponse">
+    <part name="Body" element="tns:GetRenderedPrintLayoutResponse" />
+  </message>
+  <message name="getPrintLayoutMarkup">
+    <part name="Body" element="tns:getPrintLayoutMarkup" />
+  </message>
+  <message name="GetPrintLayoutMarkupResponse">
+    <part name="Body" element="tns:GetPrintLayoutMarkupResponse" />
+  </message>
+  <message name="printPrintLayout">
+    <part name="Body" element="tns:printPrintLayout" />
+  </message>
+  <message name="PrintPrintLayoutResponse">
+    <part name="Body" element="tns:PrintPrintLayoutResponse" />
+  </message>
+  <message name="getResolvedPrintTemplates">
+    <part name="Body" element="tns:getResolvedPrintTemplates" />
+  </message>
+  <message name="GetResolvedPrintTemplatesResponse">
+    <part name="Body" element="tns:GetResolvedPrintTemplatesResponse" />
   </message>
   <message name="getInterbranchOrders">
     <part name="Body" element="tns:getInterbranchOrders" />
@@ -23122,34 +23122,6 @@
       <input message="tns:getImages" />
       <output message="tns:GetImagesResponse" />
     </operation>
-    <operation name="getPrintLayouts">
-      <input message="tns:getPrintLayouts" />
-      <output message="tns:GetPrintLayoutsResponse" />
-    </operation>
-    <operation name="getPrintLayoutAssignments">
-      <input message="tns:getPrintLayoutAssignments" />
-      <output message="tns:GetPrintLayoutAssignmentsResponse" />
-    </operation>
-    <operation name="savePrintLayoutAssignments">
-      <input message="tns:savePrintLayoutAssignments" />
-      <output message="tns:SavePrintLayoutAssignmentsResponse" />
-    </operation>
-    <operation name="getRenderedPrintLayout">
-      <input message="tns:getRenderedPrintLayout" />
-      <output message="tns:GetRenderedPrintLayoutResponse" />
-    </operation>
-    <operation name="getPrintLayoutMarkup">
-      <input message="tns:getPrintLayoutMarkup" />
-      <output message="tns:GetPrintLayoutMarkupResponse" />
-    </operation>
-    <operation name="printPrintLayout">
-      <input message="tns:printPrintLayout" />
-      <output message="tns:PrintPrintLayoutResponse" />
-    </operation>
-    <operation name="getResolvedPrintTemplates">
-      <input message="tns:getResolvedPrintTemplates" />
-      <output message="tns:GetResolvedPrintTemplatesResponse" />
-    </operation>
     <operation name="checkGiftcardPayment">
       <input message="tns:checkGiftcardPayment" />
       <output message="tns:CheckGiftcardPaymentResponse" />
@@ -23561,6 +23533,34 @@
     <operation name="sendWebhook">
       <input message="tns:sendWebhook" />
       <output message="tns:WebhookResp" />
+    </operation>
+    <operation name="getPrintLayouts">
+      <input message="tns:getPrintLayouts" />
+      <output message="tns:GetPrintLayoutsResponse" />
+    </operation>
+    <operation name="getPrintLayoutAssignments">
+      <input message="tns:getPrintLayoutAssignments" />
+      <output message="tns:GetPrintLayoutAssignmentsResponse" />
+    </operation>
+    <operation name="savePrintLayoutAssignments">
+      <input message="tns:savePrintLayoutAssignments" />
+      <output message="tns:SavePrintLayoutAssignmentsResponse" />
+    </operation>
+    <operation name="getRenderedPrintLayout">
+      <input message="tns:getRenderedPrintLayout" />
+      <output message="tns:GetRenderedPrintLayoutResponse" />
+    </operation>
+    <operation name="getPrintLayoutMarkup">
+      <input message="tns:getPrintLayoutMarkup" />
+      <output message="tns:GetPrintLayoutMarkupResponse" />
+    </operation>
+    <operation name="printPrintLayout">
+      <input message="tns:printPrintLayout" />
+      <output message="tns:PrintPrintLayoutResponse" />
+    </operation>
+    <operation name="getResolvedPrintTemplates">
+      <input message="tns:getResolvedPrintTemplates" />
+      <output message="tns:GetResolvedPrintTemplatesResponse" />
     </operation>
     <operation name="getInterbranchOrders">
       <input message="tns:getInterbranchOrders" />
@@ -25876,69 +25876,6 @@
         <SOAP:body use="literal" parts="Body" />
       </output>
     </operation>
-    <operation name="getPrintLayouts">
-      <SOAP:operation soapAction="" />
-      <input>
-        <SOAP:body use="literal" parts="Body" />
-      </input>
-      <output>
-        <SOAP:body use="literal" parts="Body" />
-      </output>
-    </operation>
-    <operation name="getPrintLayoutAssignments">
-      <SOAP:operation soapAction="" />
-      <input>
-        <SOAP:body use="literal" parts="Body" />
-      </input>
-      <output>
-        <SOAP:body use="literal" parts="Body" />
-      </output>
-    </operation>
-    <operation name="savePrintLayoutAssignments">
-      <SOAP:operation soapAction="" />
-      <input>
-        <SOAP:body use="literal" parts="Body" />
-      </input>
-      <output>
-        <SOAP:body use="literal" parts="Body" />
-      </output>
-    </operation>
-    <operation name="getRenderedPrintLayout">
-      <SOAP:operation soapAction="" />
-      <input>
-        <SOAP:body use="literal" parts="Body" />
-      </input>
-      <output>
-        <SOAP:body use="literal" parts="Body" />
-      </output>
-    </operation>
-    <operation name="getPrintLayoutMarkup">
-      <SOAP:operation soapAction="" />
-      <input>
-        <SOAP:body use="literal" parts="Body" />
-      </input>
-      <output>
-        <SOAP:body use="literal" parts="Body" />
-      </output>
-    </operation>
-    <operation name="printPrintLayout">
-      <SOAP:operation soapAction="" />
-      <input>
-        <SOAP:body use="literal" parts="Body" />
-      </input>
-      <output>
-        <SOAP:body use="literal" parts="Body" />
-      </output>
-    </operation>
-    <operation name="getResolvedPrintTemplates">
-      <SOAP:operation soapAction="" />
-      <input>
-        <SOAP:body use="literal" parts="Body" />
-      </input>
-      <output>
-        <SOAP:body use="literal" parts="Body" />
-      </output>
-    </operation>
     <operation name="checkGiftcardPayment">
       <SOAP:operation soapAction="" />
       <input>
@@ -26858,6 +26795,69 @@
       </output>
     </operation>
     <operation name="sendWebhook">
+      <SOAP:operation soapAction="" />
+      <input>
+        <SOAP:body use="literal" parts="Body" />
+      </input>
+      <output>
+        <SOAP:body use="literal" parts="Body" />
+      </output>
+    </operation>
+    <operation name="getPrintLayouts">
+      <SOAP:operation soapAction="" />
+      <input>
+        <SOAP:body use="literal" parts="Body" />
+      </input>
+      <output>
+        <SOAP:body use="literal" parts="Body" />
+      </output>
+    </operation>
+    <operation name="getPrintLayoutAssignments">
+      <SOAP:operation soapAction="" />
+      <input>
+        <SOAP:body use="literal" parts="Body" />
+      </input>
+      <output>
+        <SOAP:body use="literal" parts="Body" />
+      </output>
+    </operation>
+    <operation name="savePrintLayoutAssignments">
+      <SOAP:operation soapAction="" />
+      <input>
+        <SOAP:body use="literal" parts="Body" />
+      </input>
+      <output>
+        <SOAP:body use="literal" parts="Body" />
+      </output>
+    </operation>
+    <operation name="getRenderedPrintLayout">
+      <SOAP:operation soapAction="" />
+      <input>
+        <SOAP:body use="literal" parts="Body" />
+      </input>
+      <output>
+        <SOAP:body use="literal" parts="Body" />
+      </output>
+    </operation>
+    <operation name="getPrintLayoutMarkup">
+      <SOAP:operation soapAction="" />
+      <input>
+        <SOAP:body use="literal" parts="Body" />
+      </input>
+      <output>
+        <SOAP:body use="literal" parts="Body" />
+      </output>
+    </operation>
+    <operation name="printPrintLayout">
+      <SOAP:operation soapAction="" />
+      <input>
+        <SOAP:body use="literal" parts="Body" />
+      </input>
+      <output>
+        <SOAP:body use="literal" parts="Body" />
+      </output>
+    </operation>
+    <operation name="getResolvedPrintTemplates">
       <SOAP:operation soapAction="" />
       <input>
         <SOAP:body use="literal" parts="Body" />
