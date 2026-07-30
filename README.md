@@ -1,49 +1,17 @@
-# MplusQapiClient
+# MplusAPI Client V2 EXPERIMENTAL
 
-This is the official PHP client for the MplusKASSA SOAP API.
+**WARNING : This is an EXPERIMENTAL release, use at your own risk. All features, interfaces are
+subject to change!**
 
-```
-composer require mpluskassa/mplusqapi
-```
+This client is generated with the [wsdl2htmldocs](https://gitlab.com/eelke/wsdl2htmldocs) tool.
 
-## Usage
+# Features and Goals
 
-```php
-use MplusKASSA\MplusQapi\MplusApiClient;
+- no runtime wsdl parsing
+- strict typing
+- increase productivity
 
-$client = new MplusApiClient('api.mpluskassa.nl', $port, $ident, $secret);
-
-$response = $client->getApiVersion();
-
-echo "{$response->serviceMajorNumber}.{$response->serviceMinorNumber}.{$response->serviceRevisionNumber}";
-```
-
-## Debugging
-
-To retrieve the raw SOAP XML contents of the last request and/or response that were sent, use `getLastRequest`  and `getLastReponse`.
-
-```php
-
-// ...
-
-$response = $client->getApiVersion();
-
-$lastRequest = $client->getLastRequest();
-
-echo $lastRequest;
-
-$lastResponse = $client->getLastResponse();
-
-echo $lastResponse;
-```
-
-## Features and Goals
-
-- No runtime WSDL parsing needed.
-- Strict typing.
-- Increased productivity.
-
-## Notes on how the WSDL is mapped to PHP
+# Notes on how the WSDL is mapped to PHP
 
 - xsd:Date and xsd:DateTime are mapped to \DateTime
 - xsd:Decimal is mapped to Brick\BigDecimal
@@ -51,7 +19,18 @@ echo $lastResponse;
 - Many longs that contain an unscaled value and their companion decimalplaces are converted to Brick\BigDecimal
 - When a list is wrapped in an object containing only that list one level of indirection is removed
 
-## Dependencies
+# Dependencies
 
 - guzzlehttp/guzzle
 - brick/math
+
+# Generate instructions
+
+You need `wsdl2htmldocs`
+
+Place the wsdl of the correct api version in the `inputs` folder.
+
+Run command similar to this
+```
+wsdl2htmldocs.exe @inputs/parameters.rsp
+```
