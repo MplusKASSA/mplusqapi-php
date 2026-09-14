@@ -67,6 +67,7 @@ class SoapParser extends BaseSoapParser {
 			case 'ContractFrequencyList': return $this->load_ContractFrequencyList($in);
 			case 'SalesLineContractLine': return $this->load_SalesLineContractLine($in);
 			case 'SalesLineContractLineList': return $this->load_SalesLineContractLineList($in);
+			case 'SalesQueueEntry': return $this->load_SalesQueueEntry($in);
 			case 'Order': return $this->load_Order($in);
 			case 'OrderList': return $this->load_OrderList($in);
 			case 'OrderInput': return $this->load_OrderInput($in);
@@ -112,8 +113,12 @@ class SoapParser extends BaseSoapParser {
 			case 'EmployeeNumberList': return $this->load_EmployeeNumberList($in);
 			case 'ApiIdentList': return $this->load_ApiIdentList($in);
 			case 'JsonValueList': return $this->load_JsonValueList($in);
+			case 'TimelineEventDataPredicate': return $this->load_TimelineEventDataPredicate($in);
+			case 'TimelineEventDataPredicateList': return $this->load_TimelineEventDataPredicateList($in);
 			case 'TimelineEventSubFilter': return $this->load_TimelineEventSubFilter($in);
 			case 'TimelineEventFilter': return $this->load_TimelineEventFilter($in);
+			case 'TimelineEventCondition': return $this->load_TimelineEventCondition($in);
+			case 'TimelineEventConditionList': return $this->load_TimelineEventConditionList($in);
 			case 'YearNumberVersion': return $this->load_YearNumberVersion($in);
 			case 'WorkplaceYearNumber': return $this->load_WorkplaceYearNumber($in);
 			case 'NumberSet': return $this->load_NumberSet($in);
@@ -812,6 +817,10 @@ class SoapParser extends BaseSoapParser {
 			case 'BpeEmployeeBudgetList': return $this->load_BpeEmployeeBudgetList($in);
 			case 'GetBpeBudgetsRequest': return $this->load_GetBpeBudgetsRequest($in);
 			case 'SaveBpeBudgetsRequest': return $this->load_SaveBpeBudgetsRequest($in);
+			case 'RegisterContextPresenceRequest': return $this->load_RegisterContextPresenceRequest($in);
+			case 'ContextPresenceParticipant': return $this->load_ContextPresenceParticipant($in);
+			case 'ContextPresenceParticipantList': return $this->load_ContextPresenceParticipantList($in);
+			case 'UnregisterContextPresenceRequest': return $this->load_UnregisterContextPresenceRequest($in);
 			case 'GetConfigurationResponse': return $this->load_GetConfigurationResponse($in);
 			case 'UpdateConfigurationResponse': return $this->load_UpdateConfigurationResponse($in);
 			case 'GetConfigurationTreeResponse': return $this->load_GetConfigurationTreeResponse($in);
@@ -890,6 +899,8 @@ class SoapParser extends BaseSoapParser {
 			case 'SaveCostCentersResponse': return $this->load_SaveCostCentersResponse($in);
 			case 'GetBpeBudgetsResponse': return $this->load_GetBpeBudgetsResponse($in);
 			case 'SaveBpeBudgetsResponse': return $this->load_SaveBpeBudgetsResponse($in);
+			case 'RegisterContextPresenceResponse': return $this->load_RegisterContextPresenceResponse($in);
+			case 'UnregisterContextPresenceResponse': return $this->load_UnregisterContextPresenceResponse($in);
 			case 'ImageLabel': return $this->load_ImageLabel($in);
 			case 'ImageCardLabelIds': return $this->load_ImageCardLabelIds($in);
 			case 'ImageData': return $this->load_ImageData($in);
@@ -1044,6 +1055,17 @@ class SoapParser extends BaseSoapParser {
 			case 'ReportArticlePerformanceList': return $this->load_ReportArticlePerformanceList($in);
 			case 'RegisterTimelineEventsRequest': return $this->load_RegisterTimelineEventsRequest($in);
 			case 'GetTimelineEventsRequest': return $this->load_GetTimelineEventsRequest($in);
+			case 'reportError': return $this->load_reportError($in);
+			case 'GetReportQuerySourcesRequest': return $this->load_GetReportQuerySourcesRequest($in);
+			case 'GetReportPresetsRequest': return $this->load_GetReportPresetsRequest($in);
+			case 'GetDashboardsRequest': return $this->load_GetDashboardsRequest($in);
+			case 'GetDashboardRequest': return $this->load_GetDashboardRequest($in);
+			case 'SaveDashboardRequest': return $this->load_SaveDashboardRequest($in);
+			case 'DeleteDashboardRequest': return $this->load_DeleteDashboardRequest($in);
+			case 'UpdateDashboardOrderRequest': return $this->load_UpdateDashboardOrderRequest($in);
+			case 'ExecuteReportQueriesRequest': return $this->load_ExecuteReportQueriesRequest($in);
+			case 'AssembleReportRequest': return $this->load_AssembleReportRequest($in);
+			case 'ExecuteReportPresetRequest': return $this->load_ExecuteReportPresetRequest($in);
 			case 'ReportTurnoverByBranchResponse': return $this->load_ReportTurnoverByBranchResponse($in);
 			case 'ReportTurnoverByEmployeeResponse': return $this->load_ReportTurnoverByEmployeeResponse($in);
 			case 'ReportTurnoverByActivityResponse': return $this->load_ReportTurnoverByActivityResponse($in);
@@ -1062,6 +1084,16 @@ class SoapParser extends BaseSoapParser {
 			case 'ReportArticlePerformanceResponse': return $this->load_ReportArticlePerformanceResponse($in);
 			case 'RegisterTimelineEventsResponse': return $this->load_RegisterTimelineEventsResponse($in);
 			case 'GetTimelineEventsResponse': return $this->load_GetTimelineEventsResponse($in);
+			case 'GetReportQuerySourcesResponse': return $this->load_GetReportQuerySourcesResponse($in);
+			case 'GetReportPresetsResponse': return $this->load_GetReportPresetsResponse($in);
+			case 'GetDashboardsResponse': return $this->load_GetDashboardsResponse($in);
+			case 'GetDashboardResponse': return $this->load_GetDashboardResponse($in);
+			case 'SaveDashboardResponse': return $this->load_SaveDashboardResponse($in);
+			case 'DeleteDashboardResponse': return $this->load_DeleteDashboardResponse($in);
+			case 'UpdateDashboardOrderResponse': return $this->load_UpdateDashboardOrderResponse($in);
+			case 'ExecuteReportQueriesResponse': return $this->load_ExecuteReportQueriesResponse($in);
+			case 'AssembleReportResponse': return $this->load_AssembleReportResponse($in);
+			case 'ExecuteReportPresetResponse': return $this->load_ExecuteReportPresetResponse($in);
 			case 'ArticleNumberFilter': return $this->load_ArticleNumberFilter($in);
 			case 'Invoice': return $this->load_Invoice($in);
 			case 'InvoiceList': return $this->load_InvoiceList($in);
@@ -1156,7 +1188,6 @@ class SoapParser extends BaseSoapParser {
 			case 'SaveCashCountRequest': return $this->load_SaveCashCountRequest($in);
 			case 'SalesProcessorContext': return $this->load_SalesProcessorContext($in);
 			case 'SalesQueueTypeList': return $this->load_SalesQueueTypeList($in);
-			case 'SalesQueueEntry': return $this->load_SalesQueueEntry($in);
 			case 'SalesQueueEntryList': return $this->load_SalesQueueEntryList($in);
 			case 'SalesQueueResult': return $this->load_SalesQueueResult($in);
 			case 'SalesProcessorResult': return $this->load_SalesProcessorResult($in);
@@ -1179,6 +1210,7 @@ class SoapParser extends BaseSoapParser {
 			case 'CancelPackingSlipRequest': return $this->load_CancelPackingSlipRequest($in);
 			case 'SalesQueueFilter': return $this->load_SalesQueueFilter($in);
 			case 'GetPackingSlipQueueRequest': return $this->load_GetPackingSlipQueueRequest($in);
+			case 'GetOrderQueueRequest': return $this->load_GetOrderQueueRequest($in);
 			case 'GetSalesRepeatTemplatesResponse': return $this->load_GetSalesRepeatTemplatesResponse($in);
 			case 'SaveSalesRepeatTemplateResponse': return $this->load_SaveSalesRepeatTemplateResponse($in);
 			case 'PauseSalesRepeatTemplatesResponse': return $this->load_PauseSalesRepeatTemplatesResponse($in);
@@ -1226,6 +1258,7 @@ class SoapParser extends BaseSoapParser {
 			case 'ProcessPackingSlipResponse': return $this->load_ProcessPackingSlipResponse($in);
 			case 'CancelPackingSlipResponse': return $this->load_CancelPackingSlipResponse($in);
 			case 'GetPackingSlipQueueResponse': return $this->load_GetPackingSlipQueueResponse($in);
+			case 'GetOrderQueueResponse': return $this->load_GetOrderQueueResponse($in);
 			case 'WebhookConsumerEvent': return $this->load_WebhookConsumerEvent($in);
 			case 'WebhookConsumerEventList': return $this->load_WebhookConsumerEventList($in);
 			case 'WebhookConsumerTriggerPattern': return $this->load_WebhookConsumerTriggerPattern($in);
@@ -1603,6 +1636,8 @@ class SoapParser extends BaseSoapParser {
 			case 'saveCostCenters': return $this->load_saveCostCenters($in);
 			case 'getBpeBudgets': return $this->load_getBpeBudgets($in);
 			case 'saveBpeBudgets': return $this->load_saveBpeBudgets($in);
+			case 'registerContextPresence': return $this->load_registerContextPresence($in);
+			case 'unregisterContextPresence': return $this->load_unregisterContextPresence($in);
 			case 'createImage': return $this->load_createImage($in);
 			case 'createImageFromUrl': return $this->load_createImageFromUrl($in);
 			case 'getCardImageLabels': return $this->load_getCardImageLabels($in);
@@ -1650,6 +1685,16 @@ class SoapParser extends BaseSoapParser {
 			case 'reportArticlePerformance': return $this->load_reportArticlePerformance_($in);
 			case 'registerTimelineEvents': return $this->load_registerTimelineEvents($in);
 			case 'getTimelineEvents': return $this->load_getTimelineEvents($in);
+			case 'getReportQuerySources': return $this->load_getReportQuerySources($in);
+			case 'getReportPresets': return $this->load_getReportPresets($in);
+			case 'getDashboards': return $this->load_getDashboards($in);
+			case 'getDashboard': return $this->load_getDashboard($in);
+			case 'saveDashboard': return $this->load_saveDashboard($in);
+			case 'deleteDashboard': return $this->load_deleteDashboard($in);
+			case 'updateDashboardOrder': return $this->load_updateDashboardOrder($in);
+			case 'executeReportQueries': return $this->load_executeReportQueries($in);
+			case 'assembleReport': return $this->load_assembleReport($in);
+			case 'executeReportPreset': return $this->load_executeReportPreset($in);
 			case 'getSalesRepeatTemplates': return $this->load_getSalesRepeatTemplates($in);
 			case 'saveSalesRepeatTemplate': return $this->load_saveSalesRepeatTemplate_($in);
 			case 'pauseSalesRepeatTemplates': return $this->load_pauseSalesRepeatTemplates($in);
@@ -1702,6 +1747,7 @@ class SoapParser extends BaseSoapParser {
 			case 'processPackingSlip': return $this->load_processPackingSlip($in);
 			case 'cancelPackingSlip': return $this->load_cancelPackingSlip($in);
 			case 'getPackingSlipQueue': return $this->load_getPackingSlipQueue($in);
+			case 'getOrderQueue': return $this->load_getOrderQueue($in);
 			case 'getWebhookConsumers': return $this->load_getWebhookConsumers($in);
 			case 'startExternalPayment': return $this->load_startExternalPayment($in);
 			case 'pollExternalPayment': return $this->load_pollExternalPayment($in);
@@ -3168,6 +3214,34 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_SalesQueueEntry(\XMLReader $in) : SalesQueueEntry {
+		$n = $in->name;
+		$o = new SalesQueueEntry();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'id': $o->id = $this->load_string_property($in); break;
+						case 'salesObjectId': $o->salesObjectId = $this->load_string_property($in); break;
+						case 'type': $o->type = $this->load_string_property($in); break;
+						case 'createdTs': $o->createdTs = $this->load_DateTime_property($in); break;
+						case 'processedTs': $o->processedTs = $this->load_DateTime_property($in); break;
+						case 'cancelledTs': $o->cancelledTs = $this->load_DateTime_property($in); break;
+						case 'failedTs': $o->failedTs = $this->load_DateTime_property($in); break;
+						case 'failureReason': $o->failureReason = $this->load_string_property($in); break;
+						case 'branchNumber': $o->branchNumber = $this->load_int_property($in); break;
+						case 'expectedTargetHash': $o->expectedTargetHash = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_Order(\XMLReader $in) : Order {
 		$n = $in->name;
 		$o = new Order();
@@ -3247,6 +3321,7 @@ class SoapParser extends BaseSoapParser {
 						case 'branchInvoiceNumbers': $o->branchInvoiceNumbers = ($this->load_TransactionNumberList($in))->transactionNumber; break;
 						case 'timelineEvents': $o->timelineEvents = ($this->load_TimelineEventList($in))->event; break;
 						case 'contractPeriod': $o->contractPeriod = $this->load_ContractPeriod($in); break;
+						case 'queueEntry': $o->queueEntry = $this->load_SalesQueueEntry($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -4353,6 +4428,49 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_TimelineEventDataPredicate(\XMLReader $in) : TimelineEventDataPredicate {
+		$n = $in->name;
+		$o = new TimelineEventDataPredicate();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'path': $o->path[] = $this->load_string_property($in); break;
+						case 'predicateOperator': $o->predicateOperator = $this->load_string_property($in); break;
+						case 'stringValue': $o->stringValue = $this->load_string_property($in); break;
+						case 'numberValue': $o->numberValue = $this->load_BigDecimal_property($in); break;
+						case 'booleanValue': $o->booleanValue = $this->load_bool_property($in); break;
+						case 'dateTimeValue': $o->dateTimeValue = $this->load_DateTime_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_TimelineEventDataPredicateList(\XMLReader $in) : TimelineEventDataPredicateList {
+		$n = $in->name;
+		$o = new TimelineEventDataPredicateList();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'predicate': $o->predicate[] = $this->load_TimelineEventDataPredicate($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_TimelineEventSubFilter(\XMLReader $in) : TimelineEventSubFilter {
 		$n = $in->name;
 		$o = new TimelineEventSubFilter();
@@ -4370,6 +4488,7 @@ class SoapParser extends BaseSoapParser {
 						case 'data': $o->data = ($this->load_JsonValueList($in))->data; break;
 						case 'from': $o->from = $this->load_DateTime_property($in); break;
 						case 'through': $o->through = $this->load_DateTime_property($in); break;
+						case 'dataPredicates': $o->dataPredicates = ($this->load_TimelineEventDataPredicateList($in))->predicate; break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -4396,8 +4515,48 @@ class SoapParser extends BaseSoapParser {
 						case 'data': $o->data = ($this->load_JsonValueList($in))->data; break;
 						case 'from': $o->from = $this->load_DateTime_property($in); break;
 						case 'through': $o->through = $this->load_DateTime_property($in); break;
+						case 'dataPredicates': $o->dataPredicates = ($this->load_TimelineEventDataPredicateList($in))->predicate; break;
 						case 'entities': $o->entities = ($this->load_TimelineEventEntityList($in))->entity; break;
 						case 'categories': $o->categories = ($this->load_TimelineEventCategoryList($in))->category; break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_TimelineEventCondition(\XMLReader $in) : TimelineEventCondition {
+		$n = $in->name;
+		$o = new TimelineEventCondition();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'match': $o->match = $this->load_string_property($in); break;
+						case 'eventFilter': $o->eventFilter = $this->load_TimelineEventSubFilter($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_TimelineEventConditionList(\XMLReader $in) : TimelineEventConditionList {
+		$n = $in->name;
+		$o = new TimelineEventConditionList();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'condition': $o->condition[] = $this->load_TimelineEventCondition($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -6953,6 +7112,7 @@ class SoapParser extends BaseSoapParser {
 						case 'signingTimelineEventsFilter': $o->signingTimelineEventsFilter = $this->load_TimelineEventSubFilter($in); break;
 						case 'includeOtherTimelineEvents': $o->includeOtherTimelineEvents = $this->load_bool_property($in); break;
 						case 'otherTimelineEventsFilter': $o->otherTimelineEventsFilter = $this->load_TimelineEventSubFilter($in); break;
+						case 'timelineEventConditions': $o->timelineEventConditions = ($this->load_TimelineEventConditionList($in))->condition; break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -19361,6 +19521,7 @@ class SoapParser extends BaseSoapParser {
 						case 'name': $o->name = $this->load_string_property($in); break;
 						case 'filterProfileId': $o->filterProfileId = $this->load_int_property($in); break;
 						case 'rankOrder': $o->rankOrder = $this->load_int_property($in); break;
+						case 'systemGroupKey': $o->systemGroupKey = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -20206,6 +20367,91 @@ class SoapParser extends BaseSoapParser {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
 						case 'bpeEmployeeBudget': $o->bpeEmployeeBudget[] = $this->load_BpeEmployeeBudget($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_RegisterContextPresenceRequest(\XMLReader $in) : RegisterContextPresenceRequest {
+		$n = $in->name;
+		$o = new RegisterContextPresenceRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'presenceId': $o->presenceId = $this->load_string_property($in); break;
+						case 'employeeNumber': $o->employeeNumber = $this->load_int_property($in); break;
+						case 'workplaceKey': $o->workplaceKey = $this->load_WorkplaceIdentifier($in); break;
+						case 'contextKey': $o->contextKey = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_ContextPresenceParticipant(\XMLReader $in) : ContextPresenceParticipant {
+		$n = $in->name;
+		$o = new ContextPresenceParticipant();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'employeeNumber': $o->employeeNumber = $this->load_int_property($in); break;
+						case 'employeeName': $o->employeeName = $this->load_string_property($in); break;
+						case 'workplaceKey': $o->workplaceKey = $this->load_WorkplaceIdentifier($in); break;
+						case 'branchName': $o->branchName = $this->load_string_property($in); break;
+						case 'workplaceName': $o->workplaceName = $this->load_string_property($in); break;
+						case 'workplaceType': $o->workplaceType = $this->load_string_property($in); break;
+						case 'openedTs': $o->openedTs = $this->load_DateTime_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_ContextPresenceParticipantList(\XMLReader $in) : ContextPresenceParticipantList {
+		$n = $in->name;
+		$o = new ContextPresenceParticipantList();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'participant': $o->participant[] = $this->load_ContextPresenceParticipant($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_UnregisterContextPresenceRequest(\XMLReader $in) : UnregisterContextPresenceRequest {
+		$n = $in->name;
+		$o = new UnregisterContextPresenceRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'presenceIds': $o->presenceIds = ($this->load_IdList($in))->id; break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -21838,6 +22084,44 @@ class SoapParser extends BaseSoapParser {
 			switch ($in->nodeType) {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_RegisterContextPresenceResponse(\XMLReader $in) : RegisterContextPresenceResponse {
+		$n = $in->name;
+		$o = new RegisterContextPresenceResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'otherParticipants': $o->otherParticipants = ($this->load_ContextPresenceParticipantList($in))->participant; break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_UnregisterContextPresenceResponse(\XMLReader $in) : UnregisterContextPresenceResponse {
+		$n = $in->name;
+		$o = new UnregisterContextPresenceResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'result': $o->result = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -25232,6 +25516,217 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_reportError(\XMLReader $in) : reportError {
+		$n = $in->name;
+		$o = new reportError();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'code': $o->code = $this->load_string_property($in); break;
+						case 'details': $o->details = $this->load_string_property($in); break;
+						case 'path': $o->path = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetReportQuerySourcesRequest(\XMLReader $in) : GetReportQuerySourcesRequest {
+		$n = $in->name;
+		$o = new GetReportQuerySourcesRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetReportPresetsRequest(\XMLReader $in) : GetReportPresetsRequest {
+		$n = $in->name;
+		$o = new GetReportPresetsRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetDashboardsRequest(\XMLReader $in) : GetDashboardsRequest {
+		$n = $in->name;
+		$o = new GetDashboardsRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetDashboardRequest(\XMLReader $in) : GetDashboardRequest {
+		$n = $in->name;
+		$o = new GetDashboardRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'dashboardId': $o->dashboardId = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_SaveDashboardRequest(\XMLReader $in) : SaveDashboardRequest {
+		$n = $in->name;
+		$o = new SaveDashboardRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'dashboardJson': $o->dashboardJson = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_DeleteDashboardRequest(\XMLReader $in) : DeleteDashboardRequest {
+		$n = $in->name;
+		$o = new DeleteDashboardRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'dashboardId': $o->dashboardId = $this->load_string_property($in); break;
+						case 'revision': $o->revision = $this->load_int_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_UpdateDashboardOrderRequest(\XMLReader $in) : UpdateDashboardOrderRequest {
+		$n = $in->name;
+		$o = new UpdateDashboardOrderRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'dashboardIdsJson': $o->dashboardIdsJson = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_ExecuteReportQueriesRequest(\XMLReader $in) : ExecuteReportQueriesRequest {
+		$n = $in->name;
+		$o = new ExecuteReportQueriesRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'queriesJson': $o->queriesJson = $this->load_string_property($in); break;
+						case 'transformJson': $o->transformJson = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_AssembleReportRequest(\XMLReader $in) : AssembleReportRequest {
+		$n = $in->name;
+		$o = new AssembleReportRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'reportAssemblyJson': $o->reportAssemblyJson = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_ExecuteReportPresetRequest(\XMLReader $in) : ExecuteReportPresetRequest {
+		$n = $in->name;
+		$o = new ExecuteReportPresetRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'presetId': $o->presetId = $this->load_string_property($in); break;
+						case 'queryFiltersJson': $o->queryFiltersJson = $this->load_string_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_ReportTurnoverByBranchResponse(\XMLReader $in) : ReportTurnoverByBranchResponse {
 		$n = $in->name;
 		$o = new ReportTurnoverByBranchResponse();
@@ -25567,6 +26062,207 @@ class SoapParser extends BaseSoapParser {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
 						case 'events': $o->events = ($this->load_TimelineEventList($in))->event; break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetReportQuerySourcesResponse(\XMLReader $in) : GetReportQuerySourcesResponse {
+		$n = $in->name;
+		$o = new GetReportQuerySourcesResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'sourcesJson': $o->sourcesJson = $this->load_string_property($in); break;
+						case 'error': $o->error = $this->load_reportError($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetReportPresetsResponse(\XMLReader $in) : GetReportPresetsResponse {
+		$n = $in->name;
+		$o = new GetReportPresetsResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'presetsJson': $o->presetsJson = $this->load_string_property($in); break;
+						case 'error': $o->error = $this->load_reportError($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetDashboardsResponse(\XMLReader $in) : GetDashboardsResponse {
+		$n = $in->name;
+		$o = new GetDashboardsResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'dashboardsJson': $o->dashboardsJson = $this->load_string_property($in); break;
+						case 'error': $o->error = $this->load_reportError($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetDashboardResponse(\XMLReader $in) : GetDashboardResponse {
+		$n = $in->name;
+		$o = new GetDashboardResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'dashboardJson': $o->dashboardJson = $this->load_string_property($in); break;
+						case 'error': $o->error = $this->load_reportError($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_SaveDashboardResponse(\XMLReader $in) : SaveDashboardResponse {
+		$n = $in->name;
+		$o = new SaveDashboardResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'dashboardJson': $o->dashboardJson = $this->load_string_property($in); break;
+						case 'error': $o->error = $this->load_reportError($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_DeleteDashboardResponse(\XMLReader $in) : DeleteDashboardResponse {
+		$n = $in->name;
+		$o = new DeleteDashboardResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'success': $o->success = $this->load_bool_property($in); break;
+						case 'error': $o->error = $this->load_reportError($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_UpdateDashboardOrderResponse(\XMLReader $in) : UpdateDashboardOrderResponse {
+		$n = $in->name;
+		$o = new UpdateDashboardOrderResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'dashboardsJson': $o->dashboardsJson = $this->load_string_property($in); break;
+						case 'error': $o->error = $this->load_reportError($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_ExecuteReportQueriesResponse(\XMLReader $in) : ExecuteReportQueriesResponse {
+		$n = $in->name;
+		$o = new ExecuteReportQueriesResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'resultsJson': $o->resultsJson = $this->load_string_property($in); break;
+						case 'transformedResultJson': $o->transformedResultJson = $this->load_string_property($in); break;
+						case 'error': $o->error = $this->load_reportError($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_AssembleReportResponse(\XMLReader $in) : AssembleReportResponse {
+		$n = $in->name;
+		$o = new AssembleReportResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'reportJson': $o->reportJson = $this->load_string_property($in); break;
+						case 'error': $o->error = $this->load_reportError($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_ExecuteReportPresetResponse(\XMLReader $in) : ExecuteReportPresetResponse {
+		$n = $in->name;
+		$o = new ExecuteReportPresetResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'reportJson': $o->reportJson = $this->load_string_property($in); break;
+						case 'error': $o->error = $this->load_reportError($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -27365,6 +28061,7 @@ class SoapParser extends BaseSoapParser {
 						case 'signingTimelineEventsFilter': $o->signingTimelineEventsFilter = $this->load_TimelineEventSubFilter($in); break;
 						case 'includeOtherTimelineEvents': $o->includeOtherTimelineEvents = $this->load_bool_property($in); break;
 						case 'otherTimelineEventsFilter': $o->otherTimelineEventsFilter = $this->load_TimelineEventSubFilter($in); break;
+						case 'timelineEventConditions': $o->timelineEventConditions = ($this->load_TimelineEventConditionList($in))->condition; break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -27514,6 +28211,8 @@ class SoapParser extends BaseSoapParser {
 						case 'signingTimelineEventsFilter': $o->signingTimelineEventsFilter = $this->load_TimelineEventSubFilter($in); break;
 						case 'includeOtherTimelineEvents': $o->includeOtherTimelineEvents = $this->load_bool_property($in); break;
 						case 'otherTimelineEventsFilter': $o->otherTimelineEventsFilter = $this->load_TimelineEventSubFilter($in); break;
+						case 'timelineEventConditions': $o->timelineEventConditions = ($this->load_TimelineEventConditionList($in))->condition; break;
+						case 'includeQueuedSnapshots': $o->includeQueuedSnapshots = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -27854,32 +28553,6 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
-	private function load_SalesQueueEntry(\XMLReader $in) : SalesQueueEntry {
-		$n = $in->name;
-		$o = new SalesQueueEntry();
-		if ($in->isEmptyElement) return $o;
-		$continue = true;
-		while ($continue && $in->read()) {
-			switch ($in->nodeType) {
-				case \XMLReader::ELEMENT:
-					switch ($in->localName) {
-						case 'id': $o->id = $this->load_string_property($in); break;
-						case 'salesObjectId': $o->salesObjectId = $this->load_string_property($in); break;
-						case 'type': $o->type = $this->load_string_property($in); break;
-						case 'createdTs': $o->createdTs = $this->load_DateTime_property($in); break;
-						case 'processedTs': $o->processedTs = $this->load_DateTime_property($in); break;
-						case 'cancelledTs': $o->cancelledTs = $this->load_DateTime_property($in); break;
-						case 'failedTs': $o->failedTs = $this->load_DateTime_property($in); break;
-						case 'failureReason': $o->failureReason = $this->load_string_property($in); break;
-					}
-					break;
-				case \XMLReader::END_ELEMENT:
-					if ($in->name == $n) $continue = false;
-					break;
-			}
-		}
-		return $o;
-	}
 	private function load_SalesQueueEntryList(\XMLReader $in) : SalesQueueEntryList {
 		$n = $in->name;
 		$o = new SalesQueueEntryList();
@@ -28136,6 +28809,7 @@ class SoapParser extends BaseSoapParser {
 						case 'directDebitTimelineEventsFilter': $o->directDebitTimelineEventsFilter = $this->load_TimelineEventSubFilter($in); break;
 						case 'includeOtherTimelineEvents': $o->includeOtherTimelineEvents = $this->load_bool_property($in); break;
 						case 'otherTimelineEventsFilter': $o->otherTimelineEventsFilter = $this->load_TimelineEventSubFilter($in); break;
+						case 'timelineEventConditions': $o->timelineEventConditions = ($this->load_TimelineEventConditionList($in))->condition; break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -28245,6 +28919,7 @@ class SoapParser extends BaseSoapParser {
 						case 'branchGroupNumber': $o->branchGroupNumber = $this->load_int_property($in); break;
 						case 'ownerId': $o->ownerId = $this->load_string_property($in); break;
 						case 'branchInvoiceNumber': $o->branchInvoiceNumber = $this->load_TransactionNumber($in); break;
+						case 'queueEntry': $o->queueEntry = $this->load_SalesQueueEntry($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -28336,6 +29011,7 @@ class SoapParser extends BaseSoapParser {
 						case 'branchGroupFilter': $o->branchGroupFilter = ($this->load_BranchGroupFilter($in))->branchGroups; break;
 						case 'includeLineList': $o->includeLineList = $this->load_bool_property($in); break;
 						case 'typeFilter': $o->typeFilter[] = $this->load_string_property($in); break;
+						case 'includeQueuedSnapshots': $o->includeQueuedSnapshots = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -28419,6 +29095,10 @@ class SoapParser extends BaseSoapParser {
 						case 'salesObjectIds': $o->salesObjectIds = ($this->load_IdList($in))->id; break;
 						case 'types': $o->types = ($this->load_SalesQueueTypeList($in))->type; break;
 						case 'pendingOnly': $o->pendingOnly = $this->load_bool_property($in); break;
+						case 'branchNumbers': $o->branchNumbers[] = $this->load_int_property($in); break;
+						case 'processed': $o->processed = $this->load_bool_property($in); break;
+						case 'cancelled': $o->cancelled = $this->load_bool_property($in); break;
+						case 'failed': $o->failed = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -28439,6 +29119,27 @@ class SoapParser extends BaseSoapParser {
 					switch ($in->localName) {
 						case 'filter': $o->filter = $this->load_SalesQueueFilter($in); break;
 						case 'loadPackingSlip': $o->loadPackingSlip = $this->load_bool_property($in); break;
+						case 'latestOnly': $o->latestOnly = $this->load_bool_property($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetOrderQueueRequest(\XMLReader $in) : GetOrderQueueRequest {
+		$n = $in->name;
+		$o = new GetOrderQueueRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'filter': $o->filter = $this->load_SalesQueueFilter($in); break;
+						case 'loadOrder': $o->loadOrder = $this->load_bool_property($in); break;
 						case 'latestOnly': $o->latestOnly = $this->load_bool_property($in); break;
 					}
 					break;
@@ -29410,6 +30111,26 @@ class SoapParser extends BaseSoapParser {
 					switch ($in->localName) {
 						case 'packingSlipQueueEntryList': $o->packingSlipQueueEntryList = ($this->load_SalesQueueEntryList($in))->entry; break;
 						case 'lastPackingSlip': $o->lastPackingSlip = $this->load_PackingSlip($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_GetOrderQueueResponse(\XMLReader $in) : GetOrderQueueResponse {
+		$n = $in->name;
+		$o = new GetOrderQueueResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'orderQueueEntryList': $o->orderQueueEntryList = ($this->load_SalesQueueEntryList($in))->entry; break;
+						case 'lastOrder': $o->lastOrder = $this->load_Order($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -30539,6 +31260,7 @@ class SoapParser extends BaseSoapParser {
 						case 'selectRelation': $o->selectRelation = $this->load_WebhookSelectRelationInput($in); break;
 						case 'customAction': $o->customAction = $this->load_WebhookCustomActionInput($in); break;
 						case 'form': $o->form = $this->load_WebhookFormInput($in); break;
+						case 'webhookConsumerId': $o->webhookConsumerId = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -30622,6 +31344,7 @@ class SoapParser extends BaseSoapParser {
 						case 'selectRelation': $o->selectRelation = $this->load_WebhookSelectRelationInput($in); break;
 						case 'customAction': $o->customAction = $this->load_WebhookCustomActionInput($in); break;
 						case 'form': $o->form = $this->load_WebhookFormInput($in); break;
+						case 'webhookConsumerId': $o->webhookConsumerId = $this->load_string_property($in); break;
 						case 'externalPayment': $o->externalPayment = $this->load_ExternalPaymentReq($in); break;
 					}
 					break;
@@ -30653,6 +31376,7 @@ class SoapParser extends BaseSoapParser {
 						case 'selectRelation': $o->selectRelation = $this->load_WebhookSelectRelationInput($in); break;
 						case 'customAction': $o->customAction = $this->load_WebhookCustomActionInput($in); break;
 						case 'form': $o->form = $this->load_WebhookFormInput($in); break;
+						case 'webhookConsumerId': $o->webhookConsumerId = $this->load_string_property($in); break;
 						case 'webhookEvent': $o->webhookEvent = $this->load_string_property($in); break;
 					}
 					break;
@@ -37032,6 +37756,44 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_registerContextPresence(\XMLReader $in) : registerContextPresence {
+		$n = $in->name;
+		$o = new registerContextPresence();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_RegisterContextPresenceRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_unregisterContextPresence(\XMLReader $in) : unregisterContextPresence {
+		$n = $in->name;
+		$o = new unregisterContextPresence();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_UnregisterContextPresenceRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_createImage(\XMLReader $in) : createImage {
 		$n = $in->name;
 		$o = new createImage();
@@ -37916,6 +38678,196 @@ class SoapParser extends BaseSoapParser {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
 						case 'request': $o->request = $this->load_GetTimelineEventsRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_getReportQuerySources(\XMLReader $in) : getReportQuerySources {
+		$n = $in->name;
+		$o = new getReportQuerySources();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_GetReportQuerySourcesRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_getReportPresets(\XMLReader $in) : getReportPresets {
+		$n = $in->name;
+		$o = new getReportPresets();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_GetReportPresetsRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_getDashboards(\XMLReader $in) : getDashboards {
+		$n = $in->name;
+		$o = new getDashboards();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_GetDashboardsRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_getDashboard(\XMLReader $in) : getDashboard {
+		$n = $in->name;
+		$o = new getDashboard();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_GetDashboardRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_saveDashboard(\XMLReader $in) : saveDashboard {
+		$n = $in->name;
+		$o = new saveDashboard();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_SaveDashboardRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_deleteDashboard(\XMLReader $in) : deleteDashboard {
+		$n = $in->name;
+		$o = new deleteDashboard();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_DeleteDashboardRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_updateDashboardOrder(\XMLReader $in) : updateDashboardOrder {
+		$n = $in->name;
+		$o = new updateDashboardOrder();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_UpdateDashboardOrderRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_executeReportQueries(\XMLReader $in) : executeReportQueries {
+		$n = $in->name;
+		$o = new executeReportQueries();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_ExecuteReportQueriesRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_assembleReport(\XMLReader $in) : assembleReport {
+		$n = $in->name;
+		$o = new assembleReport();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_AssembleReportRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_executeReportPreset(\XMLReader $in) : executeReportPreset {
+		$n = $in->name;
+		$o = new executeReportPreset();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_ExecuteReportPresetRequest($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -38911,6 +39863,25 @@ class SoapParser extends BaseSoapParser {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
 						case 'request': $o->request = $this->load_GetPackingSlipQueueRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_getOrderQueue(\XMLReader $in) : getOrderQueue {
+		$n = $in->name;
+		$o = new getOrderQueue();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_GetOrderQueueRequest($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:

@@ -257,6 +257,7 @@
           <enumeration value="INTERBRANCH-TRANSFORMED" />
           <enumeration value="PRINTED" />
           <enumeration value="INVOICE-REMINDER-CREATED" />
+          <enumeration value="CONTACTED" />
         </restriction>
       </simpleType>
       <simpleType name="ContractFrequency">
@@ -278,6 +279,16 @@
           <enumeration value="PREV" />
           <enumeration value="NEXT" />
           <enumeration value="UNKNOWN" />
+        </restriction>
+      </simpleType>
+      <simpleType name="SalesQueueType">
+        <restriction base="xsd:string">
+          <enumeration value="CREATE" />
+          <enumeration value="EDIT" />
+          <enumeration value="PAY" />
+          <enumeration value="CANCEL" />
+          <enumeration value="CANCEL-GIFTCARD" />
+          <enumeration value="UNCANCEL" />
         </restriction>
       </simpleType>
       <simpleType name="OrderType">
@@ -386,6 +397,24 @@
         <restriction base="xsd:string">
           <enumeration value="UPDATE-BEHAVIOR-APPEND" />
           <enumeration value="UPDATE-BEHAVIOR-REPLACE" />
+        </restriction>
+      </simpleType>
+      <simpleType name="TimelineEventDataPredicateOperator">
+        <restriction base="xsd:string">
+          <enumeration value="EXISTS" />
+          <enumeration value="NOT-EXISTS" />
+          <enumeration value="EQUAL" />
+          <enumeration value="NOT-EQUAL" />
+          <enumeration value="LESS-THAN" />
+          <enumeration value="LESS-THAN-OR-EQUAL" />
+          <enumeration value="GREATER-THAN" />
+          <enumeration value="GREATER-THAN-OR-EQUAL" />
+        </restriction>
+      </simpleType>
+      <simpleType name="TimelineEventConditionMatch">
+        <restriction base="xsd:string">
+          <enumeration value="EXISTS" />
+          <enumeration value="NOT-EXISTS" />
         </restriction>
       </simpleType>
       <simpleType name="ArticleContractLineType">
@@ -2111,6 +2140,20 @@
           <element name="contractLine" type="tns:SalesLineContractLine" minOccurs="0" maxOccurs="unbounded" />
         </sequence>
       </complexType>
+      <complexType name="SalesQueueEntry">
+        <sequence>
+          <element name="id" type="xsd:string" />
+          <element name="salesObjectId" type="xsd:string" />
+          <element name="type" type="tns:SalesQueueType" />
+          <element name="createdTs" type="xsd:dateTime" />
+          <element name="processedTs" type="xsd:dateTime" minOccurs="0" />
+          <element name="cancelledTs" type="xsd:dateTime" minOccurs="0" />
+          <element name="failedTs" type="xsd:dateTime" minOccurs="0" />
+          <element name="failureReason" type="xsd:string" minOccurs="0" />
+          <element name="branchNumber" type="xsd:int" />
+          <element name="expectedTargetHash" type="xsd:string" minOccurs="0" />
+        </sequence>
+      </complexType>
       <complexType name="Order">
         <sequence>
           <element name="orderId" type="xsd:string" />
@@ -2183,6 +2226,13 @@
           <element name="branchInvoiceNumbers" type="tns:TransactionNumberList" minOccurs="0" />
           <element name="timelineEvents" type="tns:TimelineEventList" minOccurs="0" />
           <element name="contractPeriod" type="tns:ContractPeriod" minOccurs="0" />
+          <element name="queueEntry" type="tns:SalesQueueEntry" minOccurs="0">
+            <annotation>
+              <documentation>
+                Latest unprocessed queue entry if requested using `includeQueueEntry`.
+              </documentation>
+            </annotation>
+          </element>
         </sequence>
       </complexType>
       <complexType name="OrderList">
@@ -2905,6 +2955,21 @@
           <element name="data" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
         </sequence>
       </complexType>
+      <complexType name="TimelineEventDataPredicate">
+        <sequence>
+          <element name="path" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+          <element name="predicateOperator" type="tns:TimelineEventDataPredicateOperator" />
+          <element name="stringValue" type="xsd:string" minOccurs="0" />
+          <element name="numberValue" type="xsd:decimal" minOccurs="0" />
+          <element name="booleanValue" type="xsd:boolean" minOccurs="0" />
+          <element name="dateTimeValue" type="xsd:dateTime" minOccurs="0" />
+        </sequence>
+      </complexType>
+      <complexType name="TimelineEventDataPredicateList">
+        <sequence>
+          <element name="predicate" type="tns:TimelineEventDataPredicate" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+      </complexType>
       <complexType name="TimelineEventSubFilter">
         <sequence>
           <element name="ids" type="tns:IdList" minOccurs="0" />
@@ -2915,6 +2980,7 @@
           <element name="data" type="tns:JsonValueList" minOccurs="0" />
           <element name="from" type="xsd:dateTime" minOccurs="0" />
           <element name="through" type="xsd:dateTime" minOccurs="0" />
+          <element name="dataPredicates" type="tns:TimelineEventDataPredicateList" minOccurs="0" />
         </sequence>
       </complexType>
       <complexType name="TimelineEventFilter">
@@ -2926,6 +2992,17 @@
             </sequence>
           </extension>
         </complexContent>
+      </complexType>
+      <complexType name="TimelineEventCondition">
+        <sequence>
+          <element name="match" type="tns:TimelineEventConditionMatch" />
+          <element name="eventFilter" type="tns:TimelineEventSubFilter" />
+        </sequence>
+      </complexType>
+      <complexType name="TimelineEventConditionList">
+        <sequence>
+          <element name="condition" type="tns:TimelineEventCondition" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
       </complexType>
       <complexType name="YearNumberVersion">
         <sequence>
@@ -4322,6 +4399,7 @@
           <element name="signingTimelineEventsFilter" type="tns:TimelineEventSubFilter" minOccurs="0" />
           <element name="includeOtherTimelineEvents" type="xsd:boolean" minOccurs="0" />
           <element name="otherTimelineEventsFilter" type="tns:TimelineEventSubFilter" minOccurs="0" />
+          <element name="timelineEventConditions" type="tns:TimelineEventConditionList" minOccurs="0" />
         </sequence>
       </complexType>
       <complexType name="GetReceiptsByCashCountRequest">
@@ -8933,6 +9011,31 @@
           <enumeration value="SET-WORKPLACE-ACTIVE-ACTIVITY-RESULT-WORKPLACE-NOT-FOUND" />
         </restriction>
       </simpleType>
+      <simpleType name="WorkplaceType">
+        <restriction base="xsd:string">
+          <enumeration value="STANDARD" />
+          <enumeration value="ONLINE" />
+          <enumeration value="MOBILE" />
+          <enumeration value="KIOSK" />
+          <enumeration value="GUEST" />
+          <enumeration value="NARROWCASTING" />
+          <enumeration value="QR" />
+          <enumeration value="OTHER" />
+        </restriction>
+      </simpleType>
+      <simpleType name="UnregisterContextPresenceResult">
+        <restriction base="xsd:string">
+          <enumeration value="OK" />
+          <enumeration value="NONE-FOUND" />
+          <enumeration value="API-IDENT-MISMATCH">
+            <annotation>
+              <documentation>
+                Owned by another API ident.
+              </documentation>
+            </annotation>
+          </enumeration>
+        </restriction>
+      </simpleType>
       <complexType name="RequestDateFilter">
         <sequence>
           <element name="fromFinancialDate" type="xsd:date" />
@@ -10257,6 +10360,13 @@
           <element name="name" type="xsd:string" />
           <element name="filterProfileId" type="xsd:int" minOccurs="0" />
           <element name="rankOrder" type="xsd:int" minOccurs="0" />
+          <element name="systemGroupKey" type="xsd:string" minOccurs="0">
+            <annotation>
+              <documentation>
+                Filled in if this auth group is a system authorization group. System authorization groups are NOT editable.
+              </documentation>
+            </annotation>
+          </element>
         </sequence>
       </complexType>
       <complexType name="GroupAuthorization">
@@ -10514,6 +10624,35 @@
       <complexType name="SaveBpeBudgetsRequest">
         <sequence>
           <element name="bpeEmployeeBudget" type="tns:BpeEmployeeBudget" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+      </complexType>
+      <complexType name="RegisterContextPresenceRequest">
+        <sequence>
+          <element name="presenceId" type="xsd:string" />
+          <element name="employeeNumber" type="xsd:long" />
+          <element name="workplaceKey" type="tns:WorkplaceIdentifier" />
+          <element name="contextKey" type="xsd:string" />
+        </sequence>
+      </complexType>
+      <complexType name="ContextPresenceParticipant">
+        <sequence>
+          <element name="employeeNumber" type="xsd:long" />
+          <element name="employeeName" type="xsd:string" />
+          <element name="workplaceKey" type="tns:WorkplaceIdentifier" />
+          <element name="branchName" type="xsd:string" />
+          <element name="workplaceName" type="xsd:string" />
+          <element name="workplaceType" type="tns:WorkplaceType" />
+          <element name="openedTs" type="xsd:dateTime" />
+        </sequence>
+      </complexType>
+      <complexType name="ContextPresenceParticipantList">
+        <sequence>
+          <element name="participant" type="tns:ContextPresenceParticipant" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+      </complexType>
+      <complexType name="UnregisterContextPresenceRequest">
+        <sequence>
+          <element name="presenceIds" type="tns:IdList" />
         </sequence>
       </complexType>
       <complexType name="GetConfigurationResponse">
@@ -11065,6 +11204,16 @@
       </complexType>
       <complexType name="SaveBpeBudgetsResponse">
         <sequence />
+      </complexType>
+      <complexType name="RegisterContextPresenceResponse">
+        <sequence>
+          <element name="otherParticipants" type="tns:ContextPresenceParticipantList" />
+        </sequence>
+      </complexType>
+      <complexType name="UnregisterContextPresenceResponse">
+        <sequence>
+          <element name="result" type="tns:UnregisterContextPresenceResult" />
+        </sequence>
       </complexType>
       <simpleType name="CreateImageResult">
         <restriction base="xsd:string">
@@ -12193,6 +12342,23 @@
           <enumeration value="FAILED" />
         </restriction>
       </simpleType>
+      <simpleType name="reportErrorCode">
+        <restriction base="xsd:string">
+          <enumeration value="INVALID-JSON" />
+          <enumeration value="MISSING-FIELD" />
+          <enumeration value="INVALID-FIELD-TYPE" />
+          <enumeration value="INVALID-ENUM-VALUE" />
+          <enumeration value="UNSUPPORTED-REPORT-TYPE" />
+          <enumeration value="UNSUPPORTED-EXPRESSION-TYPE" />
+          <enumeration value="UNSUPPORTED-COLUMN" />
+          <enumeration value="INVALID-COLUMN-VALUE" />
+          <enumeration value="VALIDATION-FAILED" />
+          <enumeration value="LIMIT-EXCEEDED" />
+          <enumeration value="NOT-FOUND" />
+          <enumeration value="NOT-AUTHORIZED" />
+          <enumeration value="REVISION-CONFLICT" />
+        </restriction>
+      </simpleType>
       <complexType name="ReportDateFilter">
         <sequence>
           <element name="fromFinancialDate" type="xsd:date" />
@@ -12746,6 +12912,60 @@
           <element name="filter" type="tns:TimelineEventFilter" />
         </sequence>
       </complexType>
+      <complexType name="reportError">
+        <sequence>
+          <element name="code" type="tns:reportErrorCode" />
+          <element name="details" type="xsd:string" />
+          <element name="path" type="xsd:string" minOccurs="0" />
+        </sequence>
+      </complexType>
+      <complexType name="GetReportQuerySourcesRequest">
+        <sequence />
+      </complexType>
+      <complexType name="GetReportPresetsRequest">
+        <sequence />
+      </complexType>
+      <complexType name="GetDashboardsRequest">
+        <sequence />
+      </complexType>
+      <complexType name="GetDashboardRequest">
+        <sequence>
+          <element name="dashboardId" type="xsd:string" />
+        </sequence>
+      </complexType>
+      <complexType name="SaveDashboardRequest">
+        <sequence>
+          <element name="dashboardJson" type="xsd:string" />
+        </sequence>
+      </complexType>
+      <complexType name="DeleteDashboardRequest">
+        <sequence>
+          <element name="dashboardId" type="xsd:string" />
+          <element name="revision" type="xsd:int" />
+        </sequence>
+      </complexType>
+      <complexType name="UpdateDashboardOrderRequest">
+        <sequence>
+          <element name="dashboardIdsJson" type="xsd:string" />
+        </sequence>
+      </complexType>
+      <complexType name="ExecuteReportQueriesRequest">
+        <sequence>
+          <element name="queriesJson" type="xsd:string" />
+          <element name="transformJson" type="xsd:string" />
+        </sequence>
+      </complexType>
+      <complexType name="AssembleReportRequest">
+        <sequence>
+          <element name="reportAssemblyJson" type="xsd:string" />
+        </sequence>
+      </complexType>
+      <complexType name="ExecuteReportPresetRequest">
+        <sequence>
+          <element name="presetId" type="xsd:string" />
+          <element name="queryFiltersJson" type="xsd:string" minOccurs="0" />
+        </sequence>
+      </complexType>
       <complexType name="ReportTurnoverByBranchResponse">
         <sequence>
           <element name="turnoverList" type="tns:ReportTurnoverByBranchList" />
@@ -12845,6 +13065,67 @@
       <complexType name="GetTimelineEventsResponse">
         <sequence>
           <element name="events" type="tns:TimelineEventList" minOccurs="0" />
+        </sequence>
+      </complexType>
+      <complexType name="GetReportQuerySourcesResponse">
+        <sequence>
+          <element name="sourcesJson" type="xsd:string" minOccurs="0" />
+          <element name="error" type="tns:reportError" minOccurs="0" />
+        </sequence>
+      </complexType>
+      <complexType name="GetReportPresetsResponse">
+        <sequence>
+          <element name="presetsJson" type="xsd:string" minOccurs="0" />
+          <element name="error" type="tns:reportError" minOccurs="0" />
+        </sequence>
+      </complexType>
+      <complexType name="GetDashboardsResponse">
+        <sequence>
+          <element name="dashboardsJson" type="xsd:string" minOccurs="0" />
+          <element name="error" type="tns:reportError" minOccurs="0" />
+        </sequence>
+      </complexType>
+      <complexType name="GetDashboardResponse">
+        <sequence>
+          <element name="dashboardJson" type="xsd:string" minOccurs="0" />
+          <element name="error" type="tns:reportError" minOccurs="0" />
+        </sequence>
+      </complexType>
+      <complexType name="SaveDashboardResponse">
+        <sequence>
+          <element name="dashboardJson" type="xsd:string" minOccurs="0" />
+          <element name="error" type="tns:reportError" minOccurs="0" />
+        </sequence>
+      </complexType>
+      <complexType name="DeleteDashboardResponse">
+        <sequence>
+          <element name="success" type="xsd:boolean" />
+          <element name="error" type="tns:reportError" minOccurs="0" />
+        </sequence>
+      </complexType>
+      <complexType name="UpdateDashboardOrderResponse">
+        <sequence>
+          <element name="dashboardsJson" type="xsd:string" minOccurs="0" />
+          <element name="error" type="tns:reportError" minOccurs="0" />
+        </sequence>
+      </complexType>
+      <complexType name="ExecuteReportQueriesResponse">
+        <sequence>
+          <element name="resultsJson" type="xsd:string" minOccurs="0" />
+          <element name="transformedResultJson" type="xsd:string" minOccurs="0" />
+          <element name="error" type="tns:reportError" minOccurs="0" />
+        </sequence>
+      </complexType>
+      <complexType name="AssembleReportResponse">
+        <sequence>
+          <element name="reportJson" type="xsd:string" minOccurs="0" />
+          <element name="error" type="tns:reportError" minOccurs="0" />
+        </sequence>
+      </complexType>
+      <complexType name="ExecuteReportPresetResponse">
+        <sequence>
+          <element name="reportJson" type="xsd:string" minOccurs="0" />
+          <element name="error" type="tns:reportError" minOccurs="0" />
         </sequence>
       </complexType>
       <simpleType name="InvoiceType">
@@ -13093,15 +13374,6 @@
           <enumeration value="SAVE-CASH-COUNT-INVALID-AUTOMATIC-DEPOSIT-PAYMENT-METHOD" />
           <enumeration value="SAVE-CASH-COUNT-FAILED-TO-BUILD-OR-SAVE-CASH-COUNT" />
           <enumeration value="SAVE-CASH-COUNT-FAILED" />
-        </restriction>
-      </simpleType>
-      <simpleType name="SalesQueueType">
-        <restriction base="xsd:string">
-          <enumeration value="CREATE" />
-          <enumeration value="EDIT" />
-          <enumeration value="CANCEL" />
-          <enumeration value="CANCEL-GIFTCARD" />
-          <enumeration value="UNCANCEL" />
         </restriction>
       </simpleType>
       <simpleType name="SalesQueueResultType">
@@ -14197,6 +14469,7 @@
           <element name="signingTimelineEventsFilter" type="tns:TimelineEventSubFilter" minOccurs="0" />
           <element name="includeOtherTimelineEvents" type="xsd:boolean" minOccurs="0" />
           <element name="otherTimelineEventsFilter" type="tns:TimelineEventSubFilter" minOccurs="0" />
+          <element name="timelineEventConditions" type="tns:TimelineEventConditionList" minOccurs="0" />
         </sequence>
       </complexType>
       <complexType name="SaveProposalInfo">
@@ -14280,6 +14553,14 @@
           <element name="signingTimelineEventsFilter" type="tns:TimelineEventSubFilter" minOccurs="0" />
           <element name="includeOtherTimelineEvents" type="xsd:boolean" minOccurs="0" />
           <element name="otherTimelineEventsFilter" type="tns:TimelineEventSubFilter" minOccurs="0" />
+          <element name="timelineEventConditions" type="tns:TimelineEventConditionList" minOccurs="0" />
+          <element name="includeQueuedSnapshots" type="xsd:boolean" minOccurs="0">
+            <annotation>
+              <documentation>
+                Include pending queued snapshots.
+              </documentation>
+            </annotation>
+          </element>
         </sequence>
       </complexType>
       <complexType name="DetermineContractLinesRequest">
@@ -14521,18 +14802,6 @@
           <element name="type" type="tns:SalesQueueType" minOccurs="0" maxOccurs="unbounded" />
         </sequence>
       </complexType>
-      <complexType name="SalesQueueEntry">
-        <sequence>
-          <element name="id" type="xsd:string" />
-          <element name="salesObjectId" type="xsd:string" />
-          <element name="type" type="tns:SalesQueueType" />
-          <element name="createdTs" type="xsd:dateTime" />
-          <element name="processedTs" type="xsd:dateTime" minOccurs="0" />
-          <element name="cancelledTs" type="xsd:dateTime" minOccurs="0" />
-          <element name="failedTs" type="xsd:dateTime" minOccurs="0" />
-          <element name="failureReason" type="xsd:string" minOccurs="0" />
-        </sequence>
-      </complexType>
       <complexType name="SalesQueueEntryList">
         <sequence>
           <element name="entry" type="tns:SalesQueueEntry" minOccurs="0" maxOccurs="unbounded" />
@@ -14729,6 +14998,7 @@
           <element name="directDebitTimelineEventsFilter" type="tns:TimelineEventSubFilter" minOccurs="0" />
           <element name="includeOtherTimelineEvents" type="xsd:boolean" minOccurs="0" />
           <element name="otherTimelineEventsFilter" type="tns:TimelineEventSubFilter" minOccurs="0" />
+          <element name="timelineEventConditions" type="tns:TimelineEventConditionList" minOccurs="0" />
         </sequence>
       </complexType>
       <complexType name="CreditInvoiceV2Request">
@@ -14814,6 +15084,13 @@
           <element name="branchGroupNumber" type="xsd:int" minOccurs="0" />
           <element name="ownerId" type="xsd:string" minOccurs="0" />
           <element name="branchInvoiceNumber" type="tns:TransactionNumber" minOccurs="0" />
+          <element name="queueEntry" type="tns:SalesQueueEntry" minOccurs="0">
+            <annotation>
+              <documentation>
+                Latest unprocessed queue entry if requested using `includeQueueEntry`.
+              </documentation>
+            </annotation>
+          </element>
         </sequence>
       </complexType>
       <complexType name="PackingSlipInput">
@@ -14873,6 +15150,13 @@
               </documentation>
             </annotation>
           </element>
+          <element name="includeQueuedSnapshots" type="xsd:boolean" minOccurs="0">
+            <annotation>
+              <documentation>
+                Include pending queued snapshots.
+              </documentation>
+            </annotation>
+          </element>
         </sequence>
       </complexType>
       <complexType name="GetPackingSlipsByOrderRequest">
@@ -14905,7 +15189,35 @@
           <element name="ids" type="tns:IdList" minOccurs="0" />
           <element name="salesObjectIds" type="tns:IdList" minOccurs="0" />
           <element name="types" type="tns:SalesQueueTypeList" minOccurs="0" />
-          <element name="pendingOnly" type="xsd:boolean" minOccurs="0" />
+          <element name="pendingOnly" type="xsd:boolean" minOccurs="0">
+            <annotation>
+              <documentation>
+                Set all three state filters to false.
+              </documentation>
+            </annotation>
+          </element>
+          <element name="branchNumbers" type="xsd:int" minOccurs="0" maxOccurs="unbounded" />
+          <element name="processed" type="xsd:boolean" minOccurs="0">
+            <annotation>
+              <documentation>
+                Filter by whether the entry has been processed.
+              </documentation>
+            </annotation>
+          </element>
+          <element name="cancelled" type="xsd:boolean" minOccurs="0">
+            <annotation>
+              <documentation>
+                Filter by whether the entry has been cancelled.
+              </documentation>
+            </annotation>
+          </element>
+          <element name="failed" type="xsd:boolean" minOccurs="0">
+            <annotation>
+              <documentation>
+                Filter by whether the entry has failed.
+              </documentation>
+            </annotation>
+          </element>
         </sequence>
       </complexType>
       <complexType name="GetPackingSlipQueueRequest">
@@ -14922,6 +15234,25 @@
             <annotation>
               <documentation>
                 If true, only the latest queue entry for each sales object will be returned.
+              </documentation>
+            </annotation>
+          </element>
+        </sequence>
+      </complexType>
+      <complexType name="GetOrderQueueRequest">
+        <sequence>
+          <element name="filter" type="tns:SalesQueueFilter" />
+          <element name="loadOrder" type="xsd:boolean" minOccurs="0">
+            <annotation>
+              <documentation>
+                Return the snapshot for one sales object.
+              </documentation>
+            </annotation>
+          </element>
+          <element name="latestOnly" type="xsd:boolean" minOccurs="0">
+            <annotation>
+              <documentation>
+                Return only each sales object's latest entry.
               </documentation>
             </annotation>
           </element>
@@ -15279,6 +15610,18 @@
             <annotation>
               <documentation>
                 Will contain the packing slip state for the latest CREATE/EDIT queue entry. Only returned if loadPackingSlip is true and a single salesObjectId will be returned.
+              </documentation>
+            </annotation>
+          </element>
+        </sequence>
+      </complexType>
+      <complexType name="GetOrderQueueResponse">
+        <sequence>
+          <element name="orderQueueEntryList" type="tns:SalesQueueEntryList" minOccurs="0" />
+          <element name="lastOrder" type="tns:Order" minOccurs="0">
+            <annotation>
+              <documentation>
+                The requested queued order snapshot.
               </documentation>
             </annotation>
           </element>
@@ -15788,6 +16131,7 @@
               <element name="selectRelation" type="tns:WebhookSelectRelationInput" minOccurs="0" />
               <element name="customAction" type="tns:WebhookCustomActionInput" minOccurs="0" />
               <element name="form" type="tns:WebhookFormInput" minOccurs="0" />
+              <element name="webhookConsumerId" type="xsd:string" minOccurs="0" />
             </sequence>
           </extension>
         </complexContent>
@@ -18701,6 +19045,22 @@
         </complexType>
       </element>
       <element name="SaveBpeBudgetsResponse" type="tns:SaveBpeBudgetsResponse" />
+      <element name="registerContextPresence">
+        <complexType>
+          <sequence>
+            <element name="request" type="tns:RegisterContextPresenceRequest" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="RegisterContextPresenceResponse" type="tns:RegisterContextPresenceResponse" />
+      <element name="unregisterContextPresence">
+        <complexType>
+          <sequence>
+            <element name="request" type="tns:UnregisterContextPresenceRequest" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="UnregisterContextPresenceResponse" type="tns:UnregisterContextPresenceResponse" />
       <element name="createImage">
         <complexType>
           <sequence>
@@ -19076,6 +19436,86 @@
         </complexType>
       </element>
       <element name="GetTimelineEventsResponse" type="tns:GetTimelineEventsResponse" />
+      <element name="getReportQuerySources">
+        <complexType>
+          <sequence>
+            <element name="request" type="tns:GetReportQuerySourcesRequest" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GetReportQuerySourcesResponse" type="tns:GetReportQuerySourcesResponse" />
+      <element name="getReportPresets">
+        <complexType>
+          <sequence>
+            <element name="request" type="tns:GetReportPresetsRequest" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GetReportPresetsResponse" type="tns:GetReportPresetsResponse" />
+      <element name="getDashboards">
+        <complexType>
+          <sequence>
+            <element name="request" type="tns:GetDashboardsRequest" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GetDashboardsResponse" type="tns:GetDashboardsResponse" />
+      <element name="getDashboard">
+        <complexType>
+          <sequence>
+            <element name="request" type="tns:GetDashboardRequest" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GetDashboardResponse" type="tns:GetDashboardResponse" />
+      <element name="saveDashboard">
+        <complexType>
+          <sequence>
+            <element name="request" type="tns:SaveDashboardRequest" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="SaveDashboardResponse" type="tns:SaveDashboardResponse" />
+      <element name="deleteDashboard">
+        <complexType>
+          <sequence>
+            <element name="request" type="tns:DeleteDashboardRequest" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="DeleteDashboardResponse" type="tns:DeleteDashboardResponse" />
+      <element name="updateDashboardOrder">
+        <complexType>
+          <sequence>
+            <element name="request" type="tns:UpdateDashboardOrderRequest" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="UpdateDashboardOrderResponse" type="tns:UpdateDashboardOrderResponse" />
+      <element name="executeReportQueries">
+        <complexType>
+          <sequence>
+            <element name="request" type="tns:ExecuteReportQueriesRequest" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="ExecuteReportQueriesResponse" type="tns:ExecuteReportQueriesResponse" />
+      <element name="assembleReport">
+        <complexType>
+          <sequence>
+            <element name="request" type="tns:AssembleReportRequest" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="AssembleReportResponse" type="tns:AssembleReportResponse" />
+      <element name="executeReportPreset">
+        <complexType>
+          <sequence>
+            <element name="request" type="tns:ExecuteReportPresetRequest" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="ExecuteReportPresetResponse" type="tns:ExecuteReportPresetResponse" />
       <element name="getSalesRepeatTemplates">
         <complexType>
           <sequence>
@@ -19492,6 +19932,14 @@
         </complexType>
       </element>
       <element name="GetPackingSlipQueueResponse" type="tns:GetPackingSlipQueueResponse" />
+      <element name="getOrderQueue">
+        <complexType>
+          <sequence>
+            <element name="request" type="tns:GetOrderQueueRequest" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GetOrderQueueResponse" type="tns:GetOrderQueueResponse" />
       <element name="getWebhookConsumers">
         <complexType>
           <sequence>
@@ -21157,6 +21605,18 @@
   <message name="SaveBpeBudgetsResponse">
     <part name="Body" element="tns:SaveBpeBudgetsResponse" />
   </message>
+  <message name="registerContextPresence">
+    <part name="Body" element="tns:registerContextPresence" />
+  </message>
+  <message name="RegisterContextPresenceResponse">
+    <part name="Body" element="tns:RegisterContextPresenceResponse" />
+  </message>
+  <message name="unregisterContextPresence">
+    <part name="Body" element="tns:unregisterContextPresence" />
+  </message>
+  <message name="UnregisterContextPresenceResponse">
+    <part name="Body" element="tns:UnregisterContextPresenceResponse" />
+  </message>
   <message name="createImage">
     <part name="Body" element="tns:createImage" />
   </message>
@@ -21435,6 +21895,66 @@
   </message>
   <message name="GetTimelineEventsResponse">
     <part name="Body" element="tns:GetTimelineEventsResponse" />
+  </message>
+  <message name="getReportQuerySources">
+    <part name="Body" element="tns:getReportQuerySources" />
+  </message>
+  <message name="GetReportQuerySourcesResponse">
+    <part name="Body" element="tns:GetReportQuerySourcesResponse" />
+  </message>
+  <message name="getReportPresets">
+    <part name="Body" element="tns:getReportPresets" />
+  </message>
+  <message name="GetReportPresetsResponse">
+    <part name="Body" element="tns:GetReportPresetsResponse" />
+  </message>
+  <message name="getDashboards">
+    <part name="Body" element="tns:getDashboards" />
+  </message>
+  <message name="GetDashboardsResponse">
+    <part name="Body" element="tns:GetDashboardsResponse" />
+  </message>
+  <message name="getDashboard">
+    <part name="Body" element="tns:getDashboard" />
+  </message>
+  <message name="GetDashboardResponse">
+    <part name="Body" element="tns:GetDashboardResponse" />
+  </message>
+  <message name="saveDashboard">
+    <part name="Body" element="tns:saveDashboard" />
+  </message>
+  <message name="SaveDashboardResponse">
+    <part name="Body" element="tns:SaveDashboardResponse" />
+  </message>
+  <message name="deleteDashboard">
+    <part name="Body" element="tns:deleteDashboard" />
+  </message>
+  <message name="DeleteDashboardResponse">
+    <part name="Body" element="tns:DeleteDashboardResponse" />
+  </message>
+  <message name="updateDashboardOrder">
+    <part name="Body" element="tns:updateDashboardOrder" />
+  </message>
+  <message name="UpdateDashboardOrderResponse">
+    <part name="Body" element="tns:UpdateDashboardOrderResponse" />
+  </message>
+  <message name="executeReportQueries">
+    <part name="Body" element="tns:executeReportQueries" />
+  </message>
+  <message name="ExecuteReportQueriesResponse">
+    <part name="Body" element="tns:ExecuteReportQueriesResponse" />
+  </message>
+  <message name="assembleReport">
+    <part name="Body" element="tns:assembleReport" />
+  </message>
+  <message name="AssembleReportResponse">
+    <part name="Body" element="tns:AssembleReportResponse" />
+  </message>
+  <message name="executeReportPreset">
+    <part name="Body" element="tns:executeReportPreset" />
+  </message>
+  <message name="ExecuteReportPresetResponse">
+    <part name="Body" element="tns:ExecuteReportPresetResponse" />
   </message>
   <message name="getSalesRepeatTemplates">
     <part name="Body" element="tns:getSalesRepeatTemplates" />
@@ -21732,6 +22252,12 @@
   </message>
   <message name="GetPackingSlipQueueResponse">
     <part name="Body" element="tns:GetPackingSlipQueueResponse" />
+  </message>
+  <message name="getOrderQueue">
+    <part name="Body" element="tns:getOrderQueue" />
+  </message>
+  <message name="GetOrderQueueResponse">
+    <part name="Body" element="tns:GetOrderQueueResponse" />
   </message>
   <message name="getWebhookConsumers">
     <part name="Body" element="tns:getWebhookConsumers" />
@@ -23089,6 +23615,20 @@
       <input message="tns:saveBpeBudgets" />
       <output message="tns:SaveBpeBudgetsResponse" />
     </operation>
+    <operation name="registerContextPresence">
+      <documentation>
+      Refreshes the presence registration for the authenticated API ident and returns the other active participants. Repeat every 20 seconds.
+    </documentation>
+      <input message="tns:registerContextPresence" />
+      <output message="tns:RegisterContextPresenceResponse" />
+    </operation>
+    <operation name="unregisterContextPresence">
+      <documentation>
+      Removes presence registrations owned by the authenticated API ident. If any registration belongs to another ident, nothing is removed and the result is API_IDENT_MISMATCH.
+    </documentation>
+      <input message="tns:unregisterContextPresence" />
+      <output message="tns:UnregisterContextPresenceResponse" />
+    </operation>
     <operation name="createImage">
       <input message="tns:createImage" />
       <output message="tns:CreateImageResponse" />
@@ -23285,6 +23825,49 @@
     <operation name="getTimelineEvents">
       <input message="tns:getTimelineEvents" />
       <output message="tns:GetTimelineEventsResponse" />
+    </operation>
+    <operation name="getReportQuerySources">
+      <input message="tns:getReportQuerySources" />
+      <output message="tns:GetReportQuerySourcesResponse" />
+    </operation>
+    <operation name="getReportPresets">
+      <input message="tns:getReportPresets" />
+      <output message="tns:GetReportPresetsResponse" />
+    </operation>
+    <operation name="getDashboards">
+      <input message="tns:getDashboards" />
+      <output message="tns:GetDashboardsResponse" />
+    </operation>
+    <operation name="getDashboard">
+      <input message="tns:getDashboard" />
+      <output message="tns:GetDashboardResponse" />
+    </operation>
+    <operation name="saveDashboard">
+      <input message="tns:saveDashboard" />
+      <output message="tns:SaveDashboardResponse" />
+    </operation>
+    <operation name="deleteDashboard">
+      <input message="tns:deleteDashboard" />
+      <output message="tns:DeleteDashboardResponse" />
+    </operation>
+    <operation name="updateDashboardOrder">
+      <input message="tns:updateDashboardOrder" />
+      <output message="tns:UpdateDashboardOrderResponse" />
+    </operation>
+    <operation name="executeReportQueries">
+      <input message="tns:executeReportQueries" />
+      <output message="tns:ExecuteReportQueriesResponse" />
+    </operation>
+    <operation name="assembleReport">
+      <input message="tns:assembleReport" />
+      <output message="tns:AssembleReportResponse" />
+    </operation>
+    <operation name="executeReportPreset">
+      <documentation>
+      executes an authorized preset. Query conditions use AND.
+    </documentation>
+      <input message="tns:executeReportPreset" />
+      <output message="tns:ExecuteReportPresetResponse" />
     </operation>
     <operation name="getSalesRepeatTemplates">
       <input message="tns:getSalesRepeatTemplates" />
@@ -23493,6 +24076,10 @@
     <operation name="getPackingSlipQueue">
       <input message="tns:getPackingSlipQueue" />
       <output message="tns:GetPackingSlipQueueResponse" />
+    </operation>
+    <operation name="getOrderQueue">
+      <input message="tns:getOrderQueue" />
+      <output message="tns:GetOrderQueueResponse" />
     </operation>
     <operation name="getWebhookConsumers">
       <input message="tns:getWebhookConsumers" />
@@ -25822,6 +26409,24 @@
         <SOAP:body use="literal" parts="Body" />
       </output>
     </operation>
+    <operation name="registerContextPresence">
+      <SOAP:operation soapAction="" />
+      <input>
+        <SOAP:body use="literal" parts="Body" />
+      </input>
+      <output>
+        <SOAP:body use="literal" parts="Body" />
+      </output>
+    </operation>
+    <operation name="unregisterContextPresence">
+      <SOAP:operation soapAction="" />
+      <input>
+        <SOAP:body use="literal" parts="Body" />
+      </input>
+      <output>
+        <SOAP:body use="literal" parts="Body" />
+      </output>
+    </operation>
     <operation name="createImage">
       <SOAP:operation soapAction="" />
       <input>
@@ -26237,6 +26842,96 @@
       </output>
     </operation>
     <operation name="getTimelineEvents">
+      <SOAP:operation soapAction="" />
+      <input>
+        <SOAP:body use="literal" parts="Body" />
+      </input>
+      <output>
+        <SOAP:body use="literal" parts="Body" />
+      </output>
+    </operation>
+    <operation name="getReportQuerySources">
+      <SOAP:operation soapAction="" />
+      <input>
+        <SOAP:body use="literal" parts="Body" />
+      </input>
+      <output>
+        <SOAP:body use="literal" parts="Body" />
+      </output>
+    </operation>
+    <operation name="getReportPresets">
+      <SOAP:operation soapAction="" />
+      <input>
+        <SOAP:body use="literal" parts="Body" />
+      </input>
+      <output>
+        <SOAP:body use="literal" parts="Body" />
+      </output>
+    </operation>
+    <operation name="getDashboards">
+      <SOAP:operation soapAction="" />
+      <input>
+        <SOAP:body use="literal" parts="Body" />
+      </input>
+      <output>
+        <SOAP:body use="literal" parts="Body" />
+      </output>
+    </operation>
+    <operation name="getDashboard">
+      <SOAP:operation soapAction="" />
+      <input>
+        <SOAP:body use="literal" parts="Body" />
+      </input>
+      <output>
+        <SOAP:body use="literal" parts="Body" />
+      </output>
+    </operation>
+    <operation name="saveDashboard">
+      <SOAP:operation soapAction="" />
+      <input>
+        <SOAP:body use="literal" parts="Body" />
+      </input>
+      <output>
+        <SOAP:body use="literal" parts="Body" />
+      </output>
+    </operation>
+    <operation name="deleteDashboard">
+      <SOAP:operation soapAction="" />
+      <input>
+        <SOAP:body use="literal" parts="Body" />
+      </input>
+      <output>
+        <SOAP:body use="literal" parts="Body" />
+      </output>
+    </operation>
+    <operation name="updateDashboardOrder">
+      <SOAP:operation soapAction="" />
+      <input>
+        <SOAP:body use="literal" parts="Body" />
+      </input>
+      <output>
+        <SOAP:body use="literal" parts="Body" />
+      </output>
+    </operation>
+    <operation name="executeReportQueries">
+      <SOAP:operation soapAction="" />
+      <input>
+        <SOAP:body use="literal" parts="Body" />
+      </input>
+      <output>
+        <SOAP:body use="literal" parts="Body" />
+      </output>
+    </operation>
+    <operation name="assembleReport">
+      <SOAP:operation soapAction="" />
+      <input>
+        <SOAP:body use="literal" parts="Body" />
+      </input>
+      <output>
+        <SOAP:body use="literal" parts="Body" />
+      </output>
+    </operation>
+    <operation name="executeReportPreset">
       <SOAP:operation soapAction="" />
       <input>
         <SOAP:body use="literal" parts="Body" />
@@ -26705,6 +27400,15 @@
       </output>
     </operation>
     <operation name="getPackingSlipQueue">
+      <SOAP:operation soapAction="" />
+      <input>
+        <SOAP:body use="literal" parts="Body" />
+      </input>
+      <output>
+        <SOAP:body use="literal" parts="Body" />
+      </output>
+    </operation>
+    <operation name="getOrderQueue">
       <SOAP:operation soapAction="" />
       <input>
         <SOAP:body use="literal" parts="Body" />

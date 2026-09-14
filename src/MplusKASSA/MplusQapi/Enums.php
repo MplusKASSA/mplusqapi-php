@@ -164,6 +164,7 @@ class TimelineEventType {
 	const INTERBRANCH_TRANSFORMED = 'INTERBRANCH-TRANSFORMED';
 	const PRINTED = 'PRINTED';
 	const INVOICE_REMINDER_CREATED = 'INVOICE-REMINDER-CREATED';
+	const CONTACTED = 'CONTACTED';
 }
 class ContractFrequency {
 	const WEEKLY = 'WEEKLY';
@@ -181,6 +182,14 @@ class ContractPeriodCalculationMethod {
 	const PREV = 'PREV';
 	const NEXT = 'NEXT';
 	const UNKNOWN = 'UNKNOWN';
+}
+class SalesQueueType {
+	const CREATE = 'CREATE';
+	const EDIT = 'EDIT';
+	const PAY = 'PAY';
+	const CANCEL = 'CANCEL';
+	const CANCEL_GIFTCARD = 'CANCEL-GIFTCARD';
+	const UNCANCEL = 'UNCANCEL';
 }
 class OrderType {
 	const SALES_ORDER = 'ORDER-TYPE-SALES-ORDER';
@@ -265,6 +274,20 @@ class VoucherRedeemPeriod {
 class UpdateBehavior {
 	const APPEND = 'UPDATE-BEHAVIOR-APPEND';
 	const REPLACE = 'UPDATE-BEHAVIOR-REPLACE';
+}
+class TimelineEventDataPredicateOperator {
+	const EXISTS = 'EXISTS';
+	const NOT_EXISTS = 'NOT-EXISTS';
+	const EQUAL = 'EQUAL';
+	const NOT_EQUAL = 'NOT-EQUAL';
+	const LESS_THAN = 'LESS-THAN';
+	const LESS_THAN_OR_EQUAL = 'LESS-THAN-OR-EQUAL';
+	const GREATER_THAN = 'GREATER-THAN';
+	const GREATER_THAN_OR_EQUAL = 'GREATER-THAN-OR-EQUAL';
+}
+class TimelineEventConditionMatch {
+	const EXISTS = 'EXISTS';
+	const NOT_EXISTS = 'NOT-EXISTS';
 }
 class ArticleContractLineType {
 	const ORDER = 'ORDER';
@@ -1124,6 +1147,21 @@ class SetWorkplaceActiveActivityResult {
 	const ACTIVITY_NOT_ACTIVE = 'SET-WORKPLACE-ACTIVE-ACTIVITY-RESULT-ACTIVITY-NOT-ACTIVE';
 	const WORKPLACE_NOT_FOUND = 'SET-WORKPLACE-ACTIVE-ACTIVITY-RESULT-WORKPLACE-NOT-FOUND';
 }
+class WorkplaceType {
+	const STANDARD = 'STANDARD';
+	const ONLINE = 'ONLINE';
+	const MOBILE = 'MOBILE';
+	const KIOSK = 'KIOSK';
+	const GUEST = 'GUEST';
+	const NARROWCASTING = 'NARROWCASTING';
+	const QR = 'QR';
+	const OTHER = 'OTHER';
+}
+class UnregisterContextPresenceResult {
+	const OK = 'OK';
+	const NONE_FOUND = 'NONE-FOUND';
+	const API_IDENT_MISMATCH = 'API-IDENT-MISMATCH';
+}
 class CreateImageResult {
 	const CREATE_IMAGE_OK = 'CREATE-IMAGE-OK';
 	const CREATE_IMAGE_TOO_LARGE = 'CREATE-IMAGE-TOO-LARGE';
@@ -1286,6 +1324,21 @@ class RegisterTimelineEventsSaveMode {
 class RegisterTimelineEventsResult {
 	const OK = 'OK';
 	const FAILED = 'FAILED';
+}
+class reportErrorCode {
+	const INVALID_JSON = 'INVALID-JSON';
+	const MISSING_FIELD = 'MISSING-FIELD';
+	const INVALID_FIELD_TYPE = 'INVALID-FIELD-TYPE';
+	const INVALID_ENUM_VALUE = 'INVALID-ENUM-VALUE';
+	const UNSUPPORTED_REPORT_TYPE = 'UNSUPPORTED-REPORT-TYPE';
+	const UNSUPPORTED_EXPRESSION_TYPE = 'UNSUPPORTED-EXPRESSION-TYPE';
+	const UNSUPPORTED_COLUMN = 'UNSUPPORTED-COLUMN';
+	const INVALID_COLUMN_VALUE = 'INVALID-COLUMN-VALUE';
+	const VALIDATION_FAILED = 'VALIDATION-FAILED';
+	const LIMIT_EXCEEDED = 'LIMIT-EXCEEDED';
+	const NOT_FOUND = 'NOT-FOUND';
+	const NOT_AUTHORIZED = 'NOT-AUTHORIZED';
+	const REVISION_CONFLICT = 'REVISION-CONFLICT';
 }
 class InvoiceType {
 	const INVOICE = 'INVOICE-TYPE-INVOICE';
@@ -1452,13 +1505,6 @@ class SaveCashCountResult {
 	const SAVE_CASH_COUNT_INVALID_AUTOMATIC_DEPOSIT_PAYMENT_METHOD = 'SAVE-CASH-COUNT-INVALID-AUTOMATIC-DEPOSIT-PAYMENT-METHOD';
 	const SAVE_CASH_COUNT_FAILED_TO_BUILD_OR_SAVE_CASH_COUNT = 'SAVE-CASH-COUNT-FAILED-TO-BUILD-OR-SAVE-CASH-COUNT';
 	const SAVE_CASH_COUNT_FAILED = 'SAVE-CASH-COUNT-FAILED';
-}
-class SalesQueueType {
-	const CREATE = 'CREATE';
-	const EDIT = 'EDIT';
-	const CANCEL = 'CANCEL';
-	const CANCEL_GIFTCARD = 'CANCEL-GIFTCARD';
-	const UNCANCEL = 'UNCANCEL';
 }
 class SalesQueueResultType {
 	const APPLIED_IMMEDIATELY = 'APPLIED-IMMEDIATELY';

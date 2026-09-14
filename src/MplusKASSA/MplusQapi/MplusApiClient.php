@@ -108,14 +108,18 @@ class MplusApiClient extends BaseSoapClient {
  EmployeeNumberList::class . ':employeeNumber' => 'int',
  ApiIdentList::class . ':apiIdent' => 'string',
  JsonValueList::class . ':data' => 'string',
+ TimelineEventDataPredicate::class . ':path' => 'string',
+ TimelineEventDataPredicateList::class . ':predicate' => 'MplusKASSA\MplusQapi\TimelineEventDataPredicate',
  TimelineEventSubFilter::class . ':ids' => 'string',
  TimelineEventSubFilter::class . ':employeeNumbers' => 'int',
  TimelineEventSubFilter::class . ':workplaceKeys' => 'MplusKASSA\MplusQapi\WorkplaceIdentifier',
  TimelineEventSubFilter::class . ':apiIdents' => 'string',
  TimelineEventSubFilter::class . ':types' => 'string',
  TimelineEventSubFilter::class . ':data' => 'string',
+ TimelineEventSubFilter::class . ':dataPredicates' => 'MplusKASSA\MplusQapi\TimelineEventDataPredicate',
  TimelineEventFilter::class . ':entities' => 'MplusKASSA\MplusQapi\TimelineEventEntity',
  TimelineEventFilter::class . ':categories' => 'string',
+ TimelineEventConditionList::class . ':condition' => 'MplusKASSA\MplusQapi\TimelineEventCondition',
  NumberSet::class . ':number' => 'int',
  SalesPriceList::class . ':salesPrice' => 'MplusKASSA\MplusQapi\SalesPrice',
  PriceGroupList::class . ':priceGroup' => 'MplusKASSA\MplusQapi\PriceGroup',
@@ -186,6 +190,7 @@ class MplusApiClient extends BaseSoapClient {
  GetReceiptsRequest::class . ':ownerFilter' => 'string',
  GetReceiptsRequest::class . ':branchGroupFilter' => 'int',
  GetReceiptsRequest::class . ':receiptIds' => 'string',
+ GetReceiptsRequest::class . ':timelineEventConditions' => 'MplusKASSA\MplusQapi\TimelineEventCondition',
  JournalFilterList::class . ':journalFilter' => 'string',
  TurnoverGroup::class . ':branchAccountNumberList' => 'MplusKASSA\MplusQapi\BranchAccountNumber',
  TurnoverGroup::class . ':branchCostCenterNumberList' => 'MplusKASSA\MplusQapi\BranchCostCenterNumber',
@@ -604,6 +609,8 @@ class MplusApiClient extends BaseSoapClient {
  SaveCostCentersRequest::class . ':costCenters' => 'MplusKASSA\MplusQapi\CostCenter',
  BpeEmployeeBudgetList::class . ':bpeEmployeeBudget' => 'MplusKASSA\MplusQapi\BpeEmployeeBudget',
  SaveBpeBudgetsRequest::class . ':bpeEmployeeBudget' => 'MplusKASSA\MplusQapi\BpeEmployeeBudget',
+ ContextPresenceParticipantList::class . ':participant' => 'MplusKASSA\MplusQapi\ContextPresenceParticipant',
+ UnregisterContextPresenceRequest::class . ':presenceIds' => 'string',
  GetConfigurationResponse::class . ':configurationList' => 'MplusKASSA\MplusQapi\Configuration',
  GetConfigurationTreeResponse::class . ':configurations' => 'MplusKASSA\MplusQapi\ConfigurationGroup',
  GetConfigurationValuesResponse::class . ':configurationKeyValues' => 'MplusKASSA\MplusQapi\ConfigurationKeyValues',
@@ -646,6 +653,7 @@ class MplusApiClient extends BaseSoapClient {
  GetEmailTemplatesResponse::class . ':emailTemplates' => 'MplusKASSA\MplusQapi\EmailTemplate',
  GetCostCentersResponse::class . ':costCenterList' => 'MplusKASSA\MplusQapi\CostCenter',
  GetBpeBudgetsResponse::class . ':bpeEmployeeBudgetList' => 'MplusKASSA\MplusQapi\BpeEmployeeBudget',
+ RegisterContextPresenceResponse::class . ':otherParticipants' => 'MplusKASSA\MplusQapi\ContextPresenceParticipant',
  ImageCardLabelIds::class . ':labelId' => 'int',
  ImageData::class . ':labels' => 'int',
  CardImageData::class . ':images' => 'MplusKASSA\MplusQapi\ImageData',
@@ -919,6 +927,7 @@ class MplusApiClient extends BaseSoapClient {
  GetProposalsRequest::class . ':proposalNumbers' => 'MplusKASSA\MplusQapi\YearNumber',
  GetProposalsRequest::class . ':ownerFilter' => 'string',
  GetProposalsRequest::class . ':branchGroupFilter' => 'int',
+ GetProposalsRequest::class . ':timelineEventConditions' => 'MplusKASSA\MplusQapi\TimelineEventCondition',
  GetOrdersByReceiptsRequest::class . ':receiptIds' => 'string',
  GetOrdersRequest::class . ':branchNumbers' => 'int',
  GetOrdersRequest::class . ':employeeNumbers' => 'int',
@@ -934,6 +943,7 @@ class MplusApiClient extends BaseSoapClient {
  GetOrdersRequest::class . ':ownerFilter' => 'string',
  GetOrdersRequest::class . ':branchGroupFilter' => 'int',
  GetOrdersRequest::class . ':contractFrequencyFilter' => 'string',
+ GetOrdersRequest::class . ':timelineEventConditions' => 'MplusKASSA\MplusQapi\TimelineEventCondition',
  DetermineContractLinesRequest::class . ':lineList' => 'MplusKASSA\MplusQapi\Line',
  CreateInvoiceFromPackingSlipsRequest::class . ':packingSlipIds' => 'string',
  CashCountInfoWorkplaceDataList::class . ':workplaceData' => 'MplusKASSA\MplusQapi\CashCountInfoWorkplaceData',
@@ -971,6 +981,7 @@ class MplusApiClient extends BaseSoapClient {
  GetInvoicesRequest::class . ':branchGroupFilter' => 'int',
  GetInvoicesRequest::class . ':branchInvoiceNumbers' => 'MplusKASSA\MplusQapi\TransactionNumber',
  GetInvoicesRequest::class . ':contractFrequencyFilter' => 'string',
+ GetInvoicesRequest::class . ':timelineEventConditions' => 'MplusKASSA\MplusQapi\TimelineEventCondition',
  PackingSlip::class . ':lineList' => 'MplusKASSA\MplusQapi\Line',
  PackingSlipInput::class . ':lineList' => 'MplusKASSA\MplusQapi\LineInput',
  PackingSlipList::class . ':packingSlip' => 'MplusKASSA\MplusQapi\PackingSlip',
@@ -990,6 +1001,7 @@ class MplusApiClient extends BaseSoapClient {
  SalesQueueFilter::class . ':ids' => 'string',
  SalesQueueFilter::class . ':salesObjectIds' => 'string',
  SalesQueueFilter::class . ':types' => 'string',
+ SalesQueueFilter::class . ':branchNumbers' => 'int',
  GetSalesRepeatTemplatesResponse::class . ':salesRepeatTemplateList' => 'MplusKASSA\MplusQapi\SalesRepeatTemplate',
  GetSalesObjectsBySalesRepeatTemplatesResponse::class . ':repeatTemplateList' => 'MplusKASSA\MplusQapi\RepeatTemplateSalesObject',
  CreateSalesObjectsBySalesRepeatTemplateResponse::class . ':salesObjects' => 'MplusKASSA\MplusQapi\GeneratedSalesObject',
@@ -1026,6 +1038,7 @@ class MplusApiClient extends BaseSoapClient {
  GetPackingSlipsResponse::class . ':packingSlipList' => 'MplusKASSA\MplusQapi\PackingSlip',
  GetPackingSlipsByOrderResponse::class . ':packingSlipList' => 'MplusKASSA\MplusQapi\PackingSlip',
  GetPackingSlipQueueResponse::class . ':packingSlipQueueEntryList' => 'MplusKASSA\MplusQapi\SalesQueueEntry',
+ GetOrderQueueResponse::class . ':orderQueueEntryList' => 'MplusKASSA\MplusQapi\SalesQueueEntry',
  WebhookConsumerEventList::class . ':webhookConsumerEvent' => 'MplusKASSA\MplusQapi\WebhookConsumerEvent',
  WebhookConsumerTriggerPatternList::class . ':webhookConsumerTriggerPattern' => 'MplusKASSA\MplusQapi\WebhookConsumerTriggerPattern',
  WebhookConsumerWorkplace::class . ':workplaceNumbers' => 'int',
@@ -4058,6 +4071,30 @@ class MplusApiClient extends BaseSoapClient {
         $this->endRequest();
         return $res;
     }
+    public function registerContextPresence(RegisterContextPresenceRequest $request, ?string $requestId = null) : RegisterContextPresenceResponse {
+        $opname = 'registerContextPresence';
+        $this->startRequest($opname);
+        $reqobj = new registerContextPresence();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function unregisterContextPresence(UnregisterContextPresenceRequest $request, ?string $requestId = null) : UnregisterContextPresenceResponse {
+        $opname = 'unregisterContextPresence';
+        $this->startRequest($opname);
+        $reqobj = new unregisterContextPresence();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
     public function createImage(CreateImageRequest $request, ?string $requestId = null) : CreateImageResponse {
         $opname = 'createImage';
         $this->startRequest($opname);
@@ -4614,6 +4651,126 @@ class MplusApiClient extends BaseSoapClient {
         $opname = 'getTimelineEvents';
         $this->startRequest($opname);
         $reqobj = new getTimelineEvents();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getReportQuerySources(GetReportQuerySourcesRequest $request, ?string $requestId = null) : GetReportQuerySourcesResponse {
+        $opname = 'getReportQuerySources';
+        $this->startRequest($opname);
+        $reqobj = new getReportQuerySources();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getReportPresets(GetReportPresetsRequest $request, ?string $requestId = null) : GetReportPresetsResponse {
+        $opname = 'getReportPresets';
+        $this->startRequest($opname);
+        $reqobj = new getReportPresets();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getDashboards(GetDashboardsRequest $request, ?string $requestId = null) : GetDashboardsResponse {
+        $opname = 'getDashboards';
+        $this->startRequest($opname);
+        $reqobj = new getDashboards();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getDashboard(GetDashboardRequest $request, ?string $requestId = null) : GetDashboardResponse {
+        $opname = 'getDashboard';
+        $this->startRequest($opname);
+        $reqobj = new getDashboard();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function saveDashboard(SaveDashboardRequest $request, ?string $requestId = null) : SaveDashboardResponse {
+        $opname = 'saveDashboard';
+        $this->startRequest($opname);
+        $reqobj = new saveDashboard();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function deleteDashboard(DeleteDashboardRequest $request, ?string $requestId = null) : DeleteDashboardResponse {
+        $opname = 'deleteDashboard';
+        $this->startRequest($opname);
+        $reqobj = new deleteDashboard();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function updateDashboardOrder(UpdateDashboardOrderRequest $request, ?string $requestId = null) : UpdateDashboardOrderResponse {
+        $opname = 'updateDashboardOrder';
+        $this->startRequest($opname);
+        $reqobj = new updateDashboardOrder();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function executeReportQueries(ExecuteReportQueriesRequest $request, ?string $requestId = null) : ExecuteReportQueriesResponse {
+        $opname = 'executeReportQueries';
+        $this->startRequest($opname);
+        $reqobj = new executeReportQueries();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function assembleReport(AssembleReportRequest $request, ?string $requestId = null) : AssembleReportResponse {
+        $opname = 'assembleReport';
+        $this->startRequest($opname);
+        $reqobj = new assembleReport();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function executeReportPreset(ExecuteReportPresetRequest $request, ?string $requestId = null) : ExecuteReportPresetResponse {
+        $opname = 'executeReportPreset';
+        $this->startRequest($opname);
+        $reqobj = new executeReportPreset();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);
@@ -5244,6 +5401,18 @@ class MplusApiClient extends BaseSoapClient {
         $opname = 'getPackingSlipQueue';
         $this->startRequest($opname);
         $reqobj = new getPackingSlipQueue();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function getOrderQueue(GetOrderQueueRequest $request, ?string $requestId = null) : GetOrderQueueResponse {
+        $opname = 'getOrderQueue';
+        $this->startRequest($opname);
+        $reqobj = new getOrderQueue();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);

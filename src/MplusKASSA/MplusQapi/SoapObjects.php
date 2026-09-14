@@ -1435,6 +1435,36 @@ class SalesLineContractLineList extends SoapObject {
 	}
 }
 
+class SalesQueueEntry extends SoapObject {
+	public string $id;
+	public string $salesObjectId;
+	public string $type;
+	public \DateTime $createdTs;
+	public ?\DateTime $processedTs = null;
+	public ?\DateTime $cancelledTs = null;
+	public ?\DateTime $failedTs = null;
+	public ?string $failureReason = null;
+	public int $branchNumber;
+	public ?string $expectedTargetHash = null;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'id', null, $this->id);
+		$gen->out->writeElementNs(self::TNS, 'salesObjectId', null, $this->salesObjectId);
+		$gen->out->writeElementNs(self::TNS, 'type', null, $this->type);
+		$gen->writeDateTime('createdTs', $this->createdTs);
+		if ($this->processedTs !== null) $gen->writeDateTime('processedTs', $this->processedTs);
+		if ($this->cancelledTs !== null) $gen->writeDateTime('cancelledTs', $this->cancelledTs);
+		if ($this->failedTs !== null) $gen->writeDateTime('failedTs', $this->failedTs);
+		if ($this->failureReason !== null) $gen->out->writeElementNs(self::TNS, 'failureReason', null, $this->failureReason);
+		$gen->writeInt('branchNumber', $this->branchNumber);
+		if ($this->expectedTargetHash !== null) $gen->out->writeElementNs(self::TNS, 'expectedTargetHash', null, $this->expectedTargetHash);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
 class Order extends SoapObject {
 	public string $orderId;
 	public ?string $extOrderId = null;
@@ -1516,6 +1546,7 @@ class Order extends SoapObject {
 	/** @var TimelineEvent[] */
 	public $timelineEvents = null;
 	public ?ContractPeriod $contractPeriod = null;
+	public ?SalesQueueEntry $queueEntry = null;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'orderId', null, $this->orderId);
 		if ($this->extOrderId !== null) $gen->out->writeElementNs(self::TNS, 'extOrderId', null, $this->extOrderId);
@@ -1617,6 +1648,7 @@ $tmp_timelineEvents = new TimelineEventList($this->timelineEvents);
 $tmp_timelineEvents->write($gen, 'timelineEvents');
 }
 		if ($this->contractPeriod !== null) $this->contractPeriod->write($gen, 'contractPeriod');
+		if ($this->queueEntry !== null) $this->queueEntry->write($gen, 'queueEntry');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -2664,6 +2696,43 @@ class JsonValueList extends SoapObject {
 	}
 }
 
+class TimelineEventDataPredicate extends SoapObject {
+	/** @var string[] */
+	public $path = array();
+	public string $predicateOperator;
+	public ?string $stringValue = null;
+	public ?BigDecimal $numberValue = null;
+	public ?bool $booleanValue = null;
+	public ?\DateTime $dateTimeValue = null;
+	public function writeProps(SoapGenerator $gen): void {
+		foreach ($this->path as $elem) $gen->out->writeElementNs(self::TNS, 'path', null, $elem);
+		$gen->out->writeElementNs(self::TNS, 'predicateOperator', null, $this->predicateOperator);
+		if ($this->stringValue !== null) $gen->out->writeElementNs(self::TNS, 'stringValue', null, $this->stringValue);
+		if ($this->numberValue !== null) $gen->writeBigDecimal('numberValue', $this->numberValue);
+		if ($this->booleanValue !== null) $gen->writeBool('booleanValue', $this->booleanValue);
+		if ($this->dateTimeValue !== null) $gen->writeDateTime('dateTimeValue', $this->dateTimeValue);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class TimelineEventDataPredicateList extends SoapObject {
+	/** @var TimelineEventDataPredicate[] */
+	public $predicate = array();
+	public function __construct($list = array()) { $this->predicate = $list; }
+	public function writeProps(SoapGenerator $gen): void {
+		foreach ($this->predicate as $elem) $elem->write($gen, 'predicate');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
 class TimelineEventSubFilter extends SoapObject {
 	/** @var string[] */
 	public $ids = null;
@@ -2679,6 +2748,8 @@ class TimelineEventSubFilter extends SoapObject {
 	public $data = null;
 	public ?\DateTime $from = null;
 	public ?\DateTime $through = null;
+	/** @var TimelineEventDataPredicate[] */
+	public $dataPredicates = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->ids !== null) {
 $tmp_ids = new IdList($this->ids);
@@ -2706,6 +2777,10 @@ $tmp_data->write($gen, 'data');
 }
 		if ($this->from !== null) $gen->writeDateTime('from', $this->from);
 		if ($this->through !== null) $gen->writeDateTime('through', $this->through);
+		if ($this->dataPredicates !== null) {
+$tmp_dataPredicates = new TimelineEventDataPredicateList($this->dataPredicates);
+$tmp_dataPredicates->write($gen, 'dataPredicates');
+}
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -2729,6 +2804,37 @@ $tmp_entities->write($gen, 'entities');
 $tmp_categories = new TimelineEventCategoryList($this->categories);
 $tmp_categories->write($gen, 'categories');
 }
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class TimelineEventCondition extends SoapObject {
+	public string $match;
+	public TimelineEventSubFilter $eventFilter;
+	public function __construct() {
+		$this->eventFilter = new TimelineEventSubFilter();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'match', null, $this->match);
+		$this->eventFilter->write($gen, 'eventFilter');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class TimelineEventConditionList extends SoapObject {
+	/** @var TimelineEventCondition[] */
+	public $condition = array();
+	public function __construct($list = array()) { $this->condition = $list; }
+	public function writeProps(SoapGenerator $gen): void {
+		foreach ($this->condition as $elem) $elem->write($gen, 'condition');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -5209,6 +5315,8 @@ class GetReceiptsRequest extends SoapObject {
 	public ?TimelineEventSubFilter $signingTimelineEventsFilter = null;
 	public ?bool $includeOtherTimelineEvents = null;
 	public ?TimelineEventSubFilter $otherTimelineEventsFilter = null;
+	/** @var TimelineEventCondition[] */
+	public $timelineEventConditions = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
 		if ($this->syncMarkerLimit !== null) $gen->writeInt('syncMarkerLimit', $this->syncMarkerLimit);
@@ -5244,6 +5352,10 @@ $tmp_branchGroupFilter->write($gen, 'branchGroupFilter');
 		if ($this->signingTimelineEventsFilter !== null) $this->signingTimelineEventsFilter->write($gen, 'signingTimelineEventsFilter');
 		if ($this->includeOtherTimelineEvents !== null) $gen->writeBool('includeOtherTimelineEvents', $this->includeOtherTimelineEvents);
 		if ($this->otherTimelineEventsFilter !== null) $this->otherTimelineEventsFilter->write($gen, 'otherTimelineEventsFilter');
+		if ($this->timelineEventConditions !== null) {
+$tmp_timelineEventConditions = new TimelineEventConditionList($this->timelineEventConditions);
+$tmp_timelineEventConditions->write($gen, 'timelineEventConditions');
+}
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -16649,11 +16761,13 @@ class AuthorizationGroup extends SoapObject {
 	public string $name;
 	public ?int $filterProfileId = null;
 	public ?int $rankOrder = null;
+	public ?string $systemGroupKey = null;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->writeInt('number', $this->number);
 		$gen->out->writeElementNs(self::TNS, 'name', null, $this->name);
 		if ($this->filterProfileId !== null) $gen->writeInt('filterProfileId', $this->filterProfileId);
 		if ($this->rankOrder !== null) $gen->writeInt('rankOrder', $this->rankOrder);
+		if ($this->systemGroupKey !== null) $gen->out->writeElementNs(self::TNS, 'systemGroupKey', null, $this->systemGroupKey);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -17279,6 +17393,84 @@ class SaveBpeBudgetsRequest extends SoapObject {
 	public function __construct($list = array()) { $this->bpeEmployeeBudget = $list; }
 	public function writeProps(SoapGenerator $gen): void {
 		foreach ($this->bpeEmployeeBudget as $elem) $elem->write($gen, 'bpeEmployeeBudget');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class RegisterContextPresenceRequest extends SoapObject {
+	public string $presenceId;
+	public int $employeeNumber;
+	public WorkplaceIdentifier $workplaceKey;
+	public string $contextKey;
+	public function __construct() {
+		$this->workplaceKey = new WorkplaceIdentifier();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'presenceId', null, $this->presenceId);
+		$gen->writeInt('employeeNumber', $this->employeeNumber);
+		$this->workplaceKey->write($gen, 'workplaceKey');
+		$gen->out->writeElementNs(self::TNS, 'contextKey', null, $this->contextKey);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class ContextPresenceParticipant extends SoapObject {
+	public int $employeeNumber;
+	public string $employeeName;
+	public WorkplaceIdentifier $workplaceKey;
+	public string $branchName;
+	public string $workplaceName;
+	public string $workplaceType;
+	public \DateTime $openedTs;
+	public function __construct() {
+		$this->workplaceKey = new WorkplaceIdentifier();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->writeInt('employeeNumber', $this->employeeNumber);
+		$gen->out->writeElementNs(self::TNS, 'employeeName', null, $this->employeeName);
+		$this->workplaceKey->write($gen, 'workplaceKey');
+		$gen->out->writeElementNs(self::TNS, 'branchName', null, $this->branchName);
+		$gen->out->writeElementNs(self::TNS, 'workplaceName', null, $this->workplaceName);
+		$gen->out->writeElementNs(self::TNS, 'workplaceType', null, $this->workplaceType);
+		$gen->writeDateTime('openedTs', $this->openedTs);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class ContextPresenceParticipantList extends SoapObject {
+	/** @var ContextPresenceParticipant[] */
+	public $participant = array();
+	public function __construct($list = array()) { $this->participant = $list; }
+	public function writeProps(SoapGenerator $gen): void {
+		foreach ($this->participant as $elem) $elem->write($gen, 'participant');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class UnregisterContextPresenceRequest extends SoapObject {
+	/** @var string[] */
+	public $presenceIds = array();
+	public function __construct($list = array()) { $this->presenceIds = $list; }
+	public function writeProps(SoapGenerator $gen): void {
+		$tmp_presenceIds = new IdList($this->presenceIds);
+$tmp_presenceIds->write($gen, 'presenceIds');
+
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -18653,6 +18845,34 @@ $tmp_bpeEmployeeBudgetList->write($gen, 'bpeEmployeeBudgetList');
 
 class SaveBpeBudgetsResponse extends SoapObject {
 	public function writeProps(SoapGenerator $gen): void {
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class RegisterContextPresenceResponse extends SoapObject {
+	/** @var ContextPresenceParticipant[] */
+	public $otherParticipants = array();
+	public function __construct($list = array()) { $this->otherParticipants = $list; }
+	public function writeProps(SoapGenerator $gen): void {
+		$tmp_otherParticipants = new ContextPresenceParticipantList($this->otherParticipants);
+$tmp_otherParticipants->write($gen, 'otherParticipants');
+
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class UnregisterContextPresenceResponse extends SoapObject {
+	public string $result;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'result', null, $this->result);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -21900,6 +22120,142 @@ class GetTimelineEventsRequest extends SoapObject {
 	}
 }
 
+class reportError extends SoapObject {
+	public string $code;
+	public string $details;
+	public ?string $path = null;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'code', null, $this->code);
+		$gen->out->writeElementNs(self::TNS, 'details', null, $this->details);
+		if ($this->path !== null) $gen->out->writeElementNs(self::TNS, 'path', null, $this->path);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetReportQuerySourcesRequest extends SoapObject {
+	public function writeProps(SoapGenerator $gen): void {
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetReportPresetsRequest extends SoapObject {
+	public function writeProps(SoapGenerator $gen): void {
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetDashboardsRequest extends SoapObject {
+	public function writeProps(SoapGenerator $gen): void {
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetDashboardRequest extends SoapObject {
+	public string $dashboardId;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'dashboardId', null, $this->dashboardId);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class SaveDashboardRequest extends SoapObject {
+	public string $dashboardJson;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'dashboardJson', null, $this->dashboardJson);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class DeleteDashboardRequest extends SoapObject {
+	public string $dashboardId;
+	public int $revision;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'dashboardId', null, $this->dashboardId);
+		$gen->writeInt('revision', $this->revision);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class UpdateDashboardOrderRequest extends SoapObject {
+	public string $dashboardIdsJson;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'dashboardIdsJson', null, $this->dashboardIdsJson);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class ExecuteReportQueriesRequest extends SoapObject {
+	public string $queriesJson;
+	public string $transformJson;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'queriesJson', null, $this->queriesJson);
+		$gen->out->writeElementNs(self::TNS, 'transformJson', null, $this->transformJson);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class AssembleReportRequest extends SoapObject {
+	public string $reportAssemblyJson;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'reportAssemblyJson', null, $this->reportAssemblyJson);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class ExecuteReportPresetRequest extends SoapObject {
+	public string $presetId;
+	public ?string $queryFiltersJson = null;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->out->writeElementNs(self::TNS, 'presetId', null, $this->presetId);
+		if ($this->queryFiltersJson !== null) $gen->out->writeElementNs(self::TNS, 'queryFiltersJson', null, $this->queryFiltersJson);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
 class ReportTurnoverByBranchResponse extends SoapObject {
 	/** @var ReportTurnoverByBranch[] */
 	public $turnoverList = array();
@@ -22182,6 +22538,148 @@ class GetTimelineEventsResponse extends SoapObject {
 $tmp_events = new TimelineEventList($this->events);
 $tmp_events->write($gen, 'events');
 }
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetReportQuerySourcesResponse extends SoapObject {
+	public ?string $sourcesJson = null;
+	public ?reportError $error = null;
+	public function writeProps(SoapGenerator $gen): void {
+		if ($this->sourcesJson !== null) $gen->out->writeElementNs(self::TNS, 'sourcesJson', null, $this->sourcesJson);
+		if ($this->error !== null) $this->error->write($gen, 'error');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetReportPresetsResponse extends SoapObject {
+	public ?string $presetsJson = null;
+	public ?reportError $error = null;
+	public function writeProps(SoapGenerator $gen): void {
+		if ($this->presetsJson !== null) $gen->out->writeElementNs(self::TNS, 'presetsJson', null, $this->presetsJson);
+		if ($this->error !== null) $this->error->write($gen, 'error');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetDashboardsResponse extends SoapObject {
+	public ?string $dashboardsJson = null;
+	public ?reportError $error = null;
+	public function writeProps(SoapGenerator $gen): void {
+		if ($this->dashboardsJson !== null) $gen->out->writeElementNs(self::TNS, 'dashboardsJson', null, $this->dashboardsJson);
+		if ($this->error !== null) $this->error->write($gen, 'error');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetDashboardResponse extends SoapObject {
+	public ?string $dashboardJson = null;
+	public ?reportError $error = null;
+	public function writeProps(SoapGenerator $gen): void {
+		if ($this->dashboardJson !== null) $gen->out->writeElementNs(self::TNS, 'dashboardJson', null, $this->dashboardJson);
+		if ($this->error !== null) $this->error->write($gen, 'error');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class SaveDashboardResponse extends SoapObject {
+	public ?string $dashboardJson = null;
+	public ?reportError $error = null;
+	public function writeProps(SoapGenerator $gen): void {
+		if ($this->dashboardJson !== null) $gen->out->writeElementNs(self::TNS, 'dashboardJson', null, $this->dashboardJson);
+		if ($this->error !== null) $this->error->write($gen, 'error');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class DeleteDashboardResponse extends SoapObject {
+	public bool $success;
+	public ?reportError $error = null;
+	public function writeProps(SoapGenerator $gen): void {
+		$gen->writeBool('success', $this->success);
+		if ($this->error !== null) $this->error->write($gen, 'error');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class UpdateDashboardOrderResponse extends SoapObject {
+	public ?string $dashboardsJson = null;
+	public ?reportError $error = null;
+	public function writeProps(SoapGenerator $gen): void {
+		if ($this->dashboardsJson !== null) $gen->out->writeElementNs(self::TNS, 'dashboardsJson', null, $this->dashboardsJson);
+		if ($this->error !== null) $this->error->write($gen, 'error');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class ExecuteReportQueriesResponse extends SoapObject {
+	public ?string $resultsJson = null;
+	public ?string $transformedResultJson = null;
+	public ?reportError $error = null;
+	public function writeProps(SoapGenerator $gen): void {
+		if ($this->resultsJson !== null) $gen->out->writeElementNs(self::TNS, 'resultsJson', null, $this->resultsJson);
+		if ($this->transformedResultJson !== null) $gen->out->writeElementNs(self::TNS, 'transformedResultJson', null, $this->transformedResultJson);
+		if ($this->error !== null) $this->error->write($gen, 'error');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class AssembleReportResponse extends SoapObject {
+	public ?string $reportJson = null;
+	public ?reportError $error = null;
+	public function writeProps(SoapGenerator $gen): void {
+		if ($this->reportJson !== null) $gen->out->writeElementNs(self::TNS, 'reportJson', null, $this->reportJson);
+		if ($this->error !== null) $this->error->write($gen, 'error');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class ExecuteReportPresetResponse extends SoapObject {
+	public ?string $reportJson = null;
+	public ?reportError $error = null;
+	public function writeProps(SoapGenerator $gen): void {
+		if ($this->reportJson !== null) $gen->out->writeElementNs(self::TNS, 'reportJson', null, $this->reportJson);
+		if ($this->error !== null) $this->error->write($gen, 'error');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -24129,6 +24627,8 @@ class GetProposalsRequest extends SoapObject {
 	public ?TimelineEventSubFilter $signingTimelineEventsFilter = null;
 	public ?bool $includeOtherTimelineEvents = null;
 	public ?TimelineEventSubFilter $otherTimelineEventsFilter = null;
+	/** @var TimelineEventCondition[] */
+	public $timelineEventConditions = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
 		if ($this->syncMarkerLimit !== null) $gen->writeInt('syncMarkerLimit', $this->syncMarkerLimit);
@@ -24166,6 +24666,10 @@ $tmp_branchGroupFilter->write($gen, 'branchGroupFilter');
 		if ($this->signingTimelineEventsFilter !== null) $this->signingTimelineEventsFilter->write($gen, 'signingTimelineEventsFilter');
 		if ($this->includeOtherTimelineEvents !== null) $gen->writeBool('includeOtherTimelineEvents', $this->includeOtherTimelineEvents);
 		if ($this->otherTimelineEventsFilter !== null) $this->otherTimelineEventsFilter->write($gen, 'otherTimelineEventsFilter');
+		if ($this->timelineEventConditions !== null) {
+$tmp_timelineEventConditions = new TimelineEventConditionList($this->timelineEventConditions);
+$tmp_timelineEventConditions->write($gen, 'timelineEventConditions');
+}
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -24299,6 +24803,9 @@ class GetOrdersRequest extends SoapObject {
 	public ?TimelineEventSubFilter $signingTimelineEventsFilter = null;
 	public ?bool $includeOtherTimelineEvents = null;
 	public ?TimelineEventSubFilter $otherTimelineEventsFilter = null;
+	/** @var TimelineEventCondition[] */
+	public $timelineEventConditions = null;
+	public ?bool $includeQueuedSnapshots = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
 		if ($this->syncMarkerLimit !== null) $gen->writeInt('syncMarkerLimit', $this->syncMarkerLimit);
@@ -24342,6 +24849,11 @@ $tmp_contractFrequencyFilter->write($gen, 'contractFrequencyFilter');
 		if ($this->signingTimelineEventsFilter !== null) $this->signingTimelineEventsFilter->write($gen, 'signingTimelineEventsFilter');
 		if ($this->includeOtherTimelineEvents !== null) $gen->writeBool('includeOtherTimelineEvents', $this->includeOtherTimelineEvents);
 		if ($this->otherTimelineEventsFilter !== null) $this->otherTimelineEventsFilter->write($gen, 'otherTimelineEventsFilter');
+		if ($this->timelineEventConditions !== null) {
+$tmp_timelineEventConditions = new TimelineEventConditionList($this->timelineEventConditions);
+$tmp_timelineEventConditions->write($gen, 'timelineEventConditions');
+}
+		if ($this->includeQueuedSnapshots !== null) $gen->writeBool('includeQueuedSnapshots', $this->includeQueuedSnapshots);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -24652,32 +25164,6 @@ class SalesQueueTypeList extends SoapObject {
 	}
 }
 
-class SalesQueueEntry extends SoapObject {
-	public string $id;
-	public string $salesObjectId;
-	public string $type;
-	public \DateTime $createdTs;
-	public ?\DateTime $processedTs = null;
-	public ?\DateTime $cancelledTs = null;
-	public ?\DateTime $failedTs = null;
-	public ?string $failureReason = null;
-	public function writeProps(SoapGenerator $gen): void {
-		$gen->out->writeElementNs(self::TNS, 'id', null, $this->id);
-		$gen->out->writeElementNs(self::TNS, 'salesObjectId', null, $this->salesObjectId);
-		$gen->out->writeElementNs(self::TNS, 'type', null, $this->type);
-		$gen->writeDateTime('createdTs', $this->createdTs);
-		if ($this->processedTs !== null) $gen->writeDateTime('processedTs', $this->processedTs);
-		if ($this->cancelledTs !== null) $gen->writeDateTime('cancelledTs', $this->cancelledTs);
-		if ($this->failedTs !== null) $gen->writeDateTime('failedTs', $this->failedTs);
-		if ($this->failureReason !== null) $gen->out->writeElementNs(self::TNS, 'failureReason', null, $this->failureReason);
-	}
-	public function write(SoapGenerator $gen, string $elemName): void {
-		$gen->out->startElementNs(self::TNS, $elemName, null);
-		$this->writeProps($gen);
-		$gen->out->endElement();
-	}
-}
-
 class SalesQueueEntryList extends SoapObject {
 	/** @var SalesQueueEntry[] */
 	public $entry = array();
@@ -24939,6 +25425,8 @@ class GetInvoicesRequest extends SoapObject {
 	public ?TimelineEventSubFilter $directDebitTimelineEventsFilter = null;
 	public ?bool $includeOtherTimelineEvents = null;
 	public ?TimelineEventSubFilter $otherTimelineEventsFilter = null;
+	/** @var TimelineEventCondition[] */
+	public $timelineEventConditions = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
 		if ($this->syncMarkerLimit !== null) $gen->writeInt('syncMarkerLimit', $this->syncMarkerLimit);
@@ -24986,6 +25474,10 @@ $tmp_contractFrequencyFilter->write($gen, 'contractFrequencyFilter');
 		if ($this->directDebitTimelineEventsFilter !== null) $this->directDebitTimelineEventsFilter->write($gen, 'directDebitTimelineEventsFilter');
 		if ($this->includeOtherTimelineEvents !== null) $gen->writeBool('includeOtherTimelineEvents', $this->includeOtherTimelineEvents);
 		if ($this->otherTimelineEventsFilter !== null) $this->otherTimelineEventsFilter->write($gen, 'otherTimelineEventsFilter');
+		if ($this->timelineEventConditions !== null) {
+$tmp_timelineEventConditions = new TimelineEventConditionList($this->timelineEventConditions);
+$tmp_timelineEventConditions->write($gen, 'timelineEventConditions');
+}
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -25078,6 +25570,7 @@ class PackingSlip extends SoapObject {
 	public ?int $branchGroupNumber = null;
 	public ?string $ownerId = null;
 	public ?TransactionNumber $branchInvoiceNumber = null;
+	public ?SalesQueueEntry $queueEntry = null;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'packingSlipId', null, $this->packingSlipId);
 		if ($this->packingSlipNumber !== null) $this->packingSlipNumber->write($gen, 'packingSlipNumber');
@@ -25130,6 +25623,7 @@ $tmp_lineList->write($gen, 'lineList');
 		if ($this->branchGroupNumber !== null) $gen->writeInt('branchGroupNumber', $this->branchGroupNumber);
 		if ($this->ownerId !== null) $gen->out->writeElementNs(self::TNS, 'ownerId', null, $this->ownerId);
 		if ($this->branchInvoiceNumber !== null) $this->branchInvoiceNumber->write($gen, 'branchInvoiceNumber');
+		if ($this->queueEntry !== null) $this->queueEntry->write($gen, 'queueEntry');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -25229,6 +25723,7 @@ class GetPackingSlipsRequest extends SoapObject {
 	public ?bool $includeLineList = null;
 	/** @var string[] */
 	public $typeFilter = array();
+	public ?bool $includeQueuedSnapshots = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->syncMarker !== null) $gen->writeInt('syncMarker', $this->syncMarker);
 		if ($this->syncMarkerLimit !== null) $gen->writeInt('syncMarkerLimit', $this->syncMarkerLimit);
@@ -25261,6 +25756,7 @@ $tmp_branchGroupFilter->write($gen, 'branchGroupFilter');
 }
 		if ($this->includeLineList !== null) $gen->writeBool('includeLineList', $this->includeLineList);
 		foreach ($this->typeFilter as $elem) $gen->out->writeElementNs(self::TNS, 'typeFilter', null, $elem);
+		if ($this->includeQueuedSnapshots !== null) $gen->writeBool('includeQueuedSnapshots', $this->includeQueuedSnapshots);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -25326,6 +25822,11 @@ class SalesQueueFilter extends SoapObject {
 	/** @var string[] */
 	public $types = null;
 	public ?bool $pendingOnly = null;
+	/** @var int[] */
+	public $branchNumbers = array();
+	public ?bool $processed = null;
+	public ?bool $cancelled = null;
+	public ?bool $failed = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->ids !== null) {
 $tmp_ids = new IdList($this->ids);
@@ -25340,6 +25841,10 @@ $tmp_types = new SalesQueueTypeList($this->types);
 $tmp_types->write($gen, 'types');
 }
 		if ($this->pendingOnly !== null) $gen->writeBool('pendingOnly', $this->pendingOnly);
+		foreach ($this->branchNumbers as $elem) $gen->writeInt('branchNumbers', $elem);
+		if ($this->processed !== null) $gen->writeBool('processed', $this->processed);
+		if ($this->cancelled !== null) $gen->writeBool('cancelled', $this->cancelled);
+		if ($this->failed !== null) $gen->writeBool('failed', $this->failed);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -25358,6 +25863,25 @@ class GetPackingSlipQueueRequest extends SoapObject {
 	public function writeProps(SoapGenerator $gen): void {
 		$this->filter->write($gen, 'filter');
 		if ($this->loadPackingSlip !== null) $gen->writeBool('loadPackingSlip', $this->loadPackingSlip);
+		if ($this->latestOnly !== null) $gen->writeBool('latestOnly', $this->latestOnly);
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetOrderQueueRequest extends SoapObject {
+	public SalesQueueFilter $filter;
+	public ?bool $loadOrder = null;
+	public ?bool $latestOnly = null;
+	public function __construct() {
+		$this->filter = new SalesQueueFilter();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->filter->write($gen, 'filter');
+		if ($this->loadOrder !== null) $gen->writeBool('loadOrder', $this->loadOrder);
 		if ($this->latestOnly !== null) $gen->writeBool('latestOnly', $this->latestOnly);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
@@ -26228,6 +26752,24 @@ $tmp_packingSlipQueueEntryList = new SalesQueueEntryList($this->packingSlipQueue
 $tmp_packingSlipQueueEntryList->write($gen, 'packingSlipQueueEntryList');
 }
 		if ($this->lastPackingSlip !== null) $this->lastPackingSlip->write($gen, 'lastPackingSlip');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class GetOrderQueueResponse extends SoapObject {
+	/** @var SalesQueueEntry[] */
+	public $orderQueueEntryList = null;
+	public ?Order $lastOrder = null;
+	public function writeProps(SoapGenerator $gen): void {
+		if ($this->orderQueueEntryList !== null) {
+$tmp_orderQueueEntryList = new SalesQueueEntryList($this->orderQueueEntryList);
+$tmp_orderQueueEntryList->write($gen, 'orderQueueEntryList');
+}
+		if ($this->lastOrder !== null) $this->lastOrder->write($gen, 'lastOrder');
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -27206,6 +27748,7 @@ class WebhookReq extends IdempotentReq {
 	public ?WebhookSelectRelationInput $selectRelation = null;
 	public ?WebhookCustomActionInput $customAction = null;
 	public ?WebhookFormInput $form = null;
+	public ?string $webhookConsumerId = null;
 	public function writeProps(SoapGenerator $gen): void {
 	    parent::writeProps($gen);
 		if ($this->browser !== null) $this->browser->write($gen, 'browser');
@@ -27219,6 +27762,7 @@ class WebhookReq extends IdempotentReq {
 		if ($this->selectRelation !== null) $this->selectRelation->write($gen, 'selectRelation');
 		if ($this->customAction !== null) $this->customAction->write($gen, 'customAction');
 		if ($this->form !== null) $this->form->write($gen, 'form');
+		if ($this->webhookConsumerId !== null) $gen->out->writeElementNs(self::TNS, 'webhookConsumerId', null, $this->webhookConsumerId);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
@@ -32382,6 +32926,36 @@ class saveBpeBudgets extends SoapObject {
 	}
 }
 
+class registerContextPresence extends SoapObject {
+	public RegisterContextPresenceRequest $request;
+	public function __construct() {
+		$this->request = new RegisterContextPresenceRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class unregisterContextPresence extends SoapObject {
+	public UnregisterContextPresenceRequest $request;
+	public function __construct() {
+		$this->request = new UnregisterContextPresenceRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
 class createImage extends SoapObject {
 	public CreateImageRequest $request;
 	public function __construct() {
@@ -33073,6 +33647,156 @@ class getTimelineEvents extends SoapObject {
 	public GetTimelineEventsRequest $request;
 	public function __construct() {
 		$this->request = new GetTimelineEventsRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class getReportQuerySources extends SoapObject {
+	public GetReportQuerySourcesRequest $request;
+	public function __construct() {
+		$this->request = new GetReportQuerySourcesRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class getReportPresets extends SoapObject {
+	public GetReportPresetsRequest $request;
+	public function __construct() {
+		$this->request = new GetReportPresetsRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class getDashboards extends SoapObject {
+	public GetDashboardsRequest $request;
+	public function __construct() {
+		$this->request = new GetDashboardsRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class getDashboard extends SoapObject {
+	public GetDashboardRequest $request;
+	public function __construct() {
+		$this->request = new GetDashboardRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class saveDashboard extends SoapObject {
+	public SaveDashboardRequest $request;
+	public function __construct() {
+		$this->request = new SaveDashboardRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class deleteDashboard extends SoapObject {
+	public DeleteDashboardRequest $request;
+	public function __construct() {
+		$this->request = new DeleteDashboardRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class updateDashboardOrder extends SoapObject {
+	public UpdateDashboardOrderRequest $request;
+	public function __construct() {
+		$this->request = new UpdateDashboardOrderRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class executeReportQueries extends SoapObject {
+	public ExecuteReportQueriesRequest $request;
+	public function __construct() {
+		$this->request = new ExecuteReportQueriesRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class assembleReport extends SoapObject {
+	public AssembleReportRequest $request;
+	public function __construct() {
+		$this->request = new AssembleReportRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class executeReportPreset extends SoapObject {
+	public ExecuteReportPresetRequest $request;
+	public function __construct() {
+		$this->request = new ExecuteReportPresetRequest();
 	}
 	public function writeProps(SoapGenerator $gen): void {
 		$this->request->write($gen, 'request');
@@ -33843,6 +34567,21 @@ class getPackingSlipQueue extends SoapObject {
 	public GetPackingSlipQueueRequest $request;
 	public function __construct() {
 		$this->request = new GetPackingSlipQueueRequest();
+	}
+	public function writeProps(SoapGenerator $gen): void {
+		$this->request->write($gen, 'request');
+	}
+	public function write(SoapGenerator $gen, string $elemName): void {
+		$gen->out->startElementNs(self::TNS, $elemName, null);
+		$this->writeProps($gen);
+		$gen->out->endElement();
+	}
+}
+
+class getOrderQueue extends SoapObject {
+	public GetOrderQueueRequest $request;
+	public function __construct() {
+		$this->request = new GetOrderQueueRequest();
 	}
 	public function writeProps(SoapGenerator $gen): void {
 		$this->request->write($gen, 'request');
