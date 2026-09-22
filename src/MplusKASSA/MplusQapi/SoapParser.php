@@ -28921,6 +28921,7 @@ class SoapParser extends BaseSoapParser {
 						case 'ownerId': $o->ownerId = $this->load_string_property($in); break;
 						case 'branchInvoiceNumber': $o->branchInvoiceNumber = $this->load_TransactionNumber($in); break;
 						case 'queueEntry': $o->queueEntry = $this->load_SalesQueueEntry($in); break;
+						case 'isBasedOnSalesOrder': $o->isBasedOnSalesOrder = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:

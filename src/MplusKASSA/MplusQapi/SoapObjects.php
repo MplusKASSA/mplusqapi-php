@@ -25573,6 +25573,7 @@ class PackingSlip extends SoapObject {
 	public ?string $ownerId = null;
 	public ?TransactionNumber $branchInvoiceNumber = null;
 	public ?SalesQueueEntry $queueEntry = null;
+	public bool $isBasedOnSalesOrder;
 	public function writeProps(SoapGenerator $gen): void {
 		$gen->out->writeElementNs(self::TNS, 'packingSlipId', null, $this->packingSlipId);
 		if ($this->packingSlipNumber !== null) $this->packingSlipNumber->write($gen, 'packingSlipNumber');
@@ -25626,6 +25627,7 @@ $tmp_lineList->write($gen, 'lineList');
 		if ($this->ownerId !== null) $gen->out->writeElementNs(self::TNS, 'ownerId', null, $this->ownerId);
 		if ($this->branchInvoiceNumber !== null) $this->branchInvoiceNumber->write($gen, 'branchInvoiceNumber');
 		if ($this->queueEntry !== null) $this->queueEntry->write($gen, 'queueEntry');
+		$gen->writeBool('isBasedOnSalesOrder', $this->isBasedOnSalesOrder);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);

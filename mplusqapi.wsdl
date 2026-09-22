@@ -15092,6 +15092,13 @@
               </documentation>
             </annotation>
           </element>
+          <element name="isBasedOnSalesOrder" type="xsd:boolean">
+            <annotation>
+              <documentation>
+                Whether the packing slip is linked to a sales order (including queued sales orders).
+              </documentation>
+            </annotation>
+          </element>
         </sequence>
       </complexType>
       <complexType name="PackingSlipInput">
