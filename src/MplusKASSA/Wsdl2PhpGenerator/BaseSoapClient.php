@@ -5,6 +5,8 @@ use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Promise\PromiseInterface;
+use Psr\Http\Message\RequestInterface;
 
 abstract class BaseSoapClient
 {
@@ -47,6 +49,7 @@ abstract class BaseSoapClient
         }
         $this->endpoint = sprintf("%s:%u", $apiServer, $apiPort);
         $this->handler = $handlerStack;
+        $defaultHandler = HandlerStack::create();
         $this->client = new HttpClient([
             'base_uri' => $this->endpoint,
             'query' => [
@@ -58,6 +61,10 @@ abstract class BaseSoapClient
                 'Content-Type' => 'text/xml; charset=utf-8',
             ],
             'verify' => $verify,
+            'handler' => function (RequestInterface $request, array $options) use ($defaultHandler): PromiseInterface {
+                $handler = $this->handler ?? $defaultHandler;
+                return $handler($request, $options);
+            },
         ]);
         $this->connectTimeout = $connectTimeout ?? self::DEFAULT_CONNECT_TIMEOUT_SECS;
         $this->timeout = $timeout ?? self::DEFAULT_TIMEOUT_SECS;
@@ -152,7 +159,6 @@ abstract class BaseSoapClient
                     'headers' => $this->buildRequestHeaders($method, $requestId),
                     'connect_timeout' => $this->connectTimeout,
                     'timeout' => $this->timeout,
-                    'handler' => $this->handler,
                 ]));
                 $this->afterCallTs = hrtime(true);
                 $this->dispatchResponseHeaders($response->getHeaders());

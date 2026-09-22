@@ -5,7 +5,7 @@ namespace MplusKASSA\Wsdl2PhpGenerator;
 class SoapException extends \RuntimeException {
     private string $requestId;
     
-    public function __construct(string $message = "", int $code = 0, \Throwable $previous = NULL, string $requestId = "") {
+    public function __construct(string $message = "", int $code = 0, ?\Throwable $previous = NULL, string $requestId = "") {
         parent::__construct($message, $code, $previous);
         $this->requestId = $requestId;
     }
@@ -19,7 +19,7 @@ class SoapException extends \RuntimeException {
 class SoapFaultException extends SoapException {
     private string $faultCode;
 
-    public function __construct(string $message, string $faultcode, int $code = 0, \Throwable $previous = NULL, string $requestId = "") {
+    public function __construct(string $message, string $faultcode, int $code = 0, ?\Throwable $previous = NULL, string $requestId = "") {
         parent::__construct($message, $code, $previous, $requestId);
         $this->faultCode = $faultcode;
     }
@@ -30,7 +30,7 @@ class SoapFaultException extends SoapException {
 
 /// Server signalled is a problem with the request. The request probably needs to be modified.
 class SoapClientException extends SoapFaultException {
-    public function __construct(string $message, string $faultcode, int $code = 0, \Throwable $previous = NULL, string $requestId = "") {
+    public function __construct(string $message, string $faultcode, int $code = 0, ?\Throwable $previous = NULL, string $requestId = "") {
         parent::__construct($message, $faultcode, $code, $previous, $requestId);
     }
 
@@ -38,7 +38,7 @@ class SoapClientException extends SoapFaultException {
 
 /// Server signalled an error on its side, the problem is probably server side and call can be retried later
 class SoapServerException extends SoapFaultException {
-    public function __construct(string $message, string $faultcode, int $code = 0, \Throwable $previous = NULL, string $requestId = "") {
+    public function __construct(string $message, string $faultcode, int $code = 0, ?\Throwable $previous = NULL, string $requestId = "") {
         parent::__construct($message, $faultcode, $code, $previous, $requestId);
     }
 }
@@ -46,7 +46,7 @@ class SoapServerException extends SoapFaultException {
 
 /// Exception type for server errors outside the soap layer.
 class SoapCommunicationException extends SoapException {
-    public function __construct(string $message = "", int $code = 0, \Throwable $previous = NULL, string $requestId = "") {
+    public function __construct(string $message = "", int $code = 0, ?\Throwable $previous = NULL, string $requestId = "") {
         parent::__construct($message, $code, $previous, $requestId);
     }
 }
