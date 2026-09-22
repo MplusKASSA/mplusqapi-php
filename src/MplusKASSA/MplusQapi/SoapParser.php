@@ -8288,6 +8288,7 @@ class SoapParser extends BaseSoapParser {
 						case 'priceDeviationMin': $o->priceDeviationMin = $this->load_BigDecimal_property($in); break;
 						case 'priceDeviationMax': $o->priceDeviationMax = $this->load_BigDecimal_property($in); break;
 						case 'availableForInterbranchOrdering': $o->availableForInterbranchOrdering = $this->load_bool_property($in); break;
+						case 'shelfLifeInMinutes': $o->shelfLifeInMinutes = $this->load_int_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:

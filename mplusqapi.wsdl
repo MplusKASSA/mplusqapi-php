@@ -5064,6 +5064,7 @@
           <element name="priceDeviationMin" type="xsd:decimal" minOccurs="0" />
           <element name="priceDeviationMax" type="xsd:decimal" minOccurs="0" />
           <element name="availableForInterbranchOrdering" type="xsd:boolean" minOccurs="0" />
+          <element name="shelfLifeInMinutes" type="xsd:int" minOccurs="0" />
         </sequence>
       </complexType>
       <complexType name="ArticleList">

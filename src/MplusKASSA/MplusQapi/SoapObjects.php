@@ -6500,6 +6500,7 @@ class Article extends SoapObject {
 	public ?BigDecimal $priceDeviationMin = null;
 	public ?BigDecimal $priceDeviationMax = null;
 	public ?bool $availableForInterbranchOrdering = null;
+	public ?int $shelfLifeInMinutes = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->articleNumber !== null) $gen->writeInt('articleNumber', $this->articleNumber);
 		if ($this->extArticleId !== null) $gen->out->writeElementNs(self::TNS, 'extArticleId', null, $this->extArticleId);
@@ -6601,6 +6602,7 @@ $tmp_relationArticleDiscountList->write($gen, 'relationArticleDiscountList');
 		if ($this->priceDeviationMin !== null) $gen->writeBigDecimal('priceDeviationMin', $this->priceDeviationMin);
 		if ($this->priceDeviationMax !== null) $gen->writeBigDecimal('priceDeviationMax', $this->priceDeviationMax);
 		if ($this->availableForInterbranchOrdering !== null) $gen->writeBool('availableForInterbranchOrdering', $this->availableForInterbranchOrdering);
+		if ($this->shelfLifeInMinutes !== null) $gen->writeInt('shelfLifeInMinutes', $this->shelfLifeInMinutes);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);
