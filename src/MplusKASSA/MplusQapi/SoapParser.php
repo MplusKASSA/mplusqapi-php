@@ -480,6 +480,7 @@ class SoapParser extends BaseSoapParser {
 			case 'ArticleComponent': return $this->load_ArticleComponent($in);
 			case 'ArticleComponentList': return $this->load_ArticleComponentList($in);
 			case 'SaveArticleComponentsRequest': return $this->load_SaveArticleComponentsRequest($in);
+			case 'StartAutomaticDormantArticleCountRequest': return $this->load_StartAutomaticDormantArticleCountRequest($in);
 			case 'getSalesPriceListResponse': return $this->load_getSalesPriceListResponse($in);
 			case 'getPriceGroupListResponse': return $this->load_getPriceGroupListResponse($in);
 			case 'LogMistakeResponse': return $this->load_LogMistakeResponse($in);
@@ -625,6 +626,7 @@ class SoapParser extends BaseSoapParser {
 			case 'SetArticleRecalledResponse': return $this->load_SetArticleRecalledResponse($in);
 			case 'GetArticleComponentsResponse': return $this->load_GetArticleComponentsResponse($in);
 			case 'SaveArticleComponentsResponse': return $this->load_SaveArticleComponentsResponse($in);
+			case 'StartAutomaticDormantArticleCountResponse': return $this->load_StartAutomaticDormantArticleCountResponse($in);
 			case 'RequestDateFilter': return $this->load_RequestDateFilter($in);
 			case 'RequestBranchFilter': return $this->load_RequestBranchFilter($in);
 			case 'RequestEmployeeFilter': return $this->load_RequestEmployeeFilter($in);
@@ -1558,6 +1560,7 @@ class SoapParser extends BaseSoapParser {
 			case 'setArticleRecalled': return $this->load_setArticleRecalled($in);
 			case 'getArticleComponents': return $this->load_getArticleComponents($in);
 			case 'saveArticleComponents': return $this->load_saveArticleComponents($in);
+			case 'startAutomaticDormantArticleCount': return $this->load_startAutomaticDormantArticleCount($in);
 			case 'getConfiguration': return $this->load_getConfiguration($in);
 			case 'updateConfiguration': return $this->load_updateConfiguration($in);
 			case 'getConfigurationTree': return $this->load_getConfigurationTree($in);
@@ -2781,6 +2784,7 @@ class SoapParser extends BaseSoapParser {
 						case 'hasExternalPaymentWebhook': $o->hasExternalPaymentWebhook = $this->load_bool_property($in); break;
 						case 'bpeConfiguration': $o->bpeConfiguration = $this->load_BpeConfiguration($in); break;
 						case 'giftcardType': $o->giftcardType = $this->load_GiftcardType($in); break;
+						case 'openCashDrawer': $o->openCashDrawer = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -4489,6 +4493,9 @@ class SoapParser extends BaseSoapParser {
 						case 'from': $o->from = $this->load_DateTime_property($in); break;
 						case 'through': $o->through = $this->load_DateTime_property($in); break;
 						case 'dataPredicates': $o->dataPredicates = ($this->load_TimelineEventDataPredicateList($in))->predicate; break;
+						case 'branchGroupIds': $o->branchGroupIds = ($this->load_BranchGroupFilter($in))->branchGroups; break;
+						case 'ownerIds': $o->ownerIds = ($this->load_IdList($in))->id; break;
+						case 'activityIds': $o->activityIds = ($this->load_IdList($in))->id; break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -4516,6 +4523,9 @@ class SoapParser extends BaseSoapParser {
 						case 'from': $o->from = $this->load_DateTime_property($in); break;
 						case 'through': $o->through = $this->load_DateTime_property($in); break;
 						case 'dataPredicates': $o->dataPredicates = ($this->load_TimelineEventDataPredicateList($in))->predicate; break;
+						case 'branchGroupIds': $o->branchGroupIds = ($this->load_BranchGroupFilter($in))->branchGroups; break;
+						case 'ownerIds': $o->ownerIds = ($this->load_IdList($in))->id; break;
+						case 'activityIds': $o->activityIds = ($this->load_IdList($in))->id; break;
 						case 'entities': $o->entities = ($this->load_TimelineEventEntityList($in))->entity; break;
 						case 'categories': $o->categories = ($this->load_TimelineEventCategoryList($in))->category; break;
 					}
@@ -6137,6 +6147,8 @@ class SoapParser extends BaseSoapParser {
 						case 'articlePluNumbers': $o->articlePluNumbers = ($this->load_TextList($in))->text; break;
 						case 'articleBarcodes': $o->articleBarcodes = ($this->load_TextList($in))->text; break;
 						case 'orderTypeList': $o->orderTypeList = ($this->load_OrderTypeList($in))->orderType; break;
+						case 'ownerFilter': $o->ownerFilter = ($this->load_OwnerLabelFilter($in))->ownerLabels; break;
+						case 'branchGroupFilter': $o->branchGroupFilter = ($this->load_BranchGroupFilter($in))->branchGroups; break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -6780,6 +6792,8 @@ class SoapParser extends BaseSoapParser {
 						case 'tableNumberList': $o->tableNumberList = ($this->load_TableNumberList($in))->tableNumber; break;
 						case 'orderTypeList': $o->orderTypeList = ($this->load_OrderTypeList($in))->orderType; break;
 						case 'orderIdList': $o->orderIdList = ($this->load_IdList($in))->id; break;
+						case 'ownerFilter': $o->ownerFilter = ($this->load_OwnerLabelFilter($in))->ownerLabels; break;
+						case 'branchGroupFilter': $o->branchGroupFilter = ($this->load_BranchGroupFilter($in))->branchGroups; break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -8289,6 +8303,7 @@ class SoapParser extends BaseSoapParser {
 						case 'priceDeviationMax': $o->priceDeviationMax = $this->load_BigDecimal_property($in); break;
 						case 'availableForInterbranchOrdering': $o->availableForInterbranchOrdering = $this->load_bool_property($in); break;
 						case 'shelfLifeInMinutes': $o->shelfLifeInMinutes = $this->load_int_property($in); break;
+						case 'automaticDormantInterval': $o->automaticDormantInterval = $this->load_int_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -11421,6 +11436,7 @@ class SoapParser extends BaseSoapParser {
 						case 'correctionMode': $o->correctionMode = $this->load_string_property($in); break;
 						case 'reason': $o->reason = $this->load_string_property($in); break;
 						case 'plannedCycleCountId': $o->plannedCycleCountId = $this->load_string_property($in); break;
+						case 'automaticDormantArticleCountSessionId': $o->automaticDormantArticleCountSessionId = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -12721,6 +12737,7 @@ class SoapParser extends BaseSoapParser {
 						case 'salesPriceExcl': $o->salesPriceExcl = $this->load_BigDecimal_property($in); break;
 						case 'specialPrice': $o->specialPrice = $this->load_string_property($in); break;
 						case 'oldestBestBeforeDate': $o->oldestBestBeforeDate = $this->load_Date_property($in); break;
+						case 'automaticDormantInterval': $o->automaticDormantInterval = $this->load_int_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -13140,6 +13157,7 @@ class SoapParser extends BaseSoapParser {
 						case 'articleNumber': $o->articleNumber = $this->load_int_property($in); break;
 						case 'variantId': $o->variantId = $this->load_int_property($in); break;
 						case 'counted': $o->counted = $this->load_BigDecimal_property($in); break;
+						case 'sequenceNumber': $o->sequenceNumber = $this->load_int_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -13316,6 +13334,27 @@ class SoapParser extends BaseSoapParser {
 						case 'mode': $o->mode = $this->load_string_property($in); break;
 						case 'articleNumber': $o->articleNumber = $this->load_int_property($in); break;
 						case 'articleComponents': $o->articleComponents = ($this->load_ArticleComponentList($in))->articleComponent; break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_StartAutomaticDormantArticleCountRequest(\XMLReader $in) : StartAutomaticDormantArticleCountRequest {
+		$n = $in->name;
+		$o = new StartAutomaticDormantArticleCountRequest();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'idempotencyKey': $o->idempotencyKey = $this->load_string_property($in); break;
+						case 'branchNumber': $o->branchNumber = $this->load_int_property($in); break;
+						case 'employeeNumber': $o->employeeNumber = $this->load_int_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -16266,6 +16305,28 @@ class SoapParser extends BaseSoapParser {
 		}
 		return $o;
 	}
+	private function load_StartAutomaticDormantArticleCountResponse(\XMLReader $in) : StartAutomaticDormantArticleCountResponse {
+		$n = $in->name;
+		$o = new StartAutomaticDormantArticleCountResponse();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'idempotencyResult': $o->idempotencyResult = $this->load_string_property($in); break;
+						case 'result': $o->result = $this->load_string_property($in); break;
+						case 'sessionId': $o->sessionId = $this->load_string_property($in); break;
+						case 'articleNumbers': $o->articleNumbers = ($this->load_ArticleNumberList($in))->articleNumbers; break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
 	private function load_RequestDateFilter(\XMLReader $in) : RequestDateFilter {
 		$n = $in->name;
 		$o = new RequestDateFilter();
@@ -16776,6 +16837,7 @@ class SoapParser extends BaseSoapParser {
 						case 'key': $o->key = $this->load_string_property($in); break;
 						case 'value': $o->value = $this->load_string_property($in); break;
 						case 'locked': $o->locked = $this->load_bool_property($in); break;
+						case 'postMigrationStep': $o->postMigrationStep = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -16813,6 +16875,7 @@ class SoapParser extends BaseSoapParser {
 						case 'pathKind': $o->pathKind = $this->load_string_property($in); break;
 						case 'pathFilter': $o->pathFilter = $this->load_string_property($in); break;
 						case 'pathFilterIndex': $o->pathFilterIndex = $this->load_int_property($in); break;
+						case 'per': $o->per = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -16834,6 +16897,7 @@ class SoapParser extends BaseSoapParser {
 						case 'configurationGroupName': $o->configurationGroupName = $this->load_string_property($in); break;
 						case 'configurationItems': $o->configurationItems[] = $this->load_ConfigurationItem($in); break;
 						case 'configurationSubGroups': $o->configurationSubGroups[] = $this->load_ConfigurationGroup($in); break;
+						case 'explanation': $o->explanation = $this->load_string_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:
@@ -36273,6 +36337,25 @@ class SoapParser extends BaseSoapParser {
 				case \XMLReader::ELEMENT:
 					switch ($in->localName) {
 						case 'request': $o->request = $this->load_SaveArticleComponentsRequest($in); break;
+					}
+					break;
+				case \XMLReader::END_ELEMENT:
+					if ($in->name == $n) $continue = false;
+					break;
+			}
+		}
+		return $o;
+	}
+	private function load_startAutomaticDormantArticleCount(\XMLReader $in) : startAutomaticDormantArticleCount {
+		$n = $in->name;
+		$o = new startAutomaticDormantArticleCount();
+		if ($in->isEmptyElement) return $o;
+		$continue = true;
+		while ($continue && $in->read()) {
+			switch ($in->nodeType) {
+				case \XMLReader::ELEMENT:
+					switch ($in->localName) {
+						case 'request': $o->request = $this->load_StartAutomaticDormantArticleCountRequest($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:

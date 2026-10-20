@@ -117,6 +117,9 @@ class MplusApiClient extends BaseSoapClient {
  TimelineEventSubFilter::class . ':types' => 'string',
  TimelineEventSubFilter::class . ':data' => 'string',
  TimelineEventSubFilter::class . ':dataPredicates' => 'MplusKASSA\MplusQapi\TimelineEventDataPredicate',
+ TimelineEventSubFilter::class . ':branchGroupIds' => 'int',
+ TimelineEventSubFilter::class . ':ownerIds' => 'string',
+ TimelineEventSubFilter::class . ':activityIds' => 'string',
  TimelineEventFilter::class . ':entities' => 'MplusKASSA\MplusQapi\TimelineEventEntity',
  TimelineEventFilter::class . ':categories' => 'string',
  TimelineEventConditionList::class . ':condition' => 'MplusKASSA\MplusQapi\TimelineEventCondition',
@@ -149,6 +152,8 @@ class MplusApiClient extends BaseSoapClient {
  GetOrderChangesRequest::class . ':articlePluNumbers' => 'MplusKASSA\MplusQapi\Text',
  GetOrderChangesRequest::class . ':articleBarcodes' => 'MplusKASSA\MplusQapi\Text',
  GetOrderChangesRequest::class . ':orderTypeList' => 'string',
+ GetOrderChangesRequest::class . ':ownerFilter' => 'string',
+ GetOrderChangesRequest::class . ':branchGroupFilter' => 'int',
  OrderPaymentList::class . ':orderPayment' => 'MplusKASSA\MplusQapi\OrderPayment',
  LineChangeEventList::class . ':lineChangeEvent' => 'MplusKASSA\MplusQapi\LineChangeEvent',
  LineChangeEvent::class . ':preparationList' => 'MplusKASSA\MplusQapi\LineChangeEvent',
@@ -167,6 +172,8 @@ class MplusApiClient extends BaseSoapClient {
  GetOrderHistoryRequest::class . ':tableNumberList' => 'MplusKASSA\MplusQapi\TableNumber',
  GetOrderHistoryRequest::class . ':orderTypeList' => 'string',
  GetOrderHistoryRequest::class . ':orderIdList' => 'string',
+ GetOrderHistoryRequest::class . ':ownerFilter' => 'string',
+ GetOrderHistoryRequest::class . ':branchGroupFilter' => 'int',
  PayInvoiceRequest::class . ':paymentList' => 'MplusKASSA\MplusQapi\Payment',
  OrderDeliveryLineList::class . ':line' => 'MplusKASSA\MplusQapi\OrderDeliveryLine',
  OrderDelivery::class . ':lineList' => 'MplusKASSA\MplusQapi\OrderDeliveryLine',
@@ -503,6 +510,7 @@ class MplusApiClient extends BaseSoapClient {
  GetPlannedCycleCountsResponse::class . ':plannedCycleCounts' => 'MplusKASSA\MplusQapi\PlannedCycleCount',
  GetArticleComponentsResponse::class . ':articleComponents' => 'MplusKASSA\MplusQapi\ArticleComponent',
  SaveArticleComponentsResponse::class . ':newArticleComponents' => 'MplusKASSA\MplusQapi\ArticleComponent',
+ StartAutomaticDormantArticleCountResponse::class . ':articleNumbers' => 'int',
  RequestBranchFilter::class . ':branchNumbers' => 'int',
  RequestEmployeeFilter::class . ':employeeNumbers' => 'int',
  RequestTurnoverGroupFilter::class . ':turnoverGroups' => 'int',
@@ -3133,6 +3141,18 @@ class MplusApiClient extends BaseSoapClient {
         $opname = 'saveArticleComponents';
         $this->startRequest($opname);
         $reqobj = new saveArticleComponents();
+        $reqobj->request = $request;
+        $gen = new SoapGenerator();
+        $rq = $gen->write($reqobj, $opname);
+        $resp = $this->communicate($opname, $rq, $requestId);
+        $res = $this->parser->parse($resp);
+        $this->endRequest();
+        return $res;
+    }
+    public function startAutomaticDormantArticleCount(StartAutomaticDormantArticleCountRequest $request, ?string $requestId = null) : StartAutomaticDormantArticleCountResponse {
+        $opname = 'startAutomaticDormantArticleCount';
+        $this->startRequest($opname);
+        $reqobj = new startAutomaticDormantArticleCount();
         $reqobj->request = $request;
         $gen = new SoapGenerator();
         $rq = $gen->write($reqobj, $opname);

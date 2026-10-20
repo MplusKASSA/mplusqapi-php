@@ -1159,6 +1159,7 @@
           <enumeration value="SAVE-STOCK-CORRECTIONS-RESULT-DUPLICATE-ARTICLE" />
           <enumeration value="SAVE-STOCK-CORRECTIONS-RESULT-INVALID-PLANNED-CYCLE-COUNT-ID" />
           <enumeration value="SAVE-STOCK-CORRECTIONS-RESULT-FAILED" />
+          <enumeration value="SAVE-STOCK-CORRECTIONS-RESULT-INVALID-AUTOMATIC-DORMANT-ARTICLE-COUNT-SESSION-ID" />
         </restriction>
       </simpleType>
       <simpleType name="GetPurchaseBookResult">
@@ -1351,6 +1352,13 @@
           <enumeration value="FAILED-INVALID-ARTICLE-NUMBER" />
           <enumeration value="FAILED-INVALID-COMPONENT-ARTICLE-NUMBER" />
           <enumeration value="FAILED-COMPONENT-ALREADY-EXISTS" />
+        </restriction>
+      </simpleType>
+      <simpleType name="StartAutomaticDormantArticleCountResult">
+        <restriction base="xsd:string">
+          <enumeration value="OK" />
+          <enumeration value="UNAUTHORIZED" />
+          <enumeration value="DATABASE-UNAVAILABLE" />
         </restriction>
       </simpleType>
       <complexType name="SoapMplusDateTime">
@@ -1982,6 +1990,7 @@
           <element name="hasExternalPaymentWebhook" type="xsd:boolean" minOccurs="0" />
           <element name="bpeConfiguration" type="tns:BpeConfiguration" minOccurs="0" />
           <element name="giftcardType" type="tns:GiftcardType" minOccurs="0" />
+          <element name="openCashDrawer" type="xsd:boolean" minOccurs="0" />
         </sequence>
       </complexType>
       <complexType name="PaymentMethodList">
@@ -2981,6 +2990,9 @@
           <element name="from" type="xsd:dateTime" minOccurs="0" />
           <element name="through" type="xsd:dateTime" minOccurs="0" />
           <element name="dataPredicates" type="tns:TimelineEventDataPredicateList" minOccurs="0" />
+          <element name="branchGroupIds" type="tns:BranchGroupFilter" minOccurs="0" />
+          <element name="ownerIds" type="tns:IdList" minOccurs="0" />
+          <element name="activityIds" type="tns:IdList" minOccurs="0" />
         </sequence>
       </complexType>
       <complexType name="TimelineEventFilter">
@@ -3764,6 +3776,8 @@
           <element name="articlePluNumbers" type="tns:TextList" minOccurs="0" />
           <element name="articleBarcodes" type="tns:TextList" minOccurs="0" />
           <element name="orderTypeList" type="tns:OrderTypeList" minOccurs="0" />
+          <element name="ownerFilter" type="tns:OwnerLabelFilter" minOccurs="0" />
+          <element name="branchGroupFilter" type="tns:BranchGroupFilter" minOccurs="0" />
         </sequence>
       </complexType>
       <complexType name="OrderPaymentList">
@@ -4049,6 +4063,8 @@
           </element>
           <element name="orderTypeList" type="tns:OrderTypeList" minOccurs="0" />
           <element name="orderIdList" type="tns:IdList" minOccurs="0" />
+          <element name="ownerFilter" type="tns:OwnerLabelFilter" minOccurs="0" />
+          <element name="branchGroupFilter" type="tns:BranchGroupFilter" minOccurs="0" />
         </sequence>
       </complexType>
       <complexType name="CancelOrderRequest">
@@ -5065,6 +5081,7 @@
           <element name="priceDeviationMax" type="xsd:decimal" minOccurs="0" />
           <element name="availableForInterbranchOrdering" type="xsd:boolean" minOccurs="0" />
           <element name="shelfLifeInMinutes" type="xsd:int" minOccurs="0" />
+          <element name="automaticDormantInterval" type="xsd:int" minOccurs="0" />
         </sequence>
       </complexType>
       <complexType name="ArticleList">
@@ -6637,6 +6654,7 @@
               </documentation>
             </annotation>
           </element>
+          <element name="automaticDormantArticleCountSessionId" type="xsd:string" minOccurs="0" />
         </sequence>
       </complexType>
       <complexType name="PurchaseBookEntry">
@@ -7474,6 +7492,7 @@
           <element name="salesPriceExcl" type="xsd:decimal" minOccurs="0" />
           <element name="specialPrice" type="tns:ArticleSpecialPrice" minOccurs="0" />
           <element name="oldestBestBeforeDate" type="xsd:date" minOccurs="0" />
+          <element name="automaticDormantInterval" type="xsd:int" minOccurs="0" />
         </sequence>
       </complexType>
       <complexType name="SaveArticleBranchDeviationsRequest">
@@ -7627,6 +7646,7 @@
           <element name="articleNumber" type="xsd:long" />
           <element name="variantId" type="xsd:long" minOccurs="0" />
           <element name="counted" type="xsd:decimal" minOccurs="0" />
+          <element name="sequenceNumber" type="xsd:int" minOccurs="0" />
         </sequence>
       </complexType>
       <complexType name="ActiveCycleCountLineList">
@@ -7698,6 +7718,16 @@
               <element name="mode" type="tns:SaveArticleComponentsMode" />
               <element name="articleNumber" type="xsd:long" />
               <element name="articleComponents" type="tns:ArticleComponentList" />
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <complexType name="StartAutomaticDormantArticleCountRequest">
+        <complexContent>
+          <extension base="tns:IdempotentReq">
+            <sequence>
+              <element name="branchNumber" type="xsd:int" />
+              <element name="employeeNumber" type="xsd:long" />
             </sequence>
           </extension>
         </complexContent>
@@ -8691,6 +8721,17 @@
           </extension>
         </complexContent>
       </complexType>
+      <complexType name="StartAutomaticDormantArticleCountResponse">
+        <complexContent>
+          <extension base="tns:IdempotentResp">
+            <sequence>
+              <element name="result" type="tns:StartAutomaticDormantArticleCountResult" />
+              <element name="sessionId" type="xsd:string" />
+              <element name="articleNumbers" type="tns:ArticleNumberList" />
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
       <simpleType name="LayoutRenderType">
         <restriction base="xsd:string">
           <enumeration value="PDF" />
@@ -9204,6 +9245,7 @@
           <element name="key" type="xsd:string" />
           <element name="value" type="xsd:string" />
           <element name="locked" type="xsd:boolean" />
+          <element name="postMigrationStep" type="xsd:string" minOccurs="0" />
         </sequence>
       </complexType>
       <complexType name="ConfigurationItem">
@@ -9227,6 +9269,7 @@
           <element name="pathKind" type="tns:ConfigurationItemPathKind" minOccurs="0" />
           <element name="pathFilter" type="xsd:string" minOccurs="0" />
           <element name="pathFilterIndex" type="xsd:int" minOccurs="0" />
+          <element name="per" type="tns:ConfigurationPer" />
         </sequence>
       </complexType>
       <complexType name="ConfigurationGroup">
@@ -9234,6 +9277,7 @@
           <element name="configurationGroupName" type="xsd:string" />
           <element name="configurationItems" type="tns:ConfigurationItem" minOccurs="0" maxOccurs="unbounded" />
           <element name="configurationSubGroups" type="tns:ConfigurationGroup" minOccurs="0" maxOccurs="unbounded" />
+          <element name="explanation" type="xsd:string" minOccurs="0" />
         </sequence>
       </complexType>
       <complexType name="GetConfigurationTreeRequest">
@@ -18442,6 +18486,14 @@
         </complexType>
       </element>
       <element name="SaveArticleComponentsResponse" type="tns:SaveArticleComponentsResponse" />
+      <element name="startAutomaticDormantArticleCount">
+        <complexType>
+          <sequence>
+            <element name="request" type="tns:StartAutomaticDormantArticleCountRequest" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="StartAutomaticDormantArticleCountResponse" type="tns:StartAutomaticDormantArticleCountResponse" />
       <element name="getConfiguration">
         <complexType>
           <sequence>
@@ -21145,6 +21197,12 @@
   <message name="SaveArticleComponentsResponse">
     <part name="Body" element="tns:SaveArticleComponentsResponse" />
   </message>
+  <message name="startAutomaticDormantArticleCount">
+    <part name="Body" element="tns:startAutomaticDormantArticleCount" />
+  </message>
+  <message name="StartAutomaticDormantArticleCountResponse">
+    <part name="Body" element="tns:StartAutomaticDormantArticleCountResponse" />
+  </message>
   <message name="getConfiguration">
     <part name="Body" element="tns:getConfiguration" />
   </message>
@@ -23245,6 +23303,10 @@
       <input message="tns:saveArticleComponents" />
       <output message="tns:SaveArticleComponentsResponse" />
     </operation>
+    <operation name="startAutomaticDormantArticleCount">
+      <input message="tns:startAutomaticDormantArticleCount" />
+      <output message="tns:StartAutomaticDormantArticleCountResponse" />
+    </operation>
     <operation name="getConfiguration">
       <documentation>
       (deprecated) configuration heirarchy not clear, use getConfigurationTree and getConfigurationValues, updateConfigurationValues instead.
@@ -23261,7 +23323,7 @@
     </operation>
     <operation name="getConfigurationTree">
       <documentation>
-      use to retrieve availible configuration tree.
+      use to retrieve availible configuration tree for the current license.
     </documentation>
       <input message="tns:getConfigurationTree" />
       <output message="tns:GetConfigurationTreeResponse" />
@@ -25707,6 +25769,15 @@
       </output>
     </operation>
     <operation name="saveArticleComponents">
+      <SOAP:operation soapAction="" />
+      <input>
+        <SOAP:body use="literal" parts="Body" />
+      </input>
+      <output>
+        <SOAP:body use="literal" parts="Body" />
+      </output>
+    </operation>
+    <operation name="startAutomaticDormantArticleCount">
       <SOAP:operation soapAction="" />
       <input>
         <SOAP:body use="literal" parts="Body" />
