@@ -14464,11 +14464,13 @@ class GetConfigurationValuesRequest extends SoapObject {
 	/** @var string[] */
 	public $configurationKeys = array();
 	public ?\DateTime $changedSinceTimestamp = null;
+	public ?bool $includeUnconfiguredValues = null;
 	public function writeProps(SoapGenerator $gen): void {
 		if ($this->branchNumber !== null) $gen->writeInt('branchNumber', $this->branchNumber);
 		if ($this->workplaceNumber !== null) $gen->writeInt('workplaceNumber', $this->workplaceNumber);
 		foreach ($this->configurationKeys as $elem) $gen->out->writeElementNs(self::TNS, 'configurationKeys', null, $elem);
 		if ($this->changedSinceTimestamp !== null) $gen->writeDateTime('changedSinceTimestamp', $this->changedSinceTimestamp);
+		if ($this->includeUnconfiguredValues !== null) $gen->writeBool('includeUnconfiguredValues', $this->includeUnconfiguredValues);
 	}
 	public function write(SoapGenerator $gen, string $elemName): void {
 		$gen->out->startElementNs(self::TNS, $elemName, null);

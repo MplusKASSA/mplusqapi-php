@@ -16938,6 +16938,7 @@ class SoapParser extends BaseSoapParser {
 						case 'workplaceNumber': $o->workplaceNumber = $this->load_int_property($in); break;
 						case 'configurationKeys': $o->configurationKeys[] = $this->load_string_property($in); break;
 						case 'changedSinceTimestamp': $o->changedSinceTimestamp = $this->load_DateTime_property($in); break;
+						case 'includeUnconfiguredValues': $o->includeUnconfiguredValues = $this->load_bool_property($in); break;
 					}
 					break;
 				case \XMLReader::END_ELEMENT:

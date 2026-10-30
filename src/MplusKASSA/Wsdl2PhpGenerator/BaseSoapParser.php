@@ -160,7 +160,7 @@ abstract class BaseSoapParser {
     {
         try {
             $r = new \XMLReader();
-            $r->xml($in);
+            $r->xml($in, null, LIBXML_PARSEHUGE);
             return $this->parseSoapResponse($r);
         } catch (\Exception $e) {
             throw new SoapDeserializationException('Error while parsing soap response', 0, $e);

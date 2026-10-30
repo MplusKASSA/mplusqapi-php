@@ -9289,6 +9289,7 @@
           <element name="workplaceNumber" type="xsd:int" minOccurs="0" />
           <element name="configurationKeys" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
           <element name="changedSinceTimestamp" type="xsd:dateTime" minOccurs="0" />
+          <element name="includeUnconfiguredValues" type="xsd:boolean" minOccurs="0" />
         </sequence>
       </complexType>
       <complexType name="ConfigurationValue">
